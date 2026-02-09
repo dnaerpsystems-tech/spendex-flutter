@@ -1,0 +1,88 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+.packages
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.config.dart
+lib/generated/
+
+# Environment files (keep .env template but ignore actual configs)
+.env.development
+.env.production
+.env.local
+
+# Secure files
+*.jks
+*.keystore
+google-services.json
+GoogleService-Info.plist
+
+# Coverage
+coverage/
+
+# Test
+.test_coverage.dart
+
+# Local configuration
+.vscode/
+*.code-workspace
+
+# macOS
+.DS_Store
+*.pem
+
+# Pods (for iOS)
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# Android
+/android/app/google-services.json
+/android/key.properties
+/android/*.keystore
+/android/app/release/
+
+# Web
+/web/
+
+# Exceptions
+!.env
