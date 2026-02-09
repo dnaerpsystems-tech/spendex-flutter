@@ -15,6 +15,14 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, UserModel>> getCurrentUser();
   Future<Either<Failure, AuthResponse>> refreshToken(String refreshToken);
   Future<Either<Failure, void>> logout();
+
+  // Biometric Authentication Methods
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricRegisterOptions();
+  Future<Either<Failure, bool>> registerBiometric(Map<String, dynamic> credential);
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricLoginOptions();
+  Future<Either<Failure, AuthResponse>> loginWithBiometric(Map<String, dynamic> credential);
+  Future<Either<Failure, List<Map<String, dynamic>>>> getBiometricCredentials();
+  Future<Either<Failure, bool>> deleteBiometricCredential(String id);
 }
 
 /// Auth Remote Data Source Implementation
@@ -123,6 +131,71 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return result.fold(
       (failure) => Left(failure),
       (_) => const Right(null),
+    );
+  }
+
+  // Biometric Authentication Implementations
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricRegisterOptions() async {
+    return _apiClient.get<Map<String, dynamic>>(
+      ApiEndpoints.biometricRegisterOptions,
+      fromJson: (json) => json as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> registerBiometric(Map<String, dynamic> credential) async {
+    final result = await _apiClient.post(
+      ApiEndpoints.biometricRegister,
+      data: credential,
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (_) => const Right(true),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricLoginOptions() async {
+    return _apiClient.get<Map<String, dynamic>>(
+      ApiEndpoints.biometricLoginOptions,
+      fromJson: (json) => json as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> loginWithBiometric(Map<String, dynamic> credential) async {
+    return _apiClient.post<AuthResponse>(
+      ApiEndpoints.biometricLogin,
+      data: credential,
+      fromJson: (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getBiometricCredentials() async {
+    return _apiClient.get<List<Map<String, dynamic>>>(
+      ApiEndpoints.biometricCredentials,
+      fromJson: (json) {
+        if (json is List) {
+          return json.map((e) => e as Map<String, dynamic>).toList();
+        }
+        return <Map<String, dynamic>>[];
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteBiometricCredential(String id) async {
+    final result = await _apiClient.delete(
+      '${ApiEndpoints.biometricCredentials}/$id',
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (_) => const Right(true),
     );
   }
 }

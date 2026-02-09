@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:equatable/equatable.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter/services.dart';
 
 import '../../data/models/user_model.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -12,66 +14,102 @@ class AuthState extends Equatable {
   final bool isAuthenticated;
   final UserModel? user;
   final String? error;
+  final bool isBiometricAvailable;
+  final bool isBiometricEnabled;
+  final bool isBiometricLoading;
 
   const AuthState({
     this.isLoading = false,
     this.isAuthenticated = false,
     this.user,
     this.error,
+    this.isBiometricAvailable = false,
+    this.isBiometricEnabled = false,
+    this.isBiometricLoading = false,
   });
 
   const AuthState.initial()
       : isLoading = false,
         isAuthenticated = false,
         user = null,
-        error = null;
+        error = null,
+        isBiometricAvailable = false,
+        isBiometricEnabled = false,
+        isBiometricLoading = false;
 
   const AuthState.loading()
       : isLoading = true,
         isAuthenticated = false,
         user = null,
-        error = null;
+        error = null,
+        isBiometricAvailable = false,
+        isBiometricEnabled = false,
+        isBiometricLoading = false;
 
   AuthState.authenticated(UserModel user)
       : isLoading = false,
         isAuthenticated = true,
         user = user,
-        error = null;
+        error = null,
+        isBiometricAvailable = false,
+        isBiometricEnabled = false,
+        isBiometricLoading = false;
 
   const AuthState.unauthenticated()
       : isLoading = false,
         isAuthenticated = false,
         user = null,
-        error = null;
+        error = null,
+        isBiometricAvailable = false,
+        isBiometricEnabled = false,
+        isBiometricLoading = false;
 
   AuthState.error(String error)
       : isLoading = false,
         isAuthenticated = false,
         user = null,
-        error = error;
+        error = error,
+        isBiometricAvailable = false,
+        isBiometricEnabled = false,
+        isBiometricLoading = false;
 
   AuthState copyWith({
     bool? isLoading,
     bool? isAuthenticated,
     UserModel? user,
     String? error,
+    bool? isBiometricAvailable,
+    bool? isBiometricEnabled,
+    bool? isBiometricLoading,
   }) {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       user: user ?? this.user,
       error: error,
+      isBiometricAvailable: isBiometricAvailable ?? this.isBiometricAvailable,
+      isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
+      isBiometricLoading: isBiometricLoading ?? this.isBiometricLoading,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, isAuthenticated, user, error];
+  List<Object?> get props => [
+        isLoading,
+        isAuthenticated,
+        user,
+        error,
+        isBiometricAvailable,
+        isBiometricEnabled,
+        isBiometricLoading,
+      ];
 }
 
 /// Auth State Notifier
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _authRepository;
   final SecureStorageService _secureStorage;
+  final LocalAuthentication _localAuth = LocalAuthentication();
 
   AuthNotifier(this._authRepository, this._secureStorage)
       : super(const AuthState.initial());
@@ -91,6 +129,220 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } else {
       state = const AuthState.unauthenticated();
     }
+
+    // Check biometric availability after auth status
+    await checkBiometricAvailability();
+  }
+
+  /// Check if biometric authentication is available on device
+  Future<void> checkBiometricAvailability() async {
+    try {
+      final canCheck = await _localAuth.canCheckBiometrics;
+      final isDeviceSupported = await _localAuth.isDeviceSupported();
+      final isAvailable = canCheck && isDeviceSupported;
+
+      // Check if biometric is enabled in storage
+      final isEnabled = await _authRepository.isBiometricEnabled();
+
+      state = state.copyWith(
+        isBiometricAvailable: isAvailable,
+        isBiometricEnabled: isEnabled,
+      );
+    } on PlatformException {
+      state = state.copyWith(
+        isBiometricAvailable: false,
+        isBiometricEnabled: false,
+      );
+    }
+  }
+
+  /// Authenticate with device biometrics (fingerprint/face)
+  Future<bool> authenticateWithBiometrics() async {
+    try {
+      return await _localAuth.authenticate(
+        localizedReason: 'Authenticate to access Spendex',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+    } on PlatformException {
+      return false;
+    }
+  }
+
+  /// Login with biometric authentication
+  Future<bool> loginWithBiometric() async {
+    state = state.copyWith(isBiometricLoading: true, error: null);
+
+    try {
+      // First, authenticate with device biometrics
+      final isAuthenticated = await authenticateWithBiometrics();
+
+      if (!isAuthenticated) {
+        state = state.copyWith(
+          isBiometricLoading: false,
+          error: 'Biometric authentication failed',
+        );
+        return false;
+      }
+
+      // Get biometric login options from server
+      final optionsResult = await _authRepository.getBiometricLoginOptions();
+
+      return await optionsResult.fold(
+        (failure) {
+          state = state.copyWith(
+            isBiometricLoading: false,
+            error: failure.message,
+          );
+          return false;
+        },
+        (options) async {
+          // Create credential payload with device verification
+          final credential = {
+            'challenge': options['challenge'],
+            'deviceVerified': true,
+            'timestamp': DateTime.now().toIso8601String(),
+          };
+
+          // Login with biometric credential
+          final loginResult = await _authRepository.loginWithBiometric(credential);
+
+          return loginResult.fold(
+            (failure) {
+              state = state.copyWith(
+                isBiometricLoading: false,
+                error: failure.message,
+              );
+              return false;
+            },
+            (authResponse) {
+              state = AuthState(
+                isLoading: false,
+                isAuthenticated: true,
+                user: authResponse.user,
+                isBiometricAvailable: state.isBiometricAvailable,
+                isBiometricEnabled: state.isBiometricEnabled,
+                isBiometricLoading: false,
+              );
+              return true;
+            },
+          );
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isBiometricLoading: false,
+        error: 'Biometric authentication error: ${e.toString()}',
+      );
+      return false;
+    }
+  }
+
+  /// Register biometric credential
+  Future<bool> registerBiometric() async {
+    state = state.copyWith(isBiometricLoading: true, error: null);
+
+    try {
+      // First, authenticate with device biometrics
+      final isAuthenticated = await authenticateWithBiometrics();
+
+      if (!isAuthenticated) {
+        state = state.copyWith(
+          isBiometricLoading: false,
+          error: 'Biometric authentication failed',
+        );
+        return false;
+      }
+
+      // Get biometric register options from server
+      final optionsResult = await _authRepository.getBiometricRegisterOptions();
+
+      return await optionsResult.fold(
+        (failure) {
+          state = state.copyWith(
+            isBiometricLoading: false,
+            error: failure.message,
+          );
+          return false;
+        },
+        (options) async {
+          // Create credential payload with device verification
+          final credential = {
+            'challenge': options['challenge'],
+            'deviceVerified': true,
+            'deviceName': await _getDeviceName(),
+            'timestamp': DateTime.now().toIso8601String(),
+          };
+
+          // Register biometric credential
+          final registerResult = await _authRepository.registerBiometric(credential);
+
+          return registerResult.fold(
+            (failure) {
+              state = state.copyWith(
+                isBiometricLoading: false,
+                error: failure.message,
+              );
+              return false;
+            },
+            (success) {
+              state = state.copyWith(
+                isBiometricLoading: false,
+                isBiometricEnabled: success,
+              );
+              return success;
+            },
+          );
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isBiometricLoading: false,
+        error: 'Biometric registration error: ${e.toString()}',
+      );
+      return false;
+    }
+  }
+
+  /// Get biometric credentials
+  Future<List<Map<String, dynamic>>> getBiometricCredentials() async {
+    final result = await _authRepository.getBiometricCredentials();
+    return result.fold(
+      (failure) => [],
+      (credentials) => credentials,
+    );
+  }
+
+  /// Delete biometric credential
+  Future<bool> deleteBiometricCredential(String id) async {
+    final result = await _authRepository.deleteBiometricCredential(id);
+    return result.fold(
+      (failure) {
+        state = state.copyWith(error: failure.message);
+        return false;
+      },
+      (success) async {
+        // Check if there are remaining credentials
+        final credentials = await getBiometricCredentials();
+        state = state.copyWith(
+          isBiometricEnabled: credentials.isNotEmpty,
+        );
+        return success;
+      },
+    );
+  }
+
+  /// Disable biometric authentication
+  Future<void> disableBiometric() async {
+    await _authRepository.setBiometricEnabled(false);
+    state = state.copyWith(isBiometricEnabled: false);
+  }
+
+  /// Get device name for biometric registration
+  Future<String> _getDeviceName() async {
+    return 'Spendex Mobile Device';
   }
 
   /// Login
@@ -105,17 +357,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (authResponse) {
-        state = AuthState.authenticated(authResponse.user);
+        state = AuthState(
+          isLoading: false,
+          isAuthenticated: true,
+          user: authResponse.user,
+          isBiometricAvailable: state.isBiometricAvailable,
+          isBiometricEnabled: state.isBiometricEnabled,
+        );
         return true;
       },
     );
   }
 
   /// Register
-  Future<bool> register(String email, String password, String name, String? phone) async {
+  Future<bool> register(
+      String email, String password, String name, String? phone) async {
     state = state.copyWith(isLoading: true, error: null);
 
-    final result = await _authRepository.register(email, password, name, phone);
+    final result =
+        await _authRepository.register(email, password, name, phone);
 
     return result.fold(
       (failure) {
@@ -141,7 +401,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (authResponse) {
-        state = AuthState.authenticated(authResponse.user);
+        state = AuthState(
+          isLoading: false,
+          isAuthenticated: true,
+          user: authResponse.user,
+          isBiometricAvailable: state.isBiometricAvailable,
+          isBiometricEnabled: state.isBiometricEnabled,
+        );
         return true;
       },
     );
@@ -186,7 +452,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Logout
   Future<void> logout() async {
     await _authRepository.logout();
-    state = const AuthState.unauthenticated();
+    state = AuthState(
+      isLoading: false,
+      isAuthenticated: false,
+      isBiometricAvailable: state.isBiometricAvailable,
+      isBiometricEnabled: false,
+    );
   }
 
   /// Clear error
@@ -201,7 +472,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
 }
 
 /// Auth State Provider
-final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+final authStateProvider =
+    StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
     getIt<AuthRepository>(),
     getIt<SecureStorageService>(),
@@ -216,4 +488,19 @@ final currentUserProvider = Provider<UserModel?>((ref) {
 /// Is Authenticated Provider
 final isAuthenticatedProvider = Provider<bool>((ref) {
   return ref.watch(authStateProvider).isAuthenticated;
+});
+
+/// Biometric Available Provider
+final biometricAvailableProvider = Provider<bool>((ref) {
+  return ref.watch(authStateProvider).isBiometricAvailable;
+});
+
+/// Biometric Enabled Provider
+final biometricEnabledProvider = Provider<bool>((ref) {
+  return ref.watch(authStateProvider).isBiometricEnabled;
+});
+
+/// Biometric Loading Provider
+final biometricLoadingProvider = Provider<bool>((ref) {
+  return ref.watch(authStateProvider).isBiometricLoading;
 });

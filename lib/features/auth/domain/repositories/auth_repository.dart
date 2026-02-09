@@ -38,4 +38,30 @@ abstract class AuthRepository {
 
   /// Check if user is authenticated
   Future<bool> isAuthenticated();
+
+  // Biometric Authentication Methods
+
+  /// Get biometric register options from server
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricRegisterOptions();
+
+  /// Register a biometric credential
+  Future<Either<Failure, bool>> registerBiometric(Map<String, dynamic> credential);
+
+  /// Get biometric login options from server
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricLoginOptions();
+
+  /// Login with biometric credential
+  Future<Either<Failure, AuthResponse>> loginWithBiometric(Map<String, dynamic> credential);
+
+  /// Get list of registered biometric credentials
+  Future<Either<Failure, List<Map<String, dynamic>>>> getBiometricCredentials();
+
+  /// Delete a biometric credential
+  Future<Either<Failure, bool>> deleteBiometricCredential(String id);
+
+  /// Check if biometric is enabled locally
+  Future<bool> isBiometricEnabled();
+
+  /// Set biometric enabled state locally
+  Future<void> setBiometricEnabled(bool enabled);
 }

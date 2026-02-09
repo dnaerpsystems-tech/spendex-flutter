@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/storage/secure_storage.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
@@ -142,11 +143,93 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, void>> logout() async {
     final result = await _remoteDataSource.logout();
     await _secureStorage.clearTokens();
+    await _secureStorage.delete(AppConstants.biometricEnabledKey);
     return result;
   }
 
   @override
   Future<bool> isAuthenticated() async {
     return _secureStorage.isAuthenticated();
+  }
+
+  // Biometric Authentication Implementations
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricRegisterOptions() async {
+    return _remoteDataSource.getBiometricRegisterOptions();
+  }
+
+  @override
+  Future<Either<Failure, bool>> registerBiometric(Map<String, dynamic> credential) async {
+    final result = await _remoteDataSource.registerBiometric(credential);
+
+    return result.fold(
+      (failure) => Left(failure),
+      (success) async {
+        if (success) {
+          await setBiometricEnabled(true);
+        }
+        return Right(success);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getBiometricLoginOptions() async {
+    return _remoteDataSource.getBiometricLoginOptions();
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> loginWithBiometric(Map<String, dynamic> credential) async {
+    final result = await _remoteDataSource.loginWithBiometric(credential);
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) async {
+        await _secureStorage.saveTokens(
+          response.accessToken,
+          response.refreshToken,
+        );
+        return Right(response);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getBiometricCredentials() async {
+    return _remoteDataSource.getBiometricCredentials();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteBiometricCredential(String id) async {
+    final result = await _remoteDataSource.deleteBiometricCredential(id);
+
+    return result.fold(
+      (failure) => Left(failure),
+      (success) async {
+        // Check if there are any remaining credentials
+        final credentialsResult = await getBiometricCredentials();
+        credentialsResult.fold(
+          (_) {},
+          (credentials) async {
+            if (credentials.isEmpty) {
+              await setBiometricEnabled(false);
+            }
+          },
+        );
+        return Right(success);
+      },
+    );
+  }
+
+  @override
+  Future<bool> isBiometricEnabled() async {
+    final enabled = await _secureStorage.read(AppConstants.biometricEnabledKey);
+    return enabled == 'true';
+  }
+
+  @override
+  Future<void> setBiometricEnabled(bool enabled) async {
+    await _secureStorage.save(AppConstants.biometricEnabledKey, enabled.toString());
   }
 }
