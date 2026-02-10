@@ -34,9 +34,9 @@ abstract class CategoriesRemoteDataSource {
 
 /// Categories Remote Data Source Implementation
 class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
-  final ApiClient _apiClient;
 
   CategoriesRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, List<CategoryModel>>> getCategories() async {
@@ -45,9 +45,9 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final categories = (data as List<dynamic>)
+        final categories = data
             .map((json) => CategoryModel.fromJson(json as Map<String, dynamic>))
             .toList();
         return Right(categories);
@@ -62,9 +62,9 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final categories = (data as List<dynamic>)
+        final categories = data
             .map((json) => CategoryModel.fromJson(json as Map<String, dynamic>))
             .toList();
         return Right(categories);
@@ -79,9 +79,9 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final categories = (data as List<dynamic>)
+        final categories = data
             .map((json) => CategoryModel.fromJson(json as Map<String, dynamic>))
             .toList();
         return Right(categories);
@@ -96,9 +96,9 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final category = CategoryModel.fromJson(data as Map<String, dynamic>);
+        final category = CategoryModel.fromJson(data);
         return Right(category);
       },
     );
@@ -112,9 +112,9 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final category = CategoryModel.fromJson(data as Map<String, dynamic>);
+        final category = CategoryModel.fromJson(data);
         return Right(category);
       },
     );
@@ -128,9 +128,9 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final category = CategoryModel.fromJson(data as Map<String, dynamic>);
+        final category = CategoryModel.fromJson(data);
         return Right(category);
       },
     );
@@ -143,7 +143,7 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(null),
     );
   }
@@ -159,7 +159,7 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
       (failure) => Left(failure),
       (data) {
         if (data == null) return const Right(null);
-        final category = CategoryModel.fromJson(data as Map<String, dynamic>);
+        final category = CategoryModel.fromJson(data);
         return Right(category);
       },
     );

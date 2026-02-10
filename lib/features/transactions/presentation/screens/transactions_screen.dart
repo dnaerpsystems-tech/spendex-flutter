@@ -36,7 +36,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
           IconButton(
             icon: const Icon(Iconsax.search_normal),
             onPressed: () {
-              // TODO: Implement search
+              // TODO(spendex): Implement search
             },
           ),
           IconButton(
@@ -126,10 +126,10 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 }
 
 class _FilterChip extends StatelessWidget {
-  final String label;
-  final VoidCallback onRemove;
 
   const _FilterChip({required this.label, required this.onRemove});
+  final String label;
+  final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -165,19 +165,19 @@ class _FilterChip extends StatelessWidget {
 }
 
 class _TransactionItem extends StatelessWidget {
-  final NumberFormat currencyFormat;
-  final bool isDark;
 
   const _TransactionItem({
     required this.currencyFormat,
     required this.isDark,
   });
+  final NumberFormat currencyFormat;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
-    // Mock data
-    final isExpense = true;
-    final amount = 250000;
+    // Mock data - using hashCode to vary expense/income for demo
+    final isExpense = hashCode.isOdd;
+    const amount = 250000;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -260,10 +260,6 @@ class _TransactionItem extends StatelessWidget {
 }
 
 class _FilterSheet extends StatefulWidget {
-  final ScrollController scrollController;
-  final TransactionType? selectedType;
-  final DateTimeRange? selectedDateRange;
-  final void Function(TransactionType?, DateTimeRange?) onApply;
 
   const _FilterSheet({
     required this.scrollController,
@@ -271,6 +267,10 @@ class _FilterSheet extends StatefulWidget {
     required this.selectedDateRange,
     required this.onApply,
   });
+  final ScrollController scrollController;
+  final TransactionType? selectedType;
+  final DateTimeRange? selectedDateRange;
+  final void Function(TransactionType?, DateTimeRange?) onApply;
 
   @override
   State<_FilterSheet> createState() => _FilterSheetState();

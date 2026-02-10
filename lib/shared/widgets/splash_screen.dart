@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/routes.dart';
 import '../../app/theme.dart';
-import '../../core/storage/local_storage.dart';
 import '../../core/di/injection.dart';
+import '../../core/storage/local_storage.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -29,17 +29,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       duration: const Duration(milliseconds: 1500),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOutBack),
+        curve: const Interval(0, 0.6, curve: Curves.easeOutBack),
       ),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.3, 1.0, curve: Curves.easeIn),
+        curve: const Interval(0.3, 1, curve: Curves.easeIn),
       ),
     );
 
@@ -50,7 +50,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> _initializeApp() async {
     await Future.delayed(const Duration(milliseconds: 2000));
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final localStorage = getIt<LocalStorageService>();
     final authNotifier = ref.read(authStateProvider.notifier);
@@ -58,7 +60,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // Check authentication status
     await authNotifier.checkAuthStatus();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final authState = ref.read(authStateProvider);
     final isOnboardingCompleted = localStorage.isOnboardingCompleted();

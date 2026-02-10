@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter analyze:*)",
+      "Bash(findstr:*)",
+      "Bash(dart fix:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(dart analyze:*)"
+    ]
+  }
+}

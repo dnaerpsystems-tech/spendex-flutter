@@ -8,15 +8,6 @@ import '../../domain/repositories/budgets_repository.dart';
 
 /// Budgets State
 class BudgetsState extends Equatable {
-  final List<BudgetModel> budgets;
-  final BudgetsSummary? summary;
-  final bool isLoading;
-  final bool isSummaryLoading;
-  final String? error;
-  final BudgetModel? selectedBudget;
-  final bool isCreating;
-  final bool isUpdating;
-  final bool isDeleting;
 
   const BudgetsState({
     this.budgets = const [],
@@ -40,6 +31,15 @@ class BudgetsState extends Equatable {
         isCreating = false,
         isUpdating = false,
         isDeleting = false;
+  final List<BudgetModel> budgets;
+  final BudgetsSummary? summary;
+  final bool isLoading;
+  final bool isSummaryLoading;
+  final String? error;
+  final BudgetModel? selectedBudget;
+  final bool isCreating;
+  final bool isUpdating;
+  final bool isDeleting;
 
   BudgetsState copyWith({
     List<BudgetModel>? budgets,
@@ -122,9 +122,9 @@ class BudgetsState extends Equatable {
 
 /// Budgets State Notifier
 class BudgetsNotifier extends StateNotifier<BudgetsState> {
-  final BudgetsRepository _repository;
 
   BudgetsNotifier(this._repository) : super(const BudgetsState.initial());
+  final BudgetsRepository _repository;
 
   /// Load all budgets
   Future<void> loadBudgets() async {

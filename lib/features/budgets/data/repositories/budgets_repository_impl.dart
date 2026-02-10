@@ -7,9 +7,9 @@ import '../models/budget_model.dart';
 
 /// Budgets Repository Implementation
 class BudgetsRepositoryImpl implements BudgetsRepository {
-  final BudgetsRemoteDataSource _remoteDataSource;
 
   BudgetsRepositoryImpl(this._remoteDataSource);
+  final BudgetsRemoteDataSource _remoteDataSource;
 
   @override
   Future<Either<Failure, List<BudgetModel>>> getBudgets() {

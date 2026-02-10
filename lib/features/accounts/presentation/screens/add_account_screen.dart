@@ -8,18 +8,18 @@ import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../data/models/account_model.dart';
 import '../providers/accounts_provider.dart';
-import '../widgets/account_type_selector.dart';
 import '../widgets/account_card.dart';
+import '../widgets/account_type_selector.dart';
 
 /// Add/Edit Account Screen
 /// Full form with validation for creating or editing accounts
 class AddAccountScreen extends ConsumerStatefulWidget {
-  final String? accountId;
 
   const AddAccountScreen({
     super.key,
     this.accountId,
   });
+  final String? accountId;
 
   @override
   ConsumerState<AddAccountScreen> createState() => _AddAccountScreenState();
@@ -37,7 +37,6 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
   bool _isDefault = false;
   bool _isFormDirty = false;
   bool _isLoadingAccount = false;
-  AccountModel? _editingAccount;
 
   bool get isEditing => widget.accountId != null;
 
@@ -78,7 +77,6 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
 
     if (account != null && mounted) {
       setState(() {
-        _editingAccount = account;
         _nameController.text = account.name;
         _selectedType = account.type;
         _bankNameController.text = account.bankName ?? '';
@@ -109,7 +107,9 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
   }
 
   Future<bool> _onWillPop() async {
-    if (!_isFormDirty) return true;
+    if (!_isFormDirty) {
+      return true;
+    }
 
     final result = await showDialog<bool>(
       context: context,
@@ -125,7 +125,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(
+            child: const Text(
               'Discard',
               style: TextStyle(color: SpendexColors.expense),
             ),
@@ -244,7 +244,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
       onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
           final shouldPop = await _onWillPop();
-          if (shouldPop && mounted) {
+          if (shouldPop && context.mounted) {
             context.pop();
           }
         }
@@ -261,7 +261,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
             onPressed: () async {
               if (_isFormDirty) {
                 final shouldPop = await _onWillPop();
-                if (shouldPop && mounted) {
+                if (shouldPop && context.mounted) {
                   context.pop();
                 }
               } else {
@@ -532,7 +532,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
                                   _isFormDirty = true;
                                 });
                               },
-                              activeColor: SpendexColors.primary,
+                              activeTrackColor: SpendexColors.primary,
                             ),
                           ],
                         ),
@@ -591,7 +591,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
         ),
         if (isRequired) ...[
           const SizedBox(width: 4),
-          Text(
+          const Text(
             '*',
             style: TextStyle(
               color: SpendexColors.expense,
@@ -640,7 +640,6 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
 
     return AccountCard(
       account: previewAccount,
-      showBalance: true,
     );
   }
 }

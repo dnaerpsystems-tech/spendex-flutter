@@ -619,7 +619,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                         child: const AuthHeader(
                           title: 'Create Account',
                           subtitle: 'Start managing your finances today',
-                          showLogo: false,
                           textAlign: TextAlign.left,
                         ),
                       ),

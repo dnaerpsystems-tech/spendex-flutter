@@ -28,9 +28,9 @@ abstract class BudgetsRemoteDataSource {
 
 /// Budgets Remote Data Source Implementation
 class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
-  final ApiClient _apiClient;
 
   BudgetsRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, List<BudgetModel>>> getBudgets() async {
@@ -39,9 +39,9 @@ class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final budgets = (data as List<dynamic>)
+        final budgets = data
             .map((json) => BudgetModel.fromJson(json as Map<String, dynamic>))
             .toList();
         return Right(budgets);
@@ -56,9 +56,9 @@ class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final summary = BudgetsSummary.fromJson(data as Map<String, dynamic>);
+        final summary = BudgetsSummary.fromJson(data);
         return Right(summary);
       },
     );
@@ -71,9 +71,9 @@ class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final budget = BudgetModel.fromJson(data as Map<String, dynamic>);
+        final budget = BudgetModel.fromJson(data);
         return Right(budget);
       },
     );
@@ -87,9 +87,9 @@ class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final budget = BudgetModel.fromJson(data as Map<String, dynamic>);
+        final budget = BudgetModel.fromJson(data);
         return Right(budget);
       },
     );
@@ -103,9 +103,9 @@ class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        final budget = BudgetModel.fromJson(data as Map<String, dynamic>);
+        final budget = BudgetModel.fromJson(data);
         return Right(budget);
       },
     );
@@ -118,7 +118,7 @@ class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(null),
     );
   }

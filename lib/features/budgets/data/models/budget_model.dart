@@ -4,22 +4,6 @@ import '../../../categories/data/models/category_model.dart';
 
 /// Budget Model
 class BudgetModel extends Equatable {
-  final String id;
-  final String name;
-  final int amount; // in paise
-  final int spent; // in paise
-  final int remaining; // in paise
-  final double percentage;
-  final String? categoryId;
-  final BudgetPeriod period;
-  final DateTime startDate;
-  final DateTime endDate;
-  final int alertThreshold;
-  final bool isActive;
-  final bool rollover;
-  final CategoryModel? category;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const BudgetModel({
     required this.id,
@@ -65,6 +49,22 @@ class BudgetModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final String name;
+  final int amount; // in paise
+  final int spent; // in paise
+  final int remaining; // in paise
+  final double percentage;
+  final String? categoryId;
+  final BudgetPeriod period;
+  final DateTime startDate;
+  final DateTime endDate;
+  final int alertThreshold;
+  final bool isActive;
+  final bool rollover;
+  final CategoryModel? category;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -166,11 +166,6 @@ enum BudgetStatus {
 
 /// Budgets Summary
 class BudgetsSummary extends Equatable {
-  final int totalBudget;
-  final int totalSpent;
-  final int totalRemaining;
-  final int budgetCount;
-  final int overBudgetCount;
 
   const BudgetsSummary({
     required this.totalBudget,
@@ -189,6 +184,11 @@ class BudgetsSummary extends Equatable {
       overBudgetCount: json['overBudgetCount'] as int,
     );
   }
+  final int totalBudget;
+  final int totalSpent;
+  final int totalRemaining;
+  final int budgetCount;
+  final int overBudgetCount;
 
   double get totalBudgetInRupees => totalBudget / 100;
   double get totalSpentInRupees => totalSpent / 100;
@@ -208,12 +208,6 @@ class BudgetsSummary extends Equatable {
 
 /// Create Budget Request
 class CreateBudgetRequest {
-  final String name;
-  final int amount;
-  final String? categoryId;
-  final BudgetPeriod period;
-  final int? alertThreshold;
-  final bool? rollover;
 
   const CreateBudgetRequest({
     required this.name,
@@ -223,6 +217,12 @@ class CreateBudgetRequest {
     this.alertThreshold,
     this.rollover,
   });
+  final String name;
+  final int amount;
+  final String? categoryId;
+  final BudgetPeriod period;
+  final int? alertThreshold;
+  final bool? rollover;
 
   Map<String, dynamic> toJson() {
     return {

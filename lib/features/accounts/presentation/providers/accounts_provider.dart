@@ -1,5 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/di/injection.dart';
@@ -8,16 +8,6 @@ import '../../domain/repositories/accounts_repository.dart';
 
 /// Accounts State
 class AccountsState extends Equatable {
-  final List<AccountModel> accounts;
-  final AccountsSummary? summary;
-  final bool isLoading;
-  final bool isSummaryLoading;
-  final String? error;
-  final AccountModel? selectedAccount;
-  final bool isCreating;
-  final bool isUpdating;
-  final bool isDeleting;
-  final bool isTransferring;
 
   const AccountsState({
     this.accounts = const [],
@@ -43,6 +33,16 @@ class AccountsState extends Equatable {
         isUpdating = false,
         isDeleting = false,
         isTransferring = false;
+  final List<AccountModel> accounts;
+  final AccountsSummary? summary;
+  final bool isLoading;
+  final bool isSummaryLoading;
+  final String? error;
+  final AccountModel? selectedAccount;
+  final bool isCreating;
+  final bool isUpdating;
+  final bool isDeleting;
+  final bool isTransferring;
 
   AccountsState copyWith({
     List<AccountModel>? accounts,
@@ -128,13 +128,15 @@ class AccountsState extends Equatable {
 
 /// Accounts State Notifier
 class AccountsNotifier extends StateNotifier<AccountsState> {
-  final AccountsRepository _repository;
 
   AccountsNotifier(this._repository) : super(const AccountsState.initial());
+  final AccountsRepository _repository;
 
   /// Load all accounts
   Future<void> loadAccounts() async {
-    if (state.isLoading) return;
+    if (state.isLoading) {
+      return;
+    }
 
     state = state.copyWith(isLoading: true, clearError: true);
 
@@ -158,7 +160,9 @@ class AccountsNotifier extends StateNotifier<AccountsState> {
 
   /// Load accounts summary
   Future<void> loadSummary() async {
-    if (state.isSummaryLoading) return;
+    if (state.isSummaryLoading) {
+      return;
+    }
 
     state = state.copyWith(isSummaryLoading: true);
 
@@ -223,7 +227,9 @@ class AccountsNotifier extends StateNotifier<AccountsState> {
 
   /// Create a new account
   Future<AccountModel?> createAccount(CreateAccountRequest request) async {
-    if (state.isCreating) return null;
+    if (state.isCreating) {
+      return null;
+    }
 
     state = state.copyWith(isCreating: true, clearError: true);
 
@@ -251,7 +257,9 @@ class AccountsNotifier extends StateNotifier<AccountsState> {
 
   /// Update an existing account
   Future<AccountModel?> updateAccount(String id, CreateAccountRequest request) async {
-    if (state.isUpdating) return null;
+    if (state.isUpdating) {
+      return null;
+    }
 
     state = state.copyWith(isUpdating: true, clearError: true);
 
@@ -284,7 +292,9 @@ class AccountsNotifier extends StateNotifier<AccountsState> {
 
   /// Delete an account
   Future<bool> deleteAccount(String id) async {
-    if (state.isDeleting) return false;
+    if (state.isDeleting) {
+      return false;
+    }
 
     state = state.copyWith(isDeleting: true, clearError: true);
 
@@ -314,7 +324,9 @@ class AccountsNotifier extends StateNotifier<AccountsState> {
 
   /// Transfer between accounts
   Future<bool> transferBetweenAccounts(TransferRequest request) async {
-    if (state.isTransferring) return false;
+    if (state.isTransferring) {
+      return false;
+    }
 
     state = state.copyWith(isTransferring: true, clearError: true);
 

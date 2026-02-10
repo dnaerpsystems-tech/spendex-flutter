@@ -5,12 +5,12 @@ import '../../../../app/theme.dart';
 
 /// Password Strength Levels
 enum PasswordStrength {
-  empty('', 0.0, Colors.grey),
+  empty('', 0, Colors.grey),
   veryWeak('Very Weak', 0.2, Color(0xFFEF4444)),
   weak('Weak', 0.4, Color(0xFFF97316)),
   fair('Fair', 0.6, Color(0xFFF59E0B)),
   strong('Strong', 0.8, Color(0xFF84CC16)),
-  veryStrong('Very Strong', 1.0, Color(0xFF22C55E));
+  veryStrong('Very Strong', 1, Color(0xFF22C55E));
 
   const PasswordStrength(this.label, this.progress, this.color);
 
@@ -21,15 +21,15 @@ enum PasswordStrength {
 
 /// Represents a single password requirement
 class PasswordRequirement {
-  final String label;
-  final bool isMet;
-  final IconData icon;
 
   const PasswordRequirement({
     required this.label,
     required this.isMet,
     required this.icon,
   });
+  final String label;
+  final bool isMet;
+  final IconData icon;
 }
 
 /// Password Validator Helper Class
@@ -143,11 +143,6 @@ class PasswordValidator {
 /// Shows animated progress bar with color based on strength
 /// and individual requirement checks
 class PasswordStrengthIndicator extends StatefulWidget {
-  final String password;
-  final bool showRequirements;
-  final bool showLabel;
-  final double barHeight;
-  final EdgeInsetsGeometry? padding;
 
   const PasswordStrengthIndicator({
     super.key,
@@ -157,6 +152,11 @@ class PasswordStrengthIndicator extends StatefulWidget {
     this.barHeight = 4,
     this.padding,
   });
+  final String password;
+  final bool showRequirements;
+  final bool showLabel;
+  final double barHeight;
+  final EdgeInsetsGeometry? padding;
 
   @override
   State<PasswordStrengthIndicator> createState() =>
@@ -255,14 +255,14 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
                       gradient: LinearGradient(
                         colors: [
                           strength.color,
-                          strength.color.withOpacity(0.8),
+                          strength.color.withValues(alpha:0.8),
                         ],
                       ),
                       borderRadius:
                           BorderRadius.circular(widget.barHeight / 2),
                       boxShadow: [
                         BoxShadow(
-                          color: strength.color.withOpacity(0.4),
+                          color: strength.color.withValues(alpha:0.4),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -285,7 +285,7 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
         key: ValueKey(strength),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
-          color: strength.color.withOpacity(0.1),
+          color: strength.color.withValues(alpha:0.1),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
@@ -320,11 +320,11 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
                 height: 18,
                 decoration: BoxDecoration(
                   color: requirement.isMet
-                      ? metColor.withOpacity(0.1)
+                      ? metColor.withValues(alpha:0.1)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: color.withOpacity(0.3),
+                    color: color.withValues(alpha:0.3),
                     width: 1,
                   ),
                 ),
@@ -371,9 +371,6 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
 /// Compact Password Strength Indicator
 /// Shows only the progress bar without requirements
 class PasswordStrengthBar extends StatelessWidget {
-  final String password;
-  final double height;
-  final bool showLabel;
 
   const PasswordStrengthBar({
     super.key,
@@ -381,6 +378,9 @@ class PasswordStrengthBar extends StatelessWidget {
     this.height = 4,
     this.showLabel = true,
   });
+  final String password;
+  final double height;
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -396,14 +396,14 @@ class PasswordStrengthBar extends StatelessWidget {
 /// Password Match Indicator
 /// Shows if confirm password matches the original password
 class PasswordMatchIndicator extends StatelessWidget {
-  final String password;
-  final String confirmPassword;
 
   const PasswordMatchIndicator({
     super.key,
     required this.password,
     required this.confirmPassword,
   });
+  final String password;
+  final String confirmPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -434,10 +434,10 @@ class PasswordMatchIndicator extends StatelessWidget {
                 width: 18,
                 height: 18,
                 decoration: BoxDecoration(
-                  color: isMatch ? color.withOpacity(0.1) : Colors.transparent,
+                  color: isMatch ? color.withValues(alpha:0.1) : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: (isMatch ? color : unmetColor).withOpacity(0.3),
+                    color: (isMatch ? color : unmetColor).withValues(alpha:0.3),
                     width: 1,
                   ),
                 ),
@@ -481,10 +481,6 @@ class PasswordMatchIndicator extends StatelessWidget {
 /// Segmented Password Strength Bar
 /// Shows strength as segmented blocks instead of a continuous bar
 class SegmentedPasswordStrengthBar extends StatelessWidget {
-  final String password;
-  final int segments;
-  final double height;
-  final double gap;
 
   const SegmentedPasswordStrengthBar({
     super.key,
@@ -493,6 +489,10 @@ class SegmentedPasswordStrengthBar extends StatelessWidget {
     this.height = 4,
     this.gap = 4,
   });
+  final String password;
+  final int segments;
+  final double height;
+  final double gap;
 
   @override
   Widget build(BuildContext context) {

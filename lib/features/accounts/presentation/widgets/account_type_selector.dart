@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -8,10 +7,6 @@ import 'account_card.dart';
 /// Account Type Selector Widget
 /// A grid or horizontal list of account types with selection state
 class AccountTypeSelector extends StatelessWidget {
-  final AccountType? selectedType;
-  final ValueChanged<AccountType> onTypeSelected;
-  final bool horizontal;
-  final List<AccountType>? excludeTypes;
 
   const AccountTypeSelector({
     super.key,
@@ -20,6 +15,10 @@ class AccountTypeSelector extends StatelessWidget {
     this.horizontal = false,
     this.excludeTypes,
   });
+  final AccountType? selectedType;
+  final ValueChanged<AccountType> onTypeSelected;
+  final bool horizontal;
+  final List<AccountType>? excludeTypes;
 
   @override
   Widget build(BuildContext context) {
@@ -139,9 +138,6 @@ class AccountTypeSelector extends StatelessWidget {
 /// Account Type Chip
 /// A smaller, inline version for displaying account type
 class AccountTypeChip extends StatelessWidget {
-  final AccountType type;
-  final bool selected;
-  final VoidCallback? onTap;
 
   const AccountTypeChip({
     super.key,
@@ -149,6 +145,9 @@ class AccountTypeChip extends StatelessWidget {
     this.selected = false,
     this.onTap,
   });
+  final AccountType type;
+  final bool selected;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -205,9 +204,6 @@ class AccountTypeChip extends StatelessWidget {
 /// Account Type Filter List
 /// Horizontal scrollable list of account type chips for filtering
 class AccountTypeFilterList extends StatelessWidget {
-  final AccountType? selectedType;
-  final ValueChanged<AccountType?> onTypeSelected;
-  final bool showAll;
 
   const AccountTypeFilterList({
     super.key,
@@ -215,6 +211,9 @@ class AccountTypeFilterList extends StatelessWidget {
     required this.onTypeSelected,
     this.showAll = true,
   });
+  final AccountType? selectedType;
+  final ValueChanged<AccountType?> onTypeSelected;
+  final bool showAll;
 
   @override
   Widget build(BuildContext context) {

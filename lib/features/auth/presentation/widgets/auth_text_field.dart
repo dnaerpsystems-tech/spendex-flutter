@@ -6,15 +6,6 @@ import '../../../../app/theme.dart';
 
 /// Auth Email Field with validation and styling
 class AuthEmailField extends StatelessWidget {
-  final TextEditingController controller;
-  final FocusNode? focusNode;
-  final String? Function(String?)? validator;
-  final void Function(String)? onChanged;
-  final void Function(String)? onFieldSubmitted;
-  final bool autofocus;
-  final bool enabled;
-  final String? hintText;
-  final String? labelText;
 
   const AuthEmailField({
     super.key,
@@ -28,6 +19,15 @@ class AuthEmailField extends StatelessWidget {
     this.hintText,
     this.labelText,
   });
+  final TextEditingController controller;
+  final FocusNode? focusNode;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
+  final bool autofocus;
+  final bool enabled;
+  final String? hintText;
+  final String? labelText;
 
   @override
   Widget build(BuildContext context) {
@@ -135,17 +135,6 @@ class AuthEmailField extends StatelessWidget {
 
 /// Auth Password Field with visibility toggle and styling
 class AuthPasswordField extends StatefulWidget {
-  final TextEditingController controller;
-  final FocusNode? focusNode;
-  final String? Function(String?)? validator;
-  final void Function(String)? onChanged;
-  final void Function(String)? onFieldSubmitted;
-  final bool autofocus;
-  final bool enabled;
-  final String? hintText;
-  final String? labelText;
-  final TextInputAction textInputAction;
-  final bool enableInteractiveSelection;
 
   const AuthPasswordField({
     super.key,
@@ -161,6 +150,17 @@ class AuthPasswordField extends StatefulWidget {
     this.textInputAction = TextInputAction.done,
     this.enableInteractiveSelection = true,
   });
+  final TextEditingController controller;
+  final FocusNode? focusNode;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
+  final bool autofocus;
+  final bool enabled;
+  final String? hintText;
+  final String? labelText;
+  final TextInputAction textInputAction;
+  final bool enableInteractiveSelection;
 
   @override
   State<AuthPasswordField> createState() => _AuthPasswordFieldState();
@@ -295,23 +295,6 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
 
 /// Styled Text Form Field for auth screens
 class AuthTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final FocusNode? focusNode;
-  final String? Function(String?)? validator;
-  final void Function(String)? onChanged;
-  final void Function(String)? onFieldSubmitted;
-  final bool autofocus;
-  final bool enabled;
-  final String? hintText;
-  final String? labelText;
-  final IconData? prefixIcon;
-  final Widget? suffixIcon;
-  final TextInputType keyboardType;
-  final TextInputAction textInputAction;
-  final List<TextInputFormatter>? inputFormatters;
-  final int? maxLength;
-  final int maxLines;
-  final bool obscureText;
 
   const AuthTextField({
     super.key,
@@ -333,6 +316,23 @@ class AuthTextField extends StatelessWidget {
     this.maxLines = 1,
     this.obscureText = false,
   });
+  final TextEditingController controller;
+  final FocusNode? focusNode;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
+  final bool autofocus;
+  final bool enabled;
+  final String? hintText;
+  final String? labelText;
+  final IconData? prefixIcon;
+  final Widget? suffixIcon;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
+  final int maxLines;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {

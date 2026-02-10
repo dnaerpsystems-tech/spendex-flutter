@@ -3,38 +3,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../features/auth/presentation/screens/login_screen.dart';
-import '../features/auth/presentation/screens/register_screen.dart';
-import '../features/auth/presentation/screens/otp_verification_screen.dart';
-import '../features/auth/presentation/screens/forgot_password_screen.dart';
-import '../features/auth/presentation/screens/reset_password_screen.dart';
-import '../features/auth/presentation/providers/auth_provider.dart';
-import '../features/dashboard/presentation/screens/dashboard_screen.dart';
-import '../features/accounts/presentation/screens/accounts_screen.dart';
 import '../features/accounts/presentation/screens/account_details_screen.dart';
+import '../features/accounts/presentation/screens/accounts_screen.dart';
 import '../features/accounts/presentation/screens/add_account_screen.dart';
-import '../features/transactions/presentation/screens/transactions_screen.dart';
-import '../features/transactions/presentation/screens/add_transaction_screen.dart';
-import '../features/settings/presentation/screens/settings_screen.dart';
-import '../shared/widgets/main_scaffold.dart';
-import '../shared/widgets/splash_screen.dart';
-import '../shared/widgets/onboarding_screen.dart';
-import 'theme.dart';
-import '../features/budgets/presentation/screens/budgets_screen.dart';
+import '../features/auth/presentation/providers/auth_provider.dart';
+import '../features/auth/presentation/screens/forgot_password_screen.dart';
+import '../features/auth/presentation/screens/login_screen.dart';
+import '../features/auth/presentation/screens/otp_verification_screen.dart';
+import '../features/auth/presentation/screens/register_screen.dart';
+import '../features/auth/presentation/screens/reset_password_screen.dart';
 import '../features/budgets/presentation/screens/add_budget_screen.dart';
 import '../features/budgets/presentation/screens/budget_details_screen.dart';
+import '../features/budgets/presentation/screens/budgets_screen.dart';
+import '../features/dashboard/presentation/screens/dashboard_screen.dart';
+import '../features/settings/presentation/screens/settings_screen.dart';
+import '../features/transactions/presentation/screens/add_transaction_screen.dart';
+import '../features/transactions/presentation/screens/transactions_screen.dart';
+import '../shared/widgets/main_scaffold.dart';
+import '../shared/widgets/onboarding_screen.dart';
+import '../shared/widgets/splash_screen.dart';
+import 'theme.dart';
 
 /// Placeholder screen for features not yet implemented
 class _PlaceholderScreen extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final String description;
 
   const _PlaceholderScreen({
     required this.title,
     required this.icon,
     required this.description,
   });
+  final String title;
+  final IconData icon;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _PlaceholderScreen extends StatelessWidget {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: SpendexColors.primary.withOpacity(0.1),
+                  color: SpendexColors.primary.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(60),
                 ),
                 child: Icon(
@@ -92,13 +92,13 @@ class _PlaceholderScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: SpendexColors.warning.withOpacity(0.1),
+                  color: SpendexColors.warning.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: SpendexColors.warning.withOpacity(0.3),
+                    color: SpendexColors.warning.withValues(alpha:0.3),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
@@ -106,7 +106,7 @@ class _PlaceholderScreen extends StatelessWidget {
                       size: 16,
                       color: SpendexColors.warning,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
                       'Coming Soon',
                       style: TextStyle(
@@ -299,7 +299,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: 'analytics',
-                pageBuilder: (context, state) => NoTransitionPage(
+                pageBuilder: (context, state) => const NoTransitionPage(
                   child: _PlaceholderScreen(
                     title: 'Analytics',
                     icon: Iconsax.chart,
@@ -341,7 +341,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Transaction Routes
       GoRoute(
         path: AppRoutes.transactionDetails,
-        builder: (context, state) => _PlaceholderScreen(
+        builder: (context, state) => const _PlaceholderScreen(
           title: 'Transaction Details',
           icon: Iconsax.receipt_item,
           description: 'View and edit transaction details including category, notes, and attachments.',
@@ -473,7 +473,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Iconsax.warning_2,
               size: 64,
               color: SpendexColors.expense,

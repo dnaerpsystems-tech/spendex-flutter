@@ -10,7 +10,6 @@ import '../../data/models/account_model.dart';
 import '../providers/accounts_provider.dart';
 import '../widgets/account_card.dart';
 import '../widgets/account_summary_card.dart';
-import '../widgets/account_type_selector.dart';
 
 /// Accounts Screen
 /// Displays all accounts with summary, filtering, and management options

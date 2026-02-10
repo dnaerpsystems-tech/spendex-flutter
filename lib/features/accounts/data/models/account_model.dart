@@ -3,26 +3,14 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Account Model
 class AccountModel extends Equatable {
-  final String id;
-  final String name;
-  final AccountType type;
-  final int balance; // in paise
-  final String currency;
-  final String? bankName;
-  final String? accountNumber;
-  final String? icon;
-  final String? color;
-  final int? creditLimit; // in paise
-  final bool isDefault;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const AccountModel({
     required this.id,
     required this.name,
     required this.type,
     required this.balance,
+    required this.createdAt,
+    required this.updatedAt,
     this.currency = 'INR',
     this.bankName,
     this.accountNumber,
@@ -31,8 +19,6 @@ class AccountModel extends Equatable {
     this.creditLimit,
     this.isDefault = false,
     this.isActive = true,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
@@ -56,6 +42,20 @@ class AccountModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final String name;
+  final AccountType type;
+  final int balance; // in paise
+  final String currency;
+  final String? bankName;
+  final String? accountNumber;
+  final String? icon;
+  final String? color;
+  final int? creditLimit; // in paise
+  final bool isDefault;
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -153,11 +153,6 @@ class AccountModel extends Equatable {
 
 /// Accounts Summary
 class AccountsSummary extends Equatable {
-  final int totalBalance;
-  final int totalAssets;
-  final int totalLiabilities;
-  final int netWorth;
-  final int accountCount;
 
   const AccountsSummary({
     required this.totalBalance,
@@ -176,6 +171,11 @@ class AccountsSummary extends Equatable {
       accountCount: json['accountCount'] as int,
     );
   }
+  final int totalBalance;
+  final int totalAssets;
+  final int totalLiabilities;
+  final int netWorth;
+  final int accountCount;
 
   double get totalBalanceInRupees => totalBalance / 100;
   double get totalAssetsInRupees => totalAssets / 100;
@@ -194,15 +194,6 @@ class AccountsSummary extends Equatable {
 
 /// Create Account Request
 class CreateAccountRequest {
-  final String name;
-  final AccountType type;
-  final int? balance;
-  final String? bankName;
-  final String? accountNumber;
-  final String? icon;
-  final String? color;
-  final int? creditLimit;
-  final bool isDefault;
 
   const CreateAccountRequest({
     required this.name,
@@ -215,6 +206,15 @@ class CreateAccountRequest {
     this.creditLimit,
     this.isDefault = false,
   });
+  final String name;
+  final AccountType type;
+  final int? balance;
+  final String? bankName;
+  final String? accountNumber;
+  final String? icon;
+  final String? color;
+  final int? creditLimit;
+  final bool isDefault;
 
   Map<String, dynamic> toJson() {
     return {
@@ -233,11 +233,6 @@ class CreateAccountRequest {
 
 /// Transfer Request
 class TransferRequest {
-  final String fromAccountId;
-  final String toAccountId;
-  final int amount;
-  final String? description;
-  final DateTime? date;
 
   const TransferRequest({
     required this.fromAccountId,
@@ -246,6 +241,11 @@ class TransferRequest {
     this.description,
     this.date,
   });
+  final String fromAccountId;
+  final String toAccountId;
+  final int amount;
+  final String? description;
+  final DateTime? date;
 
   Map<String, dynamic> toJson() {
     return {

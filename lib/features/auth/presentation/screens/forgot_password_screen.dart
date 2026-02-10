@@ -606,7 +606,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 40),
 
@@ -879,7 +878,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
             _hasInteracted = true;
           },
           onFieldSubmitted: (_) => _handleSubmit(),
-          autofocus: false, // We handle focus manually
         ),
       ],
     );

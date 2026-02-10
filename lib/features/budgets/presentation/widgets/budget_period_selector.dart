@@ -3,14 +3,11 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../data/models/budget_model.dart';
 
 /// Budget Period Selector Widget
 /// Displays selectable chips for budget periods
 class BudgetPeriodSelector extends StatelessWidget {
-  final BudgetPeriod? selectedPeriod;
-  final ValueChanged<BudgetPeriod?> onPeriodChanged;
-  final bool showAllOption;
-  final bool compact;
 
   const BudgetPeriodSelector({
     super.key,
@@ -19,6 +16,10 @@ class BudgetPeriodSelector extends StatelessWidget {
     this.showAllOption = true,
     this.compact = false,
   });
+  final BudgetPeriod? selectedPeriod;
+  final ValueChanged<BudgetPeriod?> onPeriodChanged;
+  final bool showAllOption;
+  final bool compact;
 
   IconData _getPeriodIcon(BudgetPeriod period) {
     switch (period) {
@@ -73,12 +74,6 @@ class BudgetPeriodSelector extends StatelessWidget {
 }
 
 class _PeriodChip extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final bool isDark;
-  final bool compact;
 
   const _PeriodChip({
     required this.label,
@@ -88,6 +83,12 @@ class _PeriodChip extends StatelessWidget {
     required this.isDark,
     this.compact = false,
   });
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final bool isDark;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +159,6 @@ class _PeriodChip extends StatelessWidget {
 /// Budget Status Filter Widget
 /// Displays selectable chips for budget status filtering
 class BudgetStatusFilter extends StatelessWidget {
-  final BudgetStatus? selectedStatus;
-  final ValueChanged<BudgetStatus?> onStatusChanged;
-  final int? onTrackCount;
-  final int? warningCount;
-  final int? exceededCount;
 
   const BudgetStatusFilter({
     super.key,
@@ -172,6 +168,11 @@ class BudgetStatusFilter extends StatelessWidget {
     this.warningCount,
     this.exceededCount,
   });
+  final BudgetStatus? selectedStatus;
+  final ValueChanged<BudgetStatus?> onStatusChanged;
+  final int? onTrackCount;
+  final int? warningCount;
+  final int? exceededCount;
 
   @override
   Widget build(BuildContext context) {
@@ -223,12 +224,6 @@ class BudgetStatusFilter extends StatelessWidget {
 }
 
 class _StatusChip extends StatelessWidget {
-  final String label;
-  final int? count;
-  final Color color;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final bool isDark;
 
   const _StatusChip({
     required this.label,
@@ -238,6 +233,12 @@ class _StatusChip extends StatelessWidget {
     required this.onTap,
     required this.isDark,
   });
+  final String label;
+  final int? count;
+  final Color color;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {

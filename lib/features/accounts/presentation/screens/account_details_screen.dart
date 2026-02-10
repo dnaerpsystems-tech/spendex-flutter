@@ -5,7 +5,6 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../data/models/account_model.dart';
 import '../providers/accounts_provider.dart';
 import '../widgets/account_card.dart';
@@ -13,12 +12,12 @@ import '../widgets/account_card.dart';
 /// Account Details Screen
 /// Shows detailed account information with edit and delete options
 class AccountDetailsScreen extends ConsumerStatefulWidget {
-  final String accountId;
 
   const AccountDetailsScreen({
-    super.key,
     required this.accountId,
+    super.key,
   });
+  final String accountId;
 
   @override
   ConsumerState<AccountDetailsScreen> createState() =>
@@ -38,7 +37,9 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
 
   Future<void> _handleDelete() async {
     final account = ref.read(selectedAccountProvider);
-    if (account == null) return;
+    if (account == null) {
+      return;
+    }
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -64,7 +65,7 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
       ),
     );
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       final success = await ref
           .read(accountsStateProvider.notifier)
           .deleteAccount(widget.accountId);
@@ -172,7 +173,6 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
             // Account Card
             AccountCard(
               account: account,
-              showBalance: true,
             ),
 
             const SizedBox(height: 24),
@@ -767,7 +767,7 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'The account you\'re looking for doesn\'t exist or has been deleted.',
+              "The account you're looking for doesn't exist or has been deleted.",
               style: SpendexTheme.bodyMedium.copyWith(
                 color: isDark
                     ? SpendexColors.darkTextSecondary

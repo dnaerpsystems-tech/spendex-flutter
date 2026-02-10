@@ -6,14 +6,6 @@ import '../../../../app/theme.dart';
 /// Budget Progress Bar Widget
 /// An animated progress bar with color coding based on percentage
 class BudgetProgressBar extends StatefulWidget {
-  final double percentage;
-  final int alertThreshold;
-  final double height;
-  final bool showLabel;
-  final bool showWarningIcon;
-  final bool animate;
-  final Duration animationDuration;
-  final BorderRadius? borderRadius;
 
   const BudgetProgressBar({
     super.key,
@@ -26,6 +18,14 @@ class BudgetProgressBar extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 800),
     this.borderRadius,
   });
+  final double percentage;
+  final int alertThreshold;
+  final double height;
+  final bool showLabel;
+  final bool showWarningIcon;
+  final bool animate;
+  final Duration animationDuration;
+  final BorderRadius? borderRadius;
 
   @override
   State<BudgetProgressBar> createState() => _BudgetProgressBarState();
@@ -191,15 +191,15 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
 
 /// Pulsing Icon for over-budget indication
 class _PulsingIcon extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final bool pulse;
 
   const _PulsingIcon({
     required this.icon,
     required this.color,
     this.pulse = false,
   });
+  final IconData icon;
+  final Color color;
+  final bool pulse;
 
   @override
   State<_PulsingIcon> createState() => _PulsingIconState();
@@ -217,7 +217,7 @@ class _PulsingIconState extends State<_PulsingIcon>
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 1.0, end: 0.5).animate(
+    _animation = Tween<double>(begin: 1, end: 0.5).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
@@ -263,14 +263,6 @@ class _PulsingIconState extends State<_PulsingIcon>
 
 /// Circular Budget Progress Indicator
 class BudgetCircularProgress extends StatefulWidget {
-  final double percentage;
-  final int alertThreshold;
-  final double size;
-  final double strokeWidth;
-  final bool showLabel;
-  final bool animate;
-  final Duration animationDuration;
-  final Widget? center;
 
   const BudgetCircularProgress({
     super.key,
@@ -283,6 +275,14 @@ class BudgetCircularProgress extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 1000),
     this.center,
   });
+  final double percentage;
+  final int alertThreshold;
+  final double size;
+  final double strokeWidth;
+  final bool showLabel;
+  final bool animate;
+  final Duration animationDuration;
+  final Widget? center;
 
   @override
   State<BudgetCircularProgress> createState() => _BudgetCircularProgressState();

@@ -368,13 +368,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             text: 'Sign In',
                             onPressed: _handleLogin,
                             isLoading: authState.isLoading,
-                            isEnabled: !authState.isLoading,
                           ),
 
                           const SizedBox(height: 24),
 
                           // Divider
-                          const AuthDivider(text: 'or continue with'),
+                          const AuthDivider(),
 
                           const SizedBox(height: 24),
 
@@ -385,7 +384,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 BiometricLoginButton(
                                   onPressed: _handleBiometricLogin,
                                   isLoading: authState.isBiometricLoading,
-                                  isEnabled: !authState.isLoading,
                                   isAvailable: authState.isBiometricAvailable,
                                 ),
                                 const SizedBox(height: 16),

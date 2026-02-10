@@ -9,10 +9,6 @@ import '../../data/models/account_model.dart';
 /// Account Card Widget
 /// A beautiful card displaying account information with gradient backgrounds
 class AccountCard extends StatelessWidget {
-  final AccountModel account;
-  final VoidCallback? onTap;
-  final bool showBalance;
-  final bool compact;
 
   const AccountCard({
     super.key,
@@ -21,6 +17,10 @@ class AccountCard extends StatelessWidget {
     this.showBalance = true,
     this.compact = false,
   });
+  final AccountModel account;
+  final VoidCallback? onTap;
+  final bool showBalance;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {

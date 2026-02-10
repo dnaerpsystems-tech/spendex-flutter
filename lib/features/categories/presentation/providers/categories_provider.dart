@@ -8,17 +8,6 @@ import '../../domain/repositories/categories_repository.dart';
 
 /// Categories State
 class CategoriesState extends Equatable {
-  final List<CategoryModel> categories;
-  final List<CategoryModel> incomeCategories;
-  final List<CategoryModel> expenseCategories;
-  final bool isLoading;
-  final bool isIncomeLoading;
-  final bool isExpenseLoading;
-  final String? error;
-  final CategoryModel? selectedCategory;
-  final bool isCreating;
-  final bool isUpdating;
-  final bool isDeleting;
 
   const CategoriesState({
     this.categories = const [],
@@ -46,6 +35,17 @@ class CategoriesState extends Equatable {
         isCreating = false,
         isUpdating = false,
         isDeleting = false;
+  final List<CategoryModel> categories;
+  final List<CategoryModel> incomeCategories;
+  final List<CategoryModel> expenseCategories;
+  final bool isLoading;
+  final bool isIncomeLoading;
+  final bool isExpenseLoading;
+  final String? error;
+  final CategoryModel? selectedCategory;
+  final bool isCreating;
+  final bool isUpdating;
+  final bool isDeleting;
 
   CategoriesState copyWith({
     List<CategoryModel>? categories,
@@ -103,13 +103,15 @@ class CategoriesState extends Equatable {
 
 /// Categories State Notifier
 class CategoriesNotifier extends StateNotifier<CategoriesState> {
-  final CategoriesRepository _repository;
 
   CategoriesNotifier(this._repository) : super(const CategoriesState.initial());
+  final CategoriesRepository _repository;
 
   /// Load all categories
   Future<void> loadCategories() async {
-    if (state.isLoading) return;
+    if (state.isLoading) {
+      return;
+    }
 
     state = state.copyWith(isLoading: true, clearError: true);
 
@@ -133,7 +135,9 @@ class CategoriesNotifier extends StateNotifier<CategoriesState> {
 
   /// Load income categories
   Future<void> loadIncomeCategories() async {
-    if (state.isIncomeLoading) return;
+    if (state.isIncomeLoading) {
+      return;
+    }
 
     state = state.copyWith(isIncomeLoading: true, clearError: true);
 
@@ -157,7 +161,9 @@ class CategoriesNotifier extends StateNotifier<CategoriesState> {
 
   /// Load expense categories
   Future<void> loadExpenseCategories() async {
-    if (state.isExpenseLoading) return;
+    if (state.isExpenseLoading) {
+      return;
+    }
 
     state = state.copyWith(isExpenseLoading: true, clearError: true);
 
@@ -223,7 +229,9 @@ class CategoriesNotifier extends StateNotifier<CategoriesState> {
 
   /// Create a new category
   Future<CategoryModel?> createCategory(CreateCategoryRequest request) async {
-    if (state.isCreating) return null;
+    if (state.isCreating) {
+      return null;
+    }
 
     state = state.copyWith(isCreating: true, clearError: true);
 
@@ -259,7 +267,9 @@ class CategoriesNotifier extends StateNotifier<CategoriesState> {
 
   /// Update an existing category
   Future<CategoryModel?> updateCategory(String id, CreateCategoryRequest request) async {
-    if (state.isUpdating) return null;
+    if (state.isUpdating) {
+      return null;
+    }
 
     state = state.copyWith(isUpdating: true, clearError: true);
 
@@ -300,7 +310,9 @@ class CategoriesNotifier extends StateNotifier<CategoriesState> {
 
   /// Delete a category
   Future<bool> deleteCategory(String id) async {
-    if (state.isDeleting) return false;
+    if (state.isDeleting) {
+      return false;
+    }
 
     state = state.copyWith(isDeleting: true, clearError: true);
 

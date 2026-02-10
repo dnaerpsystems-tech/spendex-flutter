@@ -3,44 +3,23 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Investment Model
 class InvestmentModel extends Equatable {
-  final String id;
-  final String name;
-  final InvestmentType type;
-  final String? symbol;
-  final String? isin;
-  final String? folioNumber;
-  final double? units;
-  final int? purchasePrice;
-  final int? currentPrice;
-  final int investedAmount;
-  final int currentValue;
-  final int returns;
-  final double returnsPercent;
-  final double? interestRate;
-  final DateTime? purchaseDate;
-  final DateTime? maturityDate;
-  final int? maturityAmount;
-  final bool taxSaving;
-  final TaxSection? taxSection;
-  final String? broker;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const InvestmentModel({
     required this.id,
     required this.name,
     required this.type,
+    required this.investedAmount,
+    required this.currentValue,
+    required this.returns,
+    required this.returnsPercent,
+    required this.createdAt,
+    required this.updatedAt,
     this.symbol,
     this.isin,
     this.folioNumber,
     this.units,
     this.purchasePrice,
     this.currentPrice,
-    required this.investedAmount,
-    required this.currentValue,
-    required this.returns,
-    required this.returnsPercent,
     this.interestRate,
     this.purchaseDate,
     this.maturityDate,
@@ -49,8 +28,6 @@ class InvestmentModel extends Equatable {
     this.taxSection,
     this.broker,
     this.isActive = true,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory InvestmentModel.fromJson(Map<String, dynamic> json) {
@@ -92,6 +69,29 @@ class InvestmentModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final String name;
+  final InvestmentType type;
+  final String? symbol;
+  final String? isin;
+  final String? folioNumber;
+  final double? units;
+  final int? purchasePrice;
+  final int? currentPrice;
+  final int investedAmount;
+  final int currentValue;
+  final int returns;
+  final double returnsPercent;
+  final double? interestRate;
+  final DateTime? purchaseDate;
+  final DateTime? maturityDate;
+  final int? maturityAmount;
+  final bool taxSaving;
+  final TaxSection? taxSection;
+  final String? broker;
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -174,12 +174,6 @@ class InvestmentModel extends Equatable {
 
 /// Investment Summary
 class InvestmentSummary extends Equatable {
-  final int totalInvested;
-  final int currentValue;
-  final int totalReturns;
-  final double overallReturnsPercent;
-  final int investmentCount;
-  final Map<String, int> allocationByType;
 
   const InvestmentSummary({
     required this.totalInvested,
@@ -202,6 +196,12 @@ class InvestmentSummary extends Equatable {
           {},
     );
   }
+  final int totalInvested;
+  final int currentValue;
+  final int totalReturns;
+  final double overallReturnsPercent;
+  final int investmentCount;
+  final Map<String, int> allocationByType;
 
   double get totalInvestedInRupees => totalInvested / 100;
   double get currentValueInRupees => currentValue / 100;
@@ -220,9 +220,6 @@ class InvestmentSummary extends Equatable {
 
 /// Tax Savings Summary
 class TaxSavingsSummary extends Equatable {
-  final int year;
-  final Map<String, int> savingsBySection;
-  final int totalTaxSavings;
 
   const TaxSavingsSummary({
     required this.year,
@@ -238,6 +235,9 @@ class TaxSavingsSummary extends Equatable {
       totalTaxSavings: json['totalTaxSavings'] as int,
     );
   }
+  final int year;
+  final Map<String, int> savingsBySection;
+  final int totalTaxSavings;
 
   double get totalTaxSavingsInRupees => totalTaxSavings / 100;
 
@@ -247,21 +247,6 @@ class TaxSavingsSummary extends Equatable {
 
 /// Create Investment Request
 class CreateInvestmentRequest {
-  final String name;
-  final InvestmentType type;
-  final int investedAmount;
-  final String? symbol;
-  final String? isin;
-  final String? folioNumber;
-  final double? units;
-  final int? purchasePrice;
-  final double? interestRate;
-  final DateTime? purchaseDate;
-  final DateTime? maturityDate;
-  final int? maturityAmount;
-  final bool? taxSaving;
-  final TaxSection? taxSection;
-  final String? broker;
 
   const CreateInvestmentRequest({
     required this.name,
@@ -280,6 +265,21 @@ class CreateInvestmentRequest {
     this.taxSection,
     this.broker,
   });
+  final String name;
+  final InvestmentType type;
+  final int investedAmount;
+  final String? symbol;
+  final String? isin;
+  final String? folioNumber;
+  final double? units;
+  final int? purchasePrice;
+  final double? interestRate;
+  final DateTime? purchaseDate;
+  final DateTime? maturityDate;
+  final int? maturityAmount;
+  final bool? taxSaving;
+  final TaxSection? taxSection;
+  final String? broker;
 
   Map<String, dynamic> toJson() {
     return {

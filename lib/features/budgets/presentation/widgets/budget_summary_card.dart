@@ -9,14 +9,14 @@ import 'budget_progress_bar.dart';
 /// Budget Summary Card Widget
 /// Displays overall budget summary with total amounts and progress
 class BudgetSummaryCard extends StatelessWidget {
-  final BudgetsSummary summary;
-  final VoidCallback? onTap;
 
   const BudgetSummaryCard({
     super.key,
     required this.summary,
     this.onTap,
   });
+  final BudgetsSummary summary;
+  final VoidCallback? onTap;
 
   String _formatCurrency(double amount) {
     final formatter = NumberFormat.currency(
@@ -113,7 +113,7 @@ class BudgetSummaryCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
+                        const Icon(
                           Iconsax.warning_2,
                           size: 14,
                           color: SpendexColors.expense,
@@ -204,10 +204,6 @@ class BudgetSummaryCard extends StatelessWidget {
 }
 
 class _StatItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-  final bool isDark;
 
   const _StatItem({
     required this.label,
@@ -215,6 +211,10 @@ class _StatItem extends StatelessWidget {
     required this.color,
     required this.isDark,
   });
+  final String label;
+  final String value;
+  final Color color;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {

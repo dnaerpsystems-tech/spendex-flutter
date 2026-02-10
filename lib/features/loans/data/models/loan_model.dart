@@ -3,24 +3,6 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Loan Model
 class LoanModel extends Equatable {
-  final String id;
-  final String name;
-  final LoanType type;
-  final int principalAmount; // in paise
-  final double interestRate;
-  final int tenure; // months
-  final int emiAmount; // in paise
-  final int totalPaid; // in paise
-  final int remainingAmount; // in paise
-  final int totalInterest; // in paise
-  final DateTime startDate;
-  final DateTime? nextEmiDate;
-  final String? lender;
-  final String? accountNumber;
-  final LoanStatus status;
-  final List<EmiSchedule> emiSchedule;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const LoanModel({
     required this.id,
@@ -34,13 +16,13 @@ class LoanModel extends Equatable {
     required this.remainingAmount,
     required this.totalInterest,
     required this.startDate,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
     this.nextEmiDate,
     this.lender,
     this.accountNumber,
-    required this.status,
     this.emiSchedule = const [],
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory LoanModel.fromJson(Map<String, dynamic> json) {
@@ -76,6 +58,24 @@ class LoanModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final String name;
+  final LoanType type;
+  final int principalAmount; // in paise
+  final double interestRate;
+  final int tenure; // months
+  final int emiAmount; // in paise
+  final int totalPaid; // in paise
+  final int remainingAmount; // in paise
+  final int totalInterest; // in paise
+  final DateTime startDate;
+  final DateTime? nextEmiDate;
+  final String? lender;
+  final String? accountNumber;
+  final LoanStatus status;
+  final List<EmiSchedule> emiSchedule;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -139,14 +139,6 @@ class LoanModel extends Equatable {
 
 /// EMI Schedule
 class EmiSchedule extends Equatable {
-  final int month;
-  final DateTime dueDate;
-  final int emiAmount;
-  final int principal;
-  final int interest;
-  final int balance;
-  final bool isPaid;
-  final DateTime? paidDate;
 
   const EmiSchedule({
     required this.month,
@@ -173,6 +165,14 @@ class EmiSchedule extends Equatable {
           : null,
     );
   }
+  final int month;
+  final DateTime dueDate;
+  final int emiAmount;
+  final int principal;
+  final int interest;
+  final int balance;
+  final bool isPaid;
+  final DateTime? paidDate;
 
   Map<String, dynamic> toJson() {
     return {
@@ -209,10 +209,6 @@ class EmiSchedule extends Equatable {
 
 /// Loans Summary
 class LoansSummary extends Equatable {
-  final int totalOutstanding;
-  final int totalMonthlyEmi;
-  final int loanCount;
-  final int activeLoanCount;
 
   const LoansSummary({
     required this.totalOutstanding,
@@ -229,6 +225,10 @@ class LoansSummary extends Equatable {
       activeLoanCount: json['activeLoanCount'] as int,
     );
   }
+  final int totalOutstanding;
+  final int totalMonthlyEmi;
+  final int loanCount;
+  final int activeLoanCount;
 
   double get totalOutstandingInRupees => totalOutstanding / 100;
   double get totalMonthlyEmiInRupees => totalMonthlyEmi / 100;
@@ -244,14 +244,6 @@ class LoansSummary extends Equatable {
 
 /// Create Loan Request
 class CreateLoanRequest {
-  final String name;
-  final LoanType type;
-  final int principalAmount;
-  final double interestRate;
-  final int tenure;
-  final DateTime startDate;
-  final String? lender;
-  final String? accountNumber;
 
   const CreateLoanRequest({
     required this.name,
@@ -263,6 +255,14 @@ class CreateLoanRequest {
     this.lender,
     this.accountNumber,
   });
+  final String name;
+  final LoanType type;
+  final int principalAmount;
+  final double interestRate;
+  final int tenure;
+  final DateTime startDate;
+  final String? lender;
+  final String? accountNumber;
 
   Map<String, dynamic> toJson() {
     return {
@@ -280,13 +280,13 @@ class CreateLoanRequest {
 
 /// EMI Payment Request
 class EmiPaymentRequest {
-  final int month;
-  final DateTime? paidDate;
 
   const EmiPaymentRequest({
     required this.month,
     this.paidDate,
   });
+  final int month;
+  final DateTime? paidDate;
 
   Map<String, dynamic> toJson() {
     return {

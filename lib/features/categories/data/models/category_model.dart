@@ -3,28 +3,18 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Category Model
 class CategoryModel extends Equatable {
-  final String id;
-  final String name;
-  final CategoryType type;
-  final String? icon;
-  final String? color;
-  final String? parentId;
-  final bool isSystem;
-  final int sortOrder;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const CategoryModel({
     required this.id,
     required this.name,
     required this.type,
+    required this.createdAt,
+    required this.updatedAt,
     this.icon,
     this.color,
     this.parentId,
     this.isSystem = false,
     this.sortOrder = 0,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +34,16 @@ class CategoryModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final String name;
+  final CategoryType type;
+  final String? icon;
+  final String? color;
+  final String? parentId;
+  final bool isSystem;
+  final int sortOrder;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -107,10 +107,6 @@ class CategoryModel extends Equatable {
 
 /// Category with spending info
 class CategoryWithSpending extends Equatable {
-  final CategoryModel category;
-  final int totalSpent;
-  final int transactionCount;
-  final double percentage;
 
   const CategoryWithSpending({
     required this.category,
@@ -127,6 +123,10 @@ class CategoryWithSpending extends Equatable {
       percentage: (json['percentage'] as num).toDouble(),
     );
   }
+  final CategoryModel category;
+  final int totalSpent;
+  final int transactionCount;
+  final double percentage;
 
   double get totalSpentInRupees => totalSpent / 100;
 
@@ -136,11 +136,6 @@ class CategoryWithSpending extends Equatable {
 
 /// Create Category Request
 class CreateCategoryRequest {
-  final String name;
-  final CategoryType type;
-  final String? icon;
-  final String? color;
-  final String? parentId;
 
   const CreateCategoryRequest({
     required this.name,
@@ -149,6 +144,11 @@ class CreateCategoryRequest {
     this.color,
     this.parentId,
   });
+  final String name;
+  final CategoryType type;
+  final String? icon;
+  final String? color;
+  final String? parentId;
 
   Map<String, dynamic> toJson() {
     return {
@@ -163,13 +163,13 @@ class CreateCategoryRequest {
 
 /// Category Suggestion Request
 class CategorySuggestionRequest {
-  final String description;
-  final int? amount;
 
   const CategorySuggestionRequest({
     required this.description,
     this.amount,
   });
+  final String description;
+  final int? amount;
 
   Map<String, dynamic> toJson() {
     return {

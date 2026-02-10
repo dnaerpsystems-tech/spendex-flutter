@@ -8,9 +8,6 @@ import 'account_card.dart';
 /// Account Summary Card Widget
 /// Displays total assets, liabilities, and net worth with gradient background
 class AccountSummaryCard extends StatelessWidget {
-  final AccountsSummary summary;
-  final VoidCallback? onTap;
-  final bool showAccountCount;
 
   const AccountSummaryCard({
     super.key,
@@ -18,6 +15,9 @@ class AccountSummaryCard extends StatelessWidget {
     this.onTap,
     this.showAccountCount = true,
   });
+  final AccountsSummary summary;
+  final VoidCallback? onTap;
+  final bool showAccountCount;
 
   @override
   Widget build(BuildContext context) {
@@ -217,14 +217,14 @@ class AccountSummaryCard extends StatelessWidget {
 
 /// Compact Summary Card (for dashboard)
 class AccountSummaryCompactCard extends StatelessWidget {
-  final AccountsSummary summary;
-  final VoidCallback? onTap;
 
   const AccountSummaryCompactCard({
     super.key,
     required this.summary,
     this.onTap,
   });
+  final AccountsSummary summary;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

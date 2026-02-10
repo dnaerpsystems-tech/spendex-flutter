@@ -6,9 +6,9 @@ import '../models/account_model.dart';
 
 /// Accounts Repository Implementation
 class AccountsRepositoryImpl implements AccountsRepository {
-  final AccountsRemoteDataSource _remoteDataSource;
 
   AccountsRepositoryImpl(this._remoteDataSource);
+  final AccountsRemoteDataSource _remoteDataSource;
 
   @override
   Future<Either<Failure, List<AccountModel>>> getAccounts() {

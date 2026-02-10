@@ -6,9 +6,9 @@ import '../../app/routes.dart';
 import '../../app/theme.dart';
 
 class MainScaffold extends StatefulWidget {
-  final Widget child;
 
-  const MainScaffold({super.key, required this.child});
+  const MainScaffold({required this.child, super.key});
+  final Widget child;
 
   @override
   State<MainScaffold> createState() => _MainScaffoldState();
@@ -86,7 +86,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
     return Scaffold(
       body: widget.child,
-      bottomNavigationBar: Container(
+      bottomNavigationBar: DecoratedBox(
         decoration: BoxDecoration(
           color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
           boxShadow: [
@@ -129,11 +129,6 @@ class _MainScaffoldState extends State<MainScaffold> {
 }
 
 class _NavItem {
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  final String path;
-  final bool isCenter;
 
   _NavItem({
     required this.icon,
@@ -142,18 +137,23 @@ class _NavItem {
     required this.path,
     this.isCenter = false,
   });
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final String path;
+  final bool isCenter;
 }
 
 class _NavItemWidget extends StatelessWidget {
-  final _NavItem item;
-  final bool isSelected;
-  final VoidCallback onTap;
 
   const _NavItemWidget({
     required this.item,
     required this.isSelected,
     required this.onTap,
   });
+  final _NavItem item;
+  final bool isSelected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -190,13 +190,13 @@ class _NavItemWidget extends StatelessWidget {
 }
 
 class _CenterButton extends StatelessWidget {
-  final bool isSelected;
-  final VoidCallback onTap;
 
   const _CenterButton({
     required this.isSelected,
     required this.onTap,
   });
+  final bool isSelected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {

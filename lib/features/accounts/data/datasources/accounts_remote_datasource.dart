@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+
+import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../../core/constants/api_endpoints.dart';
 import '../models/account_model.dart';
 
 /// Accounts Remote DataSource Interface
@@ -30,9 +31,9 @@ abstract class AccountsRemoteDataSource {
 
 /// Accounts Remote DataSource Implementation
 class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
-  final ApiClient _apiClient;
 
   AccountsRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, List<AccountModel>>> getAccounts() async {
@@ -41,7 +42,7 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
         if (data is List) {
           final accounts = data
@@ -58,7 +59,7 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
   Future<Either<Failure, AccountsSummary>> getAccountsSummary() async {
     return _apiClient.get<AccountsSummary>(
       ApiEndpoints.accountsSummary,
-      fromJson: (json) => AccountsSummary.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AccountsSummary.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -66,7 +67,7 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
   Future<Either<Failure, AccountModel>> getAccountById(String id) async {
     return _apiClient.get<AccountModel>(
       ApiEndpoints.accountById(id),
-      fromJson: (json) => AccountModel.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AccountModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -75,7 +76,7 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
     return _apiClient.post<AccountModel>(
       ApiEndpoints.accounts,
       data: request.toJson(),
-      fromJson: (json) => AccountModel.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AccountModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -87,7 +88,7 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
     return _apiClient.put<AccountModel>(
       ApiEndpoints.accountById(id),
       data: request.toJson(),
-      fromJson: (json) => AccountModel.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AccountModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -98,7 +99,7 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(null),
     );
   }
@@ -111,7 +112,7 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(null),
     );
   }

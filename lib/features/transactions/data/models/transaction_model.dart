@@ -5,35 +5,19 @@ import '../../../categories/data/models/category_model.dart';
 
 /// Transaction Model
 class TransactionModel extends Equatable {
-  final String id;
-  final TransactionType type;
-  final int amount; // in paise
-  final String? description;
-  final String? notes;
-  final String accountId;
-  final String? categoryId;
-  final String? toAccountId; // for transfers
-  final DateTime date;
-  final List<String> tags;
-  final String? payee;
-  final String? receiptUrl;
-  final bool isRecurring;
-  final AccountModel? account;
-  final CategoryModel? category;
-  final AccountModel? toAccount;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const TransactionModel({
     required this.id,
     required this.type,
     required this.amount,
+    required this.accountId,
+    required this.date,
+    required this.createdAt,
+    required this.updatedAt,
     this.description,
     this.notes,
-    required this.accountId,
     this.categoryId,
     this.toAccountId,
-    required this.date,
     this.tags = const [],
     this.payee,
     this.receiptUrl,
@@ -41,8 +25,6 @@ class TransactionModel extends Equatable {
     this.account,
     this.category,
     this.toAccount,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
@@ -79,6 +61,24 @@ class TransactionModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final TransactionType type;
+  final int amount; // in paise
+  final String? description;
+  final String? notes;
+  final String accountId;
+  final String? categoryId;
+  final String? toAccountId; // for transfers
+  final DateTime date;
+  final List<String> tags;
+  final String? payee;
+  final String? receiptUrl;
+  final bool isRecurring;
+  final AccountModel? account;
+  final CategoryModel? category;
+  final AccountModel? toAccount;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -176,11 +176,6 @@ class TransactionModel extends Equatable {
 
 /// Transaction Stats
 class TransactionStats extends Equatable {
-  final int totalIncome;
-  final int totalExpense;
-  final int netAmount;
-  final int transactionCount;
-  final double savingsRate;
 
   const TransactionStats({
     required this.totalIncome,
@@ -199,6 +194,11 @@ class TransactionStats extends Equatable {
       savingsRate: (json['savingsRate'] as num).toDouble(),
     );
   }
+  final int totalIncome;
+  final int totalExpense;
+  final int netAmount;
+  final int transactionCount;
+  final double savingsRate;
 
   double get totalIncomeInRupees => totalIncome / 100;
   double get totalExpenseInRupees => totalExpense / 100;
@@ -216,10 +216,6 @@ class TransactionStats extends Equatable {
 
 /// Daily Transaction Total
 class DailyTotal extends Equatable {
-  final DateTime date;
-  final int income;
-  final int expense;
-  final int net;
 
   const DailyTotal({
     required this.date,
@@ -236,6 +232,10 @@ class DailyTotal extends Equatable {
       net: json['net'] as int,
     );
   }
+  final DateTime date;
+  final int income;
+  final int expense;
+  final int net;
 
   double get incomeInRupees => income / 100;
   double get expenseInRupees => expense / 100;
@@ -247,16 +247,6 @@ class DailyTotal extends Equatable {
 
 /// Create Transaction Request
 class CreateTransactionRequest {
-  final TransactionType type;
-  final int amount;
-  final String accountId;
-  final String? categoryId;
-  final String? toAccountId;
-  final String? description;
-  final String? notes;
-  final DateTime? date;
-  final List<String>? tags;
-  final String? payee;
 
   const CreateTransactionRequest({
     required this.type,
@@ -270,6 +260,16 @@ class CreateTransactionRequest {
     this.tags,
     this.payee,
   });
+  final TransactionType type;
+  final int amount;
+  final String accountId;
+  final String? categoryId;
+  final String? toAccountId;
+  final String? description;
+  final String? notes;
+  final DateTime? date;
+  final List<String>? tags;
+  final String? payee;
 
   Map<String, dynamic> toJson() {
     return {
@@ -289,14 +289,6 @@ class CreateTransactionRequest {
 
 /// Transaction Filter
 class TransactionFilter {
-  final TransactionType? type;
-  final String? accountId;
-  final String? categoryId;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final int? minAmount;
-  final int? maxAmount;
-  final String? search;
 
   const TransactionFilter({
     this.type,
@@ -308,6 +300,14 @@ class TransactionFilter {
     this.maxAmount,
     this.search,
   });
+  final TransactionType? type;
+  final String? accountId;
+  final String? categoryId;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final int? minAmount;
+  final int? maxAmount;
+  final String? search;
 
   Map<String, dynamic> toQueryParams() {
     return {

@@ -12,14 +12,6 @@ import '../../../../app/theme.dart';
 /// - Gradient background
 /// - Customizable text and icon
 class AuthPrimaryButton extends StatelessWidget {
-  final String text;
-  final VoidCallback? onPressed;
-  final bool isLoading;
-  final bool isEnabled;
-  final IconData? icon;
-  final double? width;
-  final double height;
-  final BorderRadius? borderRadius;
 
   const AuthPrimaryButton({
     super.key,
@@ -32,6 +24,14 @@ class AuthPrimaryButton extends StatelessWidget {
     this.height = 52,
     this.borderRadius,
   });
+  final String text;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final bool isEnabled;
+  final IconData? icon;
+  final double? width;
+  final double height;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +45,8 @@ class AuthPrimaryButton extends StatelessWidget {
           gradient: isDisabled
               ? LinearGradient(
                   colors: [
-                    SpendexColors.primary.withOpacity(0.5),
-                    SpendexColors.primaryDark.withOpacity(0.5),
+                    SpendexColors.primary.withValues(alpha:0.5),
+                    SpendexColors.primaryDark.withValues(alpha:0.5),
                   ],
                 )
               : SpendexColors.primaryGradient,
@@ -55,7 +55,7 @@ class AuthPrimaryButton extends StatelessWidget {
               ? null
               : [
                   BoxShadow(
-                    color: SpendexColors.primary.withOpacity(0.3),
+                    color: SpendexColors.primary.withValues(alpha:0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -72,7 +72,7 @@ class AuthPrimaryButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
             disabledBackgroundColor: Colors.transparent,
             foregroundColor: Colors.white,
-            disabledForegroundColor: Colors.white.withOpacity(0.7),
+            disabledForegroundColor: Colors.white.withValues(alpha:0.7),
             shadowColor: Colors.transparent,
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -123,14 +123,6 @@ class AuthPrimaryButton extends StatelessWidget {
 /// - Icon support
 /// - Haptic feedback
 class AuthOutlinedButton extends StatelessWidget {
-  final String text;
-  final VoidCallback? onPressed;
-  final bool isLoading;
-  final bool isEnabled;
-  final IconData? icon;
-  final Color? color;
-  final double? width;
-  final double height;
 
   const AuthOutlinedButton({
     super.key,
@@ -143,6 +135,14 @@ class AuthOutlinedButton extends StatelessWidget {
     this.width,
     this.height = 52,
   });
+  final String text;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final bool isEnabled;
+  final IconData? icon;
+  final Color? color;
+  final double? width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -219,13 +219,6 @@ class AuthOutlinedButton extends StatelessWidget {
 /// - Customizable color
 /// - Underline option
 class AuthTextButton extends StatelessWidget {
-  final String text;
-  final VoidCallback? onPressed;
-  final bool isEnabled;
-  final Color? color;
-  final bool underline;
-  final FontWeight fontWeight;
-  final double? fontSize;
 
   const AuthTextButton({
     super.key,
@@ -237,6 +230,13 @@ class AuthTextButton extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.fontSize,
   });
+  final String text;
+  final VoidCallback? onPressed;
+  final bool isEnabled;
+  final Color? color;
+  final bool underline;
+  final FontWeight fontWeight;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -275,15 +275,6 @@ class AuthTextButton extends StatelessWidget {
 
 /// Social Login Button (Google, Apple, etc.)
 class AuthSocialButton extends StatelessWidget {
-  final String text;
-  final String? iconAsset;
-  final IconData? icon;
-  final VoidCallback? onPressed;
-  final bool isLoading;
-  final bool isEnabled;
-  final Color? backgroundColor;
-  final Color? foregroundColor;
-  final double height;
 
   const AuthSocialButton({
     super.key,
@@ -297,6 +288,15 @@ class AuthSocialButton extends StatelessWidget {
     this.foregroundColor,
     this.height = 52,
   });
+  final String text;
+  final String? iconAsset;
+  final IconData? icon;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final bool isEnabled;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -371,11 +371,6 @@ class AuthSocialButton extends StatelessWidget {
 
 /// Icon Button for auth screens
 class AuthIconButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback? onPressed;
-  final bool isEnabled;
-  final Color? color;
-  final double size;
 
   const AuthIconButton({
     super.key,
@@ -385,6 +380,11 @@ class AuthIconButton extends StatelessWidget {
     this.color,
     this.size = 24,
   });
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final bool isEnabled;
+  final Color? color;
+  final double size;
 
   @override
   Widget build(BuildContext context) {

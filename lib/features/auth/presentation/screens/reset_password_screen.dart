@@ -10,8 +10,8 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
+import '../widgets/auth_text_field.dart';
 import '../widgets/password_strength_indicator.dart';
 
 /// Reset Password Screen
@@ -27,14 +27,14 @@ import '../widgets/password_strength_indicator.dart';
 /// - Comprehensive error handling
 /// - Security features (prevent paste on confirm, clear on error)
 class ResetPasswordScreen extends ConsumerStatefulWidget {
+  const ResetPasswordScreen({
+    required this.token,
+    this.email,
+    super.key,
+  });
+
   final String? email;
   final String token;
-
-  const ResetPasswordScreen({
-    super.key,
-    this.email,
-    required this.token,
-  });
 
   @override
   ConsumerState<ResetPasswordScreen> createState() =>
@@ -106,10 +106,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _entranceController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+        curve: const Interval(0, 0.6, curve: Curves.easeOut),
       ),
     );
 
@@ -129,7 +129,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       duration: const Duration(milliseconds: 1500),
     );
 
-    _iconPulseAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
+    _iconPulseAnimation = Tween<double>(begin: 1, end: 1.08).animate(
       CurvedAnimation(
         parent: _iconController,
         curve: Curves.easeInOut,
@@ -144,17 +144,17 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       duration: const Duration(milliseconds: 600),
     );
 
-    _successScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _successScaleAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _successController,
         curve: Curves.elasticOut,
       ),
     );
 
-    _successOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _successOpacityAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _successController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+        curve: const Interval(0, 0.5, curve: Curves.easeOut),
       ),
     );
 
@@ -164,10 +164,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       duration: const Duration(milliseconds: 800),
     );
 
-    _checkmarkAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _checkmarkAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _checkmarkController,
-        curve: const Interval(0.3, 1.0, curve: Curves.easeOutBack),
+        curve: const Interval(0.3, 1, curve: Curves.easeOutBack),
       ),
     );
 
@@ -296,7 +296,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
             _passwordController.text,
           );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       if (success) {
         await _transitionToSuccess();
@@ -408,7 +410,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
 
   /// Handle back button press
   Future<bool> _onWillPop() async {
-    if (_isLoading) return false;
+    if (_isLoading) {
+      return false;
+    }
 
     if (_isSuccess) {
       _navigateToLogin();
@@ -486,7 +490,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
+        if (didPop) {
+          return;
+        }
         final shouldPop = await _onWillPop();
         if (shouldPop && context.mounted) {
           context.go(AppRoutes.login);
@@ -570,7 +576,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
 
@@ -614,7 +619,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: SpendexColors.primary.withOpacity(0.1),
+                    color: SpendexColors.primary.withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -680,7 +685,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 80),
 
@@ -733,8 +737,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
               text: 'Continue to Login',
               icon: Iconsax.login,
               onPressed: _navigateToLogin,
-              isLoading: false,
-              isEnabled: true,
             ),
           ),
 
@@ -746,13 +748,13 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: SpendexColors.primary.withOpacity(0.1),
+                color: SpendexColors.primary.withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.timer_1,
                     size: 16,
                     color: SpendexColors.primary,
@@ -801,7 +803,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
           boxShadow: [
             BoxShadow(
               color: (isSuccess ? SpendexColors.income : SpendexColors.primary)
-                  .withOpacity(0.3),
+                  .withValues(alpha:0.3),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
@@ -846,7 +848,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       labelText: 'New Password',
       hintText: 'Enter your new password',
       textInputAction: TextInputAction.next,
-      autofocus: false,
       enabled: !_isLoading,
       validator: _validatePassword,
       onChanged: (_) {
@@ -865,9 +866,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       focusNode: _confirmPasswordFocusNode,
       labelText: 'Confirm Password',
       hintText: 'Confirm your new password',
-      textInputAction: TextInputAction.done,
       enabled: !_isLoading,
-      enableInteractiveSelection: false, // Disable paste
+      enableInteractiveSelection: false,
       validator: _validateConfirmPassword,
       onChanged: (_) {
         _hasInteracted = true;
@@ -880,9 +880,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
   Widget _buildPasswordStrength() {
     return PasswordStrengthIndicator(
       password: _passwordController.text,
-      showRequirements: true,
-      showLabel: true,
-      barHeight: 4,
       padding: const EdgeInsets.only(top: 4),
     );
   }
@@ -901,7 +898,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
     final isExpired = lowerMessage.contains('expired');
 
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
+      tween: Tween(begin: 0, end: 1),
       duration: const Duration(milliseconds: 300),
       builder: (context, value, child) {
         return Opacity(
@@ -916,10 +913,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
         width: double.infinity,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: SpendexColors.expense.withOpacity(0.1),
+          color: SpendexColors.expense.withValues(alpha:0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: SpendexColors.expense.withOpacity(0.3),
+            color: SpendexColors.expense.withValues(alpha:0.3),
           ),
         ),
         child: Row(
@@ -945,7 +942,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                     Text(
                       'Redirecting to forgot password...',
                       style: SpendexTheme.labelMedium.copyWith(
-                        color: SpendexColors.expense.withOpacity(0.8),
+                        color: SpendexColors.expense.withValues(alpha:0.8),
                       ),
                     ),
                   ],
@@ -961,7 +958,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                 },
                 child: Icon(
                   Iconsax.close_circle,
-                  color: SpendexColors.expense.withOpacity(0.7),
+                  color: SpendexColors.expense.withValues(alpha:0.7),
                   size: 18,
                 ),
               ),

@@ -3,17 +3,12 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../data/models/budget_model.dart';
 import 'budget_progress_bar.dart';
 
 /// Budget Card Widget
 /// Displays a budget with progress, amounts, and status
 class BudgetCard extends StatelessWidget {
-  final BudgetModel budget;
-  final VoidCallback? onTap;
-  final bool compact;
-  final bool showCategory;
 
   const BudgetCard({
     super.key,
@@ -22,6 +17,10 @@ class BudgetCard extends StatelessWidget {
     this.compact = false,
     this.showCategory = true,
   });
+  final BudgetModel budget;
+  final VoidCallback? onTap;
+  final bool compact;
+  final bool showCategory;
 
   String _formatCurrency(double amount) {
     final formatter = NumberFormat.currency(
@@ -35,13 +34,6 @@ class BudgetCard extends StatelessWidget {
   int _getDaysRemaining() {
     final now = DateTime.now();
     return budget.endDate.difference(now).inDays;
-  }
-
-  String _formatDaysRemaining(int days) {
-    if (days < 0) return 'Ended';
-    if (days == 0) return 'Last day';
-    if (days == 1) return '1 day left';
-    return '$days days left';
   }
 
   Color _getStatusColor() {
@@ -314,11 +306,6 @@ class BudgetCard extends StatelessWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-  final int daysRemaining;
-  final double percentage;
-  final Color statusColor;
-  final bool isDark;
-  final bool compact;
 
   const _StatusBadge({
     required this.daysRemaining,
@@ -327,6 +314,11 @@ class _StatusBadge extends StatelessWidget {
     required this.isDark,
     this.compact = false,
   });
+  final int daysRemaining;
+  final double percentage;
+  final Color statusColor;
+  final bool isDark;
+  final bool compact;
 
   String _formatDaysRemaining(int days) {
     if (days < 0) return 'Ended';
@@ -378,12 +370,12 @@ class _StatusBadge extends StatelessWidget {
 
 /// Budget Card Loading Skeleton
 class BudgetCardSkeleton extends StatelessWidget {
-  final bool compact;
 
   const BudgetCardSkeleton({
     super.key,
     this.compact = false,
   });
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -511,14 +503,14 @@ class BudgetCardSkeleton extends StatelessWidget {
 
 /// Large Budget Card for details screen header
 class BudgetDetailCard extends StatelessWidget {
-  final BudgetModel budget;
-  final VoidCallback? onEdit;
 
   const BudgetDetailCard({
     super.key,
     required this.budget,
     this.onEdit,
   });
+  final BudgetModel budget;
+  final VoidCallback? onEdit;
 
   String _formatCurrency(double amount) {
     final formatter = NumberFormat.currency(
@@ -753,10 +745,6 @@ class BudgetDetailCard extends StatelessWidget {
 }
 
 class _DetailStatItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-  final bool isDark;
 
   const _DetailStatItem({
     required this.label,
@@ -764,6 +752,10 @@ class _DetailStatItem extends StatelessWidget {
     required this.color,
     required this.isDark,
   });
+  final String label;
+  final String value;
+  final Color color;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {

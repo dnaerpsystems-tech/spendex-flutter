@@ -25,15 +25,15 @@ import '../widgets/auth_button.dart';
 /// - Animations (entrance, shake, success, pulse)
 /// - Error handling with visual feedback
 /// - Navigation based on purpose (verification/password_reset)
-class OtpVerificationScreen extends ConsumerStatefulWidget {
-  final String email;
-  final String purpose; // "verification" or "password_reset"
-
+class OtpVerificationScreen extends ConsumerStatefulWidget { // "verification" or "password_reset"
   const OtpVerificationScreen({
-    super.key,
     required this.email,
     required this.purpose,
+    super.key,
   });
+
+  final String email;
+  final String purpose;
 
   @override
   ConsumerState<OtpVerificationScreen> createState() =>
@@ -89,10 +89,10 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _entranceController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+        curve: const Interval(0, 0.6, curve: Curves.easeOut),
       ),
     );
 
@@ -102,7 +102,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     ).animate(
       CurvedAnimation(
         parent: _entranceController,
-        curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
+        curve: const Interval(0.2, 1, curve: Curves.easeOutCubic),
       ),
     );
 
@@ -125,17 +125,17 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       duration: const Duration(milliseconds: 600),
     );
 
-    _successScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _successScaleAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _successController,
         curve: Curves.elasticOut,
       ),
     );
 
-    _successOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _successOpacityAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _successController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+        curve: const Interval(0, 0.5, curve: Curves.easeOut),
       ),
     );
 
@@ -145,7 +145,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       duration: const Duration(milliseconds: 1500),
     );
 
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
+    _pulseAnimation = Tween<double>(begin: 1, end: 1.1).animate(
       CurvedAnimation(
         parent: _pulseController,
         curve: Curves.easeInOut,
@@ -201,7 +201,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
 
   /// Handle OTP completion - called when all 6 digits are entered
   Future<void> _onOtpCompleted(String otp) async {
-    if (otp.length != 6 || _isVerifying || _isSuccess) return;
+    if (otp.length != 6 || _isVerifying || _isSuccess) {
+      return;
+    }
 
     // Haptic feedback
     HapticFeedback.mediumImpact();
@@ -209,7 +211,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     // Wait briefly to let user see the entered code
     await Future.delayed(const Duration(milliseconds: 500));
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     await _verifyOtp(otp);
   }
@@ -228,7 +232,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
             otp,
           );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       if (success) {
         await _handleVerificationSuccess();
@@ -238,7 +244,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         );
       }
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       await _handleVerificationError('An error occurred. Please try again.');
     }
   }
@@ -259,7 +267,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     // Wait a moment to show success state
     await Future.delayed(const Duration(milliseconds: 500));
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     // Navigate based on purpose
     if (widget.purpose == 'verification') {
@@ -323,7 +333,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       final authRepository = getIt<AuthRepository>();
       final result = await authRepository.sendOtp(widget.email, widget.purpose);
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       result.fold(
         (failure) {
@@ -356,11 +368,11 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
           // Show success snackbar
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Row(
+              content: const Row(
                 children: [
-                  const Icon(Iconsax.tick_circle, color: Colors.white, size: 20),
-                  const SizedBox(width: 12),
-                  const Expanded(
+                  Icon(Iconsax.tick_circle, color: Colors.white, size: 20),
+                  SizedBox(width: 12),
+                  Expanded(
                     child: Text('Verification code sent successfully'),
                   ),
                 ],
@@ -379,7 +391,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         },
       );
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _isResending = false;
         _hasError = true;
@@ -390,7 +404,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
 
   /// Handle back button press
   Future<bool> _onWillPop() async {
-    if (_isVerifying) return false;
+    if (_isVerifying) {
+      return false;
+    }
 
     final result = await showDialog<bool>(
       context: context,
@@ -458,11 +474,11 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     HapticFeedback.lightImpact();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
+        content: const Row(
           children: [
-            const Icon(Iconsax.message_question, color: Colors.white, size: 20),
-            const SizedBox(width: 12),
-            const Expanded(
+            Icon(Iconsax.message_question, color: Colors.white, size: 20),
+            SizedBox(width: 12),
+            Expanded(
               child: Text('Please contact support@spendex.app for assistance'),
             ),
           ],
@@ -486,7 +502,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
+        if (didPop) {
+          return;
+        }
         final shouldPop = await _onWillPop();
         if (shouldPop && context.mounted) {
           context.pop();
@@ -522,7 +540,6 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
 
@@ -633,7 +650,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
                   color: (_isSuccess
                           ? SpendexColors.income
                           : SpendexColors.primary)
-                      .withOpacity(0.3),
+                      .withValues(alpha:0.3),
                   blurRadius: 24,
                   offset: const Offset(0, 8),
                 ),
@@ -701,7 +718,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         border: Border.all(color: SpendexColors.primary, width: 2),
         boxShadow: [
           BoxShadow(
-            color: SpendexColors.primary.withOpacity(0.2),
+            color: SpendexColors.primary.withValues(alpha:0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -716,7 +733,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         color: SpendexColors.primary,
       ),
       decoration: BoxDecoration(
-        color: SpendexColors.primary.withOpacity(0.1),
+        color: SpendexColors.primary.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: SpendexColors.primary),
       ),
@@ -729,7 +746,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         color: SpendexColors.expense,
       ),
       decoration: BoxDecoration(
-        color: SpendexColors.expense.withOpacity(0.1),
+        color: SpendexColors.expense.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: SpendexColors.expense, width: 2),
       ),
@@ -742,7 +759,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         color: SpendexColors.income,
       ),
       decoration: BoxDecoration(
-        color: SpendexColors.income.withOpacity(0.1),
+        color: SpendexColors.income.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: SpendexColors.income, width: 2),
       ),
@@ -773,7 +790,6 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         errorPinTheme: errorPinTheme,
         enabled: !_isVerifying && !_isSuccess,
         pinputAutovalidateMode: PinputAutovalidateMode.disabled,
-        showCursor: true,
         cursor: Container(
           width: 2,
           height: 24,
@@ -823,7 +839,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 16,
             height: 16,
             child: CircularProgressIndicator(
@@ -858,10 +874,10 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: SpendexColors.expense.withOpacity(0.1),
+        color: SpendexColors.expense.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: SpendexColors.expense.withOpacity(0.3),
+          color: SpendexColors.expense.withValues(alpha:0.3),
         ),
       ),
       child: Row(
@@ -957,13 +973,13 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: SpendexColors.primary.withOpacity(0.1),
+              color: SpendexColors.primary.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Iconsax.timer_1,
                   size: 14,
                   color: SpendexColors.primary,
@@ -1003,7 +1019,9 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
 
   /// Build change email button
   Widget _buildChangeEmailButton(bool isDark) {
-    if (_isVerifying || _isSuccess) return const SizedBox.shrink();
+    if (_isVerifying || _isSuccess) {
+      return const SizedBox.shrink();
+    }
 
     return TextButton(
       onPressed: _handleChangeEmail,

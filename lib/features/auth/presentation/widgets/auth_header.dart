@@ -9,14 +9,6 @@ import '../../../../app/theme.dart';
 /// - Title and subtitle
 /// - Customizable for each screen
 class AuthHeader extends StatefulWidget {
-  final String title;
-  final String subtitle;
-  final bool showLogo;
-  final bool animate;
-  final Widget? customLogo;
-  final double logoSize;
-  final Duration animationDuration;
-  final TextAlign textAlign;
 
   const AuthHeader({
     super.key,
@@ -29,6 +21,14 @@ class AuthHeader extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 800),
     this.textAlign = TextAlign.center,
   });
+  final String title;
+  final String subtitle;
+  final bool showLogo;
+  final bool animate;
+  final Widget? customLogo;
+  final double logoSize;
+  final Duration animationDuration;
+  final TextAlign textAlign;
 
   @override
   State<AuthHeader> createState() => _AuthHeaderState();
@@ -49,17 +49,17 @@ class _AuthHeaderState extends State<AuthHeader>
       duration: widget.animationDuration,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+        curve: const Interval(0, 0.6, curve: Curves.easeOut),
       ),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.elasticOut),
+        curve: const Interval(0, 0.6, curve: Curves.elasticOut),
       ),
     );
 
@@ -69,7 +69,7 @@ class _AuthHeaderState extends State<AuthHeader>
     ).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.2, 1.0, curve: Curves.easeOut),
+        curve: const Interval(0.2, 1, curve: Curves.easeOut),
       ),
     );
 
@@ -160,7 +160,7 @@ class _AuthHeaderState extends State<AuthHeader>
         borderRadius: BorderRadius.circular(widget.logoSize * 0.25),
         boxShadow: [
           BoxShadow(
-            color: SpendexColors.primary.withOpacity(0.3),
+            color: SpendexColors.primary.withValues(alpha:0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -182,10 +182,6 @@ class _AuthHeaderState extends State<AuthHeader>
 
 /// Compact Auth Header for smaller spaces
 class AuthHeaderCompact extends StatelessWidget {
-  final String title;
-  final String? subtitle;
-  final IconData? leadingIcon;
-  final VoidCallback? onBack;
 
   const AuthHeaderCompact({
     super.key,
@@ -194,6 +190,10 @@ class AuthHeaderCompact extends StatelessWidget {
     this.leadingIcon,
     this.onBack,
   });
+  final String title;
+  final String? subtitle;
+  final IconData? leadingIcon;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -243,14 +243,14 @@ class AuthHeaderCompact extends StatelessWidget {
 
 /// Auth Divider with text in the middle
 class AuthDivider extends StatelessWidget {
-  final String text;
-  final double spacing;
 
   const AuthDivider({
     super.key,
     this.text = 'or continue with',
     this.spacing = 16,
   });
+  final String text;
+  final double spacing;
 
   @override
   Widget build(BuildContext context) {
@@ -281,9 +281,6 @@ class AuthDivider extends StatelessWidget {
 
 /// Auth Footer for links at the bottom
 class AuthFooter extends StatelessWidget {
-  final String text;
-  final String linkText;
-  final VoidCallback? onLinkPressed;
 
   const AuthFooter({
     super.key,
@@ -291,6 +288,9 @@ class AuthFooter extends StatelessWidget {
     required this.linkText,
     this.onLinkPressed,
   });
+  final String text;
+  final String linkText;
+  final VoidCallback? onLinkPressed;
 
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load environment variables
-  await dotenv.load(fileName: '.env');
+  await dotenv.load();
 
   // Initialize Hive for local storage
   await Hive.initFlutter();

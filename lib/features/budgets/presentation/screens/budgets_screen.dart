@@ -431,11 +431,6 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
 }
 
 class _SortOption extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final bool isDark;
 
   const _SortOption({
     required this.label,
@@ -444,6 +439,11 @@ class _SortOption extends StatelessWidget {
     required this.onTap,
     required this.isDark,
   });
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {

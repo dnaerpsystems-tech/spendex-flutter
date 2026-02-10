@@ -16,9 +16,9 @@ import '../widgets/budget_period_selector.dart';
 
 /// Add/Edit Budget Screen
 class AddBudgetScreen extends ConsumerStatefulWidget {
-  final String? budgetId;
 
   const AddBudgetScreen({super.key, this.budgetId});
+  final String? budgetId;
 
   @override
   ConsumerState<AddBudgetScreen> createState() => _AddBudgetScreenState();
@@ -171,8 +171,6 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
   }
 
   Future<void> _selectStartDate() async {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     final date = await showDatePicker(
       context: context,
       initialDate: _startDate,
@@ -716,15 +714,15 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
 }
 
 class _SectionTitle extends StatelessWidget {
-  final String title;
-  final String? subtitle;
-  final bool isDark;
 
   const _SectionTitle({
     required this.title,
     this.subtitle,
     required this.isDark,
   });
+  final String title;
+  final String? subtitle;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
@@ -758,10 +756,6 @@ class _SectionTitle extends StatelessWidget {
 }
 
 class _CategorySelector extends StatelessWidget {
-  final List<CategoryModel> categories;
-  final CategoryModel? selectedCategory;
-  final ValueChanged<CategoryModel?> onCategorySelected;
-  final bool isDark;
 
   const _CategorySelector({
     required this.categories,
@@ -769,10 +763,13 @@ class _CategorySelector extends StatelessWidget {
     required this.onCategorySelected,
     required this.isDark,
   });
+  final List<CategoryModel> categories;
+  final CategoryModel? selectedCategory;
+  final ValueChanged<CategoryModel?> onCategorySelected;
+  final bool isDark;
 
   Color _parseColor(String? colorString) {
     try {
-      if (colorString == null || colorString.isEmpty) return SpendexColors.primary;
       if (colorString == null || colorString.isEmpty) return SpendexColors.primary;
       final color = colorString.replaceAll('#', '');
       return Color(int.parse('FF$color', radix: 16));
@@ -782,9 +779,6 @@ class _CategorySelector extends StatelessWidget {
   }
 
   IconData _parseIcon(String? iconName) {
-    if (iconName == null) return Iconsax.category;
-    if (iconName == null) return Iconsax.category;
-    if (iconName == null) return Iconsax.category;
     if (iconName == null) return Iconsax.category;
     final iconMap = {
       'shopping-cart': Iconsax.shopping_cart,

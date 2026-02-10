@@ -7,9 +7,9 @@ import '../models/category_model.dart';
 
 /// Categories Repository Implementation
 class CategoriesRepositoryImpl implements CategoriesRepository {
-  final CategoriesRemoteDataSource _remoteDataSource;
 
   CategoriesRepositoryImpl(this._remoteDataSource);
+  final CategoriesRemoteDataSource _remoteDataSource;
 
   @override
   Future<Either<Failure, List<CategoryModel>>> getCategories() {

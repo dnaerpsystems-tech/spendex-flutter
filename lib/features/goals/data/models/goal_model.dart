@@ -3,19 +3,6 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Goal Model
 class GoalModel extends Equatable {
-  final String id;
-  final String name;
-  final int targetAmount; // in paise
-  final int currentAmount; // in paise
-  final double progress;
-  final DateTime? targetDate;
-  final String? icon;
-  final String? color;
-  final GoalStatus status;
-  final int? monthlyRequired; // in paise
-  final String? linkedAccountId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const GoalModel({
     required this.id,
@@ -23,14 +10,14 @@ class GoalModel extends Equatable {
     required this.targetAmount,
     required this.currentAmount,
     required this.progress,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
     this.targetDate,
     this.icon,
     this.color,
-    required this.status,
     this.monthlyRequired,
     this.linkedAccountId,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory GoalModel.fromJson(Map<String, dynamic> json) {
@@ -55,6 +42,19 @@ class GoalModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final String name;
+  final int targetAmount; // in paise
+  final int currentAmount; // in paise
+  final double progress;
+  final DateTime? targetDate;
+  final String? icon;
+  final String? color;
+  final GoalStatus status;
+  final int? monthlyRequired; // in paise
+  final String? linkedAccountId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -140,12 +140,6 @@ class GoalModel extends Equatable {
 
 /// Goal Contribution
 class GoalContribution extends Equatable {
-  final String id;
-  final String goalId;
-  final int amount;
-  final String? note;
-  final DateTime date;
-  final DateTime createdAt;
 
   const GoalContribution({
     required this.id,
@@ -166,6 +160,12 @@ class GoalContribution extends Equatable {
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
+  final String id;
+  final String goalId;
+  final int amount;
+  final String? note;
+  final DateTime date;
+  final DateTime createdAt;
 
   double get amountInRupees => amount / 100;
 
@@ -175,11 +175,6 @@ class GoalContribution extends Equatable {
 
 /// Goals Summary
 class GoalsSummary extends Equatable {
-  final int totalTarget;
-  final int totalSaved;
-  final int totalRemaining;
-  final int goalCount;
-  final int completedCount;
 
   const GoalsSummary({
     required this.totalTarget,
@@ -198,6 +193,11 @@ class GoalsSummary extends Equatable {
       completedCount: json['completedCount'] as int,
     );
   }
+  final int totalTarget;
+  final int totalSaved;
+  final int totalRemaining;
+  final int goalCount;
+  final int completedCount;
 
   double get totalTargetInRupees => totalTarget / 100;
   double get totalSavedInRupees => totalSaved / 100;
@@ -217,12 +217,6 @@ class GoalsSummary extends Equatable {
 
 /// Create Goal Request
 class CreateGoalRequest {
-  final String name;
-  final int targetAmount;
-  final DateTime? targetDate;
-  final String? icon;
-  final String? color;
-  final String? linkedAccountId;
 
   const CreateGoalRequest({
     required this.name,
@@ -232,6 +226,12 @@ class CreateGoalRequest {
     this.color,
     this.linkedAccountId,
   });
+  final String name;
+  final int targetAmount;
+  final DateTime? targetDate;
+  final String? icon;
+  final String? color;
+  final String? linkedAccountId;
 
   Map<String, dynamic> toJson() {
     return {
@@ -247,15 +247,15 @@ class CreateGoalRequest {
 
 /// Add Contribution Request
 class AddContributionRequest {
-  final int amount;
-  final String? note;
-  final DateTime? date;
 
   const AddContributionRequest({
     required this.amount,
     this.note,
     this.date,
   });
+  final int amount;
+  final String? note;
+  final DateTime? date;
 
   Map<String, dynamic> toJson() {
     return {

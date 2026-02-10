@@ -265,7 +265,7 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                 );
 
-                if (confirm == true) {
+                if (confirm ?? false) {
                   await ref.read(authStateProvider.notifier).logout();
                   if (context.mounted) {
                     context.go(AppRoutes.login);
@@ -304,12 +304,6 @@ class SettingsScreen extends ConsumerWidget {
 }
 
 class _SettingsTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final Widget? trailing;
-  final Color? textColor;
-  final VoidCallback? onTap;
 
   const _SettingsTile({
     required this.icon,
@@ -319,6 +313,12 @@ class _SettingsTile extends StatelessWidget {
     this.textColor,
     this.onTap,
   });
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final Color? textColor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

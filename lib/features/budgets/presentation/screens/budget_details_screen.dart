@@ -14,9 +14,9 @@ import '../widgets/budget_progress_bar.dart';
 /// Budget Details Screen
 /// Displays detailed budget information, progress, and spending breakdown
 class BudgetDetailsScreen extends ConsumerStatefulWidget {
-  final String budgetId;
 
   const BudgetDetailsScreen({super.key, required this.budgetId});
+  final String budgetId;
 
   @override
   ConsumerState<BudgetDetailsScreen> createState() => _BudgetDetailsScreenState();
@@ -33,15 +33,6 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
 
   Future<void> _refresh() async {
     await ref.read(budgetsStateProvider.notifier).getBudgetById(widget.budgetId);
-  }
-
-  String _formatCurrency(double amount) {
-    final formatter = NumberFormat.currency(
-      locale: 'en_IN',
-      symbol: '₹',
-      decimalDigits: 0,
-    );
-    return formatter.format(amount);
   }
 
   String _formatDate(DateTime date) {
@@ -557,10 +548,6 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
 }
 
 class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final bool isDark;
 
   const _InfoRow({
     required this.icon,
@@ -568,6 +555,10 @@ class _InfoRow extends StatelessWidget {
     required this.value,
     required this.isDark,
   });
+  final IconData icon;
+  final String label;
+  final String value;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
@@ -606,11 +597,6 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-  final bool isDark;
 
   const _ActionButton({
     required this.icon,
@@ -619,6 +605,11 @@ class _ActionButton extends StatelessWidget {
     required this.onTap,
     required this.isDark,
   });
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
