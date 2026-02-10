@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/settings/presentation/providers/theme_provider.dart';
 import 'routes.dart';
 import 'theme.dart';
-import '../features/settings/presentation/providers/theme_provider.dart';
 
 class SpendexApp extends ConsumerWidget {
   const SpendexApp({super.key});
