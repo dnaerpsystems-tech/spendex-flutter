@@ -1,9 +1,9 @@
 /// Base Exception class
 class AppException implements Exception {
+  AppException(this.message, {this.code});
+
   final String message;
   final String? code;
-
-  AppException(this.message, {this.code});
 
   @override
   String toString() => 'AppException: $message (code: $code)';
@@ -26,9 +26,9 @@ class AuthException extends AppException {
 
 /// Validation Exception - invalid input
 class ValidationException extends AppException {
-  final Map<String, List<String>>? errors;
-
   ValidationException(super.message, {super.code, this.errors});
+
+  final Map<String, List<String>>? errors;
 }
 
 /// Cache Exception - local storage errors
@@ -43,24 +43,20 @@ class NotFoundException extends AppException {
 
 /// Rate Limit Exception
 class RateLimitException extends AppException {
-  final Duration? retryAfter;
-
   RateLimitException(super.message, {super.code, this.retryAfter});
+
+  final Duration? retryAfter;
 }
 
 /// Subscription Required Exception
 class SubscriptionRequiredException extends AppException {
-  final String? requiredPlan;
-
   SubscriptionRequiredException(super.message, {super.code, this.requiredPlan});
+
+  final String? requiredPlan;
 }
 
 /// Limit Exceeded Exception
 class LimitExceededException extends AppException {
-  final String? limitType;
-  final int? currentUsage;
-  final int? maxLimit;
-
   LimitExceededException(
     super.message, {
     super.code,
@@ -68,4 +64,8 @@ class LimitExceededException extends AppException {
     this.currentUsage,
     this.maxLimit,
   });
+
+  final String? limitType;
+  final int? currentUsage;
+  final int? maxLimit;
 }
