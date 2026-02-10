@@ -7,9 +7,9 @@ import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../data/models/category_model.dart';
 import '../providers/categories_provider.dart';
-import '../widgets/category_type_selector.dart';
-import '../widgets/category_icon_picker.dart';
 import '../widgets/category_color_picker.dart';
+import '../widgets/category_icon_picker.dart';
+import '../widgets/category_type_selector.dart';
 
 /// Add/Edit Category Screen
 ///
@@ -17,14 +17,14 @@ import '../widgets/category_color_picker.dart';
 /// Supports both income and expense category types with customizable
 /// icons, colors, and optional parent category for subcategories.
 class AddCategoryScreen extends ConsumerStatefulWidget {
-  /// Optional category ID for editing mode.
-  /// If null, the screen operates in create mode.
-  final String? categoryId;
-
   const AddCategoryScreen({
     super.key,
     this.categoryId,
   });
+
+  /// Optional category ID for editing mode.
+  /// If null, the screen operates in create mode.
+  final String? categoryId;
 
   @override
   ConsumerState<AddCategoryScreen> createState() => _AddCategoryScreenState();
@@ -64,9 +64,10 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
 
   /// Sets default values for a new category based on type
   void _setDefaultValues() {
-    _selectedColor = SpendexColors.categoryColors.first.value
+    final colorValue = SpendexColors.categoryColors.first;
+    _selectedColor = (colorValue.r.toInt() << 16 | colorValue.g.toInt() << 8 | colorValue.b.toInt())
         .toRadixString(16)
-        .substring(2)
+        .padLeft(6, '0')
         .toUpperCase();
   }
 
@@ -117,7 +118,9 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
 
   /// Handles back navigation with unsaved changes check
   Future<bool> _onWillPop() async {
-    if (!_isFormDirty) return true;
+    if (!_isFormDirty) {
+      return true;
+    }
 
     final result = await showDialog<bool>(
       context: context,
@@ -133,7 +136,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(
+            child: const Text(
               'Discard',
               style: TextStyle(color: SpendexColors.expense),
             ),
@@ -189,7 +192,9 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
 
   /// Handles category deletion with confirmation
   Future<void> _handleDelete() async {
-    if (_editingCategory == null) return;
+    if (_editingCategory == null) {
+      return;
+    }
 
     // System categories cannot be deleted
     if (isSystemCategory) {
@@ -306,7 +311,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
     }
 
     // Map icon names to IconData
-    const iconMap = <String, IconData>{
+    final iconMap = <String, IconData>{
       'shopping_bag': Iconsax.shopping_bag,
       'shopping_cart': Iconsax.shopping_cart,
       'bag': Iconsax.bag,
@@ -387,7 +392,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
       'more': Iconsax.more,
       'category': Iconsax.category,
       'category_2': Iconsax.category_2,
-      'element': Iconsax.element,
+      'element': Iconsax.element_3,
       'box': Iconsax.box,
       'archive': Iconsax.archive,
       'safe_home': Iconsax.safe_home,
