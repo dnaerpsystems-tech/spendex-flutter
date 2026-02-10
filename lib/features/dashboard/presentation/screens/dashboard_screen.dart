@@ -25,7 +25,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: SafeArea(
@@ -197,7 +196,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final transactions = _getMockTransactions();
-                    if (index >= transactions.length) return null;
+                    if (index >= transactions.length) {
+                      return null;
+                    }
                     final transaction = transactions[index];
                     return _TransactionTile(
                       transaction: transaction,
@@ -228,8 +229,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Morning';
-    if (hour < 17) return 'Afternoon';
+    if (hour < 12) {
+      return 'Morning';
+    }
+    if (hour < 17) {
+      return 'Afternoon';
+    }
     return 'Evening';
   }
 
@@ -280,15 +285,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 }
 
 class _NetWorthCard extends StatelessWidget {
-  final int netWorth;
-  final double change;
-  final NumberFormat currencyFormat;
-
   const _NetWorthCard({
     required this.netWorth,
     required this.change,
     required this.currencyFormat,
   });
+
+  final int netWorth;
+  final double change;
+  final NumberFormat currencyFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -373,10 +378,10 @@ class _NetWorthCard extends StatelessWidget {
 }
 
 class _NetWorthItem extends StatelessWidget {
+  const _NetWorthItem({required this.label, required this.value});
+
   final String label;
   final String value;
-
-  const _NetWorthItem({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -402,17 +407,17 @@ class _NetWorthItem extends StatelessWidget {
 }
 
 class _QuickActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-
   const _QuickActionButton({
     required this.icon,
     required this.label,
     required this.color,
     required this.onTap,
   });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -445,15 +450,15 @@ class _QuickActionButton extends StatelessWidget {
 }
 
 class _MonthlySummaryCard extends StatelessWidget {
-  final int income;
-  final int expense;
-  final NumberFormat currencyFormat;
-
   const _MonthlySummaryCard({
     required this.income,
     required this.expense,
     required this.currencyFormat,
   });
+
+  final int income;
+  final int expense;
+  final NumberFormat currencyFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -548,17 +553,17 @@ class _MonthlySummaryCard extends StatelessWidget {
 }
 
 class _SummaryItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-  final IconData icon;
-
   const _SummaryItem({
     required this.label,
     required this.value,
     required this.color,
     required this.icon,
   });
+
+  final String label;
+  final String value;
+  final Color color;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -600,13 +605,13 @@ class _SummaryItem extends StatelessWidget {
 }
 
 class _TransactionTile extends StatelessWidget {
-  final Map<String, dynamic> transaction;
-  final NumberFormat currencyFormat;
-
   const _TransactionTile({
     required this.transaction,
     required this.currencyFormat,
   });
+
+  final Map<String, dynamic> transaction;
+  final NumberFormat currencyFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -719,7 +724,7 @@ class _BudgetAlertCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'You\'ve used 85% of your Food budget this month',
+                  "You've used 85% of your Food budget this month",
                   style: SpendexTheme.bodyMedium.copyWith(
                     color: isDark
                         ? SpendexColors.darkTextSecondary
