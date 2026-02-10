@@ -15,8 +15,8 @@ class ApiResponse<T> {
   });
 
   factory ApiResponse.fromJson(
-    Map<String, dynamic> json,
-    T Function(dynamic)? fromJsonT,
+    Map<String, Object?> json,
+    T Function(Object?)? fromJsonT,
   ) {
     return ApiResponse(
       success: json['success'] as bool? ?? false,
@@ -24,10 +24,10 @@ class ApiResponse<T> {
           ? fromJsonT(json['data'])
           : json['data'] as T?,
       meta: json['meta'] != null
-          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+          ? Meta.fromJson(json['meta']! as Map<String, Object?>)
           : null,
       error: json['error'] != null
-          ? ApiError.fromJson(json['error'] as Map<String, dynamic>)
+          ? ApiError.fromJson(json['error']! as Map<String, Object?>)
           : null,
     );
   }
@@ -47,7 +47,7 @@ class Meta {
     required this.totalPages,
   });
 
-  factory Meta.fromJson(Map<String, dynamic> json) {
+  factory Meta.fromJson(Map<String, Object?> json) {
     return Meta(
       page: (json['page'] as num?)?.toInt() ?? 1,
       limit: (json['limit'] as num?)?.toInt() ?? 20,
@@ -72,17 +72,17 @@ class ApiError {
     this.details,
   });
 
-  factory ApiError.fromJson(Map<String, dynamic> json) {
+  factory ApiError.fromJson(Map<String, Object?> json) {
     return ApiError(
       code: json['code'] as String? ?? 'UNKNOWN_ERROR',
       message: json['message'] as String? ?? 'An unknown error occurred',
-      details: json['details'] as List<dynamic>?,
+      details: json['details'] as List<Object?>?,
     );
   }
 
   final String code;
   final String message;
-  final List<dynamic>? details;
+  final List<Object?>? details;
 }
 
 /// Paginated response wrapper
@@ -113,12 +113,12 @@ class ApiClient {
   /// GET request
   Future<Either<Failure, T>> get<T>(
     String path, {
-    Map<String, dynamic>? queryParameters,
-    T Function(dynamic)? fromJson,
+    Map<String, Object?>? queryParameters,
+    T Function(Object?)? fromJson,
     Options? options,
   }) async {
     try {
-      final response = await _dio.get<dynamic>(
+      final response = await _dio.get<Object?>(
         path,
         queryParameters: queryParameters,
         options: options,
@@ -134,13 +134,13 @@ class ApiClient {
   /// POST request
   Future<Either<Failure, T>> post<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    T Function(dynamic)? fromJson,
+    Object? data,
+    Map<String, Object?>? queryParameters,
+    T Function(Object?)? fromJson,
     Options? options,
   }) async {
     try {
-      final response = await _dio.post<dynamic>(
+      final response = await _dio.post<Object?>(
         path,
         data: data,
         queryParameters: queryParameters,
@@ -157,13 +157,13 @@ class ApiClient {
   /// PUT request
   Future<Either<Failure, T>> put<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    T Function(dynamic)? fromJson,
+    Object? data,
+    Map<String, Object?>? queryParameters,
+    T Function(Object?)? fromJson,
     Options? options,
   }) async {
     try {
-      final response = await _dio.put<dynamic>(
+      final response = await _dio.put<Object?>(
         path,
         data: data,
         queryParameters: queryParameters,
@@ -180,13 +180,13 @@ class ApiClient {
   /// DELETE request
   Future<Either<Failure, T>> delete<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    T Function(dynamic)? fromJson,
+    Object? data,
+    Map<String, Object?>? queryParameters,
+    T Function(Object?)? fromJson,
     Options? options,
   }) async {
     try {
-      final response = await _dio.delete<dynamic>(
+      final response = await _dio.delete<Object?>(
         path,
         data: data,
         queryParameters: queryParameters,
@@ -203,13 +203,13 @@ class ApiClient {
   /// PATCH request
   Future<Either<Failure, T>> patch<T>(
     String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    T Function(dynamic)? fromJson,
+    Object? data,
+    Map<String, Object?>? queryParameters,
+    T Function(Object?)? fromJson,
     Options? options,
   }) async {
     try {
-      final response = await _dio.patch<dynamic>(
+      final response = await _dio.patch<Object?>(
         path,
         data: data,
         queryParameters: queryParameters,
@@ -228,8 +228,8 @@ class ApiClient {
     String path, {
     required File file,
     required String fieldName,
-    Map<String, dynamic>? additionalData,
-    T Function(dynamic)? fromJson,
+    Map<String, Object?>? additionalData,
+    T Function(Object?)? fromJson,
     void Function(int, int)? onSendProgress,
   }) async {
     try {
@@ -241,7 +241,7 @@ class ApiClient {
         ...?additionalData,
       });
 
-      final response = await _dio.post<dynamic>(
+      final response = await _dio.post<Object?>(
         path,
         data: formData,
         onSendProgress: onSendProgress,
@@ -258,7 +258,7 @@ class ApiClient {
   Future<Either<Failure, File>> downloadFile(
     String path,
     String savePath, {
-    Map<String, dynamic>? queryParameters,
+    Map<String, Object?>? queryParameters,
     void Function(int, int)? onReceiveProgress,
   }) async {
     try {
@@ -278,15 +278,15 @@ class ApiClient {
 
   /// Handle response
   Either<Failure, T> _handleResponse<T>(
-    Response<dynamic> response,
-    T Function(dynamic)? fromJson,
+    Response<Object?> response,
+    T Function(Object?)? fromJson,
   ) {
     if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       if (fromJson != null && response.data != null) {
         final responseData = response.data;
-        if (responseData is Map<String, dynamic> &&
+        if (responseData is Map<String, Object?> &&
             responseData['data'] != null) {
           return Right(fromJson(responseData['data']));
         }
@@ -295,9 +295,9 @@ class ApiClient {
       return Right(response.data as T);
     } else {
       final responseData = response.data;
-      final apiError = responseData is Map<String, dynamic>
+      final apiError = responseData is Map<String, Object?>
           ? ApiError.fromJson(
-              responseData['error'] as Map<String, dynamic>? ?? {},
+              responseData['error'] as Map<String, Object?>? ?? {},
             )
           : ApiError(code: 'UNKNOWN', message: 'Unknown error');
       return Left(ServerFailure(apiError.message, code: apiError.code));
@@ -337,7 +337,7 @@ class ApiClient {
   }
 
   /// Handle bad response
-  Failure _handleBadResponse(Response<dynamic>? response) {
+  Failure _handleBadResponse(Response<Object?>? response) {
     if (response == null) {
       return const ServerFailure('No response from server');
     }
@@ -345,12 +345,12 @@ class ApiClient {
     final statusCode = response.statusCode ?? 0;
     final data = response.data;
 
-    String message = 'An error occurred';
-    String code = 'UNKNOWN_ERROR';
+    var message = 'An error occurred';
+    var code = 'UNKNOWN_ERROR';
 
-    if (data is Map<String, dynamic>) {
+    if (data is Map<String, Object?>) {
       final error = data['error'];
-      if (error is Map<String, dynamic>) {
+      if (error is Map<String, Object?>) {
         message = error['message'] as String? ?? message;
         code = error['code'] as String? ?? code;
       } else if (data['message'] != null) {

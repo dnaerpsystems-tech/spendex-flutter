@@ -3,9 +3,9 @@ import '../constants/app_constants.dart';
 
 /// Secure Storage Service for sensitive data
 class SecureStorageService {
-  final FlutterSecureStorage _storage;
-
   SecureStorageService(this._storage);
+
+  final FlutterSecureStorage _storage;
 
   /// Save access and refresh tokens
   Future<void> saveTokens(String accessToken, String refreshToken) async {
