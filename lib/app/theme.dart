@@ -123,10 +123,8 @@ class SpendexTheme {
       brightness: Brightness.light,
       colorScheme: const ColorScheme.light(
         primary: SpendexColors.primary,
-        onPrimary: Colors.white,
         secondary: SpendexColors.transfer,
         error: SpendexColors.expense,
-        surface: SpendexColors.lightSurface,
         onSurface: SpendexColors.lightTextPrimary,
       ),
       scaffoldBackgroundColor: SpendexColors.lightBackground,
