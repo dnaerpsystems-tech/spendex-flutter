@@ -348,6 +348,26 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
+      // Category Routes
+      GoRoute(
+        path: AppRoutes.categories,
+        builder: (context, state) => const CategoriesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addCategory,
+        builder: (context, state) {
+          final categoryId = state.uri.queryParameters['id'];
+          return AddCategoryScreen(categoryId: categoryId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.categoryDetails,
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return CategoryDetailsScreen(categoryId: id);
+        },
+      ),
+
       // Budget Routes
       GoRoute(
         path: AppRoutes.budgets,
