@@ -139,7 +139,7 @@ class SpendexTheme {
           color: SpendexColors.lightTextPrimary,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         color: SpendexColors.lightCard,
         shape: RoundedRectangleBorder(
@@ -214,7 +214,7 @@ class SpendexTheme {
           color: SpendexColors.darkTextPrimary,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         color: SpendexColors.darkCard,
         shape: RoundedRectangleBorder(
