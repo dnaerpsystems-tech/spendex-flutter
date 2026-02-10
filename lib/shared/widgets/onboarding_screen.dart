@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/routes.dart';
 import '../../app/theme.dart';
-import '../../core/storage/local_storage.dart';
 import '../../core/di/injection.dart';
+import '../../core/storage/local_storage.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     OnboardingPage(
       title: 'Set Smart Budgets',
       description:
-          'Create budgets for different categories and get alerts when you\'re close to your limits.',
+          "Create budgets for different categories and get alerts when you're close to your limits.",
       icon: Icons.pie_chart_outline,
       color: SpendexColors.transfer,
     ),
@@ -66,8 +66,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _completeOnboarding() {
-    final localStorage = getIt<LocalStorageService>();
-    localStorage.setOnboardingCompleted(true);
+    getIt<LocalStorageService>().setOnboardingCompleted(completed: true);
     context.go(AppRoutes.login);
   }
 
@@ -157,23 +156,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class OnboardingPage {
-  final String title;
-  final String description;
-  final IconData icon;
-  final Color color;
-
   OnboardingPage({
     required this.title,
     required this.description,
     required this.icon,
     required this.color,
   });
+
+  final String title;
+  final String description;
+  final IconData icon;
+  final Color color;
 }
 
 class _OnboardingPageView extends StatelessWidget {
-  final OnboardingPage page;
-
   const _OnboardingPageView({required this.page});
+
+  final OnboardingPage page;
 
   @override
   Widget build(BuildContext context) {

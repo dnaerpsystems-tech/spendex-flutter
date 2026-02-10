@@ -685,8 +685,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                         const SizedBox(height: 12),
                         PasswordStrengthIndicator(
                           password: _currentPassword,
-                          showRequirements: true,
-                          showLabel: true,
                         ),
                       ],
 
@@ -863,8 +861,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: isDark
-                          ? SpendexColors.darkBorder.withOpacity(0.5)
-                          : SpendexColors.lightBorder.withOpacity(0.5),
+                          ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+                          : SpendexColors.lightBorder.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -1061,10 +1059,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: SpendexColors.expense.withOpacity(0.1),
+        color: SpendexColors.expense.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: SpendexColors.expense.withOpacity(0.3),
+          color: SpendexColors.expense.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
