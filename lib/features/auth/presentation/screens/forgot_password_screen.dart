@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -685,7 +684,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 60),
 
@@ -831,7 +829,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
           boxShadow: [
             BoxShadow(
               color: (isSuccess ? SpendexColors.income : SpendexColors.primary)
-                  .withOpacity(0.3),
+                  .withValues(alpha: 0.3),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
@@ -895,7 +893,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         lowerMessage.contains('limit');
 
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
+      tween: Tween(begin: 0, end: 1),
       duration: const Duration(milliseconds: 300),
       builder: (context, value, child) {
         return Opacity(
@@ -964,7 +962,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       icon: Iconsax.send_2,
       onPressed: _handleSubmit,
       isLoading: _isLoading,
-      isEnabled: !_isLoading,
     );
   }
 

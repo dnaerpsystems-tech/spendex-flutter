@@ -74,10 +74,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+        curve: const Interval(0, 0.6, curve: Curves.easeOut),
       ),
     );
 
@@ -87,7 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     ).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.2, 1.0, curve: Curves.easeOut),
+        curve: const Interval(0.2, 1, curve: Curves.easeOut),
       ),
     );
 
@@ -400,7 +400,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                   text: 'Google',
                                   icon: Icons.g_mobiledata_rounded,
                                   onPressed: () {
-                                    // TODO: Implement Google login
+                                    // TODO(spendex): Implement Google login.
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('Google login coming soon'),
@@ -417,7 +417,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                   text: 'Apple',
                                   icon: Icons.apple,
                                   onPressed: () {
-                                    // TODO: Implement Apple login
+                                    // TODO(spendex): Implement Apple login.
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('Apple login coming soon'),
@@ -451,8 +451,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
             // Loading Overlay
             if (authState.isLoading)
-              Container(
-                color: Colors.black.withOpacity(0.3),
+              ColoredBox(
+                color: Colors.black.withValues(alpha: 0.3),
                 child: const Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(SpendexColors.primary),
@@ -476,7 +476,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         authState.error!.toLowerCase().contains('too many');
 
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
+      tween: Tween(begin: 0, end: 1),
       duration: const Duration(milliseconds: 300),
       builder: (context, value, child) {
         return Opacity(
@@ -492,11 +492,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: (isRateLimited ? SpendexColors.warning : SpendexColors.expense)
-              .withOpacity(0.1),
+              .withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: (isRateLimited ? SpendexColors.warning : SpendexColors.expense)
-                .withOpacity(0.3),
+                .withValues(alpha: 0.3),
           ),
         ),
         child: Row(
@@ -522,7 +522,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               child: Icon(
                 Iconsax.close_circle,
                 color: (isRateLimited ? SpendexColors.warning : SpendexColors.expense)
-                    .withOpacity(0.7),
+                    .withValues(alpha: 0.7),
                 size: 18,
               ),
             ),
