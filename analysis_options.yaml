@@ -16,7 +16,6 @@ linter:
   rules:
     # Error Rules
     avoid_dynamic_calls: true
-    avoid_returning_null_for_future: true
     avoid_slow_async_io: true
     cancel_subscriptions: true
     close_sinks: true
@@ -44,7 +43,6 @@ linter:
     avoid_positional_boolean_parameters: true
     avoid_private_typedef_functions: true
     avoid_redundant_argument_values: true
-    avoid_returning_null: true
     avoid_returning_this: true
     avoid_setters_without_getters: true
     avoid_types_on_closure_parameters: true
@@ -97,7 +95,6 @@ linter:
     use_enums: true
     use_if_null_to_convert_nulls_to_bools: true
     use_is_even_rather_than_modulo: true
-    use_late_for_private_fields_final: true
     use_named_constants: true
     use_raw_strings: true
     use_setters_to_change_properties: true

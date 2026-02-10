@@ -1,15 +1,17 @@
 import 'dart:convert';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../constants/app_constants.dart';
 
 /// Local Storage Service for non-sensitive data
 class LocalStorageService {
-  final SharedPreferences _prefs;
-  final Box _settingsBox;
-  final Box _cacheBox;
-
   LocalStorageService(this._prefs, this._settingsBox, this._cacheBox);
+
+  final SharedPreferences _prefs;
+  final Box<String> _settingsBox;
+  final Box<String> _cacheBox;
 
   // ============ Settings ============
 
@@ -39,7 +41,7 @@ class LocalStorageService {
   }
 
   /// Set onboarding completed
-  Future<void> setOnboardingCompleted(bool completed) async {
+  Future<void> setOnboardingCompleted({required bool completed}) async {
     await _prefs.setBool(AppConstants.onboardingKey, completed);
   }
 
@@ -49,7 +51,7 @@ class LocalStorageService {
   }
 
   /// Set biometric enabled
-  Future<void> setBiometricEnabled(bool enabled) async {
+  Future<void> setBiometricEnabled({required bool enabled}) async {
     await _prefs.setBool(AppConstants.biometricEnabledKey, enabled);
   }
 
@@ -59,7 +61,7 @@ class LocalStorageService {
   }
 
   /// Set PIN enabled
-  Future<void> setPinEnabled(bool enabled) async {
+  Future<void> setPinEnabled({required bool enabled}) async {
     await _prefs.setBool(AppConstants.pinEnabledKey, enabled);
   }
 
@@ -85,7 +87,7 @@ class LocalStorageService {
   Map<String, dynamic>? getUser() {
     final userData = _settingsBox.get(AppConstants.userKey);
     if (userData != null) {
-      return jsonDecode(userData as String) as Map<String, dynamic>;
+      return jsonDecode(userData) as Map<String, dynamic>;
     }
     return null;
   }
@@ -100,7 +102,7 @@ class LocalStorageService {
   /// Save to cache with expiry
   Future<void> cache(
     String key,
-    dynamic data, {
+    Object data, {
     Duration expiry = const Duration(hours: 1),
   }) async {
     final cacheData = {
@@ -113,10 +115,12 @@ class LocalStorageService {
   /// Get from cache
   T? getCache<T>(String key) {
     final cached = _cacheBox.get(key);
-    if (cached == null) return null;
+    if (cached == null) {
+      return null;
+    }
 
     try {
-      final cacheData = jsonDecode(cached as String) as Map<String, dynamic>;
+      final cacheData = jsonDecode(cached) as Map<String, dynamic>;
       final expiry = DateTime.parse(cacheData['expiry'] as String);
 
       if (DateTime.now().isAfter(expiry)) {
@@ -134,10 +138,12 @@ class LocalStorageService {
   /// Check if cache exists and is valid
   bool isCacheValid(String key) {
     final cached = _cacheBox.get(key);
-    if (cached == null) return false;
+    if (cached == null) {
+      return false;
+    }
 
     try {
-      final cacheData = jsonDecode(cached as String) as Map<String, dynamic>;
+      final cacheData = jsonDecode(cached) as Map<String, dynamic>;
       final expiry = DateTime.parse(cacheData['expiry'] as String);
       return DateTime.now().isBefore(expiry);
     } catch (e) {
@@ -168,7 +174,7 @@ class LocalStorageService {
   }
 
   /// Save bool
-  Future<void> saveBool(String key, bool value) async {
+  Future<void> saveBool(String key, {required bool value}) async {
     await _prefs.setBool(key, value);
   }
 
