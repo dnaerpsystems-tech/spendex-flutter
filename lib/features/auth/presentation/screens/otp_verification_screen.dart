@@ -206,7 +206,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     }
 
     // Haptic feedback
-    HapticFeedback.mediumImpact();
+    unawaited(HapticFeedback.mediumImpact());
 
     // Wait briefly to let user see the entered code
     await Future.delayed(const Duration(milliseconds: 500));
@@ -259,7 +259,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     });
 
     // Haptic success feedback
-    HapticFeedback.heavyImpact();
+    unawaited(HapticFeedback.heavyImpact());
 
     // Play success animation
     await _successController.forward();
@@ -286,7 +286,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
   /// Handle verification error
   Future<void> _handleVerificationError(String message) async {
     // Haptic error feedback
-    HapticFeedback.heavyImpact();
+    unawaited(HapticFeedback.heavyImpact());
 
     setState(() {
       _isVerifying = false;
@@ -387,7 +387,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
           );
 
           // Haptic feedback
-          HapticFeedback.mediumImpact();
+          unawaited(HapticFeedback.mediumImpact());
         },
       );
     } catch (e) {
@@ -465,13 +465,13 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
 
   /// Handle change email action
   void _handleChangeEmail() {
-    HapticFeedback.lightImpact();
+    unawaited(HapticFeedback.lightImpact());
     context.pop();
   }
 
   /// Handle contact support action
   void _handleContactSupport() {
-    HapticFeedback.lightImpact();
+    unawaited(HapticFeedback.lightImpact());
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Row(
@@ -566,7 +566,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
 
                     // Subtitle
                     Text(
-                      'We\'ve sent a 6-digit verification code to',
+                      "We've sent a 6-digit verification code to",
                       style: SpendexTheme.bodyMedium.copyWith(
                         color: isDark
                             ? SpendexColors.darkTextSecondary

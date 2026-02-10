@@ -14,8 +14,8 @@ import '../../../../app/theme.dart';
 class AuthPrimaryButton extends StatelessWidget {
 
   const AuthPrimaryButton({
-    super.key,
     required this.text,
+    super.key,
     this.onPressed,
     this.isLoading = false,
     this.isEnabled = true,
@@ -125,8 +125,8 @@ class AuthPrimaryButton extends StatelessWidget {
 class AuthOutlinedButton extends StatelessWidget {
 
   const AuthOutlinedButton({
-    super.key,
     required this.text,
+    super.key,
     this.onPressed,
     this.isLoading = false,
     this.isEnabled = true,
@@ -221,8 +221,8 @@ class AuthOutlinedButton extends StatelessWidget {
 class AuthTextButton extends StatelessWidget {
 
   const AuthTextButton({
-    super.key,
     required this.text,
+    super.key,
     this.onPressed,
     this.isEnabled = true,
     this.color,
@@ -277,8 +277,8 @@ class AuthTextButton extends StatelessWidget {
 class AuthSocialButton extends StatelessWidget {
 
   const AuthSocialButton({
-    super.key,
     required this.text,
+    super.key,
     this.iconAsset,
     this.icon,
     this.onPressed,
@@ -373,8 +373,8 @@ class AuthSocialButton extends StatelessWidget {
 class AuthIconButton extends StatelessWidget {
 
   const AuthIconButton({
-    super.key,
     required this.icon,
+    super.key,
     this.onPressed,
     this.isEnabled = true,
     this.color,

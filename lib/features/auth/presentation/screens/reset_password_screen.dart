@@ -325,8 +325,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
 
     // Determine error type for specific handling
     final lowerMessage = message.toLowerCase();
-    String displayMessage = message;
-    bool shouldNavigateBack = false;
+    var displayMessage = message;
+    var shouldNavigateBack = false;
 
     if (lowerMessage.contains('expired') || lowerMessage.contains('invalid token')) {
       displayMessage = 'Reset link has expired. Please request a new one.';
