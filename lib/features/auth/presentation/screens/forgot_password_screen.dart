@@ -93,10 +93,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _entranceController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+        curve: const Interval(0, 0.6, curve: Curves.easeOut),
       ),
     );
 
@@ -116,7 +116,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       duration: const Duration(milliseconds: 1500),
     );
 
-    _iconPulseAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
+    _iconPulseAnimation = Tween<double>(begin: 1, end: 1.08).animate(
       CurvedAnimation(
         parent: _iconPulseController,
         curve: Curves.easeInOut,
@@ -131,24 +131,24 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       duration: const Duration(milliseconds: 600),
     );
 
-    _successScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _successScaleAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _successController,
         curve: Curves.elasticOut,
       ),
     );
 
-    _successOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _successOpacityAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _successController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+        curve: const Interval(0, 0.5, curve: Curves.easeOut),
       ),
     );
 
-    _checkmarkAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _checkmarkAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _successController,
-        curve: const Interval(0.3, 1.0, curve: Curves.easeOutBack),
+        curve: const Interval(0.3, 1, curve: Curves.easeOutBack),
       ),
     );
 
@@ -216,8 +216,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
   @override
   void dispose() {
-    _emailController.removeListener(_onEmailChanged);
-    _emailController.dispose();
+    _emailController
+      ..removeListener(_onEmailChanged)
+      ..dispose();
     _emailFocusNode.dispose();
     _resendTimer?.cancel();
     _debounceTimer?.cancel();
@@ -233,8 +234,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
     if (value == null || value.isEmpty) {
       return 'Email is required';
     }
-    value = value.trim();
-    if (!AppConstants.emailRegex.hasMatch(value)) {
+    final trimmedValue = value.trim();
+    if (!AppConstants.emailRegex.hasMatch(trimmedValue)) {
       return 'Please enter a valid email address';
     }
     return null;
@@ -243,7 +244,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
   /// Mask email for privacy display (e.g., u***r@example.com)
   String _maskEmail(String email) {
     final parts = email.split('@');
-    if (parts.length != 2) return email;
+    if (parts.length != 2) {
+      return email;
+    }
 
     final name = parts[0];
     final domain = parts[1];
@@ -305,7 +308,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       final success =
           await ref.read(authStateProvider.notifier).forgotPassword(email);
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       if (success) {
         // Transition to success state
@@ -334,7 +339,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
     // Determine error type for specific handling
     final lowerMessage = message.toLowerCase();
-    String displayMessage = message;
+    var displayMessage = message;
 
     if (lowerMessage.contains('not found') || lowerMessage.contains('no account')) {
       displayMessage = 'No account found with this email address';
@@ -377,7 +382,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
   /// Handle resend code action
   Future<void> _handleResend() async {
-    if (!_canResend || _isLoading) return;
+    if (!_canResend || _isLoading) {
+      return;
+    }
 
     HapticFeedback.lightImpact();
 
@@ -391,7 +398,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       final success =
           await ref.read(authStateProvider.notifier).forgotPassword(email);
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       if (success) {
         // Reset timer
@@ -505,7 +514,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
   /// Handle back navigation
   Future<bool> _onWillPop() async {
-    if (_isLoading) return false;
+    if (_isLoading) {
+      return false;
+    }
     return true;
   }
 
@@ -516,7 +527,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
     return PopScope(
       canPop: !_isLoading,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
+        if (didPop) {
+          return;
+        }
         final shouldPop = await _onWillPop();
         if (shouldPop && context.mounted) {
           context.pop();
