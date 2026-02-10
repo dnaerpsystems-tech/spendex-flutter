@@ -1,36 +1,23 @@
 import 'package:equatable/equatable.dart';
+
 import '../../../../core/constants/app_constants.dart';
 
 /// User Model
 class UserModel extends Equatable {
-  final String id;
-  final String email;
-  final String name;
-  final String? phone;
-  final String? avatarUrl;
-  final UserRole role;
-  final UserStatus status;
-  final UserPreferences preferences;
-  final String tenantId;
-  final DateTime? emailVerifiedAt;
-  final DateTime? lastLoginAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
   const UserModel({
     required this.id,
     required this.email,
     required this.name,
-    this.phone,
-    this.avatarUrl,
     required this.role,
     required this.status,
     required this.preferences,
     required this.tenantId,
-    this.emailVerifiedAt,
-    this.lastLoginAt,
     required this.createdAt,
     required this.updatedAt,
+    this.phone,
+    this.avatarUrl,
+    this.emailVerifiedAt,
+    this.lastLoginAt,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -62,6 +49,20 @@ class UserModel extends Equatable {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+
+  final String id;
+  final String email;
+  final String name;
+  final String? phone;
+  final String? avatarUrl;
+  final UserRole role;
+  final UserStatus status;
+  final UserPreferences preferences;
+  final String tenantId;
+  final DateTime? emailVerifiedAt;
+  final DateTime? lastLoginAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -138,11 +139,6 @@ class UserModel extends Equatable {
 
 /// User Preferences
 class UserPreferences extends Equatable {
-  final String theme;
-  final bool notifications;
-  final String currency;
-  final String locale;
-
   const UserPreferences({
     this.theme = 'system',
     this.notifications = true,
@@ -158,6 +154,11 @@ class UserPreferences extends Equatable {
       locale: json['locale'] as String? ?? 'en',
     );
   }
+
+  final String theme;
+  final bool notifications;
+  final String currency;
+  final String locale;
 
   Map<String, dynamic> toJson() {
     return {
@@ -188,11 +189,6 @@ class UserPreferences extends Equatable {
 
 /// Auth Response
 class AuthResponse {
-  final String accessToken;
-  final String refreshToken;
-  final int expiresIn;
-  final UserModel user;
-
   const AuthResponse({
     required this.accessToken,
     required this.refreshToken,
@@ -208,21 +204,26 @@ class AuthResponse {
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
+
+  final String accessToken;
+  final String refreshToken;
+  final int expiresIn;
+  final UserModel user;
 }
 
 /// Register Request
 class RegisterRequest {
-  final String email;
-  final String password;
-  final String name;
-  final String? phone;
-
   const RegisterRequest({
     required this.email,
     required this.password,
     required this.name,
     this.phone,
   });
+
+  final String email;
+  final String password;
+  final String name;
+  final String? phone;
 
   Map<String, dynamic> toJson() {
     return {
@@ -236,13 +237,13 @@ class RegisterRequest {
 
 /// Login Request
 class LoginRequest {
-  final String email;
-  final String password;
-
   const LoginRequest({
     required this.email,
     required this.password,
   });
+
+  final String email;
+  final String password;
 
   Map<String, dynamic> toJson() {
     return {
@@ -254,13 +255,13 @@ class LoginRequest {
 
 /// OTP Verification Request
 class OtpVerificationRequest {
-  final String email;
-  final String otp;
-
   const OtpVerificationRequest({
     required this.email,
     required this.otp,
   });
+
+  final String email;
+  final String otp;
 
   Map<String, dynamic> toJson() {
     return {
@@ -272,13 +273,13 @@ class OtpVerificationRequest {
 
 /// Reset Password Request
 class ResetPasswordRequest {
-  final String token;
-  final String password;
-
   const ResetPasswordRequest({
     required this.token,
     required this.password,
   });
+
+  final String token;
+  final String password;
 
   Map<String, dynamic> toJson() {
     return {
