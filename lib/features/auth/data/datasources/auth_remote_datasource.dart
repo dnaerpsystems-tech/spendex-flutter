@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+
+import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../../core/constants/api_endpoints.dart';
 import '../models/user_model.dart';
 
 /// Auth Remote Data Source Interface
@@ -27,16 +28,16 @@ abstract class AuthRemoteDataSource {
 
 /// Auth Remote Data Source Implementation
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final ApiClient _apiClient;
-
   AuthRemoteDataSourceImpl(this._apiClient);
+
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, AuthResponse>> login(LoginRequest request) async {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.login,
       data: request.toJson(),
-      fromJson: (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -48,7 +49,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -60,7 +61,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.verifyOtp,
       data: request.toJson(),
-      fromJson: (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -72,7 +73,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -85,7 +86,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -100,7 +101,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -109,7 +110,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Either<Failure, UserModel>> getCurrentUser() async {
     return _apiClient.get<UserModel>(
       ApiEndpoints.me,
-      fromJson: (json) => UserModel.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => UserModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -120,7 +121,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.refresh,
       data: {'refreshToken': refreshToken},
-      fromJson: (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -129,7 +130,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final result = await _apiClient.post(ApiEndpoints.logout);
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(null),
     );
   }
@@ -140,7 +141,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Either<Failure, Map<String, dynamic>>> getBiometricRegisterOptions() async {
     return _apiClient.get<Map<String, dynamic>>(
       ApiEndpoints.biometricRegisterOptions,
-      fromJson: (json) => json as Map<String, dynamic>,
+      fromJson: (json) => json! as Map<String, dynamic>,
     );
   }
 
@@ -152,7 +153,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -161,7 +162,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Either<Failure, Map<String, dynamic>>> getBiometricLoginOptions() async {
     return _apiClient.get<Map<String, dynamic>>(
       ApiEndpoints.biometricLoginOptions,
-      fromJson: (json) => json as Map<String, dynamic>,
+      fromJson: (json) => json! as Map<String, dynamic>,
     );
   }
 
@@ -170,7 +171,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.biometricLogin,
       data: credential,
-      fromJson: (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -194,7 +195,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
