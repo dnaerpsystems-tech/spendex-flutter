@@ -398,7 +398,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               Expanded(
                                 child: AuthSocialButton(
                                   text: 'Google',
-                                  icon: Iconsax.google,
+                                  icon: Icons.g_mobiledata_rounded,
                                   onPressed: () {
                                     // TODO: Implement Google login
                                     ScaffoldMessenger.of(context).showSnackBar(
