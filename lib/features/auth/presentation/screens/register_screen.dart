@@ -9,9 +9,9 @@ import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
 import '../widgets/auth_header.dart';
+import '../widgets/auth_text_field.dart';
 import '../widgets/password_strength_indicator.dart';
 
 /// Registration Screen
@@ -102,11 +102,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
     _fadeAnimations = List.generate(itemCount, (index) {
       final start = index * 0.1;
       final end = start + 0.4;
-      return Tween<double>(begin: 0.0, end: 1.0).animate(
+      return Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
           parent: _staggerController,
-          curve: Interval(start.clamp(0.0, 1.0), end.clamp(0.0, 1.0),
-              curve: Curves.easeOut),
+          curve: Interval(
+            start.clamp(0.0, 1.0),
+            end.clamp(0.0, 1.0),
+            curve: Curves.easeOut,
+          ),
         ),
       );
     });
@@ -120,8 +123,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
       ).animate(
         CurvedAnimation(
           parent: _staggerController,
-          curve: Interval(start.clamp(0.0, 1.0), end.clamp(0.0, 1.0),
-              curve: Curves.easeOutCubic),
+          curve: Interval(
+            start.clamp(0.0, 1.0),
+            end.clamp(0.0, 1.0),
+            curve: Curves.easeOutCubic,
+          ),
         ),
       );
     });
@@ -272,7 +278,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(
+            child: const Text(
               'Discard',
               style: TextStyle(color: SpendexColors.expense),
             ),
@@ -295,7 +301,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         initialChildSize: 0.9,
         minChildSize: 0.5,
         maxChildSize: 0.95,
-        builder: (context, scrollController) => Container(
+        builder: (context, scrollController) => DecoratedBox(
           decoration: BoxDecoration(
             color: isDark
                 ? SpendexColors.darkSurface
@@ -451,7 +457,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                     margin: const EdgeInsets.only(top: 6),
                     width: 6,
                     height: 6,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: SpendexColors.primary,
                       shape: BoxShape.circle,
                     ),
@@ -469,7 +475,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                   ),
                 ],
               ),
-            )),
+            ),
+          ),
       ],
     );
   }
@@ -523,7 +530,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
 
     if (success && mounted) {
       // Navigate to OTP verification
-      context.push(
+      await context.push(
         '${AppRoutes.otpVerification}?email=${Uri.encodeComponent(_emailController.text.trim())}&purpose=verification',
       );
     } else if (mounted) {
@@ -539,9 +546,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
     return PopScope(
       canPop: !_isFormDirty,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
+        if (didPop) {
+          return;
+        }
         final shouldPop = await _onWillPop();
-        if (shouldPop && mounted) {
+        if (shouldPop && context.mounted) {
           context.pop();
         }
       },
@@ -562,7 +571,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             onPressed: () async {
               if (_isFormDirty) {
                 final shouldPop = await _onWillPop();
-                if (shouldPop && mounted) {
+                if (shouldPop && context.mounted) {
                   context.pop();
                 }
               } else {
@@ -607,7 +616,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                       // Header
                       _buildStaggeredChild(
                         index: 0,
-                        child: AuthHeader(
+                        child: const AuthHeader(
                           title: 'Create Account',
                           subtitle: 'Start managing your finances today',
                           showLogo: false,
@@ -623,10 +632,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                         child: AuthTextField(
                           controller: _nameController,
                           focusNode: _nameFocusNode,
-                          label: 'Full Name',
+                          labelText: 'Full Name',
                           hintText: 'Enter your full name',
                           prefixIcon: Iconsax.user,
-                          textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.name,
                           validator: _validateName,
                           onFieldSubmitted: (_) {
@@ -644,11 +652,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                         child: AuthTextField(
                           controller: _emailController,
                           focusNode: _emailFocusNode,
-                          label: 'Email Address',
+                          labelText: 'Email Address',
                           hintText: 'Enter your email',
                           prefixIcon: Iconsax.sms,
                           keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
                           validator: _validateEmail,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context)
