@@ -29,7 +29,6 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   String? _selectedCategoryId;
   String? _toAccountId;
   DateTime _selectedDate = DateTime.now();
-  List<String> _tags = [];
 
   @override
   void initState() {
@@ -55,7 +54,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
   Future<void> _handleSubmit() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // TODO: Submit transaction
+      // TODO(dev): Submit transaction to backend
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Transaction added successfully'),
@@ -345,15 +344,15 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 }
 
 class _AccountSelector extends StatelessWidget {
-  final String? selectedId;
-  final bool isDark;
-  final void Function(String) onSelect;
-
   const _AccountSelector({
     required this.selectedId,
     required this.isDark,
     required this.onSelect,
   });
+
+  final String? selectedId;
+  final bool isDark;
+  final void Function(String) onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +373,7 @@ class _AccountSelector extends StatelessWidget {
           final isSelected = selectedId == account['id'];
 
           return GestureDetector(
-            onTap: () => onSelect(account['id'] as String),
+            onTap: () => onSelect(account['id']! as String),
             child: Container(
               width: 100,
               margin: const EdgeInsets.only(right: 12),
@@ -399,7 +398,7 @@ class _AccountSelector extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    account['icon'] as IconData,
+                    account['icon']! as IconData,
                     color: isSelected
                         ? SpendexColors.primary
                         : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -407,7 +406,7 @@ class _AccountSelector extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    account['name'] as String,
+                    account['name']! as String,
                     style: SpendexTheme.labelMedium.copyWith(
                       color: isSelected
                           ? SpendexColors.primary
@@ -428,17 +427,17 @@ class _AccountSelector extends StatelessWidget {
 }
 
 class _CategorySelector extends StatelessWidget {
-  final String? selectedId;
-  final bool isDark;
-  final TransactionType type;
-  final void Function(String) onSelect;
-
   const _CategorySelector({
     required this.selectedId,
     required this.isDark,
     required this.type,
     required this.onSelect,
   });
+
+  final String? selectedId;
+  final bool isDark;
+  final TransactionType type;
+  final void Function(String) onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -467,7 +466,7 @@ class _CategorySelector extends StatelessWidget {
         final isSelected = selectedId == category['id'];
 
         return GestureDetector(
-          onTap: () => onSelect(category['id'] as String),
+          onTap: () => onSelect(category['id']! as String),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -490,7 +489,7 @@ class _CategorySelector extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  category['icon'] as IconData,
+                  category['icon']! as IconData,
                   color: isSelected
                       ? SpendexColors.primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -498,7 +497,7 @@ class _CategorySelector extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  category['name'] as String,
+                  category['name']! as String,
                   style: SpendexTheme.labelMedium.copyWith(
                     color: isSelected
                         ? SpendexColors.primary
