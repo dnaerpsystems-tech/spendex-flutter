@@ -365,7 +365,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
 
   /// Transition to success view with animation
   Future<void> _transitionToSuccess() async {
-    HapticFeedback.mediumImpact();
+    unawaited(HapticFeedback.mediumImpact());
 
     // Stop pulse animation
     _iconController.stop();

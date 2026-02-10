@@ -8,8 +8,8 @@ import '../../../../app/theme.dart';
 class AuthEmailField extends StatelessWidget {
 
   const AuthEmailField({
-    super.key,
     required this.controller,
+    super.key,
     this.focusNode,
     this.validator,
     this.onChanged,
@@ -137,8 +137,8 @@ class AuthEmailField extends StatelessWidget {
 class AuthPasswordField extends StatefulWidget {
 
   const AuthPasswordField({
-    super.key,
     required this.controller,
+    super.key,
     this.focusNode,
     this.validator,
     this.onChanged,
@@ -297,8 +297,8 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
 class AuthTextField extends StatelessWidget {
 
   const AuthTextField({
-    super.key,
     required this.controller,
+    super.key,
     this.focusNode,
     this.validator,
     this.onChanged,

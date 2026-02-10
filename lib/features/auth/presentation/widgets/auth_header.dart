@@ -11,9 +11,9 @@ import '../../../../app/theme.dart';
 class AuthHeader extends StatefulWidget {
 
   const AuthHeader({
-    super.key,
     required this.title,
     required this.subtitle,
+    super.key,
     this.showLogo = true,
     this.animate = true,
     this.customLogo,
@@ -184,8 +184,8 @@ class _AuthHeaderState extends State<AuthHeader>
 class AuthHeaderCompact extends StatelessWidget {
 
   const AuthHeaderCompact({
-    super.key,
     required this.title,
+    super.key,
     this.subtitle,
     this.leadingIcon,
     this.onBack,
@@ -283,9 +283,9 @@ class AuthDivider extends StatelessWidget {
 class AuthFooter extends StatelessWidget {
 
   const AuthFooter({
-    super.key,
     required this.text,
     required this.linkText,
+    super.key,
     this.onLinkPressed,
   });
   final String text;
