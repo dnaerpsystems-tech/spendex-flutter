@@ -1,20 +1,22 @@
 import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import '../storage/secure_storage.dart';
+
 import '../constants/api_endpoints.dart';
+import '../storage/secure_storage.dart';
 
 /// Auth Interceptor for handling JWT token refresh
 class AuthInterceptor extends QueuedInterceptor {
+  AuthInterceptor(this._storage, this._dio);
+
   final SecureStorageService _storage;
   final Dio _dio;
   bool _isRefreshing = false;
   final List<(RequestOptions, ErrorInterceptorHandler)> _pendingRequests = [];
 
-  AuthInterceptor(this._storage, this._dio);
-
   @override
-  void onRequest(
+  Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
@@ -33,7 +35,7 @@ class AuthInterceptor extends QueuedInterceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
       // Check if the failed request was the refresh token request itself
       if (err.requestOptions.path == ApiEndpoints.refresh) {
@@ -98,23 +100,28 @@ class AuthInterceptor extends QueuedInterceptor {
         ),
       );
 
-      final response = await refreshDio.post(
+      final response = await refreshDio.post<Map<String, dynamic>>(
         ApiEndpoints.refresh,
         data: {'refreshToken': refreshToken},
       );
 
-      if (response.statusCode == 200 && response.data['success'] == true) {
-        final data = response.data['data'];
-        final newAccessToken = data['accessToken'] as String;
-        final newRefreshToken = data['refreshToken'] as String;
+      final responseData = response.data;
+      if (response.statusCode == 200 &&
+          responseData != null &&
+          responseData['success'] == true) {
+        final data = responseData['data'] as Map<String, dynamic>?;
+        if (data != null) {
+          final newAccessToken = data['accessToken'] as String;
+          final newRefreshToken = data['refreshToken'] as String;
 
-        await _storage.saveTokens(newAccessToken, newRefreshToken);
+          await _storage.saveTokens(newAccessToken, newRefreshToken);
 
-        if (kDebugMode) {
-          print('Token refreshed successfully');
+          if (kDebugMode) {
+            print('Token refreshed successfully');
+          }
+
+          return true;
         }
-
-        return true;
       }
 
       return false;
@@ -127,7 +134,7 @@ class AuthInterceptor extends QueuedInterceptor {
   }
 
   /// Retry a failed request with new token
-  Future<Response> _retryRequest(RequestOptions requestOptions) async {
+  Future<Response<dynamic>> _retryRequest(RequestOptions requestOptions) async {
     final accessToken = await _storage.getAccessToken();
 
     final options = Options(
@@ -138,7 +145,7 @@ class AuthInterceptor extends QueuedInterceptor {
       },
     );
 
-    return _dio.request(
+    return _dio.request<dynamic>(
       requestOptions.path,
       data: requestOptions.data,
       queryParameters: requestOptions.queryParameters,
