@@ -218,7 +218,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(
+            child: const Text(
               'Delete',
               style: TextStyle(color: SpendexColors.expense),
             ),
@@ -227,7 +227,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
       ),
     );
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       final success = await ref
           .read(categoriesStateProvider.notifier)
           .deleteCategory(widget.categoryId!);
@@ -430,7 +430,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
         .where((c) =>
             c.type == _selectedType &&
             c.parentId == null && // Only top-level categories can be parents
-            c.id != widget.categoryId) // Exclude current category in edit mode
+            c.id != widget.categoryId,) // Exclude current category in edit mode
         .toList();
   }
 
@@ -446,9 +446,10 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
       canPop: !_isFormDirty,
       onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
+          final navigator = GoRouter.of(context);
           final shouldPop = await _onWillPop();
           if (shouldPop && mounted) {
-            context.pop();
+            navigator.pop();
           }
         }
       },
@@ -465,7 +466,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
           ),
           // Loading overlay during operations
           if (isOperationInProgress)
-            Container(
+            ColoredBox(
               color: Colors.black.withValues(alpha: 0.3),
               child: const Center(
                 child: CircularProgressIndicator(),
@@ -497,7 +498,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
       actions: [
         if (isEditing && !isSystemCategory)
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Iconsax.trash,
               color: SpendexColors.expense,
             ),
@@ -577,7 +578,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
                       return 'Name cannot exceed ${AppConstants.maxNameLength} characters';
                     }
                     // Check for special characters (allow letters, numbers, spaces, and common punctuation)
-                    final validPattern = RegExp(r'^[a-zA-Z0-9\s\-&,\.\']+$');
+                    final validPattern = RegExp(r"^[a-zA-Z0-9\s\-&,\.']+$");
                     if (!validPattern.hasMatch(value.trim())) {
                       return 'Name contains invalid characters';
                     }
@@ -705,7 +706,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
         ),
         if (isRequired) ...[
           const SizedBox(width: 4),
-          Text(
+          const Text(
             '*',
             style: TextStyle(
               color: SpendexColors.expense,
