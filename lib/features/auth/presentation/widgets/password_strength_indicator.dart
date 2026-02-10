@@ -113,7 +113,7 @@ class PasswordValidator {
         icon: Iconsax.hashtag,
       ),
       PasswordRequirement(
-        label: 'Special character (@$!%*?&)',
+        label: 'Special character (@\$!%*?&)',
         isMet: hasSpecialChar(password),
         icon: Iconsax.star,
       ),
