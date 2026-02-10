@@ -343,9 +343,9 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
                     child: requirement.isMet
-                        ? Icon(
+                        ? const Icon(
                             Iconsax.tick_circle5,
-                            key: const ValueKey('met'),
+                            key: ValueKey('met'),
                             size: 14,
                             color: metColor,
                           )
@@ -384,8 +384,8 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
 class PasswordStrengthBar extends StatelessWidget {
 
   const PasswordStrengthBar({
-    super.key,
     required this.password,
+    super.key,
     this.height = 4,
     this.showLabel = true,
   });
@@ -409,9 +409,9 @@ class PasswordStrengthBar extends StatelessWidget {
 class PasswordMatchIndicator extends StatelessWidget {
 
   const PasswordMatchIndicator({
-    super.key,
     required this.password,
     required this.confirmPassword,
+    super.key,
   });
   final String password;
   final String confirmPassword;
@@ -449,7 +449,6 @@ class PasswordMatchIndicator extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
                     color: (isMatch ? color : unmetColor).withValues(alpha:0.3),
-                    width: 1,
                   ),
                 ),
                 child: Center(
@@ -494,8 +493,8 @@ class PasswordMatchIndicator extends StatelessWidget {
 class SegmentedPasswordStrengthBar extends StatelessWidget {
 
   const SegmentedPasswordStrengthBar({
-    super.key,
     required this.password,
+    super.key,
     this.segments = 5,
     this.height = 4,
     this.gap = 4,
