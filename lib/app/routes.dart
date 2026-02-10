@@ -23,6 +23,9 @@ import '../shared/widgets/main_scaffold.dart';
 import '../shared/widgets/onboarding_screen.dart';
 import '../shared/widgets/splash_screen.dart';
 import 'theme.dart';
+import '../features/budgets/presentation/screens/budgets_screen.dart';
+import '../features/budgets/presentation/screens/add_budget_screen.dart';
+import '../features/budgets/presentation/screens/budget_details_screen.dart';
 
 /// Placeholder screen for features not yet implemented
 class _PlaceholderScreen extends StatelessWidget {
@@ -150,6 +153,11 @@ class AppRoutes {
   static const String accounts = '/accounts';
   static const String accountDetails = '/accounts/:id';
   static const String addAccount = '/accounts/add';
+
+  // Category routes
+  static const String categories = '/categories';
+  static const String addCategory = '/categories/add';
+  static const String categoryDetails = '/categories/:id';
 
   // Transaction routes
   static const String transactionDetails = '/transactions/:id';
@@ -346,6 +354,26 @@ final routerProvider = Provider<GoRouter>((ref) {
           icon: Iconsax.receipt_item,
           description: 'View and edit transaction details including category, notes, and attachments.',
         ),
+      ),
+
+      // Category Routes
+      GoRoute(
+        path: AppRoutes.categories,
+        builder: (context, state) => const CategoriesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addCategory,
+        builder: (context, state) {
+          final categoryId = state.uri.queryParameters['id'];
+          return AddCategoryScreen(categoryId: categoryId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.categoryDetails,
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return CategoryDetailsScreen(categoryId: id);
+        },
       ),
 
       // Budget Routes

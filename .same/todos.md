@@ -1,6 +1,6 @@
 # Spendex Flutter App - Development Tracker
 
-## Current Status: Phase 6 - Building Feature Screens
+## Current Status: Phase 6 - Building Categories Feature
 
 ### Completed Features
 
@@ -22,32 +22,33 @@
 - [x] Shared widgets (Splash, Onboarding, MainScaffold)
 
 #### 4. Accounts Feature (Phase 6) - DONE
-- [x] accounts_repository.dart (interface)
-- [x] accounts_remote_datasource.dart (API calls)
-- [x] accounts_repository_impl.dart (implementation)
-- [x] accounts_provider.dart (full state management)
-- [x] account_card.dart (gradient cards)
-- [x] account_type_selector.dart (grid selector)
-- [x] account_summary_card.dart (net worth)
-- [x] accounts_screen.dart (list with tabs)
-- [x] add_account_screen.dart (form with validation)
-- [x] account_details_screen.dart (details with actions)
+- [x] All layers complete with screens and widgets
 
-**Total: 3,650+ lines of production code**
+#### 5. Budgets Feature - DONE
+- [x] All layers complete with screens and widgets
 
 ---
 
-## Next Features to Build
+## Categories Feature - IN PROGRESS
 
-1. **Transactions** - Repository, DataSource, Provider, Screens
-2. **Categories** - Repository, DataSource, Provider, Screens
-3. **Budgets** - Repository, DataSource, Provider, Screens
-4. **Goals** - Repository, DataSource, Provider, Screens
-5. **Loans** - Repository, DataSource, Provider, Screens
-6. **Investments** - Repository, DataSource, Provider, Screens
+### Backend/Data Layer (Already Complete)
+- [x] category_model.dart
+- [x] categories_repository.dart
+- [x] categories_remote_datasource.dart
+- [x] categories_repository_impl.dart
+- [x] categories_provider.dart
+
+### Widgets to Build
+- [ ] category_card.dart
+- [ ] category_icon_picker.dart
+- [ ] category_color_picker.dart
+- [ ] category_type_selector.dart
+
+### Screens to Build
+- [ ] categories_screen.dart
+- [ ] add_category_screen.dart
+- [ ] category_details_screen.dart
 
 ---
 
-## Last Updated
-- **Date:** February 9, 2026
-- **Status:** Accounts Feature Complete
+## Last Updated: February 10, 2026
