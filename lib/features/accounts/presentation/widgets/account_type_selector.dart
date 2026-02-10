@@ -9,9 +9,9 @@ import 'account_card.dart';
 class AccountTypeSelector extends StatelessWidget {
 
   const AccountTypeSelector({
-    super.key,
     required this.selectedType,
     required this.onTypeSelected,
+    super.key,
     this.horizontal = false,
     this.excludeTypes,
   });
@@ -140,8 +140,8 @@ class AccountTypeSelector extends StatelessWidget {
 class AccountTypeChip extends StatelessWidget {
 
   const AccountTypeChip({
-    super.key,
     required this.type,
+    super.key,
     this.selected = false,
     this.onTap,
   });
@@ -206,9 +206,9 @@ class AccountTypeChip extends StatelessWidget {
 class AccountTypeFilterList extends StatelessWidget {
 
   const AccountTypeFilterList({
-    super.key,
     required this.selectedType,
     required this.onTypeSelected,
+    super.key,
     this.showAll = true,
   });
   final AccountType? selectedType;

@@ -10,8 +10,8 @@ import 'account_card.dart';
 class AccountSummaryCard extends StatelessWidget {
 
   const AccountSummaryCard({
-    super.key,
     required this.summary,
+    super.key,
     this.onTap,
     this.showAccountCount = true,
   });
@@ -219,8 +219,8 @@ class AccountSummaryCard extends StatelessWidget {
 class AccountSummaryCompactCard extends StatelessWidget {
 
   const AccountSummaryCompactCard({
-    super.key,
     required this.summary,
+    super.key,
     this.onTap,
   });
   final AccountsSummary summary;

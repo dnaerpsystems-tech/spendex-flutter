@@ -11,8 +11,8 @@ import '../../data/models/account_model.dart';
 class AccountCard extends StatelessWidget {
 
   const AccountCard({
-    super.key,
     required this.account,
+    super.key,
     this.onTap,
     this.showBalance = true,
     this.compact = false,
