@@ -1,17 +1,18 @@
 import 'package:dartz/dartz.dart';
+
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/storage/secure_storage.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
 
 /// Auth Repository Implementation
 class AuthRepositoryImpl implements AuthRepository {
+  AuthRepositoryImpl(this._remoteDataSource, this._secureStorage);
+
   final AuthRemoteDataSource _remoteDataSource;
   final SecureStorageService _secureStorage;
-
-  AuthRepositoryImpl(this._remoteDataSource, this._secureStorage);
 
   @override
   Future<Either<Failure, AuthResponse>> login(
@@ -23,7 +24,7 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (response) async {
         await _secureStorage.saveTokens(
           response.accessToken,
@@ -51,7 +52,7 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -66,7 +67,7 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (response) async {
         await _secureStorage.saveTokens(
           response.accessToken,
@@ -82,7 +83,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final result = await _remoteDataSource.sendOtp(email, purpose);
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -92,7 +93,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final result = await _remoteDataSource.forgotPassword(email);
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -107,7 +108,7 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (_) => const Right(true),
     );
   }
@@ -128,7 +129,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final result = await _remoteDataSource.refreshToken(refreshToken);
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (response) async {
         await _secureStorage.saveTokens(
           response.accessToken,
@@ -164,10 +165,10 @@ class AuthRepositoryImpl implements AuthRepository {
     final result = await _remoteDataSource.registerBiometric(credential);
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (success) async {
         if (success) {
-          await setBiometricEnabled(true);
+          await setBiometricEnabled(enabled: true);
         }
         return Right(success);
       },
@@ -184,7 +185,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final result = await _remoteDataSource.loginWithBiometric(credential);
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (response) async {
         await _secureStorage.saveTokens(
           response.accessToken,
@@ -205,15 +206,15 @@ class AuthRepositoryImpl implements AuthRepository {
     final result = await _remoteDataSource.deleteBiometricCredential(id);
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (success) async {
         // Check if there are any remaining credentials
         final credentialsResult = await getBiometricCredentials();
-        credentialsResult.fold(
-          (_) {},
+        await credentialsResult.fold(
+          (_) async {},
           (credentials) async {
             if (credentials.isEmpty) {
-              await setBiometricEnabled(false);
+              await setBiometricEnabled(enabled: false);
             }
           },
         );
@@ -229,7 +230,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> setBiometricEnabled(bool enabled) async {
+  Future<void> setBiometricEnabled({required bool enabled}) async {
     await _secureStorage.save(AppConstants.biometricEnabledKey, enabled.toString());
   }
 }

@@ -63,5 +63,5 @@ abstract class AuthRepository {
   Future<bool> isBiometricEnabled();
 
   /// Set biometric enabled state locally
-  Future<void> setBiometricEnabled(bool enabled);
+  Future<void> setBiometricEnabled({required bool enabled});
 }
