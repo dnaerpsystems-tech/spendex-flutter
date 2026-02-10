@@ -20,6 +20,9 @@ import '../shared/widgets/main_scaffold.dart';
 import '../shared/widgets/splash_screen.dart';
 import '../shared/widgets/onboarding_screen.dart';
 import 'theme.dart';
+import '../features/budgets/presentation/screens/budgets_screen.dart';
+import '../features/budgets/presentation/screens/add_budget_screen.dart';
+import '../features/budgets/presentation/screens/budget_details_screen.dart';
 
 /// Placeholder screen for features not yet implemented
 class _PlaceholderScreen extends StatelessWidget {
@@ -348,19 +351,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Budget Routes
       GoRoute(
         path: AppRoutes.budgets,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Budgets',
-          icon: Iconsax.wallet_3,
-          description: 'Create and manage monthly budgets to control your spending in different categories.',
-        ),
+        builder: (context, state) => const BudgetsScreen(),
+      ),
+      GoRoute(
+        path: '/budgets/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return BudgetDetailsScreen(budgetId: id);
+        },
       ),
       GoRoute(
         path: AppRoutes.addBudget,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Add Budget',
-          icon: Iconsax.wallet_add,
-          description: 'Set up a new budget with spending limits and alerts.',
-        ),
+        builder: (context, state) {
+          final budgetId = state.uri.queryParameters['id'];
+          return AddBudgetScreen(budgetId: budgetId);
+        },
       ),
 
       // Goal Routes
