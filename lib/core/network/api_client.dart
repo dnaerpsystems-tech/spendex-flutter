@@ -1,16 +1,12 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
+
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+
 import '../errors/failures.dart';
-import '../errors/exceptions.dart';
 
 /// API Response wrapper
 class ApiResponse<T> {
-  final bool success;
-  final T? data;
-  final Meta? meta;
-  final ApiError? error;
-
   ApiResponse({
     required this.success,
     this.data,
@@ -23,23 +19,27 @@ class ApiResponse<T> {
     T Function(dynamic)? fromJsonT,
   ) {
     return ApiResponse(
-      success: json['success'] ?? false,
+      success: json['success'] as bool? ?? false,
       data: json['data'] != null && fromJsonT != null
           ? fromJsonT(json['data'])
-          : json['data'],
-      meta: json['meta'] != null ? Meta.fromJson(json['meta']) : null,
-      error: json['error'] != null ? ApiError.fromJson(json['error']) : null,
+          : json['data'] as T?,
+      meta: json['meta'] != null
+          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+          : null,
+      error: json['error'] != null
+          ? ApiError.fromJson(json['error'] as Map<String, dynamic>)
+          : null,
     );
   }
+
+  final bool success;
+  final T? data;
+  final Meta? meta;
+  final ApiError? error;
 }
 
 /// Pagination meta data
 class Meta {
-  final int page;
-  final int limit;
-  final int total;
-  final int totalPages;
-
   Meta({
     required this.page,
     required this.limit,
@@ -49,22 +49,23 @@ class Meta {
 
   factory Meta.fromJson(Map<String, dynamic> json) {
     return Meta(
-      page: json['page'] ?? 1,
-      limit: json['limit'] ?? 20,
-      total: json['total'] ?? 0,
-      totalPages: json['totalPages'] ?? 1,
+      page: (json['page'] as num?)?.toInt() ?? 1,
+      limit: (json['limit'] as num?)?.toInt() ?? 20,
+      total: (json['total'] as num?)?.toInt() ?? 0,
+      totalPages: (json['totalPages'] as num?)?.toInt() ?? 1,
     );
   }
+
+  final int page;
+  final int limit;
+  final int total;
+  final int totalPages;
 
   bool get hasMore => page < totalPages;
 }
 
 /// API Error response
 class ApiError {
-  final String code;
-  final String message;
-  final List<dynamic>? details;
-
   ApiError({
     required this.code,
     required this.message,
@@ -73,21 +74,19 @@ class ApiError {
 
   factory ApiError.fromJson(Map<String, dynamic> json) {
     return ApiError(
-      code: json['code'] ?? 'UNKNOWN_ERROR',
-      message: json['message'] ?? 'An unknown error occurred',
-      details: json['details'],
+      code: json['code'] as String? ?? 'UNKNOWN_ERROR',
+      message: json['message'] as String? ?? 'An unknown error occurred',
+      details: json['details'] as List<dynamic>?,
     );
   }
+
+  final String code;
+  final String message;
+  final List<dynamic>? details;
 }
 
 /// Paginated response wrapper
 class PaginatedResponse<T> {
-  final List<T> data;
-  final int page;
-  final int limit;
-  final int total;
-  final int totalPages;
-
   PaginatedResponse({
     required this.data,
     required this.page,
@@ -96,14 +95,20 @@ class PaginatedResponse<T> {
     required this.totalPages,
   });
 
+  final List<T> data;
+  final int page;
+  final int limit;
+  final int total;
+  final int totalPages;
+
   bool get hasMore => page < totalPages;
 }
 
 /// API Client for making HTTP requests
 class ApiClient {
-  final Dio _dio;
-
   ApiClient(this._dio);
+
+  final Dio _dio;
 
   /// GET request
   Future<Either<Failure, T>> get<T>(
@@ -113,12 +118,12 @@ class ApiClient {
     Options? options,
   }) async {
     try {
-      final response = await _dio.get(
+      final response = await _dio.get<dynamic>(
         path,
         queryParameters: queryParameters,
         options: options,
       );
-      return _handleResponse(response, fromJson);
+      return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       return Left(_handleDioError(e));
     } catch (e) {
@@ -135,13 +140,13 @@ class ApiClient {
     Options? options,
   }) async {
     try {
-      final response = await _dio.post(
+      final response = await _dio.post<dynamic>(
         path,
         data: data,
         queryParameters: queryParameters,
         options: options,
       );
-      return _handleResponse(response, fromJson);
+      return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       return Left(_handleDioError(e));
     } catch (e) {
@@ -158,13 +163,13 @@ class ApiClient {
     Options? options,
   }) async {
     try {
-      final response = await _dio.put(
+      final response = await _dio.put<dynamic>(
         path,
         data: data,
         queryParameters: queryParameters,
         options: options,
       );
-      return _handleResponse(response, fromJson);
+      return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       return Left(_handleDioError(e));
     } catch (e) {
@@ -181,13 +186,13 @@ class ApiClient {
     Options? options,
   }) async {
     try {
-      final response = await _dio.delete(
+      final response = await _dio.delete<dynamic>(
         path,
         data: data,
         queryParameters: queryParameters,
         options: options,
       );
-      return _handleResponse(response, fromJson);
+      return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       return Left(_handleDioError(e));
     } catch (e) {
@@ -204,13 +209,13 @@ class ApiClient {
     Options? options,
   }) async {
     try {
-      final response = await _dio.patch(
+      final response = await _dio.patch<dynamic>(
         path,
         data: data,
         queryParameters: queryParameters,
         options: options,
       );
-      return _handleResponse(response, fromJson);
+      return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       return Left(_handleDioError(e));
     } catch (e) {
@@ -236,12 +241,12 @@ class ApiClient {
         ...?additionalData,
       });
 
-      final response = await _dio.post(
+      final response = await _dio.post<dynamic>(
         path,
         data: formData,
         onSendProgress: onSendProgress,
       );
-      return _handleResponse(response, fromJson);
+      return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       return Left(_handleDioError(e));
     } catch (e) {
@@ -273,22 +278,27 @@ class ApiClient {
 
   /// Handle response
   Either<Failure, T> _handleResponse<T>(
-    Response response,
+    Response<dynamic> response,
     T Function(dynamic)? fromJson,
   ) {
     if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       if (fromJson != null && response.data != null) {
-        if (response.data is Map && response.data['data'] != null) {
-          return Right(fromJson(response.data['data']));
+        final responseData = response.data;
+        if (responseData is Map<String, dynamic> &&
+            responseData['data'] != null) {
+          return Right(fromJson(responseData['data']));
         }
         return Right(fromJson(response.data));
       }
       return Right(response.data as T);
     } else {
-      final apiError = response.data is Map
-          ? ApiError.fromJson(response.data['error'] ?? {})
+      final responseData = response.data;
+      final apiError = responseData is Map<String, dynamic>
+          ? ApiError.fromJson(
+              responseData['error'] as Map<String, dynamic>? ?? {},
+            )
           : ApiError(code: 'UNKNOWN', message: 'Unknown error');
       return Left(ServerFailure(apiError.message, code: apiError.code));
     }
@@ -327,7 +337,7 @@ class ApiClient {
   }
 
   /// Handle bad response
-  Failure _handleBadResponse(Response? response) {
+  Failure _handleBadResponse(Response<dynamic>? response) {
     if (response == null) {
       return const ServerFailure('No response from server');
     }
@@ -338,13 +348,13 @@ class ApiClient {
     String message = 'An error occurred';
     String code = 'UNKNOWN_ERROR';
 
-    if (data is Map) {
+    if (data is Map<String, dynamic>) {
       final error = data['error'];
-      if (error is Map) {
-        message = error['message'] ?? message;
-        code = error['code'] ?? code;
+      if (error is Map<String, dynamic>) {
+        message = error['message'] as String? ?? message;
+        code = error['code'] as String? ?? code;
       } else if (data['message'] != null) {
-        message = data['message'];
+        message = data['message'] as String? ?? message;
       }
     }
 
