@@ -23,6 +23,9 @@ import 'theme.dart';
 import '../features/budgets/presentation/screens/budgets_screen.dart';
 import '../features/budgets/presentation/screens/add_budget_screen.dart';
 import '../features/budgets/presentation/screens/budget_details_screen.dart';
+import '../features/categories/presentation/screens/categories_screen.dart';
+import '../features/categories/presentation/screens/add_category_screen.dart';
+import '../features/categories/presentation/screens/category_details_screen.dart';
 
 /// Placeholder screen for features not yet implemented
 class _PlaceholderScreen extends StatelessWidget {
@@ -150,6 +153,11 @@ class AppRoutes {
   static const String accounts = '/accounts';
   static const String accountDetails = '/accounts/:id';
   static const String addAccount = '/accounts/add';
+
+  // Category routes
+  static const String categories = '/categories';
+  static const String addCategory = '/categories/add';
+  static const String categoryDetails = '/categories/:id';
 
   // Transaction routes
   static const String transactionDetails = '/transactions/:id';
