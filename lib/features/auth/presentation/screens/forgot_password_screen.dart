@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -364,7 +365,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
   /// Transition to success view with animation
   Future<void> _transitionToSuccess() async {
-    HapticFeedback.mediumImpact();
+    await HapticFeedback.mediumImpact();
 
     // Stop pulse animation
     _iconPulseController.stop();
@@ -386,7 +387,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       return;
     }
 
-    HapticFeedback.lightImpact();
+    await HapticFeedback.lightImpact();
 
     setState(() {
       _isLoading = true;
@@ -409,11 +410,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         // Show success snackbar
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
+            content: const Row(
               children: [
-                const Icon(Iconsax.tick_circle, color: Colors.white, size: 20),
-                const SizedBox(width: 12),
-                const Expanded(
+                Icon(Iconsax.tick_circle, color: Colors.white, size: 20),
+                SizedBox(width: 12),
+                Expanded(
                   child: Text('Reset code sent successfully'),
                 ),
               ],
@@ -428,7 +429,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
           ),
         );
 
-        HapticFeedback.mediumImpact();
+        await HapticFeedback.mediumImpact();
       } else {
         final authError = ref.read(authStateProvider).error;
         _handleError(authError ?? 'Failed to resend code. Please try again.');
@@ -463,16 +464,16 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
   /// Open email app
   Future<void> _openEmailApp() async {
-    HapticFeedback.lightImpact();
+    await HapticFeedback.lightImpact();
 
     try {
-      final Uri emailUri = Uri(scheme: 'mailto');
+      final emailUri = Uri(scheme: 'mailto');
       if (await canLaunchUrl(emailUri)) {
         await launchUrl(emailUri);
       } else {
         // Try alternative approach for different platforms
-        final Uri gmailUri = Uri.parse('googlegmail://');
-        final Uri mailUri = Uri.parse('message://');
+        final gmailUri = Uri.parse('googlegmail://');
+        final mailUri = Uri.parse('message://');
 
         if (await canLaunchUrl(gmailUri)) {
           await launchUrl(gmailUri);
@@ -489,14 +490,16 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
   /// Show error when email app cannot be opened
   void _showEmailAppError() {
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
+        content: const Row(
           children: [
-            const Icon(Iconsax.warning_2, color: Colors.white, size: 20),
-            const SizedBox(width: 12),
-            const Expanded(
+            Icon(Iconsax.warning_2, color: Colors.white, size: 20),
+            SizedBox(width: 12),
+            Expanded(
               child: Text('Could not open email app'),
             ),
           ],
@@ -631,7 +634,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'No worries! Enter your email and we\'ll send you a reset code.',
+                  "No worries! Enter your email and we'll send you a reset code.",
                   style: SpendexTheme.bodyMedium.copyWith(
                     color: isDark
                         ? SpendexColors.darkTextSecondary
@@ -712,7 +715,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
           FadeTransition(
             opacity: _successOpacityAnimation,
             child: Text(
-              'We\'ve sent a 6-digit verification code to',
+              "We've sent a 6-digit verification code to",
               style: SpendexTheme.bodyMedium.copyWith(
                 color: isDark
                     ? SpendexColors.darkTextSecondary
@@ -730,7 +733,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: SpendexColors.primary.withOpacity(0.1),
+                color: SpendexColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -751,7 +754,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                'Didn\'t receive it? Check your spam folder or try resending.',
+                "Didn't receive it? Check your spam folder or try resending.",
                 style: SpendexTheme.bodyMedium.copyWith(
                   color: isDark
                       ? SpendexColors.darkTextTertiary
@@ -772,8 +775,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
               text: 'Open Email App',
               icon: Iconsax.directbox_default,
               onPressed: _openEmailApp,
-              isLoading: false,
-              isEnabled: !_isLoading,
             ),
           ),
 
@@ -786,8 +787,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
               text: 'Enter Code Manually',
               icon: Iconsax.keyboard,
               onPressed: _navigateToOtpScreen,
-              isLoading: false,
-              isEnabled: !_isLoading,
             ),
           ),
 
@@ -912,11 +911,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: (isRateLimited ? SpendexColors.warning : SpendexColors.expense)
-              .withOpacity(0.1),
+              .withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: (isRateLimited ? SpendexColors.warning : SpendexColors.expense)
-                .withOpacity(0.3),
+                .withValues(alpha: 0.3),
           ),
         ),
         child: Row(
@@ -948,7 +947,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                 color: (isRateLimited
                         ? SpendexColors.warning
                         : SpendexColors.expense)
-                    .withOpacity(0.7),
+                    .withValues(alpha: 0.7),
                 size: 18,
               ),
             ),
@@ -977,7 +976,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Didn\'t receive the code? ',
+            "Didn't receive the code? ",
             style: SpendexTheme.bodyMedium.copyWith(
               color: isDark
                   ? SpendexColors.darkTextSecondary
@@ -1013,7 +1012,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: SpendexColors.primary.withOpacity(0.1),
+                color: SpendexColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
