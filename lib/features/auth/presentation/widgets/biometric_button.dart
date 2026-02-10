@@ -77,8 +77,9 @@ class _BiometricButtonState extends State<BiometricButton>
         _pulseController.repeat(reverse: true);
       }
     } else {
-      _pulseController.stop();
-      _pulseController.reset();
+      _pulseController
+        ..stop()
+        ..reset();
     }
   }
 

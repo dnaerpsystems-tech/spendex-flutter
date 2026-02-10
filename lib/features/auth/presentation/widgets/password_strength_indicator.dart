@@ -41,15 +41,15 @@ class PasswordValidator {
 
   /// Contains uppercase letter (A-Z)
   static bool hasUppercase(String password) =>
-      password.contains(RegExp(r'[A-Z]'));
+      password.contains(RegExp('[A-Z]'));
 
   /// Contains lowercase letter (a-z)
   static bool hasLowercase(String password) =>
-      password.contains(RegExp(r'[a-z]'));
+      password.contains(RegExp('[a-z]'));
 
   /// Contains number (0-9)
   static bool hasNumber(String password) =>
-      password.contains(RegExp(r'[0-9]'));
+      password.contains(RegExp('[0-9]'));
 
   /// Contains special character (@$!%*?&)
   static bool hasSpecialChar(String password) =>
@@ -57,18 +57,30 @@ class PasswordValidator {
 
   /// Count how many requirements are met
   static int getMetRequirementsCount(String password) {
-    int count = 0;
-    if (hasMinLength(password)) count++;
-    if (hasUppercase(password)) count++;
-    if (hasLowercase(password)) count++;
-    if (hasNumber(password)) count++;
-    if (hasSpecialChar(password)) count++;
+    var count = 0;
+    if (hasMinLength(password)) {
+      count++;
+    }
+    if (hasUppercase(password)) {
+      count++;
+    }
+    if (hasLowercase(password)) {
+      count++;
+    }
+    if (hasNumber(password)) {
+      count++;
+    }
+    if (hasSpecialChar(password)) {
+      count++;
+    }
     return count;
   }
 
   /// Get password strength based on requirements met
   static PasswordStrength getStrength(String password) {
-    if (password.isEmpty) return PasswordStrength.empty;
+    if (password.isEmpty) {
+      return PasswordStrength.empty;
+    }
 
     final count = getMetRequirementsCount(password);
 
@@ -113,7 +125,7 @@ class PasswordValidator {
         icon: Iconsax.hashtag,
       ),
       PasswordRequirement(
-        label: 'Special character (@\$!%*?&)',
+        label: r'Special character (@$!%*?&)',
         isMet: hasSpecialChar(password),
         icon: Iconsax.star,
       ),
@@ -145,8 +157,8 @@ class PasswordValidator {
 class PasswordStrengthIndicator extends StatefulWidget {
 
   const PasswordStrengthIndicator({
-    super.key,
     required this.password,
+    super.key,
     this.showRequirements = true,
     this.showLabel = true,
     this.barHeight = 4,
@@ -300,7 +312,7 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
   }
 
   Widget _buildRequirementItem(PasswordRequirement requirement, bool isDark) {
-    final metColor = SpendexColors.income;
+    const metColor = SpendexColors.income;
     final unmetColor =
         isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
 
@@ -325,7 +337,6 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
                     color: color.withValues(alpha:0.3),
-                    width: 1,
                   ),
                 ),
                 child: Center(
