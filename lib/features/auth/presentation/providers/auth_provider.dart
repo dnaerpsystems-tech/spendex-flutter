@@ -1,23 +1,15 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:equatable/equatable.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:local_auth/local_auth.dart';
 
-import '../../data/models/user_model.dart';
-import '../../domain/repositories/auth_repository.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/storage/secure_storage.dart';
+import '../../data/models/user_model.dart';
+import '../../domain/repositories/auth_repository.dart';
 
 /// Auth State
 class AuthState extends Equatable {
-  final bool isLoading;
-  final bool isAuthenticated;
-  final UserModel? user;
-  final String? error;
-  final bool isBiometricAvailable;
-  final bool isBiometricEnabled;
-  final bool isBiometricLoading;
-
   const AuthState({
     this.isLoading = false,
     this.isAuthenticated = false,
@@ -46,10 +38,9 @@ class AuthState extends Equatable {
         isBiometricEnabled = false,
         isBiometricLoading = false;
 
-  AuthState.authenticated(UserModel user)
+  const AuthState.authenticated(this.user)
       : isLoading = false,
         isAuthenticated = true,
-        user = user,
         error = null,
         isBiometricAvailable = false,
         isBiometricEnabled = false,
@@ -64,14 +55,21 @@ class AuthState extends Equatable {
         isBiometricEnabled = false,
         isBiometricLoading = false;
 
-  AuthState.error(String error)
+  const AuthState.error(this.error)
       : isLoading = false,
         isAuthenticated = false,
         user = null,
-        error = error,
         isBiometricAvailable = false,
         isBiometricEnabled = false,
         isBiometricLoading = false;
+
+  final bool isLoading;
+  final bool isAuthenticated;
+  final UserModel? user;
+  final String? error;
+  final bool isBiometricAvailable;
+  final bool isBiometricEnabled;
+  final bool isBiometricLoading;
 
   AuthState copyWith({
     bool? isLoading,
@@ -107,12 +105,12 @@ class AuthState extends Equatable {
 
 /// Auth State Notifier
 class AuthNotifier extends StateNotifier<AuthState> {
+  AuthNotifier(this._authRepository, this._secureStorage)
+      : super(const AuthState.initial());
+
   final AuthRepository _authRepository;
   final SecureStorageService _secureStorage;
   final LocalAuthentication _localAuth = LocalAuthentication();
-
-  AuthNotifier(this._authRepository, this._secureStorage)
-      : super(const AuthState.initial());
 
   /// Check authentication status
   Future<void> checkAuthStatus() async {
@@ -173,7 +171,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Login with biometric authentication
   Future<bool> loginWithBiometric() async {
-    state = state.copyWith(isBiometricLoading: true, error: null);
+    state = state.copyWith(isBiometricLoading: true);
 
     try {
       // First, authenticate with device biometrics
@@ -219,12 +217,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
             },
             (authResponse) {
               state = AuthState(
-                isLoading: false,
                 isAuthenticated: true,
                 user: authResponse.user,
                 isBiometricAvailable: state.isBiometricAvailable,
                 isBiometricEnabled: state.isBiometricEnabled,
-                isBiometricLoading: false,
               );
               return true;
             },
@@ -234,7 +230,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       state = state.copyWith(
         isBiometricLoading: false,
-        error: 'Biometric authentication error: ${e.toString()}',
+        error: 'Biometric authentication error: $e',
       );
       return false;
     }
@@ -242,7 +238,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Register biometric credential
   Future<bool> registerBiometric() async {
-    state = state.copyWith(isBiometricLoading: true, error: null);
+    state = state.copyWith(isBiometricLoading: true);
 
     try {
       // First, authenticate with device biometrics
@@ -300,7 +296,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       state = state.copyWith(
         isBiometricLoading: false,
-        error: 'Biometric registration error: ${e.toString()}',
+        error: 'Biometric registration error: $e',
       );
       return false;
     }
@@ -336,7 +332,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Disable biometric authentication
   Future<void> disableBiometric() async {
-    await _authRepository.setBiometricEnabled(false);
+    await _authRepository.setBiometricEnabled(enabled: false);
     state = state.copyWith(isBiometricEnabled: false);
   }
 
@@ -347,7 +343,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Login
   Future<bool> login(String email, String password) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _authRepository.login(email, password);
 
@@ -358,7 +354,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       },
       (authResponse) {
         state = AuthState(
-          isLoading: false,
           isAuthenticated: true,
           user: authResponse.user,
           isBiometricAvailable: state.isBiometricAvailable,
@@ -372,7 +367,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Register
   Future<bool> register(
       String email, String password, String name, String? phone) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result =
         await _authRepository.register(email, password, name, phone);
@@ -391,7 +386,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Verify OTP
   Future<bool> verifyOtp(String email, String otp) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _authRepository.verifyOtp(email, otp);
 
@@ -402,7 +397,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       },
       (authResponse) {
         state = AuthState(
-          isLoading: false,
           isAuthenticated: true,
           user: authResponse.user,
           isBiometricAvailable: state.isBiometricAvailable,
@@ -415,7 +409,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Forgot Password
   Future<bool> forgotPassword(String email) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _authRepository.forgotPassword(email);
 
@@ -433,7 +427,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Reset Password
   Future<bool> resetPassword(String token, String password) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _authRepository.resetPassword(token, password);
 
@@ -453,16 +447,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     await _authRepository.logout();
     state = AuthState(
-      isLoading: false,
-      isAuthenticated: false,
       isBiometricAvailable: state.isBiometricAvailable,
-      isBiometricEnabled: false,
     );
   }
 
   /// Clear error
   void clearError() {
-    state = state.copyWith(error: null);
+    state = state.copyWith();
   }
 
   /// Update user
