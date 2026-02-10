@@ -12,9 +12,9 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/storage/secure_storage.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
 import '../widgets/auth_header.dart';
+import '../widgets/auth_text_field.dart';
 import '../widgets/biometric_button.dart';
 
 /// Login Form Data
@@ -398,7 +398,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               Expanded(
                                 child: AuthSocialButton(
                                   text: 'Google',
-                                  icon: Iconsax.google4,
+                                  icon: Iconsax.google,
                                   onPressed: () {
                                     // TODO: Implement Google login
                                     ScaffoldMessenger.of(context).showSnackBar(
