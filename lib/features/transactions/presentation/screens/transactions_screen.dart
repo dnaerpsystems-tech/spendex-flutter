@@ -7,7 +7,17 @@ import 'package:intl/intl.dart';
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../data/models/transaction_model.dart';
+import '../providers/transactions_provider.dart';
+import '../widgets/date_group_header.dart';
+import '../widgets/quick_add_bottom_sheet.dart';
+import '../widgets/receipt_scanner_sheet.dart';
+import '../widgets/transaction_card.dart';
+import '../widgets/transaction_search_delegate.dart';
+import '../widgets/voice_input_sheet.dart';
 
+/// Transactions Screen
+/// Displays all transactions with filtering, search, and pagination
 class TransactionsScreen extends ConsumerStatefulWidget {
   const TransactionsScreen({super.key});
 
@@ -16,147 +26,366 @@ class TransactionsScreen extends ConsumerStatefulWidget {
 }
 
 class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
+  final ScrollController _scrollController = ScrollController();
   final _currencyFormat = NumberFormat.currency(
     locale: 'en_IN',
     symbol: '\u20B9',
     decimalDigits: 0,
   );
-
+  
   TransactionType? _selectedType;
   DateTimeRange? _selectedDateRange;
 
   @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(transactionsStateProvider.notifier).loadTransactions();
+    });
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Transactions'),
-        actions: [
-          IconButton(
-            icon: const Icon(Iconsax.search_normal),
-            onPressed: () {
-              // TODO(spendex): Implement search
-            },
-          ),
-          IconButton(
-            icon: const Icon(Iconsax.filter),
-            onPressed: _showFilterSheet,
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Filter Chips
-          if (_selectedType != null || _selectedDateRange != null)
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Row(
-                children: [
-                  if (_selectedType != null)
-                    _FilterChip(
-                      label: _selectedType!.label,
-                      onRemove: () {
-                        setState(() {
-                          _selectedType = null;
-                        });
-                      },
-                    ),
-                  if (_selectedDateRange != null)
-                    _FilterChip(
-                      label:
-                          '${DateFormat('MMM d').format(_selectedDateRange!.start)} - ${DateFormat('MMM d').format(_selectedDateRange!.end)}',
-                      onRemove: () {
-                        setState(() {
-                          _selectedDateRange = null;
-                        });
-                      },
-                    ),
-                ],
-              ),
-            ),
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-          // Transaction List
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                return _TransactionItem(
-                  currencyFormat: _currencyFormat,
-                  isDark: isDark,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go(AppRoutes.addTransaction),
-        child: const Icon(Iconsax.add),
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      final state = ref.read(transactionsStateProvider);
+      if (!state.isLoading && state.hasMore) {
+        ref.read(transactionsStateProvider.notifier).loadMore();
+      }
+    }
+  }
+
+  Future<void> _refresh() async {
+    await ref.read(transactionsStateProvider.notifier).loadTransactions(refresh: true);
+  }
+
+  Future<void> _openSearch() async {
+    final transactionsState = ref.read(transactionsStateProvider);
+    final result = await showSearch<TransactionModel?>(
+      context: context,
+      delegate: TransactionSearchDelegate(
+        ref: ref,
+        transactions: transactionsState.transactions,
       ),
     );
+    if (result != null && mounted) {
+      context.push('/transactions/${result.id}');
+    }
   }
 
   void _showFilterSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.4,
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, scrollController) => _FilterSheet(
-          scrollController: scrollController,
-          selectedType: _selectedType,
-          selectedDateRange: _selectedDateRange,
-          onApply: (type, dateRange) {
-            setState(() {
-              _selectedType = type;
-              _selectedDateRange = dateRange;
-            });
-            Navigator.pop(context);
-          },
+      backgroundColor: Colors.transparent,
+      builder: (context) => _FilterSheet(
+        selectedType: _selectedType,
+        selectedDateRange: _selectedDateRange,
+        onApply: (type, dateRange) {
+          setState(() {
+            _selectedType = type;
+            _selectedDateRange = dateRange;
+          });
+          Navigator.pop(context);
+          if (type != null) {
+            ref.read(transactionsStateProvider.notifier).applyFilter(
+              TransactionFilter(type: type),
+            );
+          } else {
+            ref.read(transactionsStateProvider.notifier).clearFilter();
+          }
+        },
+      ),
+    );
+  }
+
+  void _showVoiceInput() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => VoiceInputSheet(
+        onTransactionParsed: (request) {
+          Navigator.pop(context);
+          if (request != null) {
+            context.go('${AppRoutes.addTransaction}?amount=${request.amount}&type=${request.type.value}');
+          }
+        },
+      ),
+    );
+  }
+
+  void _showReceiptScanner() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ReceiptScannerSheet(
+        onReceiptScanned: (request) {
+          Navigator.pop(context);
+          if (request != null) {
+            context.go('${AppRoutes.addTransaction}?amount=${request.amount}');
+          }
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final transactionsState = ref.watch(transactionsStateProvider);
+
+    return Scaffold(
+      backgroundColor: isDark
+          ? SpendexColors.darkBackground
+          : SpendexColors.lightBackground,
+      appBar: AppBar(
+        title: const Text('Transactions'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Iconsax.search_normal),
+            onPressed: _openSearch,
+            tooltip: 'Search transactions',
+          ),
+          IconButton(
+            icon: const Icon(Iconsax.filter),
+            onPressed: _showFilterSheet,
+            tooltip: 'Filter',
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        color: SpendexColors.primary,
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            // Filter Chips
+            if (_selectedType != null || _selectedDateRange != null)
+              SliverToBoxAdapter(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Row(
+                    children: [
+                      if (_selectedType != null)
+                        _FilterChip(
+                          label: _selectedType!.label,
+                          color: _getTypeColor(_selectedType!),
+                          onRemove: () {
+                            setState(() => _selectedType = null);
+                            ref.read(transactionsStateProvider.notifier).clearFilter();
+                          },
+                        ),
+                      if (_selectedDateRange != null)
+                        _FilterChip(
+                          label: '${DateFormat('MMM d').format(_selectedDateRange!.start)} - ${DateFormat('MMM d').format(_selectedDateRange!.end)}',
+                          onRemove: () => setState(() => _selectedDateRange = null),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+
+            // Content
+            if (transactionsState.isLoading && transactionsState.transactions.isEmpty)
+              _buildLoadingSkeleton()
+            else if (transactionsState.error != null && transactionsState.transactions.isEmpty)
+              _buildErrorState(transactionsState.error!)
+            else if (transactionsState.transactions.isEmpty)
+              _buildEmptyState()
+            else
+              _buildTransactionsList(transactionsState, isDark),
+
+            // Loading More Indicator
+            if (transactionsState.isLoading && transactionsState.transactions.isNotEmpty)
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: SpendexColors.primary,
+                      strokeWidth: 2,
+                    ),
+                  ),
+                ),
+              ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 100)),
+          ],
+        ),
+      ),
+      floatingActionButton: QuickAddFab(
+        onManualTap: () => context.go(AppRoutes.addTransaction),
+        onVoiceTap: _showVoiceInput,
+        onReceiptTap: _showReceiptScanner,
+      ),
+    );
+  }
+
+  Widget _buildLoadingSkeleton() {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => _TransactionSkeleton(),
+          childCount: 6,
         ),
       ),
     );
   }
+
+  Widget _buildErrorState(String error) {
+    return SliverFillRemaining(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: SpendexColors.expense.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: const Icon(Iconsax.warning_2, size: 40, color: SpendexColors.expense),
+              ),
+              const SizedBox(height: 16),
+              Text('Something went wrong', style: SpendexTheme.headlineMedium),
+              const SizedBox(height: 8),
+              Text(error, textAlign: TextAlign.center),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: _refresh,
+                icon: const Icon(Iconsax.refresh),
+                label: const Text('Try Again'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return SliverFillRemaining(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: SpendexColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: const Icon(Iconsax.receipt_item, size: 48, color: SpendexColors.primary),
+              ),
+              const SizedBox(height: 24),
+              Text('No transactions yet', style: SpendexTheme.headlineMedium),
+              const SizedBox(height: 8),
+              Text(
+                'Start tracking your finances by adding your first transaction',
+                textAlign: TextAlign.center,
+                style: SpendexTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () => context.go(AppRoutes.addTransaction),
+                icon: const Icon(Iconsax.add),
+                label: const Text('Add Transaction'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransactionsList(TransactionsState state, bool isDark) {
+    final grouped = _groupTransactionsByDate(state.transactions);
+    
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final entry = grouped.entries.elementAt(index);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DateGroupHeader(date: entry.key),
+                ...entry.value.map((t) => TransactionCard(
+                  transaction: t,
+                  onTap: () => context.push('/transactions/${t.id}'),
+                  showAccount: true,
+                )),
+              ],
+            );
+          },
+          childCount: grouped.length,
+        ),
+      ),
+    );
+  }
+
+  Map<DateTime, List<TransactionModel>> _groupTransactionsByDate(List<TransactionModel> transactions) {
+    final grouped = <DateTime, List<TransactionModel>>{};
+    for (final t in transactions) {
+      final key = DateTime(t.date.year, t.date.month, t.date.day);
+      grouped.putIfAbsent(key, () => []).add(t);
+    }
+    return Map.fromEntries(grouped.entries.toList()..sort((a, b) => b.key.compareTo(a.key)));
+  }
+
+  Color _getTypeColor(TransactionType type) {
+    switch (type) {
+      case TransactionType.income: return SpendexColors.income;
+      case TransactionType.expense: return SpendexColors.expense;
+      case TransactionType.transfer: return SpendexColors.transfer;
+    }
+  }
 }
 
 class _FilterChip extends StatelessWidget {
-
-  const _FilterChip({required this.label, required this.onRemove});
+  const _FilterChip({required this.label, this.color, required this.onRemove});
   final String label;
+  final Color? color;
   final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
+    final chipColor = color ?? SpendexColors.primary;
     return Container(
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: SpendexColors.primary.withValues(alpha: 0.1),
+        color: chipColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: SpendexTheme.labelMedium.copyWith(
-              color: SpendexColors.primary,
-            ),
-          ),
+          Text(label, style: SpendexTheme.labelMedium.copyWith(color: chipColor)),
           const SizedBox(width: 8),
           GestureDetector(
             onTap: onRemove,
-            child: const Icon(
-              Icons.close,
-              size: 16,
-              color: SpendexColors.primary,
-            ),
+            child: Icon(Icons.close, size: 16, color: chipColor),
           ),
         ],
       ),
@@ -164,95 +393,33 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
-class _TransactionItem extends StatelessWidget {
-
-  const _TransactionItem({
-    required this.currencyFormat,
-    required this.isDark,
-  });
-  final NumberFormat currencyFormat;
-  final bool isDark;
-
+class _TransactionSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Mock data - using hashCode to vary expense/income for demo
-    final isExpense = hashCode.isOdd;
-    const amount = 250000;
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final color = isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
-        ),
       ),
       child: Row(
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: (isExpense ? SpendexColors.expense : SpendexColors.income)
-                  .withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Center(
-              child: Icon(
-                Iconsax.shopping_cart,
-                color: isExpense ? SpendexColors.expense : SpendexColors.income,
-                size: 24,
-              ),
-            ),
-          ),
+          Container(width: 48, height: 48, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(14))),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Grocery Shopping',
-                  style: SpendexTheme.titleMedium.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      'Food',
-                      style: SpendexTheme.labelMedium.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      width: 4,
-                      height: 4,
-                      decoration: const BoxDecoration(
-                        color: SpendexColors.lightTextTertiary,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Text(
-                      'Today',
-                      style: SpendexTheme.labelMedium.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+                Container(height: 16, width: 120, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
+                const SizedBox(height: 8),
+                Container(height: 12, width: 80, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
               ],
             ),
           ),
-          Text(
-            '-${currencyFormat.format(amount / 100)}',
-            style: SpendexTheme.titleMedium.copyWith(
-              color: isExpense ? SpendexColors.expense : SpendexColors.income,
-            ),
-          ),
+          Container(height: 16, width: 60, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
         ],
       ),
     );
@@ -260,14 +427,7 @@ class _TransactionItem extends StatelessWidget {
 }
 
 class _FilterSheet extends StatefulWidget {
-
-  const _FilterSheet({
-    required this.scrollController,
-    required this.selectedType,
-    required this.selectedDateRange,
-    required this.onApply,
-  });
-  final ScrollController scrollController;
+  const _FilterSheet({required this.selectedType, required this.selectedDateRange, required this.onApply});
   final TransactionType? selectedType;
   final DateTimeRange? selectedDateRange;
   final void Function(TransactionType?, DateTimeRange?) onApply;
@@ -277,78 +437,53 @@ class _FilterSheet extends StatefulWidget {
 }
 
 class _FilterSheetState extends State<_FilterSheet> {
-  TransactionType? _selectedType;
-  DateTimeRange? _selectedDateRange;
+  TransactionType? _type;
+  DateTimeRange? _dateRange;
 
   @override
   void initState() {
     super.initState();
-    _selectedType = widget.selectedType;
-    _selectedDateRange = widget.selectedDateRange;
+    _type = widget.selectedType;
+    _dateRange = widget.selectedDateRange;
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Filter Transactions',
-                style: SpendexTheme.headlineMedium.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
+              Text('Filter Transactions', style: SpendexTheme.headlineMedium),
               TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedType = null;
-                    _selectedDateRange = null;
-                  });
-                },
-                child: Text(
-                  'Reset',
-                  style: SpendexTheme.labelMedium.copyWith(
-                    color: SpendexColors.primary,
-                  ),
-                ),
+                onPressed: () => setState(() { _type = null; _dateRange = null; }),
+                child: Text('Reset', style: TextStyle(color: SpendexColors.expense)),
               ),
             ],
           ),
           const SizedBox(height: 24),
-          Text(
-            'Transaction Type',
-            style: SpendexTheme.titleMedium.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
+          Text('Transaction Type', style: SpendexTheme.titleMedium),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
-            children: TransactionType.values.map((type) {
-              final isSelected = _selectedType == type;
-              return ChoiceChip(
-                label: Text(type.label),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    _selectedType = selected ? type : null;
-                  });
-                },
-              );
-            }).toList(),
+            children: TransactionType.values.map((t) => ChoiceChip(
+              label: Text(t.label),
+              selected: _type == t,
+              selectedColor: _getColor(t).withValues(alpha: 0.2),
+              onSelected: (s) => setState(() => _type = s ? t : null),
+            )).toList(),
           ),
           const SizedBox(height: 24),
-          Text(
-            'Date Range',
-            style: SpendexTheme.titleMedium.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
+          Text('Date Range', style: SpendexTheme.titleMedium),
           const SizedBox(height: 12),
           OutlinedButton.icon(
             onPressed: () async {
@@ -356,33 +491,34 @@ class _FilterSheetState extends State<_FilterSheet> {
                 context: context,
                 firstDate: DateTime(2020),
                 lastDate: DateTime.now(),
-                initialDateRange: _selectedDateRange,
+                initialDateRange: _dateRange,
               );
-              if (picked != null) {
-                setState(() {
-                  _selectedDateRange = picked;
-                });
-              }
+              if (picked != null) setState(() => _dateRange = picked);
             },
             icon: const Icon(Iconsax.calendar),
-            label: Text(
-              _selectedDateRange != null
-                  ? '${DateFormat('MMM d, yyyy').format(_selectedDateRange!.start)} - ${DateFormat('MMM d, yyyy').format(_selectedDateRange!.end)}'
-                  : 'Select Date Range',
-            ),
+            label: Text(_dateRange != null
+                ? '${DateFormat('MMM d').format(_dateRange!.start)} - ${DateFormat('MMM d').format(_dateRange!.end)}'
+                : 'Select Date Range'),
           ),
-          const Spacer(),
+          const SizedBox(height: 32),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                widget.onApply(_selectedType, _selectedDateRange);
-              },
+              onPressed: () => widget.onApply(_type, _dateRange),
               child: const Text('Apply Filters'),
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );
+  }
+
+  Color _getColor(TransactionType t) {
+    switch (t) {
+      case TransactionType.income: return SpendexColors.income;
+      case TransactionType.expense: return SpendexColors.expense;
+      case TransactionType.transfer: return SpendexColors.transfer;
+    }
   }
 }
