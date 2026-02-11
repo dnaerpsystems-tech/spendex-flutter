@@ -15,26 +15,27 @@ import '../features/auth/presentation/screens/reset_password_screen.dart';
 import '../features/budgets/presentation/screens/add_budget_screen.dart';
 import '../features/budgets/presentation/screens/budget_details_screen.dart';
 import '../features/budgets/presentation/screens/budgets_screen.dart';
+import '../features/categories/presentation/screens/add_category_screen.dart';
+import '../features/categories/presentation/screens/categories_screen.dart';
+import '../features/categories/presentation/screens/category_details_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/transactions/presentation/screens/add_transaction_screen.dart';
+import '../features/transactions/presentation/screens/transaction_details_screen.dart';
 import '../features/transactions/presentation/screens/transactions_screen.dart';
 import '../shared/widgets/main_scaffold.dart';
 import '../shared/widgets/onboarding_screen.dart';
 import '../shared/widgets/splash_screen.dart';
 import 'theme.dart';
-import '../features/budgets/presentation/screens/budgets_screen.dart';
-import '../features/budgets/presentation/screens/add_budget_screen.dart';
-import '../features/budgets/presentation/screens/budget_details_screen.dart';
 
 /// Placeholder screen for features not yet implemented
 class _PlaceholderScreen extends StatelessWidget {
-
   const _PlaceholderScreen({
     required this.title,
     required this.icon,
     required this.description,
   });
+
   final String title;
   final IconData icon;
   final String description;
@@ -64,7 +65,7 @@ class _PlaceholderScreen extends StatelessWidget {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: SpendexColors.primary.withValues(alpha:0.1),
+                  color: SpendexColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(60),
                 ),
                 child: Icon(
@@ -77,28 +78,29 @@ class _PlaceholderScreen extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
                 description,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
-                ),
+                      color: isDark
+                          ? SpendexColors.darkTextSecondary
+                          : SpendexColors.lightTextSecondary,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: SpendexColors.warning.withValues(alpha:0.1),
+                  color: SpendexColors.warning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: SpendexColors.warning.withValues(alpha:0.3),
+                    color: SpendexColors.warning.withValues(alpha: 0.3),
                   ),
                 ),
                 child: const Row(
@@ -256,7 +258,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.otpVerification,
         builder: (context, state) {
           final email = state.uri.queryParameters['email'] ?? '';
-          final purpose = state.uri.queryParameters['purpose'] ?? 'verification';
+          final purpose =
+              state.uri.queryParameters['purpose'] ?? 'verification';
           return OtpVerificationScreen(email: email, purpose: purpose);
         },
       ),
@@ -301,9 +304,12 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: 'add-transaction',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: AddTransactionScreen(),
-                ),
+                pageBuilder: (context, state) {
+                  final transactionId = state.uri.queryParameters['id'];
+                  return NoTransitionPage(
+                    child: AddTransactionScreen(transactionId: transactionId),
+                  );
+                },
               ),
               GoRoute(
                 path: 'analytics',
@@ -311,7 +317,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                   child: _PlaceholderScreen(
                     title: 'Analytics',
                     icon: Iconsax.chart,
-                    description: 'View detailed analytics and insights about your spending patterns and financial health.',
+                    description:
+                        'View detailed analytics and insights about your spending patterns and financial health.',
                   ),
                 ),
               ),
@@ -349,11 +356,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Transaction Routes
       GoRoute(
         path: AppRoutes.transactionDetails,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Transaction Details',
-          icon: Iconsax.receipt_item,
-          description: 'View and edit transaction details including category, notes, and attachments.',
-        ),
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return TransactionDetailsScreen(transactionId: id);
+        },
       ),
 
       // Category Routes
@@ -402,7 +408,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Savings Goals',
           icon: Iconsax.flag,
-          description: 'Track your progress towards financial goals like vacations, emergency funds, or major purchases.',
+          description:
+              'Track your progress towards financial goals like vacations, emergency funds, or major purchases.',
         ),
       ),
       GoRoute(
@@ -410,7 +417,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Add Goal',
           icon: Iconsax.flag,
-          description: 'Create a new savings goal with target amount and deadline.',
+          description:
+              'Create a new savings goal with target amount and deadline.',
         ),
       ),
 
@@ -420,7 +428,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Loans & EMIs',
           icon: Iconsax.receipt_item,
-          description: 'Track your loans, view EMI schedules, and monitor outstanding balances.',
+          description:
+              'Track your loans, view EMI schedules, and monitor outstanding balances.',
         ),
       ),
       GoRoute(
@@ -428,7 +437,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Add Loan',
           icon: Iconsax.receipt_add,
-          description: 'Add a new loan with EMI calculation and payment reminders.',
+          description:
+              'Add a new loan with EMI calculation and payment reminders.',
         ),
       ),
 
@@ -438,7 +448,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Investments',
           icon: Iconsax.chart_2,
-          description: 'Track your investment portfolio including mutual funds, stocks, and other assets.',
+          description:
+              'Track your investment portfolio including mutual funds, stocks, and other assets.',
         ),
       ),
       GoRoute(
@@ -446,7 +457,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Add Investment',
           icon: Iconsax.chart_21,
-          description: 'Add a new investment with purchase details and current valuation.',
+          description:
+              'Add a new investment with purchase details and current valuation.',
         ),
       ),
 
@@ -456,7 +468,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'AI Insights',
           icon: Iconsax.lamp_charge,
-          description: 'Get personalized financial insights and recommendations powered by AI.',
+          description:
+              'Get personalized financial insights and recommendations powered by AI.',
         ),
       ),
       GoRoute(
@@ -464,7 +477,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Family',
           icon: Iconsax.people,
-          description: 'Manage family members and share accounts for collaborative financial tracking.',
+          description:
+              'Manage family members and share accounts for collaborative financial tracking.',
         ),
       ),
       GoRoute(
@@ -472,7 +486,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Subscription',
           icon: Iconsax.crown,
-          description: 'Upgrade to Pro or Premium for unlimited features and AI insights.',
+          description:
+              'Upgrade to Pro or Premium for unlimited features and AI insights.',
         ),
       ),
       GoRoute(
@@ -484,7 +499,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Profile',
           icon: Iconsax.user,
-          description: 'View and edit your profile information, preferences, and security settings.',
+          description:
+              'View and edit your profile information, preferences, and security settings.',
         ),
       ),
       GoRoute(
@@ -492,7 +508,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const _PlaceholderScreen(
           title: 'Notifications',
           icon: Iconsax.notification,
-          description: 'View all your notifications including budget alerts, bill reminders, and insights.',
+          description:
+              'View all your notifications including budget alerts, bill reminders, and insights.',
         ),
       ),
     ],
@@ -515,8 +532,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             Text(
               state.uri.toString(),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: SpendexColors.lightTextSecondary,
-              ),
+                    color: SpendexColors.lightTextSecondary,
+                  ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
