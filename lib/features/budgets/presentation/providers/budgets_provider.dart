@@ -82,7 +82,7 @@ class BudgetsState extends Equatable {
   List<BudgetModel> get warningBudgets {
     return budgets
         .where((budget) =>
-            budget.percentage >= budget.alertThreshold && budget.percentage < 100)
+            budget.percentage >= budget.alertThreshold && budget.percentage < 100,)
         .toList();
   }
 
@@ -128,7 +128,9 @@ class BudgetsNotifier extends StateNotifier<BudgetsState> {
 
   /// Load all budgets
   Future<void> loadBudgets() async {
-    if (state.isLoading) return;
+    if (state.isLoading) {
+      return;
+    }
 
     state = state.copyWith(isLoading: true, clearError: true);
 
@@ -152,7 +154,9 @@ class BudgetsNotifier extends StateNotifier<BudgetsState> {
 
   /// Load budgets summary
   Future<void> loadSummary() async {
-    if (state.isSummaryLoading) return;
+    if (state.isSummaryLoading) {
+      return;
+    }
 
     state = state.copyWith(isSummaryLoading: true);
 
@@ -217,7 +221,9 @@ class BudgetsNotifier extends StateNotifier<BudgetsState> {
 
   /// Create a new budget
   Future<BudgetModel?> createBudget(CreateBudgetRequest request) async {
-    if (state.isCreating) return null;
+    if (state.isCreating) {
+      return null;
+    }
 
     state = state.copyWith(isCreating: true, clearError: true);
 
@@ -245,7 +251,9 @@ class BudgetsNotifier extends StateNotifier<BudgetsState> {
 
   /// Update an existing budget
   Future<BudgetModel?> updateBudget(String id, CreateBudgetRequest request) async {
-    if (state.isUpdating) return null;
+    if (state.isUpdating) {
+      return null;
+    }
 
     state = state.copyWith(isUpdating: true, clearError: true);
 
@@ -278,7 +286,9 @@ class BudgetsNotifier extends StateNotifier<BudgetsState> {
 
   /// Delete a budget
   Future<bool> deleteBudget(String id) async {
-    if (state.isDeleting) return false;
+    if (state.isDeleting) {
+      return false;
+    }
 
     state = state.copyWith(isDeleting: true, clearError: true);
 

@@ -11,8 +11,7 @@ import 'budget_progress_bar.dart';
 class BudgetCard extends StatelessWidget {
 
   const BudgetCard({
-    super.key,
-    required this.budget,
+    required this.budget, super.key,
     this.onTap,
     this.compact = false,
     this.showCategory = true,
@@ -37,9 +36,15 @@ class BudgetCard extends StatelessWidget {
   }
 
   Color _getStatusColor() {
-    if (budget.percentage >= 100) return SpendexColors.expense;
-    if (budget.percentage >= 80) return const Color(0xFFF97316);
-    if (budget.percentage >= 60) return SpendexColors.warning;
+    if (budget.percentage >= 100) {
+      return SpendexColors.expense;
+    }
+    if (budget.percentage >= 80) {
+      return const Color(0xFFF97316);
+    }
+    if (budget.percentage >= 60) {
+      return SpendexColors.warning;
+    }
     return SpendexColors.income;
   }
 
@@ -209,7 +214,6 @@ class BudgetCard extends StatelessWidget {
               percentage: budget.percentage,
               alertThreshold: budget.alertThreshold,
               height: compact ? 6 : 8,
-              showLabel: false,
             ),
 
             SizedBox(height: compact ? 12 : 14),
@@ -245,7 +249,6 @@ class BudgetCard extends StatelessWidget {
 
                 // Limit
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Limit',
@@ -321,9 +324,15 @@ class _StatusBadge extends StatelessWidget {
   final bool compact;
 
   String _formatDaysRemaining(int days) {
-    if (days < 0) return 'Ended';
-    if (days == 0) return 'Last day';
-    if (days == 1) return '1 day';
+    if (days < 0) {
+      return 'Ended';
+    }
+    if (days == 0) {
+      return 'Last day';
+    }
+    if (days == 1) {
+      return '1 day';
+    }
     return '$days days';
   }
 
@@ -505,8 +514,7 @@ class BudgetCardSkeleton extends StatelessWidget {
 class BudgetDetailCard extends StatelessWidget {
 
   const BudgetDetailCard({
-    super.key,
-    required this.budget,
+    required this.budget, super.key,
     this.onEdit,
   });
   final BudgetModel budget;
@@ -526,9 +534,15 @@ class BudgetDetailCard extends StatelessWidget {
   }
 
   Color _getStatusColor() {
-    if (budget.percentage >= 100) return SpendexColors.expense;
-    if (budget.percentage >= 80) return const Color(0xFFF97316);
-    if (budget.percentage >= 60) return SpendexColors.warning;
+    if (budget.percentage >= 100) {
+      return SpendexColors.expense;
+    }
+    if (budget.percentage >= 80) {
+      return const Color(0xFFF97316);
+    }
+    if (budget.percentage >= 60) {
+      return SpendexColors.warning;
+    }
     return SpendexColors.income;
   }
 

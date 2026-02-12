@@ -10,9 +10,7 @@ import '../../data/models/budget_model.dart';
 class BudgetPeriodSelector extends StatelessWidget {
 
   const BudgetPeriodSelector({
-    super.key,
-    required this.selectedPeriod,
-    required this.onPeriodChanged,
+    required this.selectedPeriod, required this.onPeriodChanged, super.key,
     this.showAllOption = true,
     this.compact = false,
   });
@@ -161,9 +159,7 @@ class _PeriodChip extends StatelessWidget {
 class BudgetStatusFilter extends StatelessWidget {
 
   const BudgetStatusFilter({
-    super.key,
-    required this.selectedStatus,
-    required this.onStatusChanged,
+    required this.selectedStatus, required this.onStatusChanged, super.key,
     this.onTrackCount,
     this.warningCount,
     this.exceededCount,
@@ -227,11 +223,7 @@ class _StatusChip extends StatelessWidget {
 
   const _StatusChip({
     required this.label,
-    this.count,
-    required this.color,
-    required this.isSelected,
-    required this.onTap,
-    required this.isDark,
+    required this.color, required this.isSelected, required this.onTap, required this.isDark, this.count,
   });
   final String label;
   final int? count;

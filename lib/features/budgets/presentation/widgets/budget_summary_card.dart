@@ -11,8 +11,7 @@ import 'budget_progress_bar.dart';
 class BudgetSummaryCard extends StatelessWidget {
 
   const BudgetSummaryCard({
-    super.key,
-    required this.summary,
+    required this.summary, super.key,
     this.onTap,
   });
   final BudgetsSummary summary;
@@ -139,7 +138,6 @@ class BudgetSummaryCard extends StatelessWidget {
               percentage: summary.overallPercentage,
               height: 10,
               showLabel: true,
-              showWarningIcon: true,
             ),
 
             const SizedBox(height: 20),
@@ -196,9 +194,15 @@ class BudgetSummaryCard extends StatelessWidget {
   }
 
   Color _getSpentColor(double percentage) {
-    if (percentage >= 100) return SpendexColors.expense;
-    if (percentage >= 80) return const Color(0xFFF97316);
-    if (percentage >= 60) return SpendexColors.warning;
+    if (percentage >= 100) {
+      return SpendexColors.expense;
+    }
+    if (percentage >= 80) {
+      return const Color(0xFFF97316);
+    }
+    if (percentage >= 60) {
+      return SpendexColors.warning;
+    }
     return SpendexColors.income;
   }
 }

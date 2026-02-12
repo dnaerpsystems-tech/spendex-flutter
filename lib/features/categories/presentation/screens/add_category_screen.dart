@@ -732,7 +732,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Iconsax.warning_2,
             color: SpendexColors.warning,
             size: 20,
@@ -852,7 +852,6 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
               ),
               items: [
                 DropdownMenuItem<String?>(
-                  value: null,
                   child: Text(
                     'None (Top-level category)',
                     style: SpendexTheme.bodyMedium.copyWith(

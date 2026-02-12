@@ -140,7 +140,9 @@ class InvestmentModel extends Equatable {
       type == InvestmentType.crypto;
 
   int? get daysToMaturity {
-    if (maturityDate == null) return null;
+    if (maturityDate == null) {
+      return null;
+    }
     return maturityDate!.difference(DateTime.now()).inDays;
   }
 

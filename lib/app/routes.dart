@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -197,15 +198,28 @@ class AppRoutes {
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+/// Auth state notifier for router refresh
+class AuthChangeNotifier extends ChangeNotifier {
+  AuthChangeNotifier(this._ref) {
+    _ref.listen(authStateProvider, (_, __) {
+      notifyListeners();
+    });
+  }
+  final Ref _ref;
+}
+
 /// Router provider
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateProvider);
+  final authNotifier = AuthChangeNotifier(ref);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
     initialLocation: AppRoutes.splash,
+    refreshListenable: authNotifier,
     redirect: (context, state) {
+      debugPrint('Router redirect: ${state.matchedLocation}');
+      final authState = ref.read(authStateProvider);
       final isAuthenticated = authState.isAuthenticated;
       final isOnAuthRoute = state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.register ||
@@ -215,8 +229,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isOnSplash = state.matchedLocation == AppRoutes.splash;
       final isOnOnboarding = state.matchedLocation == AppRoutes.onboarding;
 
+      debugPrint('Router: isOnSplash=$isOnSplash, isOnOnboarding=$isOnOnboarding, isAuth=$isAuthenticated');
+
       // Allow splash and onboarding without redirection
       if (isOnSplash || isOnOnboarding) {
+        debugPrint('Router: Allowing $state.matchedLocation');
         return null;
       }
 
@@ -365,21 +382,27 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Category Routes
       GoRoute(
         path: AppRoutes.categories,
-        builder: (context, state) => const CategoriesScreen(),
+        builder: (context, state) => const _PlaceholderScreen(
+          title: 'Categories',
+          icon: Iconsax.category,
+          description: 'Manage your income and expense categories.',
+        ),
       ),
       GoRoute(
         path: AppRoutes.addCategory,
-        builder: (context, state) {
-          final categoryId = state.uri.queryParameters['id'];
-          return AddCategoryScreen(categoryId: categoryId);
-        },
+        builder: (context, state) => const _PlaceholderScreen(
+          title: 'Add Category',
+          icon: Iconsax.add_circle,
+          description: 'Create a new category for your transactions.',
+        ),
       ),
       GoRoute(
         path: AppRoutes.categoryDetails,
-        builder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          return CategoryDetailsScreen(categoryId: id);
-        },
+        builder: (context, state) => const _PlaceholderScreen(
+          title: 'Category Details',
+          icon: Iconsax.category_2,
+          description: 'View and edit category details.',
+        ),
       ),
 
       // Budget Routes

@@ -9,6 +9,14 @@ import '../../../../core/constants/app_constants.dart';
 /// A beautiful segmented control for selecting between Income and Expense
 /// category types. Features smooth animations and proper theme support.
 class CategoryTypeSelector extends StatelessWidget {
+
+  const CategoryTypeSelector({
+    required this.selectedType, required this.onTypeChanged, super.key,
+    this.enabled = true,
+    this.showIcons = true,
+    this.height = 52,
+    this.padding = const EdgeInsets.all(4),
+  });
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -26,16 +34,6 @@ class CategoryTypeSelector extends StatelessWidget {
 
   /// Padding around the selector content
   final EdgeInsets padding;
-
-  const CategoryTypeSelector({
-    super.key,
-    required this.selectedType,
-    required this.onTypeChanged,
-    this.enabled = true,
-    this.showIcons = true,
-    this.height = 52,
-    this.padding = const EdgeInsets.all(4),
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +181,11 @@ class CategoryTypeSelector extends StatelessWidget {
 ///
 /// A smaller version of the type selector for use in forms or tight spaces.
 class CompactCategoryTypeSelector extends StatelessWidget {
+
+  const CompactCategoryTypeSelector({
+    required this.selectedType, required this.onTypeChanged, super.key,
+    this.enabled = true,
+  });
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -191,13 +194,6 @@ class CompactCategoryTypeSelector extends StatelessWidget {
 
   /// Whether the selector is enabled
   final bool enabled;
-
-  const CompactCategoryTypeSelector({
-    super.key,
-    required this.selectedType,
-    required this.onTypeChanged,
-    this.enabled = true,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -287,6 +283,11 @@ class CompactCategoryTypeSelector extends StatelessWidget {
 /// A single toggle button that switches between Income and Expense on tap.
 /// Displays the current type with an icon.
 class CategoryTypeToggleButton extends StatelessWidget {
+
+  const CategoryTypeToggleButton({
+    required this.selectedType, required this.onTypeChanged, super.key,
+    this.enabled = true,
+  });
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -296,16 +297,8 @@ class CategoryTypeToggleButton extends StatelessWidget {
   /// Whether the button is enabled
   final bool enabled;
 
-  const CategoryTypeToggleButton({
-    super.key,
-    required this.selectedType,
-    required this.onTypeChanged,
-    this.enabled = true,
-  });
-
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isIncome = selectedType == CategoryType.income;
     final color = isIncome ? SpendexColors.income : SpendexColors.expense;
 
@@ -382,6 +375,12 @@ class CategoryTypeToggleButton extends StatelessWidget {
 ///
 /// Traditional radio button style selection for Income/Expense types.
 class CategoryTypeRadioButtons extends StatelessWidget {
+
+  const CategoryTypeRadioButtons({
+    required this.selectedType, required this.onTypeChanged, super.key,
+    this.enabled = true,
+    this.direction = Axis.horizontal,
+  });
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -393,14 +392,6 @@ class CategoryTypeRadioButtons extends StatelessWidget {
 
   /// Layout direction
   final Axis direction;
-
-  const CategoryTypeRadioButtons({
-    super.key,
-    required this.selectedType,
-    required this.onTypeChanged,
-    this.enabled = true,
-    this.direction = Axis.horizontal,
-  });
 
   @override
   Widget build(BuildContext context) {

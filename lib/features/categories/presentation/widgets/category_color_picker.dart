@@ -11,6 +11,14 @@ import '../../../../core/constants/app_constants.dart';
 /// with support for custom color input via hex code.
 /// Returns the selected color as a hex String (without #).
 class CategoryColorPicker extends StatefulWidget {
+
+  const CategoryColorPicker({
+    required this.onColorSelected, super.key,
+    this.selectedColor,
+    this.showCustomColorInput = true,
+    this.compact = false,
+    this.previewSize = 44,
+  });
   /// Currently selected color hex value (without #)
   final String? selectedColor;
 
@@ -26,15 +34,6 @@ class CategoryColorPicker extends StatefulWidget {
   /// Preview size for color circles
   final double previewSize;
 
-  const CategoryColorPicker({
-    super.key,
-    this.selectedColor,
-    required this.onColorSelected,
-    this.showCustomColorInput = true,
-    this.compact = false,
-    this.previewSize = 44,
-  });
-
   @override
   State<CategoryColorPicker> createState() => _CategoryColorPickerState();
 }
@@ -46,7 +45,7 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
 
   /// Convert SpendexColors.categoryColors to hex strings
   static final List<String> _predefinedColors = SpendexColors.categoryColors
-      .map((c) => c.value.toRadixString(16).substring(2).toUpperCase())
+      .map((c) => c.toARGB32().toRadixString(16).substring(2).toUpperCase())
       .toList();
 
   @override
@@ -74,7 +73,9 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
   Color? _parseHexColor(String hex) {
     try {
       final cleanHex = hex.replaceFirst('#', '').toUpperCase();
-      if (cleanHex.length != 6) return null;
+      if (cleanHex.length != 6) {
+        return null;
+      }
 
       final colorValue = int.parse(cleanHex, radix: 16);
       return Color(colorValue | 0xFF000000);
@@ -85,7 +86,9 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
 
   /// Checks if the provided hex string matches the selected color
   bool _isColorSelected(String hex) {
-    if (widget.selectedColor == null) return false;
+    if (widget.selectedColor == null) {
+      return false;
+    }
     final normalizedSelected = widget.selectedColor!.toUpperCase().replaceFirst('#', '');
     final normalizedHex = hex.toUpperCase().replaceFirst('#', '');
     return normalizedSelected == normalizedHex;
@@ -184,7 +187,9 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
   /// Builds a color circle button
   Widget _buildColorCircle(String hex, bool isDark) {
     final color = _parseHexColor(hex);
-    if (color == null) return const SizedBox.shrink();
+    if (color == null) {
+      return const SizedBox.shrink();
+    }
 
     final isSelected = _isColorSelected(hex);
 
@@ -312,7 +317,7 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
             controller: _hexController,
             maxLength: 6,
             inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9a-fA-F]')),
+              FilteringTextInputFormatter.allow(RegExp('[0-9a-fA-F]')),
               UpperCaseTextFormatter(),
             ],
             decoration: InputDecoration(
@@ -380,7 +385,9 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
   /// Builds the selected color preview
   Widget _buildSelectedColorPreview(bool isDark) {
     final color = _parseHexColor(widget.selectedColor!);
-    if (color == null) return const SizedBox.shrink();
+    if (color == null) {
+      return const SizedBox.shrink();
+    }
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
@@ -454,11 +461,11 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
             onPressed: () {
               Clipboard.setData(ClipboardData(text: '#${widget.selectedColor}'));
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Color code copied!'),
+                const SnackBar(
+                  content: Text('Color code copied!'),
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: SpendexColors.primary,
-                  duration: const Duration(seconds: 1),
+                  duration: Duration(seconds: 1),
                 ),
               );
             },
@@ -496,7 +503,7 @@ Future<String?> showCategoryColorPicker(
     backgroundColor: Colors.transparent,
     builder: (context) {
       final isDark = Theme.of(context).brightness == Brightness.dark;
-      String? currentSelection = selectedColor;
+      var currentSelection = selectedColor;
 
       return StatefulBuilder(
         builder: (context, setState) {

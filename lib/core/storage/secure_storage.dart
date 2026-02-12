@@ -8,11 +8,16 @@ class SecureStorageService {
   final FlutterSecureStorage _storage;
 
   /// Save access and refresh tokens
-  Future<void> saveTokens(String accessToken, String refreshToken) async {
-    await Future.wait([
+  Future<void> saveTokens(String accessToken, String? refreshToken) async {
+    final futures = <Future<void>>[
       _storage.write(key: AppConstants.accessTokenKey, value: accessToken),
-      _storage.write(key: AppConstants.refreshTokenKey, value: refreshToken),
-    ]);
+    ];
+    if (refreshToken != null) {
+      futures.add(
+        _storage.write(key: AppConstants.refreshTokenKey, value: refreshToken),
+      );
+    }
+    await Future.wait(futures);
   }
 
   /// Get access token

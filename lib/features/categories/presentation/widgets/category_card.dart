@@ -11,6 +11,14 @@ import '../../data/models/category_model.dart';
 /// A beautiful card displaying category information with customizable appearance.
 /// Supports compact and expanded modes, loading skeleton, and spending info display.
 class CategoryCard extends StatelessWidget {
+
+  const CategoryCard({
+    required this.category, super.key,
+    this.spendingInfo,
+    this.onTap,
+    this.compact = false,
+    this.showSpendingInfo = false,
+  });
   /// The category to display
   final CategoryModel category;
 
@@ -25,15 +33,6 @@ class CategoryCard extends StatelessWidget {
 
   /// Whether to show spending information (amount, percentage, transaction count)
   final bool showSpendingInfo;
-
-  const CategoryCard({
-    super.key,
-    required this.category,
-    this.spendingInfo,
-    this.onTap,
-    this.compact = false,
-    this.showSpendingInfo = false,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -462,13 +461,13 @@ class CategoryCard extends StatelessWidget {
 ///
 /// A loading skeleton placeholder for the CategoryCard widget.
 class CategoryCardSkeleton extends StatelessWidget {
-  /// Whether to display in compact mode
-  final bool compact;
 
   const CategoryCardSkeleton({
     super.key,
     this.compact = false,
   });
+  /// Whether to display in compact mode
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -563,7 +562,9 @@ class CategoryCardSkeleton extends StatelessWidget {
 /// Returns the corresponding IconData for a given icon name string,
 /// or null if the icon name is not recognized.
 IconData? getCategoryIconByName(String? iconName) {
-  if (iconName == null || iconName.isEmpty) return null;
+  if (iconName == null || iconName.isEmpty) {
+    return null;
+  }
 
   const iconMap = <String, IconData>{
     // Shopping & Retail
@@ -669,7 +670,7 @@ IconData? getCategoryIconByName(String? iconName) {
     'more': Iconsax.more,
     'category': Iconsax.category,
     'category_2': Iconsax.category_2,
-    'element': Iconsax.element,
+    'element': Iconsax.element_3,
   };
 
   return iconMap[iconName.toLowerCase()];

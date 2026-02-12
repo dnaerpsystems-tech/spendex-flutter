@@ -21,13 +21,12 @@ import '../widgets/category_card.dart';
 /// - Subcategories (if parent category)
 /// - Quick action buttons for common operations
 class CategoryDetailsScreen extends ConsumerStatefulWidget {
-  /// The ID of the category to display
-  final String categoryId;
 
   const CategoryDetailsScreen({
-    super.key,
-    required this.categoryId,
+    required this.categoryId, super.key,
   });
+  /// The ID of the category to display
+  final String categoryId;
 
   @override
   ConsumerState<CategoryDetailsScreen> createState() =>
@@ -54,14 +53,14 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
     final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     // Generate last 6 months of mock data
-    for (int i = 5; i >= 0; i--) {
-      final date = DateTime(now.year, now.month - i, 1);
+    for (var i = 5; i >= 0; i--) {
+      final date = DateTime(now.year, now.month - i);
       final monthIndex = date.month - 1;
       _monthlyTrend.add(_MonthlyData(
         month: months[monthIndex],
         amount: (5000 + (i * 1500) + (i % 3) * 800).toDouble(),
         isCurrentMonth: i == 0,
-      ));
+      ),);
     }
 
     // Mock recent transactions
@@ -69,31 +68,31 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
       _MockTransaction(
         id: '1',
         description: 'Grocery Shopping',
-        amount: 2450.00,
+        amount: 2450,
         date: DateTime.now().subtract(const Duration(days: 1)),
       ),
       _MockTransaction(
         id: '2',
         description: 'Online Purchase',
-        amount: 1899.00,
+        amount: 1899,
         date: DateTime.now().subtract(const Duration(days: 3)),
       ),
       _MockTransaction(
         id: '3',
         description: 'Restaurant Bill',
-        amount: 750.00,
+        amount: 750,
         date: DateTime.now().subtract(const Duration(days: 5)),
       ),
       _MockTransaction(
         id: '4',
         description: 'Monthly Subscription',
-        amount: 499.00,
+        amount: 499,
         date: DateTime.now().subtract(const Duration(days: 7)),
       ),
       _MockTransaction(
         id: '5',
         description: 'Fuel Purchase',
-        amount: 3200.00,
+        amount: 3200,
         date: DateTime.now().subtract(const Duration(days: 10)),
       ),
     ]);
@@ -107,7 +106,9 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
   /// Handles category deletion with confirmation dialog
   Future<void> _handleDelete() async {
     final category = ref.read(selectedCategoryProvider);
-    if (category == null) return;
+    if (category == null) {
+      return;
+    }
 
     // System categories cannot be deleted
     if (category.isSystem) {
@@ -149,7 +150,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
       ),
     );
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       final success = await ref
           .read(categoriesStateProvider.notifier)
           .deleteCategory(widget.categoryId);
@@ -439,7 +440,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
   Widget _buildStatsSection(bool isDark, CategoryModel category) {
     // Mock stats data - in a real app, this would come from the API
     final totalAmount = category.isIncome ? 45000.0 : 28500.0;
-    final transactionCount = 12;
+    const transactionCount = 12;
     final percentage = category.isIncome ? 35.5 : 22.3;
 
     return Row(
@@ -699,7 +700,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
       return _buildEmptyTransactionsState(isDark);
     }
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
@@ -877,7 +878,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
       children: [
         _buildSectionTitle('Subcategories', isDark),
         const SizedBox(height: 12),
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
             borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
@@ -1271,7 +1272,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'The category you\'re looking for doesn\'t exist or has been deleted.',
+              "The category you're looking for doesn't exist or has been deleted.",
               style: SpendexTheme.bodyMedium.copyWith(
                 color: isDark
                     ? SpendexColors.darkTextSecondary
@@ -1335,23 +1336,19 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
 
 /// Helper class for monthly trend data
 class _MonthlyData {
-  final String month;
-  final double amount;
-  final bool isCurrentMonth;
 
   const _MonthlyData({
     required this.month,
     required this.amount,
     this.isCurrentMonth = false,
   });
+  final String month;
+  final double amount;
+  final bool isCurrentMonth;
 }
 
 /// Helper class for mock transaction data
 class _MockTransaction {
-  final String id;
-  final String description;
-  final double amount;
-  final DateTime date;
 
   const _MockTransaction({
     required this.id,
@@ -1359,4 +1356,8 @@ class _MockTransaction {
     required this.amount,
     required this.date,
   });
+  final String id;
+  final String description;
+  final double amount;
+  final DateTime date;
 }

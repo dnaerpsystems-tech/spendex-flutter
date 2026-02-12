@@ -194,7 +194,9 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
   }
 
   Future<void> _saveBudget() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     setState(() => _isLoading = true);
 
@@ -289,7 +291,6 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                     const SizedBox(height: 8),
                     BudgetCard(
                       budget: _createPreviewBudget(),
-                      compact: false,
                     ),
 
                     const SizedBox(height: 24),
@@ -332,8 +333,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                           ),
                         ),
                         prefixIconConstraints: const BoxConstraints(
-                          minWidth: 0,
-                          minHeight: 0,
+                          
                         ),
                         filled: true,
                         fillColor: isDark
@@ -579,7 +579,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                           Switch(
                             value: _rollover,
                             onChanged: (value) => setState(() => _rollover = value),
-                            activeColor: SpendexColors.primary,
+                            activeTrackColor: SpendexColors.primary,
                           ),
                         ],
                       ),
@@ -678,7 +678,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                   .read(budgetsStateProvider.notifier)
                   .deleteBudget(widget.budgetId!);
 
-              if (mounted) {
+              if (context.mounted) {
                 setState(() => _isLoading = false);
 
                 if (success) {
@@ -717,8 +717,7 @@ class _SectionTitle extends StatelessWidget {
 
   const _SectionTitle({
     required this.title,
-    this.subtitle,
-    required this.isDark,
+    required this.isDark, this.subtitle,
   });
   final String title;
   final String? subtitle;
@@ -770,7 +769,9 @@ class _CategorySelector extends StatelessWidget {
 
   Color _parseColor(String? colorString) {
     try {
-      if (colorString == null || colorString.isEmpty) return SpendexColors.primary;
+      if (colorString == null || colorString.isEmpty) {
+        return SpendexColors.primary;
+      }
       final color = colorString.replaceAll('#', '');
       return Color(int.parse('FF$color', radix: 16));
     } catch (_) {
@@ -779,7 +780,9 @@ class _CategorySelector extends StatelessWidget {
   }
 
   IconData _parseIcon(String? iconName) {
-    if (iconName == null) return Iconsax.category;
+    if (iconName == null) {
+      return Iconsax.category;
+    }
     final iconMap = {
       'shopping-cart': Iconsax.shopping_cart,
       'restaurant': Iconsax.reserve,

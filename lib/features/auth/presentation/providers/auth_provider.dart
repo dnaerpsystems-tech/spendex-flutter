@@ -135,8 +135,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Check if biometric authentication is available on device
   Future<void> checkBiometricAvailability() async {
     try {
-      final canCheck = await _localAuth.canCheckBiometrics;
-      final isDeviceSupported = await _localAuth.isDeviceSupported();
+      final canCheck = await _localAuth.canCheckBiometrics.timeout(
+        const Duration(seconds: 2),
+        onTimeout: () => false,
+      );
+      final isDeviceSupported = await _localAuth.isDeviceSupported().timeout(
+        const Duration(seconds: 2),
+        onTimeout: () => false,
+      );
       final isAvailable = canCheck && isDeviceSupported;
 
       // Check if biometric is enabled in storage
@@ -147,6 +153,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isBiometricEnabled: isEnabled,
       );
     } on PlatformException {
+      state = state.copyWith(
+        isBiometricAvailable: false,
+        isBiometricEnabled: false,
+      );
+    } catch (e) {
+      // Handle any other errors (timeout, etc.)
       state = state.copyWith(
         isBiometricAvailable: false,
         isBiometricEnabled: false,

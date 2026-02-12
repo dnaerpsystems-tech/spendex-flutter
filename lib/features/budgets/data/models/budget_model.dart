@@ -12,16 +12,11 @@ class BudgetModel extends Equatable {
     required this.spent,
     required this.remaining,
     required this.percentage,
-    this.categoryId,
-    required this.period,
-    required this.startDate,
-    required this.endDate,
+    required this.period, required this.startDate, required this.endDate, required this.createdAt, required this.updatedAt, this.categoryId,
     this.alertThreshold = 80,
     this.isActive = true,
     this.rollover = false,
     this.category,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory BudgetModel.fromJson(Map<String, dynamic> json) {
@@ -132,8 +127,12 @@ class BudgetModel extends Equatable {
   bool get isNearLimit => percentage >= alertThreshold;
 
   BudgetStatus get status {
-    if (percentage >= 100) return BudgetStatus.exceeded;
-    if (percentage >= alertThreshold) return BudgetStatus.warning;
+    if (percentage >= 100) {
+      return BudgetStatus.exceeded;
+    }
+    if (percentage >= alertThreshold) {
+      return BudgetStatus.warning;
+    }
     return BudgetStatus.onTrack;
   }
 
@@ -212,8 +211,7 @@ class CreateBudgetRequest {
   const CreateBudgetRequest({
     required this.name,
     required this.amount,
-    this.categoryId,
-    required this.period,
+    required this.period, this.categoryId,
     this.alertThreshold,
     this.rollover,
   });

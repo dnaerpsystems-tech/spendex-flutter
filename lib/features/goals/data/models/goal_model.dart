@@ -116,7 +116,9 @@ class GoalModel extends Equatable {
   bool get isActive => status == GoalStatus.active;
 
   int? get daysRemaining {
-    if (targetDate == null) return null;
+    if (targetDate == null) {
+      return null;
+    }
     return targetDate!.difference(DateTime.now()).inDays;
   }
 
@@ -145,9 +147,7 @@ class GoalContribution extends Equatable {
     required this.id,
     required this.goalId,
     required this.amount,
-    this.note,
-    required this.date,
-    required this.createdAt,
+    required this.date, required this.createdAt, this.note,
   });
 
   factory GoalContribution.fromJson(Map<String, dynamic> json) {

@@ -156,9 +156,11 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     );
 
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (data) {
-        if (data == null) return const Right(null);
+        if (data == null) {
+          return const Right(null);
+        }
         final category = CategoryModel.fromJson(data);
         return Right(category);
       },

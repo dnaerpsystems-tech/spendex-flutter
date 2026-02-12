@@ -37,7 +37,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.login,
       data: request.toJson(),
-      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) {
+        if (json == null) {
+          throw Exception('Invalid response: null data');
+        }
+        return AuthResponse.fromJson(json as Map<String, dynamic>);
+      },
     );
   }
 
@@ -61,7 +66,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.verifyOtp,
       data: request.toJson(),
-      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) {
+        if (json == null) {
+          throw Exception('Invalid response: null data');
+        }
+        return AuthResponse.fromJson(json as Map<String, dynamic>);
+      },
     );
   }
 
@@ -110,7 +120,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Either<Failure, UserModel>> getCurrentUser() async {
     return _apiClient.get<UserModel>(
       ApiEndpoints.me,
-      fromJson: (json) => UserModel.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) {
+        if (json == null) {
+          throw Exception('Invalid response: null data');
+        }
+        return UserModel.fromJson(json as Map<String, dynamic>);
+      },
     );
   }
 
@@ -121,7 +136,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.refresh,
       data: {'refreshToken': refreshToken},
-      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) {
+        if (json == null) {
+          throw Exception('Invalid response: null data');
+        }
+        return AuthResponse.fromJson(json as Map<String, dynamic>);
+      },
     );
   }
 
@@ -141,7 +161,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Either<Failure, Map<String, dynamic>>> getBiometricRegisterOptions() async {
     return _apiClient.get<Map<String, dynamic>>(
       ApiEndpoints.biometricRegisterOptions,
-      fromJson: (json) => json! as Map<String, dynamic>,
+      fromJson: (json) => (json ?? {}) as Map<String, dynamic>,
     );
   }
 
@@ -162,7 +182,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Either<Failure, Map<String, dynamic>>> getBiometricLoginOptions() async {
     return _apiClient.get<Map<String, dynamic>>(
       ApiEndpoints.biometricLoginOptions,
-      fromJson: (json) => json! as Map<String, dynamic>,
+      fromJson: (json) => (json ?? {}) as Map<String, dynamic>,
     );
   }
 
@@ -171,7 +191,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.biometricLogin,
       data: credential,
-      fromJson: (json) => AuthResponse.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) {
+        if (json == null) {
+          throw Exception('Invalid response: null data');
+        }
+        return AuthResponse.fromJson(json as Map<String, dynamic>);
+      },
     );
   }
 

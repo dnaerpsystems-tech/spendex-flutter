@@ -15,7 +15,7 @@ import '../widgets/budget_progress_bar.dart';
 /// Displays detailed budget information, progress, and spending breakdown
 class BudgetDetailsScreen extends ConsumerStatefulWidget {
 
-  const BudgetDetailsScreen({super.key, required this.budgetId});
+  const BudgetDetailsScreen({required this.budgetId, super.key});
   final String budgetId;
 
   @override
@@ -40,9 +40,15 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
   }
 
   Color _getStatusColor(double percentage) {
-    if (percentage >= 100) return SpendexColors.expense;
-    if (percentage >= 80) return const Color(0xFFF97316);
-    if (percentage >= 60) return SpendexColors.warning;
+    if (percentage >= 100) {
+      return SpendexColors.expense;
+    }
+    if (percentage >= 80) {
+      return const Color(0xFFF97316);
+    }
+    if (percentage >= 60) {
+      return SpendexColors.warning;
+    }
     return SpendexColors.income;
   }
 
@@ -96,7 +102,7 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
                   .read(budgetsStateProvider.notifier)
                   .deleteBudget(widget.budgetId);
 
-              if (mounted) {
+              if (context.mounted) {
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -322,7 +328,6 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
                       percentage: budget.percentage,
                       alertThreshold: budget.alertThreshold,
                       height: 12,
-                      showLabel: false,
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -419,8 +424,8 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
                 Expanded(
                   child: Text(
                     budget.percentage <= expectedPercentage
-                        ? 'You\'re spending less than expected. Keep it up!'
-                        : 'You\'re spending faster than expected. Consider slowing down.',
+                        ? "You're spending less than expected. Keep it up!"
+                        : "You're spending faster than expected. Consider slowing down.",
                     style: SpendexTheme.labelMedium.copyWith(
                       color: isDark
                           ? SpendexColors.darkTextSecondary

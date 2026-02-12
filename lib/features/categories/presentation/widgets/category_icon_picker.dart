@@ -25,15 +25,15 @@ enum IconCategory {
 
 /// Icon entry containing the icon data and its name
 class IconEntry {
-  final String name;
-  final IconData icon;
-  final IconCategory category;
 
   const IconEntry({
     required this.name,
     required this.icon,
     required this.category,
   });
+  final String name;
+  final IconData icon;
+  final IconCategory category;
 }
 
 /// Category Icon Picker Widget
@@ -41,6 +41,14 @@ class IconEntry {
 /// A comprehensive icon picker that displays a searchable grid of Iconsax icons
 /// organized by categories. Returns the selected icon name as a String.
 class CategoryIconPicker extends StatefulWidget {
+
+  const CategoryIconPicker({
+    required this.onIconSelected, super.key,
+    this.selectedIcon,
+    this.showSearch = true,
+    this.showCategories = true,
+    this.maxHeight,
+  });
   /// Currently selected icon name
   final String? selectedIcon;
 
@@ -55,15 +63,6 @@ class CategoryIconPicker extends StatefulWidget {
 
   /// Maximum height of the picker (useful for bottom sheets)
   final double? maxHeight;
-
-  const CategoryIconPicker({
-    super.key,
-    this.selectedIcon,
-    required this.onIconSelected,
-    this.showSearch = true,
-    this.showCategories = true,
-    this.maxHeight,
-  });
 
   @override
   State<CategoryIconPicker> createState() => _CategoryIconPickerState();
@@ -181,7 +180,7 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
     IconEntry(name: 'more', icon: Iconsax.more, category: IconCategory.misc),
     IconEntry(name: 'category', icon: Iconsax.category, category: IconCategory.misc),
     IconEntry(name: 'category_2', icon: Iconsax.category_2, category: IconCategory.misc),
-    IconEntry(name: 'element', icon: Iconsax.element, category: IconCategory.misc),
+    IconEntry(name: 'element_3', icon: Iconsax.element_3, category: IconCategory.misc),
     IconEntry(name: 'box', icon: Iconsax.box, category: IconCategory.misc),
     IconEntry(name: 'archive', icon: Iconsax.archive, category: IconCategory.misc),
     IconEntry(name: 'safe_home', icon: Iconsax.safe_home, category: IconCategory.misc),
@@ -483,7 +482,7 @@ Future<String?> showCategoryIconPicker(
     backgroundColor: Colors.transparent,
     builder: (context) {
       final isDark = Theme.of(context).brightness == Brightness.dark;
-      String? currentSelection = selectedIcon;
+      var currentSelection = selectedIcon;
 
       return StatefulBuilder(
         builder: (context, setState) {

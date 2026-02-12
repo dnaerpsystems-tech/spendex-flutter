@@ -45,8 +45,13 @@ class UserModel extends Equatable {
       lastLoginAt: json['lastLoginAt'] != null
           ? DateTime.parse(json['lastLoginAt'] as String)
           : null,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      // API may not return these fields, use current time as default
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -191,24 +196,48 @@ class UserPreferences extends Equatable {
 class AuthResponse {
   const AuthResponse({
     required this.accessToken,
-    required this.refreshToken,
-    required this.expiresIn,
     required this.user,
+    this.refreshToken,
+    this.expiresAt,
+    this.expiresIn,
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
+    // Handle both expiresAt (string) and expiresIn (int) formats
+    DateTime? expiresAt;
+    int? expiresIn;
+
+    if (json['expiresAt'] != null) {
+      expiresAt = DateTime.parse(json['expiresAt'] as String);
+    }
+    if (json['expiresIn'] != null) {
+      expiresIn = json['expiresIn'] as int;
+    }
+
     return AuthResponse(
       accessToken: json['accessToken'] as String,
-      refreshToken: json['refreshToken'] as String,
-      expiresIn: json['expiresIn'] as int,
+      refreshToken: json['refreshToken'] as String?,
+      expiresAt: expiresAt,
+      expiresIn: expiresIn,
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
 
   final String accessToken;
-  final String refreshToken;
-  final int expiresIn;
+  final String? refreshToken;
+  final DateTime? expiresAt;
+  final int? expiresIn;
   final UserModel user;
+
+  /// Get token expiry time (handles both formats)
+  DateTime get tokenExpiry {
+    if (expiresAt != null) return expiresAt!;
+    if (expiresIn != null) {
+      return DateTime.now().add(Duration(seconds: expiresIn!));
+    }
+    // Default to 1 hour if neither is provided
+    return DateTime.now().add(const Duration(hours: 1));
+  }
 }
 
 /// Register Request

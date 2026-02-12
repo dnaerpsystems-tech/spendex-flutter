@@ -8,8 +8,7 @@ import '../../../../app/theme.dart';
 class BudgetProgressBar extends StatefulWidget {
 
   const BudgetProgressBar({
-    super.key,
-    required this.percentage,
+    required this.percentage, super.key,
     this.alertThreshold = 80,
     this.height = 8,
     this.showLabel = false,
@@ -49,7 +48,7 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOutCubic,
-    ));
+    ),);
 
     if (widget.animate) {
       _controller.forward();
@@ -68,7 +67,7 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
       ).animate(CurvedAnimation(
         parent: _controller,
         curve: Curves.easeOutCubic,
-      ));
+      ),);
       _controller.forward(from: 0);
     }
   }
@@ -80,17 +79,21 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
   }
 
   Color _getProgressColor(double percentage) {
-    if (percentage >= 100) return SpendexColors.expense;
-    if (percentage >= 80) return const Color(0xFFF97316);
-    if (percentage >= 60) return SpendexColors.warning;
+    if (percentage >= 100) {
+      return SpendexColors.expense;
+    }
+    if (percentage >= 80) {
+      return const Color(0xFFF97316);
+    }
+    if (percentage >= 60) {
+      return SpendexColors.warning;
+    }
     return SpendexColors.income;
   }
 
   LinearGradient _getProgressGradient(double percentage) {
     final color = _getProgressColor(percentage);
     return LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
       colors: [
         color.withValues(alpha: 0.8),
         color,
@@ -232,8 +235,9 @@ class _PulsingIconState extends State<_PulsingIcon>
     if (widget.pulse && !_controller.isAnimating) {
       _controller.repeat(reverse: true);
     } else if (!widget.pulse && _controller.isAnimating) {
-      _controller.stop();
-      _controller.value = 1.0;
+      _controller
+        ..stop()
+        ..value = 1.0;
     }
   }
 
@@ -265,8 +269,7 @@ class _PulsingIconState extends State<_PulsingIcon>
 class BudgetCircularProgress extends StatefulWidget {
 
   const BudgetCircularProgress({
-    super.key,
-    required this.percentage,
+    required this.percentage, super.key,
     this.alertThreshold = 80,
     this.size = 120,
     this.strokeWidth = 10,
@@ -306,7 +309,7 @@ class _BudgetCircularProgressState extends State<BudgetCircularProgress>
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOutCubic,
-    ));
+    ),);
 
     if (widget.animate) {
       _controller.forward();
@@ -325,7 +328,7 @@ class _BudgetCircularProgressState extends State<BudgetCircularProgress>
       ).animate(CurvedAnimation(
         parent: _controller,
         curve: Curves.easeOutCubic,
-      ));
+      ),);
       _controller.forward(from: 0);
     }
   }
@@ -337,9 +340,15 @@ class _BudgetCircularProgressState extends State<BudgetCircularProgress>
   }
 
   Color _getProgressColor(double percentage) {
-    if (percentage >= 100) return SpendexColors.expense;
-    if (percentage >= 80) return const Color(0xFFF97316);
-    if (percentage >= 60) return SpendexColors.warning;
+    if (percentage >= 100) {
+      return SpendexColors.expense;
+    }
+    if (percentage >= 80) {
+      return const Color(0xFFF97316);
+    }
+    if (percentage >= 60) {
+      return SpendexColors.warning;
+    }
     return SpendexColors.income;
   }
 
