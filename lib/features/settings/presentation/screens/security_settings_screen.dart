@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:local_auth/local_auth.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/di/injection.dart';
-import '../../../../core/storage/secure_storage.dart';
+import '../../../../core/security/auto_lock_service.dart';
+import '../../../../core/security/biometric_service.dart';
+import '../../../../core/security/pin_service.dart';
+import '../../../../core/security/security_provider.dart';
 import '../widgets/security_option_card.dart';
 
 class SecuritySettingsScreen extends ConsumerStatefulWidget {
@@ -26,12 +28,16 @@ class _SecuritySettingsScreenState
   final int _activeSessions = 1;
   bool _isLoading = false;
 
-  final SecureStorageService _secureStorage = getIt<SecureStorageService>();
-  final LocalAuthentication _localAuth = LocalAuthentication();
+  late final PinService _pinService;
+  late final BiometricService _biometricService;
+  late final AutoLockService _autoLockService;
 
   @override
   void initState() {
     super.initState();
+    _pinService = getIt<PinService>();
+    _biometricService = getIt<BiometricService>();
+    _autoLockService = getIt<AutoLockService>();
     _initSecuritySettings();
   }
 
@@ -44,12 +50,10 @@ class _SecuritySettingsScreenState
 
   Future<void> _checkBiometricAvailability() async {
     try {
-      final canCheckBiometrics = await _localAuth.canCheckBiometrics;
-      final isDeviceSupported = await _localAuth.isDeviceSupported();
-
+      final isAvailable = await _biometricService.isBiometricAvailable();
       if (mounted) {
         setState(() {
-          _biometricAvailable = canCheckBiometrics && isDeviceSupported;
+          _biometricAvailable = isAvailable;
         });
       }
     } catch (e) {
@@ -65,19 +69,18 @@ class _SecuritySettingsScreenState
     setState(() {
       _isLoading = true;
     });
-
     try {
-      final pinHash = await _secureStorage.getPin();
-      final biometricEnabled =
-          await _secureStorage.read('biometric_enabled') ?? 'false';
-      final autoLockDuration =
-          await _secureStorage.read('auto_lock_duration') ?? 'never';
+      final isPinSet = await _pinService.isPinSet();
+      final isBiometricEnabled = await _biometricService.isBiometricEnabled();
+      final autoLockTimeout = _autoLockService.timeout;
+      final autoLockEnabled = _autoLockService.isEnabled;
 
       if (mounted) {
         setState(() {
-          _pinEnabled = pinHash != null && pinHash.isNotEmpty;
-          _biometricEnabled = biometricEnabled == 'true';
-          _autoLockDuration = autoLockDuration;
+          _pinEnabled = isPinSet;
+          _biometricEnabled = isBiometricEnabled;
+          _autoLockDuration =
+              _durationToString(autoLockTimeout, autoLockEnabled);
           _isLoading = false;
         });
       }
@@ -90,11 +93,49 @@ class _SecuritySettingsScreenState
     }
   }
 
+  /// Convert Duration and enabled state to string representation.
+  String _durationToString(Duration duration, bool enabled) {
+    if (!enabled) {
+      return 'never';
+    }
+    if (duration.inSeconds <= 0) {
+      return 'immediate';
+    }
+    if (duration.inMinutes == 1) {
+      return '1';
+    }
+    if (duration.inMinutes == 5) {
+      return '5';
+    }
+    if (duration.inMinutes == 15) {
+      return '15';
+    }
+    return 'never';
+  }
+
+  /// Convert string representation to Duration.
+  Duration _stringToDuration(String value) {
+    switch (value) {
+      case 'immediate':
+        return Duration.zero;
+      case '1':
+        return const Duration(minutes: 1);
+      case '5':
+        return const Duration(minutes: 5);
+      case '15':
+        return const Duration(minutes: 15);
+      default:
+        return const Duration(minutes: 5);
+    }
+  }
+
   Future<void> _togglePinLock(bool value) async {
     if (value) {
       final result = await context.push<bool>('/settings/set-pin');
       if ((result ?? false) || result == null) {
         await _loadSecuritySettings();
+        // Refresh the pinAuthStateProvider
+        ref.read(pinAuthStateProvider.notifier).refresh();
       }
     } else {
       await _showRemovePinDialog();
@@ -107,7 +148,8 @@ class _SecuritySettingsScreenState
       builder: (context) => AlertDialog(
         title: const Text('Remove PIN?'),
         content: const Text(
-          'This will disable PIN lock and biometric authentication. Your app will no longer require authentication to access.',
+          'This will disable PIN lock and biometric authentication. '
+          'Your app will no longer require authentication to access.',
         ),
         actions: [
           TextButton(
@@ -134,13 +176,13 @@ class _SecuritySettingsScreenState
     setState(() {
       _isLoading = true;
     });
-
     try {
-      await Future.wait([
-        _secureStorage.deletePin(),
-        _secureStorage.delete('biometric_enabled'),
-        _secureStorage.save('auto_lock_duration', 'never'),
-      ]);
+      await _pinService.clearPin();
+      await _biometricService.disableBiometric();
+      await _autoLockService.setEnabled(false);
+
+      // Refresh the pinAuthStateProvider
+      ref.read(pinAuthStateProvider.notifier).refresh();
 
       if (mounted) {
         setState(() {
@@ -149,7 +191,6 @@ class _SecuritySettingsScreenState
           _autoLockDuration = 'never';
           _isLoading = false;
         });
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('PIN removed successfully'),
@@ -166,7 +207,6 @@ class _SecuritySettingsScreenState
         setState(() {
           _isLoading = false;
         });
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Failed to remove PIN. Please try again.'),
@@ -185,16 +225,30 @@ class _SecuritySettingsScreenState
     setState(() {
       _isLoading = true;
     });
-
     try {
-      await _secureStorage.save('biometric_enabled', value.toString());
+      if (value) {
+        // Require biometric verification before enabling
+        final authenticated = await _biometricService.authenticateWithBiometric(
+          reason: 'Verify your identity to enable biometric authentication',
+        );
+        if (!authenticated) {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
+          return;
+        }
+        await _biometricService.enableBiometric();
+      } else {
+        await _biometricService.disableBiometric();
+      }
 
       if (mounted) {
         setState(() {
           _biometricEnabled = value;
           _isLoading = false;
         });
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -215,7 +269,6 @@ class _SecuritySettingsScreenState
         setState(() {
           _isLoading = false;
         });
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Failed to update biometric setting'),
@@ -244,16 +297,18 @@ class _SecuritySettingsScreenState
       setState(() {
         _isLoading = true;
       });
-
       try {
-        await _secureStorage.save('auto_lock_duration', result);
-
+        if (result == 'never') {
+          await _autoLockService.setEnabled(false);
+        } else {
+          await _autoLockService.setEnabled(true);
+          await _autoLockService.setTimeout(_stringToDuration(result));
+        }
         if (mounted) {
           setState(() {
             _autoLockDuration = result;
             _isLoading = false;
           });
-
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Auto-lock set to ${_getAutoLockLabel(result)}'),
@@ -270,7 +325,6 @@ class _SecuritySettingsScreenState
           setState(() {
             _isLoading = false;
           });
-
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Text('Failed to update auto-lock setting'),
@@ -306,6 +360,8 @@ class _SecuritySettingsScreenState
   Future<void> _changePin() async {
     final result = await context.push<bool>('/settings/set-pin');
     if ((result ?? false) || result == null) {
+      // Refresh the pinAuthStateProvider
+      ref.read(pinAuthStateProvider.notifier).refresh();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -324,12 +380,14 @@ class _SecuritySettingsScreenState
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textColor = isDark
+        ? SpendexColors.darkTextPrimary
+        : SpendexColors.lightTextPrimary;
     final secondaryTextColor = isDark
         ? SpendexColors.darkTextSecondary
         : SpendexColors.lightTextSecondary;
-    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final cardColor =
+        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
 
     return Scaffold(
       appBar: AppBar(
@@ -429,8 +487,9 @@ class _SecuritySettingsScreenState
                     description: _getBiometricDescription(),
                     isEnabled: _biometricEnabled && _pinEnabled,
                     showSwitch: _pinEnabled && _biometricAvailable,
-                    onToggle:
-                        _pinEnabled && _biometricAvailable ? _toggleBiometric : null,
+                    onToggle: _pinEnabled && _biometricAvailable
+                        ? _toggleBiometric
+                        : null,
                   ),
                   if (!_pinEnabled || !_biometricAvailable) ...[
                     const SizedBox(height: SpendexTheme.spacingSm),
@@ -504,7 +563,6 @@ class _SecuritySettingsScreenState
                         Icon(
                           Icons.chevron_right,
                           color: secondaryTextColor,
-                          size: 24,
                         ),
                       ],
                     ),
@@ -620,8 +678,9 @@ class _AutoLockSelectorSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textColor = isDark
+        ? SpendexColors.darkTextPrimary
+        : SpendexColors.lightTextPrimary;
 
     final options = [
       {'value': 'never', 'label': 'Never'},
@@ -673,8 +732,9 @@ class _AutoLockSelectorSheet extends StatelessWidget {
               itemCount: options.length,
               separatorBuilder: (context, index) => Divider(
                 height: 1,
-                color:
-                    isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                color: isDark
+                    ? SpendexColors.darkBorder
+                    : SpendexColors.lightBorder,
               ),
               itemBuilder: (context, index) {
                 final option = options[index];
@@ -685,7 +745,8 @@ class _AutoLockSelectorSheet extends StatelessWidget {
                     option['label']!,
                     style: SpendexTheme.bodyMedium.copyWith(
                       color: textColor,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
                     ),
                   ),
                   trailing: isSelected
