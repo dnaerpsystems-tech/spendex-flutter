@@ -13,6 +13,7 @@ class ApiEndpoints {
   static const String verifyOtp = '/auth/verify-otp';
   static const String forgotPassword = '/auth/forgot-password';
   static const String resetPassword = '/auth/reset-password';
+  static const String changePassword = '/auth/change-password';
   static const String me = '/auth/me';
   static const String logout = '/auth/logout';
   static const String biometricRegisterOptions = '/auth/biometric/register-options';
@@ -92,7 +93,8 @@ class ApiEndpoints {
   static const String insights = '/insights';
   static const String insightsDashboard = '/insights/dashboard';
   static const String insightsGenerate = '/insights/generate';
-  static String insightRead(String id) => '/insights/$id/read';
+  static String insightById(String id) => '/insights/$id';
+  static String insightMarkRead(String id) => '/insights/$id/read';
   static String insightDismiss(String id) => '/insights/$id/dismiss';
 
   // Voice Endpoints
@@ -117,4 +119,46 @@ class ApiEndpoints {
   static const String notificationsReadAll = '/notifications/read-all';
   static String notificationDelete(String id) => '/notifications/$id';
   static const String notificationsRegisterPush = '/notifications/register-push';
+
+  // Bank Import - PDF/CSV Import Endpoints
+  static const String importPdf = '/import/pdf';
+  static const String importCsv = '/import/csv';
+  static const String importHistory = '/import/history';
+  static String importResults(String importId) => '/import/$importId/results';
+  static String importConfirm(String importId) => '/import/$importId/confirm';
+  static String importDelete(String importId) => '/import/$importId';
+
+  // Bank Import - SMS Parser Endpoints
+  static const String smsSyncMessages = '/sms/sync';
+  static const String smsBankConfigs = '/sms/bank-configs';
+  static const String smsTracking = '/sms/tracking';
+  static const String transactionsBulkImport = '/transactions/bulk-import';
+
+  // Bank Import - Account Aggregator Endpoints
+  static const String aaConsentInitiate = '/aa/consent/initiate';
+  static String aaConsentStatus(String consentId) => '/aa/consent/$consentId/status';
+  static String aaConsentRevoke(String consentId) => '/aa/consent/$consentId/revoke';
+  static const String aaDataFetch = '/aa/data/fetch';
+  static const String aaAccounts = '/aa/accounts';
+
+  // Bank Import - India Utils Endpoints
+  static String utilsIfscLookup(String ifscCode) => '/utils/ifsc/$ifscCode';
+  static const String utilsUpiValidate = '/utils/upi/validate';
+  static const String utilsPaymentMethods = '/utils/payment-methods';
+
+  // Bank Import - Email Parser Endpoints
+  static const String emailConnect = '/email/connect';
+  static const String emailDisconnect = '/email/disconnect';
+  static const String emailAccounts = '/email/accounts';
+  static String emailAccountById(String id) => '/email/accounts/$id';
+  static const String emailFetch = '/email/fetch';
+  static const String emailParse = '/email/parse';
+  static String emailById(String id) => '/email/$id';
+  static const String emailBulkImport = '/email/bulk-import';
+  static const String emailBankConfigs = '/email/bank-configs';
+
+  // Duplicate Detection Endpoints
+  static const String duplicateCheck = '/transactions/check-duplicates';
+  static const String duplicateResolve = '/transactions/resolve-duplicates';
+  static const String duplicateStats = '/transactions/duplicate-stats';
 }

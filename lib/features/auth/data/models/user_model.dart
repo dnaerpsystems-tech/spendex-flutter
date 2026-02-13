@@ -146,50 +146,104 @@ class UserModel extends Equatable {
 class UserPreferences extends Equatable {
   const UserPreferences({
     this.theme = 'system',
-    this.notifications = true,
     this.currency = 'INR',
     this.locale = 'en',
+    this.dateFormat = 'DD-MM-YYYY',
+    this.notifications = true,
+    this.budgetAlerts = true,
+    this.emiReminders = true,
+    this.goalMilestones = true,
+    this.transactionAlerts = true,
+    this.showBalanceBadge = false,
+    this.requireAuth = false,
   });
 
   factory UserPreferences.fromJson(Map<String, dynamic> json) {
     return UserPreferences(
       theme: json['theme'] as String? ?? 'system',
-      notifications: json['notifications'] as bool? ?? true,
       currency: json['currency'] as String? ?? 'INR',
       locale: json['locale'] as String? ?? 'en',
+      dateFormat: json['dateFormat'] as String? ?? 'DD-MM-YYYY',
+      notifications: json['notifications'] as bool? ?? true,
+      budgetAlerts: json['budgetAlerts'] as bool? ?? true,
+      emiReminders: json['emiReminders'] as bool? ?? true,
+      goalMilestones: json['goalMilestones'] as bool? ?? true,
+      transactionAlerts: json['transactionAlerts'] as bool? ?? true,
+      showBalanceBadge: json['showBalanceBadge'] as bool? ?? false,
+      requireAuth: json['requireAuth'] as bool? ?? false,
     );
   }
 
   final String theme;
-  final bool notifications;
   final String currency;
   final String locale;
+  final String dateFormat;
+  final bool notifications;
+  final bool budgetAlerts;
+  final bool emiReminders;
+  final bool goalMilestones;
+  final bool transactionAlerts;
+  final bool showBalanceBadge;
+  final bool requireAuth;
 
   Map<String, dynamic> toJson() {
     return {
       'theme': theme,
-      'notifications': notifications,
       'currency': currency,
       'locale': locale,
+      'dateFormat': dateFormat,
+      'notifications': notifications,
+      'budgetAlerts': budgetAlerts,
+      'emiReminders': emiReminders,
+      'goalMilestones': goalMilestones,
+      'transactionAlerts': transactionAlerts,
+      'showBalanceBadge': showBalanceBadge,
+      'requireAuth': requireAuth,
     };
   }
 
   UserPreferences copyWith({
     String? theme,
-    bool? notifications,
     String? currency,
     String? locale,
+    String? dateFormat,
+    bool? notifications,
+    bool? budgetAlerts,
+    bool? emiReminders,
+    bool? goalMilestones,
+    bool? transactionAlerts,
+    bool? showBalanceBadge,
+    bool? requireAuth,
   }) {
     return UserPreferences(
       theme: theme ?? this.theme,
-      notifications: notifications ?? this.notifications,
       currency: currency ?? this.currency,
       locale: locale ?? this.locale,
+      dateFormat: dateFormat ?? this.dateFormat,
+      notifications: notifications ?? this.notifications,
+      budgetAlerts: budgetAlerts ?? this.budgetAlerts,
+      emiReminders: emiReminders ?? this.emiReminders,
+      goalMilestones: goalMilestones ?? this.goalMilestones,
+      transactionAlerts: transactionAlerts ?? this.transactionAlerts,
+      showBalanceBadge: showBalanceBadge ?? this.showBalanceBadge,
+      requireAuth: requireAuth ?? this.requireAuth,
     );
   }
 
   @override
-  List<Object?> get props => [theme, notifications, currency, locale];
+  List<Object?> get props => [
+        theme,
+        currency,
+        locale,
+        dateFormat,
+        notifications,
+        budgetAlerts,
+        emiReminders,
+        goalMilestones,
+        transactionAlerts,
+        showBalanceBadge,
+        requireAuth,
+      ];
 }
 
 /// Auth Response
@@ -314,6 +368,24 @@ class ResetPasswordRequest {
     return {
       'token': token,
       'password': password,
+    };
+  }
+}
+
+/// Change Password Request
+class ChangePasswordRequest {
+  const ChangePasswordRequest({
+    required this.currentPassword,
+    required this.newPassword,
+  });
+
+  final String currentPassword;
+  final String newPassword;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
     };
   }
 }

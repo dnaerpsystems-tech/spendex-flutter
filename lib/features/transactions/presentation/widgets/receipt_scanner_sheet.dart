@@ -1,13 +1,19 @@
+import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../data/models/transaction_model.dart';
+import '../../data/services/receipt_parser_service.dart';
 
 /// Receipt scanning state
 enum ReceiptScanState {
@@ -104,66 +110,179 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
   Future<void> _captureFromCamera() async {
     setState(() {
       _state = ReceiptScanState.capturing;
+      _errorMessage = null;
     });
 
-    // TODO: Implement actual camera capture with image_picker package
-    //
-    // final ImagePicker picker = ImagePicker();
-    // final XFile? image = await picker.pickImage(source: ImageSource.camera);
-    // if (image != null) {
-    //   _processImage(image.path);
-    // }
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 90,
+        preferredCameraDevice: CameraDevice.rear,
+      );
 
-    // Simulate camera capture
-    await Future.delayed(const Duration(seconds: 1));
-    _processImage(null);
+      if (image != null) {
+        await _processImage(image.path);
+      } else {
+        // User cancelled
+        setState(() {
+          _state = ReceiptScanState.idle;
+        });
+      }
+    } on PlatformException catch (e) {
+      setState(() {
+        _state = ReceiptScanState.error;
+        _errorMessage = e.code == 'camera_access_denied'
+            ? 'Camera permission denied. Please enable in settings.'
+            : 'Failed to access camera: ${e.message}';
+      });
+    } catch (e) {
+      setState(() {
+        _state = ReceiptScanState.error;
+        _errorMessage = 'Failed to capture image. Please try again.';
+      });
+    }
   }
 
   Future<void> _pickFromGallery() async {
     setState(() {
       _state = ReceiptScanState.capturing;
+      _errorMessage = null;
     });
 
-    // TODO: Implement actual gallery picker with image_picker package
-    //
-    // final ImagePicker picker = ImagePicker();
-    // final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    // if (image != null) {
-    //   _processImage(image.path);
-    // }
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 90,
+      );
 
-    // Simulate gallery selection
-    await Future.delayed(const Duration(milliseconds: 500));
-    _processImage(null);
+      if (image != null) {
+        await _processImage(image.path);
+      } else {
+        // User cancelled
+        setState(() {
+          _state = ReceiptScanState.idle;
+        });
+      }
+    } on PlatformException catch (e) {
+      setState(() {
+        _state = ReceiptScanState.error;
+        _errorMessage = e.code == 'photo_access_denied'
+            ? 'Photo library permission denied. Please enable in settings.'
+            : 'Failed to access gallery: ${e.message}';
+      });
+    } catch (e) {
+      setState(() {
+        _state = ReceiptScanState.error;
+        _errorMessage = 'Failed to select image. Please try again.';
+      });
+    }
   }
 
-  Future<void> _processImage(String? imagePath) async {
+  Future<void> _processImage(String imagePath) async {
     setState(() {
       _state = ReceiptScanState.processing;
+      _errorMessage = null;
     });
 
     _scanAnimationController.repeat();
+    TextRecognizer? textRecognizer;
 
-    // TODO: Implement actual OCR with google_ml_kit or similar
-    //
-    // final inputImage = InputImage.fromFilePath(imagePath);
-    // final textRecognizer = TextRecognizer();
-    // final RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
-    // _parseReceiptText(recognizedText.text);
+    try {
+      // Create input image from file
+      final inputImage = InputImage.fromFilePath(imagePath);
 
-    // Simulate processing time
-    await Future.delayed(const Duration(seconds: 2));
+      // Initialize text recognizer
+      textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
-    _scanAnimationController.stop();
+      // Perform OCR
+      final RecognizedText recognizedText =
+          await textRecognizer.processImage(inputImage);
 
-    // Mock extracted data for demonstration
-    final mockData = _generateMockReceiptData();
+      // Check if any text was recognized
+      if (recognizedText.text.isEmpty) {
+        throw Exception(
+          'No text found in image. Please ensure the receipt is clear and well-lit.',
+        );
+      }
+
+      // Parse the recognized text
+      await _parseReceiptText(recognizedText.text);
+    } on PlatformException catch (e) {
+      _handleOcrError('OCR failed: ${e.message ?? 'Unknown platform error'}');
+    } catch (e) {
+      _handleOcrError(e.toString());
+    } finally {
+      // Clean up
+      _scanAnimationController.stop();
+      textRecognizer?.close();
+
+      // Delete temporary image file to free up space
+      try {
+        final file = File(imagePath);
+        if (await file.exists()) {
+          await file.delete();
+        }
+      } catch (_) {
+        // Ignore cleanup errors
+      }
+    }
+  }
+
+  void _handleOcrError(String error) {
+    if (kDebugMode) {
+      debugPrint('OCR Error: $error');
+    }
 
     setState(() {
-      _state = ReceiptScanState.extracted;
-      _extractedData = mockData;
-      _populateFields(mockData);
+      _state = ReceiptScanState.error;
+      _errorMessage = error.contains('No text found')
+          ? 'Could not read text from image. Please try with a clearer photo.'
+          : 'Failed to process receipt. Please try again with better lighting.';
     });
+  }
+
+  Future<void> _parseReceiptText(String ocrText) async {
+    if (kDebugMode) {
+      debugPrint('OCR Text: $ocrText');
+    }
+
+    try {
+      // Parse using the service
+      final parserService = ReceiptParserService.instance;
+      final extractedData = parserService.parseReceiptText(ocrText);
+
+      if (kDebugMode) {
+        debugPrint('Parsed Amount: ${extractedData.amount}');
+        debugPrint('Parsed Merchant: ${extractedData.merchantName}');
+      }
+
+      // Validate that we got at least an amount
+      if (extractedData.amount == null || extractedData.amount! <= 0) {
+        throw Exception('Could not find transaction amount in receipt');
+      }
+
+      setState(() {
+        _state = ReceiptScanState.extracted;
+        _extractedData = extractedData;
+        _populateFields(extractedData);
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Parse Error: $e');
+      }
+
+      setState(() {
+        _state = ReceiptScanState.error;
+        _errorMessage =
+            'Could not extract receipt data. Please enter manually.';
+      });
+    }
   }
 
   ExtractedReceiptData _generateMockReceiptData() {

@@ -108,6 +108,12 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => context.push(AppRoutes.investments),
             ),
             _SettingsTile(
+              icon: Iconsax.document_upload,
+              title: 'Bank Import',
+              subtitle: 'Import from PDF, SMS, AA',
+              onTap: () => context.push(AppRoutes.bankImport),
+            ),
+            _SettingsTile(
               icon: Iconsax.people,
               title: 'Family',
               onTap: () => context.push(AppRoutes.family),

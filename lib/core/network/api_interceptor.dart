@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../constants/api_endpoints.dart';
 import '../storage/secure_storage.dart';
 
-/// Auth Interceptor for handling JWT token refresh
+/// Auth Interceptor for handling JWT token attachment and refresh
 class AuthInterceptor extends QueuedInterceptor {
   AuthInterceptor(this._storage, this._dio);
 
@@ -20,31 +20,47 @@ class AuthInterceptor extends QueuedInterceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Skip auth header for public endpoints
     if (_isPublicEndpoint(options.path)) {
       handler.next(options);
       return;
     }
 
     final accessToken = await _storage.getAccessToken();
-    if (accessToken != null) {
+    if (accessToken != null && accessToken.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $accessToken';
+    }
+
+    // Attach refresh token cookie for endpoints that need it
+    final refreshToken = await _storage.getRefreshToken();
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      options.headers['Cookie'] = 'fintrace_refresh=$refreshToken';
     }
 
     handler.next(options);
   }
 
   @override
-  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) async {
+    // Extract refresh token from Set-Cookie header on auth responses
+    _extractAndSaveRefreshToken(response);
+    handler.next(response);
+  }
+
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     if (err.response?.statusCode == 401) {
-      // Check if the failed request was the refresh token request itself
-      if (err.requestOptions.path == ApiEndpoints.refresh) {
+      if (err.requestOptions.path.contains(ApiEndpoints.refresh)) {
         await _storage.clearTokens();
         handler.reject(err);
         return;
       }
 
-      // Queue the request if already refreshing
       if (_isRefreshing) {
         _pendingRequests.add((err.requestOptions, handler));
         return;
@@ -56,14 +72,10 @@ class AuthInterceptor extends QueuedInterceptor {
         final refreshed = await _refreshToken();
 
         if (refreshed) {
-          // Retry the original request
           final retryResponse = await _retryRequest(err.requestOptions);
           handler.resolve(retryResponse);
-
-          // Process pending requests
           await _processPendingRequests();
         } else {
-          // Clear tokens and reject
           await _storage.clearTokens();
           handler.reject(err);
           _rejectPendingRequests(err);
@@ -80,29 +92,49 @@ class AuthInterceptor extends QueuedInterceptor {
     }
   }
 
-  /// Refresh the access token
+  /// Extract refresh token from Set-Cookie header and persist it
+  void _extractAndSaveRefreshToken(Response<dynamic> response) {
+    final setCookieHeaders = response.headers['set-cookie'];
+    if (setCookieHeaders == null || setCookieHeaders.isEmpty) {
+      return;
+    }
+
+    for (final cookie in setCookieHeaders) {
+      if (cookie.startsWith('fintrace_refresh=')) {
+        final tokenValue = cookie
+            .split(';')
+            .first
+            .replaceFirst('fintrace_refresh=', '');
+        if (tokenValue.isNotEmpty) {
+          _storage.saveRefreshToken(tokenValue);
+        }
+        break;
+      }
+    }
+  }
+
+  /// Refresh the access token using the stored refresh token
   Future<bool> _refreshToken() async {
     try {
       final refreshToken = await _storage.getRefreshToken();
-
-      if (refreshToken == null) {
+      if (refreshToken == null || refreshToken.isEmpty) {
         return false;
       }
 
-      // Create a new Dio instance for refresh to avoid interceptor loop
+      // Use a separate Dio to avoid interceptor loop
       final refreshDio = Dio(
         BaseOptions(
           baseUrl: _dio.options.baseUrl,
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'Cookie': 'fintrace_refresh=$refreshToken',
           },
         ),
       );
 
       final response = await refreshDio.post<Map<String, dynamic>>(
         ApiEndpoints.refresh,
-        data: {'refreshToken': refreshToken},
       );
 
       final responseData = response.data;
@@ -110,16 +142,30 @@ class AuthInterceptor extends QueuedInterceptor {
           responseData != null &&
           responseData['success'] == true) {
         final data = responseData['data'] as Map<String, dynamic>?;
-        if (data != null) {
+        if (data != null && data['accessToken'] != null) {
           final newAccessToken = data['accessToken'] as String;
-          final newRefreshToken = data['refreshToken'] as String;
+          await _storage.saveTokens(newAccessToken, null);
 
-          await _storage.saveTokens(newAccessToken, newRefreshToken);
-
-          if (kDebugMode) {
-            print('Token refreshed successfully');
+          // Extract new refresh token from response cookies
+          final setCookieHeaders = response.headers['set-cookie'];
+          if (setCookieHeaders != null) {
+            for (final cookie in setCookieHeaders) {
+              if (cookie.startsWith('fintrace_refresh=')) {
+                final newRefresh = cookie
+                    .split(';')
+                    .first
+                    .replaceFirst('fintrace_refresh=', '');
+                if (newRefresh.isNotEmpty) {
+                  await _storage.saveRefreshToken(newRefresh);
+                }
+                break;
+              }
+            }
           }
 
+          if (kDebugMode) {
+            debugPrint('AuthInterceptor: Token refreshed successfully');
+          }
           return true;
         }
       }
@@ -127,14 +173,16 @@ class AuthInterceptor extends QueuedInterceptor {
       return false;
     } catch (e) {
       if (kDebugMode) {
-        print('Token refresh failed: $e');
+        debugPrint('AuthInterceptor: Token refresh failed: $e');
       }
       return false;
     }
   }
 
-  /// Retry a failed request with new token
-  Future<Response<dynamic>> _retryRequest(RequestOptions requestOptions) async {
+  /// Retry a failed request with the new access token
+  Future<Response<dynamic>> _retryRequest(
+    RequestOptions requestOptions,
+  ) async {
     final accessToken = await _storage.getAccessToken();
 
     final options = Options(
@@ -153,7 +201,7 @@ class AuthInterceptor extends QueuedInterceptor {
     );
   }
 
-  /// Process pending requests after token refresh
+  /// Replay queued requests after a successful token refresh
   Future<void> _processPendingRequests() async {
     final requests = List<(RequestOptions, ErrorInterceptorHandler)>.from(
       _pendingRequests,
@@ -166,31 +214,25 @@ class AuthInterceptor extends QueuedInterceptor {
         handler.resolve(response);
       } catch (e) {
         handler.reject(
-          DioException(
-            requestOptions: options,
-            error: e,
-          ),
+          DioException(requestOptions: options, error: e),
         );
       }
     }
   }
 
-  /// Reject all pending requests
+  /// Reject all queued requests
   void _rejectPendingRequests(DioException error) {
     for (final (options, handler) in _pendingRequests) {
       handler.reject(
-        DioException(
-          requestOptions: options,
-          error: error,
-        ),
+        DioException(requestOptions: options, error: error),
       );
     }
     _pendingRequests.clear();
   }
 
-  /// Check if endpoint is public (no auth required)
+  /// Endpoints that do not require authentication
   bool _isPublicEndpoint(String path) {
-    final publicEndpoints = [
+    const publicEndpoints = [
       ApiEndpoints.login,
       ApiEndpoints.register,
       ApiEndpoints.refresh,

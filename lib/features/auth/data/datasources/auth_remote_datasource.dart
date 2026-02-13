@@ -13,7 +13,9 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, bool>> sendOtp(String email, String purpose);
   Future<Either<Failure, bool>> forgotPassword(String email);
   Future<Either<Failure, bool>> resetPassword(ResetPasswordRequest request);
+  Future<Either<Failure, bool>> changePassword(ChangePasswordRequest request);
   Future<Either<Failure, UserModel>> getCurrentUser();
+  Future<Either<Failure, UserModel>> updatePreferences(UserPreferences preferences);
   Future<Either<Failure, AuthResponse>> refreshToken(String refreshToken);
   Future<Either<Failure, void>> logout();
 
@@ -117,9 +119,38 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, bool>> changePassword(
+    ChangePasswordRequest request,
+  ) async {
+    final result = await _apiClient.post(
+      ApiEndpoints.changePassword,
+      data: request.toJson(),
+    );
+
+    return result.fold(
+      Left.new,
+      (_) => const Right(true),
+    );
+  }
+
+  @override
   Future<Either<Failure, UserModel>> getCurrentUser() async {
     return _apiClient.get<UserModel>(
       ApiEndpoints.me,
+      fromJson: (json) {
+        if (json == null) {
+          throw Exception('Invalid response: null data');
+        }
+        return UserModel.fromJson(json as Map<String, dynamic>);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> updatePreferences(UserPreferences preferences) async {
+    return _apiClient.put<UserModel>(
+      ApiEndpoints.me,
+      data: {'preferences': preferences.toJson()},
       fromJson: (json) {
         if (json == null) {
           throw Exception('Invalid response: null data');

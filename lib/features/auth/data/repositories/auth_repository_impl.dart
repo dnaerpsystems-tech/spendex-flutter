@@ -114,8 +114,31 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    final result = await _remoteDataSource.changePassword(
+      ChangePasswordRequest(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (_) => const Right(true),
+    );
+  }
+
+  @override
   Future<Either<Failure, UserModel>> getCurrentUser() async {
     return _remoteDataSource.getCurrentUser();
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> updatePreferences(UserPreferences preferences) async {
+    return _remoteDataSource.updatePreferences(preferences);
   }
 
   @override

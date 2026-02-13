@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/currency_formatter.dart';
+import '../../../../shared/widgets/loading_state_widget.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../budgets/data/models/budget_model.dart';
+import '../../../insights/presentation/providers/insights_provider.dart';
+import '../../../insights/presentation/widgets/insights_dashboard_widget.dart';
+import '../../../transactions/data/models/transaction_model.dart';
+import '../providers/dashboard_provider.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -16,21 +24,30 @@ class DashboardScreen extends ConsumerStatefulWidget {
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
-  final _currencyFormat = NumberFormat.currency(
-    locale: 'en_IN',
-    symbol: '\u20B9',
-    decimalDigits: 0,
-  );
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      ref.read(dashboardStateProvider.notifier).loadAll();
+      ref.read(insightsStateProvider.notifier).loadDashboard();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
+    final dashboardState = ref.watch(dashboardStateProvider);
+    final accountsSummary = ref.watch(accountsSummaryProvider);
+    final monthlyStats = ref.watch(monthlyStatsProvider);
+    final recentTransactions = ref.watch(recentTransactionsProvider);
+    final budgetAlerts = ref.watch(budgetAlertsProvider);
+    final error = ref.watch(dashboardErrorProvider);
 
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            // Refresh data
+            await ref.read(dashboardStateProvider.notifier).refresh();
           },
           child: CustomScrollView(
             slivers: [
@@ -43,7 +60,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       // Avatar
                       CircleAvatar(
                         radius: 24,
-                        backgroundColor: SpendexColors.primary.withValues(alpha: 0.1),
+                        backgroundColor:
+                            SpendexColors.primary.withValues(alpha: 0.1),
                         child: Text(
                           user?.name.substring(0, 1).toUpperCase() ?? 'U',
                           style: SpendexTheme.headlineMedium.copyWith(
@@ -59,7 +77,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             Text(
                               'Good ${_getGreeting()}',
                               style: SpendexTheme.bodyMedium.copyWith(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
                               ),
                             ),
                             Text(
@@ -86,15 +106,54 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
               ),
 
+              // Error Banner
+              if (error != null)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: MaterialBanner(
+                      content: Text(error),
+                      backgroundColor:
+                          SpendexColors.expense.withValues(alpha: 0.1),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            ref
+                                .read(dashboardStateProvider.notifier)
+                                .clearError();
+                          },
+                          child: const Text('Dismiss'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            ref
+                                .read(dashboardStateProvider.notifier)
+                                .refresh();
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
               // Net Worth Card
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _NetWorthCard(
-                    netWorth: 125000000, // Mock data in paise
-                    change: 5.2,
-                    currencyFormat: _currencyFormat,
-                  ),
+                  child: dashboardState.isSummaryLoading &&
+                          accountsSummary == null
+                      ? const ShimmerLoadingList(
+                          itemCount: 1,
+                          itemHeight: 180,
+                          padding: EdgeInsets.zero,
+                        )
+                      : _NetWorthCard(
+                          netWorth: accountsSummary?.netWorth ?? 0,
+                          totalAssets: accountsSummary?.totalAssets ?? 0,
+                          totalLiabilities:
+                              accountsSummary?.totalLiabilities ?? 0,
+                        ),
                 ),
               ),
 
@@ -150,15 +209,46 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
+              // AI Insights Section
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final dashboardInsights = ref.watch(dashboardInsightsProvider);
+                      final isLoading = ref.watch(insightsLoadingProvider);
+                      final error = ref.watch(insightsErrorProvider);
+
+                      return InsightsDashboardWidget(
+                        insights: dashboardInsights,
+                        isLoading: isLoading,
+                        error: error,
+                        onViewAllTap: () => context.push(AppRoutes.insights),
+                        onInsightTap: (insight) => context.push('/insights/${insight.id}'),
+                        onDismiss: (id) => ref.read(insightsStateProvider.notifier).dismiss(id),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
               // Monthly Summary
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _MonthlySummaryCard(
-                    income: 7500000, // Mock data
-                    expense: 4500000,
-                    currencyFormat: _currencyFormat,
-                  ),
+                  child: dashboardState.isStatsLoading && monthlyStats == null
+                      ? const ShimmerLoadingList(
+                          itemCount: 1,
+                          itemHeight: 160,
+                          padding: EdgeInsets.zero,
+                        )
+                      : _MonthlySummaryCard(
+                          income: monthlyStats?.totalIncome ?? 0,
+                          expense: monthlyStats?.totalExpense ?? 0,
+                          savingsRate: monthlyStats?.savingsRate ?? 0,
+                        ),
                 ),
               ),
 
@@ -192,32 +282,98 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
 
               // Recent Transactions List
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final transactions = _getMockTransactions();
-                    if (index >= transactions.length) {
-                      return null;
-                    }
-                    final transaction = transactions[index];
-                    return _TransactionTile(
-                      transaction: transaction,
-                      currencyFormat: _currencyFormat,
-                    );
-                  },
-                  childCount: 5,
+              if (dashboardState.isTransactionsLoading &&
+                  recentTransactions.isEmpty)
+                const SliverToBoxAdapter(
+                  child: ShimmerLoadingList(
+                    itemCount: 3,
+                    itemHeight: 72,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                  ),
+                )
+              else if (recentTransactions.isEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 24,
+                    ),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Iconsax.receipt_item,
+                            size: 48,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant
+                                .withValues(alpha: 0.5),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'No transactions yet',
+                            style: SpendexTheme.bodyMedium.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Add your first transaction to get started',
+                            style: SpendexTheme.labelMedium.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant
+                                  .withValues(alpha: 0.7),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              else
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final transaction = recentTransactions[index];
+                      return _TransactionTile(transaction: transaction);
+                    },
+                    childCount: recentTransactions.length,
+                  ),
                 ),
-              ),
 
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
               // Budget Alerts
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _BudgetAlertCard(),
+              if (dashboardState.isBudgetsLoading && budgetAlerts.isEmpty)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerLoadingList(
+                      itemCount: 1,
+                      padding: EdgeInsets.zero,
+                    ),
+                  ),
+                )
+              else if (budgetAlerts.isNotEmpty)
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final budget = budgetAlerts[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20)
+                            .copyWith(
+                          bottom:
+                              index < budgetAlerts.length - 1 ? 12 : 0,
+                        ),
+                        child: _BudgetAlertCard(budget: budget),
+                      );
+                    },
+                    childCount: budgetAlerts.length,
+                  ),
                 ),
-              ),
 
               const SliverToBoxAdapter(child: SizedBox(height: 100)),
             ],
@@ -237,68 +393,21 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     }
     return 'Evening';
   }
-
-  List<Map<String, dynamic>> _getMockTransactions() {
-    return [
-      {
-        'id': '1',
-        'description': 'Grocery Shopping',
-        'amount': -250000,
-        'category': 'Food',
-        'icon': Iconsax.shopping_cart,
-        'date': DateTime.now(),
-      },
-      {
-        'id': '2',
-        'description': 'Salary Credit',
-        'amount': 7500000,
-        'category': 'Income',
-        'icon': Iconsax.money_recive,
-        'date': DateTime.now().subtract(const Duration(days: 1)),
-      },
-      {
-        'id': '3',
-        'description': 'Netflix Subscription',
-        'amount': -64900,
-        'category': 'Entertainment',
-        'icon': Iconsax.video,
-        'date': DateTime.now().subtract(const Duration(days: 2)),
-      },
-      {
-        'id': '4',
-        'description': 'Electricity Bill',
-        'amount': -185000,
-        'category': 'Utilities',
-        'icon': Iconsax.flash,
-        'date': DateTime.now().subtract(const Duration(days: 3)),
-      },
-      {
-        'id': '5',
-        'description': 'Freelance Project',
-        'amount': 2500000,
-        'category': 'Income',
-        'icon': Iconsax.money_recive,
-        'date': DateTime.now().subtract(const Duration(days: 4)),
-      },
-    ];
-  }
 }
 
 class _NetWorthCard extends StatelessWidget {
   const _NetWorthCard({
     required this.netWorth,
-    required this.change,
-    required this.currencyFormat,
+    required this.totalAssets,
+    required this.totalLiabilities,
   });
 
   final int netWorth;
-  final double change;
-  final NumberFormat currencyFormat;
+  final int totalAssets;
+  final int totalLiabilities;
 
   @override
   Widget build(BuildContext context) {
-    final isPositive = change >= 0;
-
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -315,43 +424,15 @@ class _NetWorthCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Net Worth',
-                style: SpendexTheme.bodyMedium.copyWith(
-                  color: Colors.white.withValues(alpha: 0.8),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      isPositive ? Iconsax.arrow_up_3 : Iconsax.arrow_down,
-                      size: 14,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${change.abs()}%',
-                      style: SpendexTheme.labelMedium.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          Text(
+            'Net Worth',
+            style: SpendexTheme.bodyMedium.copyWith(
+              color: Colors.white.withValues(alpha: 0.8),
+            ),
           ),
           const SizedBox(height: 12),
           Text(
-            currencyFormat.format(netWorth / 100),
+            CurrencyFormatter.formatPaise(netWorth, decimalDigits: 0),
             style: SpendexTheme.displayLarge.copyWith(
               color: Colors.white,
               fontSize: 36,
@@ -362,12 +443,18 @@ class _NetWorthCard extends StatelessWidget {
             children: [
               _NetWorthItem(
                 label: 'Assets',
-                value: currencyFormat.format(150000000 / 100),
+                value: CurrencyFormatter.formatPaise(
+                  totalAssets,
+                  decimalDigits: 0,
+                ),
               ),
               const SizedBox(width: 32),
               _NetWorthItem(
                 label: 'Liabilities',
-                value: currencyFormat.format(25000000 / 100),
+                value: CurrencyFormatter.formatPaise(
+                  totalLiabilities,
+                  decimalDigits: 0,
+                ),
               ),
             ],
           ),
@@ -453,18 +540,17 @@ class _MonthlySummaryCard extends StatelessWidget {
   const _MonthlySummaryCard({
     required this.income,
     required this.expense,
-    required this.currencyFormat,
+    required this.savingsRate,
   });
 
   final int income;
   final int expense;
-  final NumberFormat currencyFormat;
+  final double savingsRate;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final savings = income - expense;
-    final savingsRate = income > 0 ? (savings / income) * 100 : 0;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -490,7 +576,10 @@ class _MonthlySummaryCard extends StatelessWidget {
               Expanded(
                 child: _SummaryItem(
                   label: 'Income',
-                  value: currencyFormat.format(income / 100),
+                  value: CurrencyFormatter.formatPaise(
+                    income,
+                    decimalDigits: 0,
+                  ),
                   color: SpendexColors.income,
                   icon: Iconsax.arrow_down,
                 ),
@@ -499,7 +588,10 @@ class _MonthlySummaryCard extends StatelessWidget {
               Expanded(
                 child: _SummaryItem(
                   label: 'Expense',
-                  value: currencyFormat.format(expense / 100),
+                  value: CurrencyFormatter.formatPaise(
+                    expense,
+                    decimalDigits: 0,
+                  ),
                   color: SpendexColors.expense,
                   icon: Iconsax.arrow_up_3,
                 ),
@@ -521,7 +613,10 @@ class _MonthlySummaryCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    currencyFormat.format(savings / 100),
+                    CurrencyFormatter.formatPaise(
+                      savings,
+                      decimalDigits: 0,
+                    ),
                     style: SpendexTheme.titleMedium.copyWith(
                       color: savings >= 0
                           ? SpendexColors.income
@@ -531,7 +626,8 @@ class _MonthlySummaryCard extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: SpendexColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -581,23 +677,26 @@ class _SummaryItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: SpendexTheme.labelMedium.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: SpendexTheme.labelMedium.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              value,
-              style: SpendexTheme.titleMedium.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: SpendexTheme.titleMedium.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -607,17 +706,35 @@ class _SummaryItem extends StatelessWidget {
 class _TransactionTile extends StatelessWidget {
   const _TransactionTile({
     required this.transaction,
-    required this.currencyFormat,
   });
 
-  final Map<String, dynamic> transaction;
-  final NumberFormat currencyFormat;
+  final TransactionModel transaction;
+
+  IconData _getTransactionIcon() {
+    if (transaction.type == TransactionType.transfer) {
+      return Iconsax.arrow_swap_horizontal;
+    }
+    if (transaction.type == TransactionType.income) {
+      return Iconsax.money_recive;
+    }
+    return Iconsax.money_send;
+  }
+
+  Color _getTransactionColor() {
+    if (transaction.type == TransactionType.transfer) {
+      return SpendexColors.transfer;
+    }
+    if (transaction.type == TransactionType.income) {
+      return SpendexColors.income;
+    }
+    return SpendexColors.expense;
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final amount = transaction['amount'] as int;
-    final isExpense = amount < 0;
+    final isExpense = transaction.isExpense;
+    final color = _getTransactionColor();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
@@ -635,14 +752,13 @@ class _TransactionTile extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: (isExpense ? SpendexColors.expense : SpendexColors.income)
-                  .withValues(alpha: 0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Center(
               child: Icon(
-                transaction['icon'] as IconData,
-                color: isExpense ? SpendexColors.expense : SpendexColors.income,
+                _getTransactionIcon(),
+                color: color,
                 size: 24,
               ),
             ),
@@ -653,14 +769,14 @@ class _TransactionTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  transaction['description'] as String,
+                  transaction.description ?? 'Transaction',
                   style: SpendexTheme.titleMedium.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  transaction['category'] as String,
+                  transaction.category?.name ?? transaction.type.label,
                   style: SpendexTheme.labelMedium.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -669,9 +785,9 @@ class _TransactionTile extends StatelessWidget {
             ),
           ),
           Text(
-            '${isExpense ? '-' : '+'}${currencyFormat.format(amount.abs() / 100)}',
+            '${isExpense ? '-' : '+'}${CurrencyFormatter.formatPaise(transaction.amount, decimalDigits: 0)}',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isExpense ? SpendexColors.expense : SpendexColors.income,
+              color: color,
             ),
           ),
         ],
@@ -681,17 +797,24 @@ class _TransactionTile extends StatelessWidget {
 }
 
 class _BudgetAlertCard extends StatelessWidget {
+  const _BudgetAlertCard({required this.budget});
+
+  final BudgetModel budget;
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isExceeded = budget.percentage >= 100;
+    final alertColor =
+        isExceeded ? SpendexColors.expense : SpendexColors.warning;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: SpendexColors.warning.withValues(alpha: 0.1),
+        color: alertColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: SpendexColors.warning.withValues(alpha: 0.3),
+          color: alertColor.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -700,13 +823,13 @@ class _BudgetAlertCard extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: SpendexColors.warning.withValues(alpha: 0.2),
+              color: alertColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Center(
+            child: Center(
               child: Icon(
-                Iconsax.warning_2,
-                color: SpendexColors.warning,
+                isExceeded ? Iconsax.danger : Iconsax.warning_2,
+                color: alertColor,
                 size: 24,
               ),
             ),
@@ -717,14 +840,14 @@ class _BudgetAlertCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Budget Alert',
+                  isExceeded ? 'Budget Exceeded' : 'Budget Alert',
                   style: SpendexTheme.titleMedium.copyWith(
-                    color: SpendexColors.warning,
+                    color: alertColor,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "You've used 85% of your Food budget this month",
+                  "You've used ${budget.percentage.toStringAsFixed(0)}% of your ${budget.name} budget",
                   style: SpendexTheme.bodyMedium.copyWith(
                     color: isDark
                         ? SpendexColors.darkTextSecondary
@@ -734,9 +857,9 @@ class _BudgetAlertCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(
+          Icon(
             Iconsax.arrow_right_3,
-            color: SpendexColors.warning,
+            color: alertColor,
             size: 20,
           ),
         ],

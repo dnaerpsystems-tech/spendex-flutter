@@ -10,23 +10,33 @@ import 'core/di/injection.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  debugPrint('Main: Flutter initialized');
+  if (kDebugMode) {
+    debugPrint('Main: Flutter initialized');
+  }
 
   // Load environment variables
   try {
     await dotenv.load();
-    debugPrint('Main: Dotenv loaded');
+    if (kDebugMode) {
+      debugPrint('Main: Dotenv loaded');
+    }
   } catch (e) {
-    debugPrint('Main: Dotenv error: $e');
+    if (kDebugMode) {
+      debugPrint('Main: Dotenv error: $e');
+    }
   }
 
   // Initialize Hive for local storage
   await Hive.initFlutter();
-  debugPrint('Main: Hive initialized');
+  if (kDebugMode) {
+    debugPrint('Main: Hive initialized');
+  }
 
   // Initialize dependency injection
   await configureDependencies();
-  debugPrint('Main: Dependencies configured');
+  if (kDebugMode) {
+    debugPrint('Main: Dependencies configured');
+  }
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
@@ -43,7 +53,9 @@ Future<void> main() async {
     ),
   );
 
-  debugPrint('Main: Running app');
+  if (kDebugMode) {
+    debugPrint('Main: Running app');
+  }
   runApp(
     const ProviderScope(
       child: SpendexApp(),

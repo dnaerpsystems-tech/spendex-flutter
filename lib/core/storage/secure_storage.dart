@@ -20,6 +20,14 @@ class SecureStorageService {
     await Future.wait(futures);
   }
 
+  /// Save refresh token independently (used by AuthInterceptor for cookie extraction)
+  Future<void> saveRefreshToken(String refreshToken) async {
+    await _storage.write(
+      key: AppConstants.refreshTokenKey,
+      value: refreshToken,
+    );
+  }
+
   /// Get access token
   Future<String?> getAccessToken() async {
     return _storage.read(key: AppConstants.accessTokenKey);

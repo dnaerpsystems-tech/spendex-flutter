@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 import '../errors/failures.dart';
 
@@ -282,19 +281,12 @@ class ApiClient {
     Response<Object?> response,
     T Function(Object?)? fromJson,
   ) {
-    debugPrint('API Response Status: ${response.statusCode}');
-    debugPrint('API Response Data: ${response.data}');
-    debugPrint('API Response Data Type: ${response.data.runtimeType}');
-
     if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       if (fromJson != null && response.data != null) {
         final responseData = response.data;
-        debugPrint('API responseData type: ${responseData.runtimeType}');
         if (responseData is Map<String, Object?>) {
-          debugPrint('API responseData[data]: ${responseData['data']}');
-          debugPrint('API responseData[data] type: ${responseData['data'].runtimeType}');
           if (responseData['data'] != null) {
             return Right(fromJson(responseData['data']));
           }

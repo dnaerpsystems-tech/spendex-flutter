@@ -459,6 +459,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
+  /// Change Password
+  Future<bool> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    state = state.copyWith(isLoading: true);
+
+    final result =
+        await _authRepository.changePassword(currentPassword, newPassword);
+
+    return result.fold(
+      (failure) {
+        state = state.copyWith(isLoading: false, error: failure.message);
+        return false;
+      },
+      (_) {
+        state = state.copyWith(isLoading: false);
+        return true;
+      },
+    );
+  }
+
   /// Logout
   Future<void> logout() async {
     await _authRepository.logout();
@@ -475,6 +497,24 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Update user
   void updateUser(UserModel user) {
     state = state.copyWith(user: user);
+  }
+
+  /// Update user preferences
+  Future<bool> updatePreferences(UserPreferences preferences) async {
+    if (state.user == null) return false;
+
+    final result = await _authRepository.updatePreferences(preferences);
+
+    return result.fold(
+      (failure) {
+        state = state.copyWith(error: failure.message);
+        return false;
+      },
+      (updatedUser) {
+        state = state.copyWith(user: updatedUser);
+        return true;
+      },
+    );
   }
 }
 

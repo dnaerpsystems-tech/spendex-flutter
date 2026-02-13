@@ -48,58 +48,40 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _initializeApp() async {
-    debugPrint('Splash: Starting initialization...');
     await Future.delayed(const Duration(milliseconds: 2000));
 
     if (!mounted) {
-      debugPrint('Splash: Not mounted after delay');
       return;
     }
 
-    debugPrint('Splash: Getting localStorage...');
     final localStorage = getIt<LocalStorageService>();
-    debugPrint('Splash: Got localStorage');
 
     final authNotifier = ref.read(authStateProvider.notifier);
-    debugPrint('Splash: Got authNotifier');
 
     // Check authentication status with timeout
     try {
-      debugPrint('Splash: Checking auth status...');
       await authNotifier.checkAuthStatus().timeout(
         const Duration(seconds: 5),
-        onTimeout: () {
-          debugPrint('Splash: Auth check timed out');
-        },
       );
-      debugPrint('Splash: Auth check completed');
-    } catch (e) {
-      debugPrint('Splash: Auth check error: $e');
+    } catch (_) {
+      // Auth check failed or timed out, continue with unauthenticated state
     }
 
     if (!mounted) {
-      debugPrint('Splash: Not mounted after auth check');
       return;
     }
 
     final authState = ref.read(authStateProvider);
-    debugPrint('Splash: Auth state - isAuthenticated: ${authState.isAuthenticated}');
 
     final isOnboardingCompleted = localStorage.isOnboardingCompleted();
-    debugPrint('Splash: Onboarding completed: $isOnboardingCompleted');
 
-    debugPrint('Splash: Navigating...');
     if (!isOnboardingCompleted) {
-      debugPrint('Splash: Going to onboarding');
       context.go(AppRoutes.onboarding);
     } else if (authState.isAuthenticated) {
-      debugPrint('Splash: Going to home');
       context.go(AppRoutes.home);
     } else {
-      debugPrint('Splash: Going to login');
       context.go(AppRoutes.login);
     }
-    debugPrint('Splash: Navigation called');
   }
 
   @override

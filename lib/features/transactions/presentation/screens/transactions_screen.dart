@@ -333,7 +333,6 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                 ...entry.value.map((t) => TransactionCard(
                   transaction: t,
                   onTap: () => context.push('/transactions/${t.id}'),
-                  showAccount: true,
                 )),
               ],
             );

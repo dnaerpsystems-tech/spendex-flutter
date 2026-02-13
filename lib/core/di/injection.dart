@@ -11,37 +11,54 @@ import '../../features/accounts/domain/repositories/accounts_repository.dart';
 import '../../features/auth/data/datasources/auth_remote_datasource.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/bank_import/data/datasources/account_aggregator_remote_datasource.dart';
+import '../../features/bank_import/data/datasources/india_utils_remote_datasource.dart';
+import '../../features/bank_import/data/datasources/pdf_import_remote_datasource.dart';
+import '../../features/bank_import/data/datasources/sms_parser_local_datasource.dart';
+import '../../features/bank_import/data/datasources/sms_parser_remote_datasource.dart';
+import '../../features/bank_import/data/repositories/account_aggregator_repository_impl.dart';
+import '../../features/bank_import/data/repositories/india_utils_repository_impl.dart';
+import '../../features/bank_import/data/repositories/pdf_import_repository_impl.dart';
+import '../../features/bank_import/data/repositories/sms_parser_repository_impl.dart';
+import '../../features/bank_import/domain/repositories/account_aggregator_repository.dart';
+import '../../features/bank_import/domain/repositories/india_utils_repository.dart';
+import '../../features/bank_import/domain/repositories/pdf_import_repository.dart';
+import '../../features/bank_import/domain/repositories/sms_parser_repository.dart';
 import '../../features/budgets/data/datasources/budgets_remote_datasource.dart';
 import '../../features/budgets/data/repositories/budgets_repository_impl.dart';
 import '../../features/budgets/domain/repositories/budgets_repository.dart';
 import '../../features/categories/data/datasources/categories_remote_datasource.dart';
 import '../../features/categories/data/repositories/categories_repository_impl.dart';
 import '../../features/categories/domain/repositories/categories_repository.dart';
-// TODO(dev): Uncomment when feature is implemented
-// import '../../features/family/data/datasources/family_remote_datasource.dart';
-// import '../../features/family/data/repositories/family_repository_impl.dart';
-// import '../../features/family/domain/repositories/family_repository.dart';
-// import '../../features/goals/data/datasources/goals_remote_datasource.dart';
-// import '../../features/goals/data/repositories/goals_repository_impl.dart';
-// import '../../features/goals/domain/repositories/goals_repository.dart';
-// import '../../features/insights/data/datasources/insights_remote_datasource.dart';
-// import '../../features/insights/data/repositories/insights_repository_impl.dart';
-// import '../../features/insights/domain/repositories/insights_repository.dart';
-// import '../../features/investments/data/datasources/investments_remote_datasource.dart';
-// import '../../features/investments/data/repositories/investments_repository_impl.dart';
-// import '../../features/investments/domain/repositories/investments_repository.dart';
-// import '../../features/loans/data/datasources/loans_remote_datasource.dart';
-// import '../../features/loans/data/repositories/loans_repository_impl.dart';
-// import '../../features/loans/domain/repositories/loans_repository.dart';
-// import '../../features/notifications/data/datasources/notifications_remote_datasource.dart';
-// import '../../features/notifications/data/repositories/notifications_repository_impl.dart';
-// import '../../features/notifications/domain/repositories/notifications_repository.dart';
-// import '../../features/subscription/data/datasources/subscription_remote_datasource.dart';
-// import '../../features/subscription/data/repositories/subscription_repository_impl.dart';
-// import '../../features/subscription/domain/repositories/subscription_repository.dart';
-// import '../../features/transactions/data/datasources/transactions_remote_datasource.dart';
-// import '../../features/transactions/data/repositories/transactions_repository_impl.dart';
-// import '../../features/transactions/domain/repositories/transactions_repository.dart';
+import '../../features/dashboard/data/datasources/dashboard_remote_datasource.dart';
+import '../../features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import '../../features/dashboard/domain/repositories/dashboard_repository.dart';
+import '../../features/duplicate_detection/data/datasources/duplicate_detection_remote_datasource.dart';
+import '../../features/duplicate_detection/data/repositories/duplicate_detection_repository_impl.dart';
+import '../../features/duplicate_detection/domain/repositories/duplicate_detection_repository.dart';
+import '../../features/email_parser/data/datasources/email_local_datasource.dart';
+import '../../features/email_parser/data/datasources/email_remote_datasource.dart';
+import '../../features/email_parser/data/repositories/email_parser_repository_impl.dart';
+import '../../features/email_parser/domain/repositories/email_parser_repository.dart';
+import '../../features/goals/data/datasources/goals_remote_datasource.dart';
+import '../../features/goals/data/repositories/goals_repository_impl.dart';
+import '../../features/goals/domain/repositories/goals_repository.dart';
+import '../../features/insights/data/datasources/insights_remote_datasource.dart';
+import '../../features/insights/data/repositories/insights_repository_impl.dart';
+import '../../features/insights/domain/repositories/insights_repository.dart';
+import '../../features/investments/data/datasources/investments_remote_datasource.dart';
+import '../../features/investments/data/repositories/investments_repository_impl.dart';
+import '../../features/investments/domain/repositories/investments_repository.dart';
+import '../../features/loans/data/datasources/loans_remote_datasource.dart';
+import '../../features/loans/data/repositories/loans_repository_impl.dart';
+import '../../features/loans/domain/repositories/loans_repository.dart';
+import '../../features/settings/data/datasources/settings_remote_datasource.dart';
+import '../../features/settings/data/repositories/settings_repository_impl.dart';
+import '../../features/settings/domain/repositories/settings_repository.dart';
+import '../../features/transactions/data/datasources/transactions_remote_datasource.dart';
+import '../../features/transactions/data/repositories/transactions_repository_impl.dart';
+import '../../features/transactions/domain/repositories/transactions_repository.dart';
+
 import '../network/api_client.dart';
 import '../network/api_interceptor.dart';
 import '../storage/local_storage.dart';
@@ -119,20 +136,21 @@ void _registerCore() {
         'Accept': 'application/json',
       },
     ),
-  )..interceptors.add(LogInterceptor(responseBody: true, requestBody: true));
-  getIt
-    ..registerSingleton<Dio>(dio)
+  );
+  getIt.registerSingleton<Dio>(dio);
 
-    // Auth Interceptor
-    ..registerLazySingleton<AuthInterceptor>(
-      () => AuthInterceptor(
-        getIt<SecureStorageService>(),
-        getIt<Dio>(),
-      ),
-    );
+  // Auth Interceptor - must be added BEFORE LogInterceptor
+  // so auth headers appear in logs and are sent with requests
+  final authInterceptor = AuthInterceptor(
+    getIt<SecureStorageService>(),
+    dio,
+  );
+  getIt.registerSingleton<AuthInterceptor>(authInterceptor);
 
-  // Add interceptor to Dio
-  dio.interceptors.add(getIt<AuthInterceptor>());
+  dio.interceptors.addAll([
+    authInterceptor,
+    LogInterceptor(responseBody: true, requestBody: true),
+  ]);
 
   // API Client
   getIt.registerLazySingleton<ApiClient>(
@@ -160,48 +178,78 @@ void _registerDataSources() {
     // Budgets
     ..registerLazySingleton<BudgetsRemoteDataSource>(
       () => BudgetsRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Goals
+    ..registerLazySingleton<GoalsRemoteDataSource>(
+      () => GoalsRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Investments
+    ..registerLazySingleton<InvestmentsRemoteDataSource>(
+      () => InvestmentsRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Loans
+    ..registerLazySingleton<LoansRemoteDataSource>(
+      () => LoansRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Transactions
+    ..registerLazySingleton<TransactionsRemoteDataSource>(
+      () => TransactionsRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Dashboard
+    ..registerLazySingleton<DashboardRemoteDataSource>(
+      () => DashboardRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Settings
+    ..registerLazySingleton<SettingsRemoteDataSource>(
+      () => SettingsRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Bank Import - PDF Import
+    ..registerLazySingleton<PdfImportRemoteDataSource>(
+      () => PdfImportRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Bank Import - SMS Parser
+    ..registerLazySingleton<SmsParserRemoteDataSource>(
+      () => SmsParserRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+    ..registerLazySingleton<SmsParserLocalDataSource>(
+      () => SmsParserLocalDataSourceImpl(getIt<SecureStorageService>()),
+    )
+
+    // Bank Import - Account Aggregator
+    ..registerLazySingleton<AccountAggregatorRemoteDataSource>(
+      () => AccountAggregatorRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Bank Import - India Utils
+    ..registerLazySingleton<IndiaUtilsRemoteDataSource>(
+      () => IndiaUtilsRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Email Parser
+    ..registerLazySingleton<EmailRemoteDataSource>(
+      () => EmailRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+    ..registerLazySingleton<EmailLocalDataSource>(
+      () => EmailLocalDataSourceImpl(getIt<SecureStorageService>()),
+    )
+
+    // Duplicate Detection
+    ..registerLazySingleton<DuplicateDetectionRemoteDataSource>(
+      () => DuplicateDetectionRemoteDataSourceImpl(getIt<ApiClient>()),
+    )
+
+    // Insights
+    ..registerLazySingleton<InsightsRemoteDataSource>(
+      () => InsightsRemoteDataSourceImpl(apiClient: getIt<ApiClient>()),
     );
-
-  // TODO(dev): Uncomment when features are implemented
-  // // Transactions
-  // getIt.registerLazySingleton<TransactionsRemoteDataSource>(
-  //   () => TransactionsRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
-
-  // // Goals
-  // getIt.registerLazySingleton<GoalsRemoteDataSource>(
-  //   () => GoalsRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
-
-  // // Loans
-  // getIt.registerLazySingleton<LoansRemoteDataSource>(
-  //   () => LoansRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
-
-  // // Investments
-  // getIt.registerLazySingleton<InvestmentsRemoteDataSource>(
-  //   () => InvestmentsRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
-
-  // // Insights
-  // getIt.registerLazySingleton<InsightsRemoteDataSource>(
-  //   () => InsightsRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
-
-  // // Subscription
-  // getIt.registerLazySingleton<SubscriptionRemoteDataSource>(
-  //   () => SubscriptionRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
-
-  // // Family
-  // getIt.registerLazySingleton<FamilyRemoteDataSource>(
-  //   () => FamilyRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
-
-  // // Notifications
-  // getIt.registerLazySingleton<NotificationsRemoteDataSource>(
-  //   () => NotificationsRemoteDataSourceImpl(getIt<ApiClient>()),
-  // );
 }
 
 void _registerRepositories() {
@@ -227,46 +275,80 @@ void _registerRepositories() {
     // Budgets
     ..registerLazySingleton<BudgetsRepository>(
       () => BudgetsRepositoryImpl(getIt<BudgetsRemoteDataSource>()),
+    )
+
+    // Goals
+    ..registerLazySingleton<GoalsRepository>(
+      () => GoalsRepositoryImpl(getIt<GoalsRemoteDataSource>()),
+    )
+
+    // Investments
+    ..registerLazySingleton<InvestmentsRepository>(
+      () => InvestmentsRepositoryImpl(getIt<InvestmentsRemoteDataSource>()),
+    )
+
+    // Loans
+    ..registerLazySingleton<LoansRepository>(
+      () => LoansRepositoryImpl(getIt<LoansRemoteDataSource>()),
+    )
+
+    // Transactions
+    ..registerLazySingleton<TransactionsRepository>(
+      () => TransactionsRepositoryImpl(getIt<TransactionsRemoteDataSource>()),
+    )
+
+    // Dashboard
+    ..registerLazySingleton<DashboardRepository>(
+      () => DashboardRepositoryImpl(getIt<DashboardRemoteDataSource>()),
+    )
+
+    // Settings
+    ..registerLazySingleton<SettingsRepository>(
+      () => SettingsRepositoryImpl(getIt<SettingsRemoteDataSource>()),
+    )
+
+    // Bank Import - PDF Import
+    ..registerLazySingleton<PdfImportRepository>(
+      () => PdfImportRepositoryImpl(getIt<PdfImportRemoteDataSource>()),
+    )
+
+    // Bank Import - SMS Parser
+    ..registerLazySingleton<SmsParserRepository>(
+      () => SmsParserRepositoryImpl(
+        getIt<SmsParserRemoteDataSource>(),
+        getIt<SmsParserLocalDataSource>(),
+      ),
+    )
+
+    // Bank Import - Account Aggregator
+    ..registerLazySingleton<AccountAggregatorRepository>(
+      () => AccountAggregatorRepositoryImpl(
+        getIt<AccountAggregatorRemoteDataSource>(),
+      ),
+    )
+
+    // Bank Import - India Utils
+    ..registerLazySingleton<IndiaUtilsRepository>(
+      () => IndiaUtilsRepositoryImpl(getIt<IndiaUtilsRemoteDataSource>()),
+    )
+
+    // Email Parser
+    ..registerLazySingleton<EmailParserRepository>(
+      () => EmailParserRepositoryImpl(
+        getIt<EmailRemoteDataSource>(),
+        getIt<EmailLocalDataSource>(),
+      ),
+    )
+
+    // Duplicate Detection
+    ..registerLazySingleton<DuplicateDetectionRepository>(
+      () => DuplicateDetectionRepositoryImpl(
+        getIt<DuplicateDetectionRemoteDataSource>(),
+      ),
+    )
+
+    // Insights
+    ..registerLazySingleton<InsightsRepository>(
+      () => InsightsRepositoryImpl(getIt<InsightsRemoteDataSource>()),
     );
-
-  // TODO(dev): Uncomment when features are implemented
-  // // Transactions
-  // getIt.registerLazySingleton<TransactionsRepository>(
-  //   () => TransactionsRepositoryImpl(getIt<TransactionsRemoteDataSource>()),
-  // );
-
-  // // Goals
-  // getIt.registerLazySingleton<GoalsRepository>(
-  //   () => GoalsRepositoryImpl(getIt<GoalsRemoteDataSource>()),
-  // );
-
-  // // Loans
-  // getIt.registerLazySingleton<LoansRepository>(
-  //   () => LoansRepositoryImpl(getIt<LoansRemoteDataSource>()),
-  // );
-
-  // // Investments
-  // getIt.registerLazySingleton<InvestmentsRepository>(
-  //   () => InvestmentsRepositoryImpl(getIt<InvestmentsRemoteDataSource>()),
-  // );
-
-  // // Insights
-  // getIt.registerLazySingleton<InsightsRepository>(
-  //   () => InsightsRepositoryImpl(getIt<InsightsRemoteDataSource>()),
-  // );
-
-  // // Subscription
-  // getIt.registerLazySingleton<SubscriptionRepository>(
-  //   () => SubscriptionRepositoryImpl(getIt<SubscriptionRemoteDataSource>()),
-  // );
-
-  // // Family
-  // getIt.registerLazySingleton<FamilyRepository>(
-  //   () => FamilyRepositoryImpl(getIt<FamilyRemoteDataSource>()),
-  // );
-
-  // // Notifications
-  // getIt.registerLazySingleton<NotificationsRepository>(
-  //   () => NotificationsRepositoryImpl(getIt<NotificationsRemoteDataSource>()),
-  // );
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../../app/theme.dart';
 import '../../data/models/transaction_model.dart';
@@ -48,6 +50,10 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Whether a search is in progress.
   bool _isSearching = false;
+
+  /// Speech to text instance for voice search.
+  final SpeechToText _speech = SpeechToText();
+  bool _speechInitialized = false;
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -110,13 +116,10 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
           },
           tooltip: 'Clear',
         ),
-      // Voice input button (placeholder for future implementation)
+      // Voice input button
       IconButton(
         icon: const Icon(Iconsax.microphone_2),
-        onPressed: () {
-          // TODO(spendex): Implement voice input
-          _showVoiceInputPlaceholder(context);
-        },
+        onPressed: () => _startVoiceSearch(context),
         tooltip: 'Voice search',
       ),
     ];
@@ -536,68 +539,59 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
     );
   }
 
-  /// Shows a placeholder dialog for voice input feature.
-  void _showVoiceInputPlaceholder(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  /// Start voice search
+  Future<void> _startVoiceSearch(BuildContext context) async {
+    // Initialize speech if not already initialized
+    if (!_speechInitialized) {
+      _speechInitialized = await _speech.initialize(
+        onError: (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Speech recognition error: ${error.errorMsg}'),
+              backgroundColor: SpendexColors.expense,
+            ),
+          );
+        },
+      );
 
+      if (!_speechInitialized) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Speech recognition not available on this device'),
+            backgroundColor: SpendexColors.expense,
+          ),
+        );
+        return;
+      }
+    }
+
+    // Check permission
+    final hasPermission = await _speech.hasPermission;
+    if (!hasPermission) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Microphone permission required. Please enable in settings.',
+          ),
+          backgroundColor: SpendexColors.expense,
+        ),
+      );
+      return;
+    }
+
+    // Show listening dialog
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor:
-            isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        title: Row(
-          children: [
-            const Icon(
-              Iconsax.microphone_2,
-              color: SpendexColors.primary,
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'Voice Search',
-              style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Iconsax.code,
-              size: 48,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Voice search will be available soon!',
-              style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'OK',
-              style: SpendexTheme.titleMedium.copyWith(
-                color: SpendexColors.primary,
-              ),
-            ),
-          ),
-        ],
+      barrierDismissible: false,
+      builder: (dialogContext) => _VoiceSearchDialog(
+        onResult: (recognizedText) {
+          Navigator.pop(dialogContext);
+          if (recognizedText.isNotEmpty) {
+            query = recognizedText;
+            showResults(context);
+          }
+        },
+        speech: _speech,
       ),
     );
   }
@@ -606,5 +600,159 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
   void dispose() {
     _debounce?.cancel();
     super.dispose();
+  }
+}
+
+/// Voice search dialog widget
+class _VoiceSearchDialog extends StatefulWidget {
+  const _VoiceSearchDialog({
+    required this.onResult,
+    required this.speech,
+  });
+
+  final ValueChanged<String> onResult;
+  final SpeechToText speech;
+
+  @override
+  State<_VoiceSearchDialog> createState() => _VoiceSearchDialogState();
+}
+
+class _VoiceSearchDialogState extends State<_VoiceSearchDialog> {
+  String _recognizedText = '';
+  bool _isListening = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startListening();
+  }
+
+  @override
+  void dispose() {
+    if (widget.speech.isListening) {
+      widget.speech.stop();
+    }
+    super.dispose();
+  }
+
+  Future<void> _startListening() async {
+    setState(() {
+      _isListening = true;
+    });
+
+    try {
+      await widget.speech.listen(
+        onResult: (SpeechRecognitionResult result) {
+          setState(() {
+            _recognizedText = result.recognizedWords;
+          });
+
+          if (result.finalResult) {
+            widget.onResult(_recognizedText);
+          }
+        },
+        listenFor: const Duration(seconds: 10),
+        pauseFor: const Duration(seconds: 2),
+        partialResults: true,
+        listenMode: ListenMode.confirmation,
+      );
+    } catch (e) {
+      widget.onResult('');
+    }
+  }
+
+  void _stopListening() {
+    if (widget.speech.isListening) {
+      widget.speech.stop();
+    }
+    widget.onResult(_recognizedText);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return AlertDialog(
+      backgroundColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      title: Row(
+        children: [
+          const Icon(
+            Iconsax.microphone_2,
+            color: SpendexColors.primary,
+          ),
+          const SizedBox(width: 12),
+          Text(
+            'Voice Search',
+            style: SpendexTheme.headlineMedium.copyWith(
+              color: isDark
+                  ? SpendexColors.darkTextPrimary
+                  : SpendexColors.lightTextPrimary,
+            ),
+          ),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 16),
+          Icon(
+            Iconsax.microphone_2,
+            size: 48,
+            color: _isListening ? SpendexColors.primary : SpendexColors.expense,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            _isListening ? 'Listening...' : 'Processing...',
+            style: SpendexTheme.titleMedium.copyWith(
+              color: isDark
+                  ? SpendexColors.darkTextPrimary
+                  : SpendexColors.lightTextPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? SpendexColors.darkBackground
+                  : SpendexColors.lightBackground,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              _recognizedText.isEmpty ? 'Say something...' : _recognizedText,
+              style: SpendexTheme.bodyMedium.copyWith(
+                color: isDark
+                    ? SpendexColors.darkTextSecondary
+                    : SpendexColors.lightTextSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            widget.speech.cancel();
+            widget.onResult('');
+          },
+          child: Text(
+            'Cancel',
+            style: SpendexTheme.titleMedium.copyWith(
+              color: isDark
+                  ? SpendexColors.darkTextSecondary
+                  : SpendexColors.lightTextSecondary,
+            ),
+          ),
+        ),
+        FilledButton(
+          onPressed: _stopListening,
+          child: const Text('Done'),
+        ),
+      ],
+    );
   }
 }

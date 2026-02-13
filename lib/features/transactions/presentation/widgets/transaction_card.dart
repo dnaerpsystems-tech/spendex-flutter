@@ -228,7 +228,7 @@ class TransactionCard extends StatelessWidget {
       'utilities': Iconsax.flash,
       'rent': Iconsax.home,
       'home': Iconsax.home_2,
-      'clothing': Iconsax.shopping,
+      'clothing': Iconsax.shopping_cart,
       'personal': Iconsax.user,
       'gifts': Iconsax.gift,
       'investment': Iconsax.chart,

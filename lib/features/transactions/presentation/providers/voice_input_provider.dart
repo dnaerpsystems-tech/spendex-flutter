@@ -1,5 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../data/models/transaction_model.dart';
 import '../../data/services/voice_parser_service.dart';
@@ -96,15 +101,85 @@ class VoiceInputData extends Equatable {
 
 /// Voice Input Notifier
 class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
-  VoiceInputNotifier() : super(const VoiceInputData.initial());
+  VoiceInputNotifier() : super(const VoiceInputData.initial()) {
+    _initializeSpeech();
+  }
 
   final _parserService = VoiceParserService.instance;
+  final SpeechToText _speech = SpeechToText();
+  bool _isInitialized = false;
+  double _currentSoundLevel = 0;
 
-  // TODO: Replace with actual speech_to_text implementation
-  // For now, we simulate voice recognition with mock data
+  /// Initialize speech recognition
+  Future<void> _initializeSpeech() async {
+    try {
+      _isInitialized = await _speech.initialize(
+        onError: _onSpeechError,
+        onStatus: _onSpeechStatus,
+        debugLogging: false,
+      );
+
+      if (!_isInitialized) {
+        state = state.copyWith(
+          state: VoiceInputState.error,
+          errorMessage: 'Speech recognition is not available on this device.',
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        state: VoiceInputState.error,
+        errorMessage: 'Failed to initialize speech recognition: ${e.toString()}',
+      );
+    }
+  }
+
+  /// Check if speech recognition permission is granted
+  Future<bool> _checkPermission() async {
+    if (!_isInitialized) {
+      state = state.copyWith(
+        state: VoiceInputState.error,
+        errorMessage: 'Speech recognition is not initialized.',
+      );
+      return false;
+    }
+
+    final available = await _speech.hasPermission;
+
+    if (!available) {
+      state = state.copyWith(
+        state: VoiceInputState.error,
+        errorMessage:
+            'Microphone permission is required. Please grant permission in settings.',
+      );
+    }
+
+    return available;
+  }
 
   /// Start listening for voice input
   Future<void> startListening() async {
+    // Check if already listening
+    if (_speech.isListening) {
+      return;
+    }
+
+    // Check initialization
+    if (!_isInitialized) {
+      state = state.copyWith(
+        state: VoiceInputState.error,
+        errorMessage:
+            'Speech recognition is not initialized. Please restart the app.',
+      );
+      return;
+    }
+
+    // Check permissions
+    final hasPermission = await _checkPermission();
+    if (!hasPermission) {
+      return;
+    }
+
+    // Reset state for new listening session
     state = state.copyWith(
       state: VoiceInputState.listening,
       recognizedText: '',
@@ -112,41 +187,134 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
       clearError: true,
     );
 
-    // TODO: Implement actual speech recognition
-    // This is a mock implementation that simulates listening
-    // In production, use the speech_to_text package:
-    //
-    // final speech = SpeechToText();
-    // bool available = await speech.initialize();
-    // if (available) {
-    //   speech.listen(
-    //     onResult: (result) {
-    //       _onSpeechResult(result.recognizedWords);
-    //     },
-    //     onSoundLevelChange: (level) {
-    //       // Update UI with sound level for visual feedback
-    //     },
-    //   );
-    // }
+    try {
+      await _speech.listen(
+        onResult: _onSpeechResult,
+        listenFor: const Duration(seconds: 30),
+        pauseFor: const Duration(seconds: 3),
+        partialResults: true,
+        onSoundLevelChange: _onSoundLevelChange,
+        cancelOnError: true,
+        listenMode: ListenMode.confirmation,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        state: VoiceInputState.error,
+        errorMessage: 'Failed to start listening: ${e.toString()}',
+      );
+    }
   }
 
   /// Stop listening and process the result
   Future<void> stopListening() async {
-    if (state.state != VoiceInputState.listening) return;
+    // Check if actually listening
+    if (!_speech.isListening) {
+      return;
+    }
 
-    state = state.copyWith(state: VoiceInputState.processing);
+    // Stop speech recognition
+    try {
+      await _speech.stop();
+      // The final result will be processed in _onSpeechResult callback
+    } catch (e) {
+      state = state.copyWith(
+        state: VoiceInputState.error,
+        errorMessage: 'Failed to stop listening: ${e.toString()}',
+      );
+    }
+  }
 
-    // TODO: In production, stop actual speech recognition
-    // speech.stop();
+  /// Handle speech recognition results
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    // Only update if still in listening state
+    if (state.state != VoiceInputState.listening) {
+      return;
+    }
 
-    // If we have recognized text, parse it
-    if (state.recognizedText.isNotEmpty) {
-      _parseRecognizedText(state.recognizedText);
-    } else {
+    final recognizedText = result.recognizedWords;
+
+    // Update state with recognized text
+    state = state.copyWith(recognizedText: recognizedText);
+
+    // If this is a final result, process it
+    if (result.finalResult) {
+      _processFinalResult(recognizedText);
+    }
+  }
+
+  /// Process final speech result
+  void _processFinalResult(String text) {
+    if (text.isEmpty) {
       state = state.copyWith(
         state: VoiceInputState.error,
         errorMessage: 'No speech detected. Please try again.',
       );
+      return;
+    }
+
+    // Haptic feedback
+    HapticFeedback.lightImpact();
+
+    // Move to processing state
+    state = state.copyWith(state: VoiceInputState.processing);
+
+    // Parse the recognized text
+    _parseRecognizedText(text);
+  }
+
+  /// Handle sound level changes for visual feedback
+  void _onSoundLevelChange(double level) {
+    _currentSoundLevel = level;
+  }
+
+  /// Get current sound level (for UI if needed)
+  double get currentSoundLevel => _currentSoundLevel;
+
+  /// Handle speech recognition errors
+  void _onSpeechError(SpeechRecognitionError error) {
+    String errorMessage;
+
+    switch (error.errorMsg) {
+      case 'error_no_match':
+        errorMessage = 'Could not understand. Please speak clearly and try again.';
+        break;
+      case 'error_network':
+        errorMessage = 'Network error. Check your internet connection.';
+        break;
+      case 'error_busy':
+        errorMessage = 'Speech recognition is busy. Please try again.';
+        break;
+      case 'error_audio':
+        errorMessage = 'Microphone error. Check your device settings.';
+        break;
+      case 'error_permission':
+        errorMessage =
+            'Microphone permission denied. Please enable it in settings.';
+        break;
+      case 'error_speech_timeout':
+        errorMessage = 'No speech detected. Please try again.';
+        break;
+      default:
+        errorMessage = 'Speech recognition error: ${error.errorMsg}';
+    }
+
+    state = state.copyWith(
+      state: VoiceInputState.error,
+      errorMessage: errorMessage,
+    );
+  }
+
+  /// Handle speech recognition status changes
+  void _onSpeechStatus(String status) {
+    debugPrint('Speech status: $status');
+
+    if (status == 'done' && state.state == VoiceInputState.listening) {
+      if (state.recognizedText.isEmpty) {
+        state = state.copyWith(
+          state: VoiceInputState.error,
+          errorMessage: 'No speech detected. Please try again.',
+        );
+      }
     }
   }
 
@@ -229,7 +397,43 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
 
   /// Reset to initial state
   void reset() {
+    // Cancel any active listening
+    if (_speech.isListening) {
+      _speech.cancel();
+    }
+
     state = const VoiceInputData.initial();
+    _currentSoundLevel = 0;
+  }
+
+  /// Check if speech recognition is available
+  bool get isSpeechAvailable => _isInitialized;
+
+  /// Check if currently listening
+  bool get isListening => _speech.isListening;
+
+  /// Cancel listening without processing
+  Future<void> cancelListening() async {
+    if (_speech.isListening) {
+      try {
+        await _speech.cancel();
+        state = state.copyWith(
+          state: VoiceInputState.idle,
+          recognizedText: '',
+          clearParsedData: true,
+          clearError: true,
+        );
+      } catch (e) {
+        debugPrint('Error canceling speech: $e');
+      }
+    }
+  }
+
+  /// Retry initialization (can be called from UI)
+  Future<void> retryInitialization() async {
+    state = const VoiceInputData.initial();
+    _isInitialized = false;
+    await _initializeSpeech();
   }
 
   /// Get example commands

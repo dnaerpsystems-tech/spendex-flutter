@@ -117,6 +117,26 @@ class SpendexTheme {
         fontWeight: FontWeight.w500,
       );
 
+  static TextStyle get headlineSmall => GoogleFonts.poppins(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+      );
+
+  static TextStyle get bodySmall => GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+      );
+
+  static TextStyle get labelSmall => GoogleFonts.poppins(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+      );
+
+  static TextStyle get labelLarge => GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      );
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,

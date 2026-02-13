@@ -13,13 +13,43 @@ import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../features/auth/presentation/screens/register_screen.dart';
 import '../features/auth/presentation/screens/reset_password_screen.dart';
+import '../features/bank_import/data/models/parsed_transaction_model.dart';
+import '../features/bank_import/presentation/screens/account_aggregator_screen.dart';
+import '../features/bank_import/presentation/screens/bank_import_home_screen.dart';
+import '../features/bank_import/presentation/screens/import_history_screen.dart';
+import '../features/bank_import/presentation/screens/import_preview_screen.dart';
+import '../features/bank_import/presentation/screens/pdf_import_screen.dart';
+import '../features/bank_import/presentation/screens/sms_parser_screen.dart';
 import '../features/budgets/presentation/screens/add_budget_screen.dart';
 import '../features/budgets/presentation/screens/budget_details_screen.dart';
 import '../features/budgets/presentation/screens/budgets_screen.dart';
-import '../features/categories/presentation/screens/add_category_screen.dart';
-import '../features/categories/presentation/screens/categories_screen.dart';
-import '../features/categories/presentation/screens/category_details_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
+import '../features/duplicate_detection/presentation/screens/duplicate_resolution_screen.dart';
+import '../features/email_parser/presentation/screens/email_details_screen.dart';
+import '../features/email_parser/presentation/screens/email_filters_screen.dart';
+import '../features/email_parser/presentation/screens/email_parser_screen.dart';
+import '../features/email_parser/presentation/screens/email_setup_screen.dart';
+import '../features/goals/presentation/screens/add_goal_screen.dart';
+import '../features/goals/presentation/screens/goal_details_screen.dart';
+import '../features/goals/presentation/screens/goals_screen.dart';
+import '../features/insights/presentation/screens/insight_detail_screen.dart';
+import '../features/insights/presentation/screens/insights_screen.dart';
+import '../features/investments/presentation/screens/add_investment_screen.dart';
+import '../features/investments/presentation/screens/holdings_screen.dart';
+import '../features/investments/presentation/screens/investment_details_screen.dart';
+import '../features/investments/presentation/screens/portfolio_dashboard_screen.dart';
+import '../features/investments/presentation/screens/tax_savings_screen.dart';
+import '../features/loans/presentation/screens/add_loan_screen.dart';
+import '../features/loans/presentation/screens/loan_details_screen.dart';
+import '../features/loans/presentation/screens/loans_screen.dart';
+import '../features/settings/presentation/screens/change_password_screen.dart';
+import '../features/settings/presentation/screens/device_management_screen.dart';
+import '../features/settings/presentation/screens/edit_profile_screen.dart';
+import '../features/settings/presentation/screens/pin_entry_screen.dart';
+import '../features/settings/presentation/screens/preferences_screen.dart';
+import '../features/settings/presentation/screens/profile_screen.dart';
+import '../features/settings/presentation/screens/security_settings_screen.dart';
+import '../features/settings/presentation/screens/set_pin_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/transactions/presentation/screens/add_transaction_screen.dart';
 import '../features/transactions/presentation/screens/transaction_details_screen.dart';
@@ -192,6 +222,21 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String profile = '/profile';
   static const String notifications = '/notifications';
+
+  // Bank Import routes
+  static const String bankImport = '/bank-import';
+  static const String pdfImport = '/bank-import/pdf-import';
+  static const String smsParser = '/bank-import/sms-parser';
+  static const String accountAggregator = '/bank-import/account-aggregator';
+  static const String importPreview = '/bank-import/preview/:importId';
+  static const String importHistory = '/bank-import/history';
+  static const String duplicateResolution = '/bank-import/duplicate-resolution';
+
+  // Email Parser routes
+  static const String emailParser = '/email-parser';
+  static const String emailSetup = '/email-parser/setup';
+  static const String emailFilters = '/email-parser/filters';
+  static const String emailDetails = '/email-parser/details/:emailId';
 }
 
 /// Navigation keys
@@ -218,7 +263,9 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: AppRoutes.splash,
     refreshListenable: authNotifier,
     redirect: (context, state) {
-      debugPrint('Router redirect: ${state.matchedLocation}');
+      if (kDebugMode) {
+        debugPrint('Router redirect: ${state.matchedLocation}');
+      }
       final authState = ref.read(authStateProvider);
       final isAuthenticated = authState.isAuthenticated;
       final isOnAuthRoute = state.matchedLocation == AppRoutes.login ||
@@ -229,11 +276,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isOnSplash = state.matchedLocation == AppRoutes.splash;
       final isOnOnboarding = state.matchedLocation == AppRoutes.onboarding;
 
-      debugPrint('Router: isOnSplash=$isOnSplash, isOnOnboarding=$isOnOnboarding, isAuth=$isAuthenticated');
+      if (kDebugMode) {
+        debugPrint('Router: isOnSplash=$isOnSplash, isOnOnboarding=$isOnOnboarding, isAuth=$isAuthenticated');
+      }
 
       // Allow splash and onboarding without redirection
       if (isOnSplash || isOnOnboarding) {
-        debugPrint('Router: Allowing $state.matchedLocation');
         return null;
       }
 
@@ -428,73 +476,85 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Goal Routes
       GoRoute(
         path: AppRoutes.goals,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Savings Goals',
-          icon: Iconsax.flag,
-          description:
-              'Track your progress towards financial goals like vacations, emergency funds, or major purchases.',
-        ),
+        builder: (context, state) => const GoalsScreen(),
+      ),
+      GoRoute(
+        path: '/goals/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return GoalDetailsScreen(goalId: id);
+        },
       ),
       GoRoute(
         path: AppRoutes.addGoal,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Add Goal',
-          icon: Iconsax.flag,
-          description:
-              'Create a new savings goal with target amount and deadline.',
-        ),
+        builder: (context, state) {
+          final goalId = state.uri.queryParameters['id'];
+          return AddGoalScreen(goalId: goalId);
+        },
       ),
 
       // Loan Routes
       GoRoute(
         path: AppRoutes.loans,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Loans & EMIs',
-          icon: Iconsax.receipt_item,
-          description:
-              'Track your loans, view EMI schedules, and monitor outstanding balances.',
-        ),
+        builder: (context, state) => const LoansScreen(),
+      ),
+      GoRoute(
+        path: '/loans/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return LoanDetailsScreen(loanId: id);
+        },
       ),
       GoRoute(
         path: AppRoutes.addLoan,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Add Loan',
-          icon: Iconsax.receipt_add,
-          description:
-              'Add a new loan with EMI calculation and payment reminders.',
-        ),
+        builder: (context, state) {
+          final loanId = state.uri.queryParameters['id'];
+          return AddLoanScreen(loanId: loanId);
+        },
       ),
 
       // Investment Routes
       GoRoute(
         path: AppRoutes.investments,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Investments',
-          icon: Iconsax.chart_2,
-          description:
-              'Track your investment portfolio including mutual funds, stocks, and other assets.',
-        ),
+        builder: (context, state) => const PortfolioDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/investments/holdings',
+        builder: (context, state) => const HoldingsScreen(),
+      ),
+      GoRoute(
+        path: '/investments/tax',
+        builder: (context, state) => const TaxSavingsScreen(),
+      ),
+      GoRoute(
+        path: '/investments/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return InvestmentDetailsScreen(investmentId: id);
+        },
       ),
       GoRoute(
         path: AppRoutes.addInvestment,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Add Investment',
-          icon: Iconsax.chart_21,
-          description:
-              'Add a new investment with purchase details and current valuation.',
-        ),
+        builder: (context, state) {
+          final investmentId = state.uri.queryParameters['id'];
+          return AddInvestmentScreen(investmentId: investmentId);
+        },
+      ),
+
+      // Insights Routes
+      GoRoute(
+        path: AppRoutes.insights,
+        builder: (context, state) => const InsightsScreen(),
+      ),
+      GoRoute(
+        path: '/insights/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return InsightDetailScreen(insightId: id);
+        },
       ),
 
       // Other Routes
-      GoRoute(
-        path: AppRoutes.insights,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'AI Insights',
-          icon: Iconsax.lamp_charge,
-          description:
-              'Get personalized financial insights and recommendations powered by AI.',
-        ),
-      ),
       GoRoute(
         path: AppRoutes.family,
         builder: (context, state) => const _PlaceholderScreen(
@@ -517,14 +577,38 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
       ),
+      // Profile & Security Routes
       GoRoute(
         path: AppRoutes.profile,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Profile',
-          icon: Iconsax.user,
-          description:
-              'View and edit your profile information, preferences, and security settings.',
-        ),
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/profile/edit',
+        builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: '/profile/change-password',
+        builder: (context, state) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: '/profile/preferences',
+        builder: (context, state) => const PreferencesScreen(),
+      ),
+      GoRoute(
+        path: '/security',
+        builder: (context, state) => const SecuritySettingsScreen(),
+      ),
+      GoRoute(
+        path: '/security/set-pin',
+        builder: (context, state) => const SetPinScreen(),
+      ),
+      GoRoute(
+        path: '/security/pin-entry',
+        builder: (context, state) => const PinEntryScreen(),
+      ),
+      GoRoute(
+        path: '/security/devices',
+        builder: (context, state) => const DeviceManagementScreen(),
       ),
       GoRoute(
         path: AppRoutes.notifications,
@@ -534,6 +618,72 @@ final routerProvider = Provider<GoRouter>((ref) {
           description:
               'View all your notifications including budget alerts, bill reminders, and insights.',
         ),
+      ),
+
+      // Bank Import Routes
+      GoRoute(
+        path: AppRoutes.bankImport,
+        builder: (context, state) => const BankImportHomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.pdfImport,
+        builder: (context, state) => const PdfImportScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.smsParser,
+        builder: (context, state) => const SmsParserScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.accountAggregator,
+        builder: (context, state) => const AccountAggregatorScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.importPreview,
+        builder: (context, state) {
+          final importId = state.pathParameters['importId'] ?? '';
+          return ImportPreviewScreen(importId: importId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.importHistory,
+        builder: (context, state) => const ImportHistoryScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.duplicateResolution,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          if (extra == null) {
+            return const Scaffold(
+              body: Center(child: Text('Missing required data')),
+            );
+          }
+          return DuplicateResolutionScreen(
+            importId: extra['importId'] as String,
+            transactions: (extra['transactions'] as List<dynamic>)
+                .cast<ParsedTransactionModel>(),
+          );
+        },
+      ),
+
+      // Email Parser Routes
+      GoRoute(
+        path: AppRoutes.emailParser,
+        builder: (context, state) => const EmailParserScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.emailSetup,
+        builder: (context, state) => const EmailSetupScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.emailFilters,
+        builder: (context, state) => const EmailFiltersScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.emailDetails,
+        builder: (context, state) {
+          final emailId = state.pathParameters['emailId'] ?? '';
+          return EmailDetailsScreen(emailId: emailId);
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

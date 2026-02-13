@@ -27,8 +27,17 @@ abstract class AuthRepository {
   /// Reset password
   Future<Either<Failure, bool>> resetPassword(String token, String password);
 
+  /// Change password
+  Future<Either<Failure, bool>> changePassword(
+    String currentPassword,
+    String newPassword,
+  );
+
   /// Get current user
   Future<Either<Failure, UserModel>> getCurrentUser();
+
+  /// Update user preferences
+  Future<Either<Failure, UserModel>> updatePreferences(UserPreferences preferences);
 
   /// Refresh token
   Future<Either<Failure, AuthResponse>> refreshToken();
