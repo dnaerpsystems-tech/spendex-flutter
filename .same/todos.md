@@ -1,81 +1,117 @@
-# Spendex Flutter App - Development Tracker
+# Spendex Tier-One Action Plan - Progress Tracker
 
-## Current Status: Phase 7 - Transactions Feature COMPLETED
+## ✅ COMPLETED
 
-### Transactions Feature - Build Order ✅ ALL COMPLETED
+### Phase 0: Foundation & Critical Infrastructure
+- [x] Add Android platform ()
+- [x] Add iOS platform ()
+- [x] Fixed insights widget type errors (SpendexColors, InsightActionType)
+- [x] Removed placeholder test file
+- [x] Setup GitHub SSH on server
 
-#### Data Layer ✅ COMPLETED
-- [x] 1. `transactions_repository.dart` (Domain - Interface)
-- [x] 2. `transactions_remote_datasource.dart` (Data - API calls)
-- [x] 3. `transactions_repository_impl.dart` (Data - Implementation)
-
-#### Presentation Layer ✅ COMPLETED
-- [x] 4. `transactions_provider.dart` (State management - 495 lines)
-- [x] 5. Transaction Widgets:
-   - [x] `transaction_card.dart`
-   - [x] `transaction_type_selector.dart`
-   - [x] `transaction_filter_sheet.dart`
-   - [x] `transaction_summary_card.dart`
-   - [x] `date_group_header.dart`
-- [x] 6. `transactions_screen.dart` (Full implementation - 388 lines)
-- [x] 7. `add_transaction_screen.dart` (Full implementation with edit mode - 1036 lines)
-- [x] 8. `edit_transaction_screen.dart` (Handled via add_transaction_screen with transactionId param)
-- [x] 9. `transaction_details_screen.dart` (Full implementation - 1239 lines)
-
-### Completed Features
-
-#### 1. Core Infrastructure (Phase 2) - DONE
-- [x] Dependency Injection (GetIt)
-- [x] Network Layer (ApiClient, Interceptor)
-- [x] Constants & Enums
-- [x] Error Handling
-- [x] Storage Services
-- [x] Theme System
-- [x] Router Configuration
-
-#### 2. Auth Feature (Phase 4) - DONE
-- [x] Domain, Data, Presentation layers complete
-- [x] Screens: Login, Register, OTP, Forgot/Reset Password
-
-#### 3. Dashboard Feature (Phase 5) - DONE
-- [x] Dashboard screen
-- [x] Shared widgets (Splash, Onboarding, MainScaffold)
-
-#### 4. Accounts Feature (Phase 6) - DONE
-- [x] All layers complete with screens and widgets
-
-#### 5. Budgets Feature - DONE
-- [x] All layers complete with screens and widgets
-
-#### 6. Categories Feature - DONE
-- [x] All layers complete with screens and widgets
-
-#### 7. Transactions Feature - DONE ✅
-- [x] All layers complete with screens and widgets
+### Phase 2: Analytics & Reports Feature
+- [x] Data models: AnalyticsSummary, CategoryBreakdown, DailyStats, MonthlyStats, NetWorth
+- [x] Remote datasource with API integration (analytics_remote_datasource.dart)
+- [x] Repository implementation (analytics_repository_impl.dart)
+- [x] Domain repository interface (analytics_repository.dart)
+- [x] State management with Riverpod provider (analytics_provider.dart)
+- [x] Analytics screen with 5 tabs: Overview, Income, Expense, Trends, Net Worth
+- [x] Summary cards (income, expense, savings, savings rate)
+- [x] Bar charts for income vs expense (fl_chart)
+- [x] Category breakdown visualization
+- [x] Trend line charts
+- [x] Net worth history tracking
+- [x] Date range picker with presets
+- [x] Export functionality
+- [x] Registered in DI (injection.dart)
+- [x] Connected to routes (routes.dart)
+- [x] API endpoints added (api_endpoints.dart)
 
 ---
 
-## Files Summary
+## 🔄 IN PROGRESS
 
-### Data Layer (3 files)
-1. `lib/features/transactions/data/datasources/transactions_remote_datasource.dart`
-2. `lib/features/transactions/data/repositories/transactions_repository_impl.dart`
-3. `lib/features/transactions/presentation/providers/transactions_provider.dart`
-
-### Widgets (5 files)
-4. `lib/features/transactions/presentation/widgets/transaction_card.dart`
-5. `lib/features/transactions/presentation/widgets/transaction_type_selector.dart`
-6. `lib/features/transactions/presentation/widgets/transaction_filter_sheet.dart`
-7. `lib/features/transactions/presentation/widgets/transaction_summary_card.dart`
-8. `lib/features/transactions/presentation/widgets/date_group_header.dart`
-
-### Screens (3 files)
-9. `lib/features/transactions/presentation/screens/transactions_screen.dart` - List view with filters
-10. `lib/features/transactions/presentation/screens/add_transaction_screen.dart` - Create/Edit form
-11. `lib/features/transactions/presentation/screens/transaction_details_screen.dart` - View details
-
-### Total: 11 files created/updated for Transactions Feature
+### Phase 0: Remaining Tasks
+- [ ] Create environment config files (.env.development, .env.staging, .env.production)
+- [ ] Update injection.dart to use EnvironmentConfig.apiBaseUrl
+- [ ] Fix cookie name (fintrace_refresh -> spendex_refresh)
+- [ ] Replace debugPrint with AppLogger
+- [ ] Verify Android/iOS builds complete successfully
 
 ---
 
-## Last Updated: February 11, 2026
+## ⬜ TODO
+
+### Phase 1: Security Hardening (Week 2)
+- [ ] SSL Certificate Pinning
+- [ ] PIN Service implementation
+- [ ] Auto-Lock Service
+- [ ] Auto-Lock Wrapper widget
+- [ ] Screenshot prevention
+- [ ] Root/Jailbreak detection
+
+### Phase 2: Analytics - Remaining Widgets
+- [ ] Extract reusable chart widgets to widgets/ folder
+- [ ] Add pie/donut chart for category breakdown
+- [ ] Add cash flow chart
+
+### Phase 3: Testing Infrastructure (Weeks 4-5)
+- [ ] Setup test structure
+- [ ] Create test helpers
+- [ ] Unit tests for core utilities
+- [ ] Widget tests for key screens
+- [ ] Integration tests
+- [ ] Achieve 80% coverage
+
+### Phase 4: CI/CD Pipeline (Week 5)
+- [ ] Create GitHub Actions CI workflow
+- [ ] Setup pre-commit hooks
+- [ ] Configure Codecov
+
+### Phase 5: Family / Multi-User Feature (Week 6)
+- [ ] Data models
+- [ ] Datasource & Repository
+- [ ] Provider
+- [ ] Screens (family, invite, join, settings)
+- [ ] Widgets
+
+### Phase 6: Notifications System (Week 7)
+- [ ] Data models
+- [ ] Datasource & Repository
+- [ ] Provider
+- [ ] FCM Integration
+- [ ] Notification screen
+
+### Phase 7: Subscription & Payments (Week 8)
+- [ ] Data models
+- [ ] Datasource & Repository
+- [ ] Provider
+- [ ] Razorpay integration
+- [ ] Plans & Invoice screens
+
+### Phase 8: Voice & Receipt Backend Integration (Week 9)
+- [ ] Test voice API connection
+- [ ] Test receipt API connection
+- [ ] Handle offline queuing
+
+### Phase 9: Offline-First Architecture (Weeks 10-11)
+- [ ] Hive type adapters
+- [ ] Cache layer
+- [ ] Offline queue
+- [ ] Sync service
+
+### Phase 10: Performance & Polish (Week 11)
+- [ ] Localization (English + Hindi)
+- [ ] Performance profiling
+- [ ] Crashlytics & Analytics
+- [ ] App icons & splash
+
+### Phase 11: Production Deployment (Week 12)
+- [ ] Generate release keystore
+- [ ] Build release APK/AAB
+- [ ] App store submissions
+
+---
+
+**Last Updated:** Feb 13, 2026
+**Current Phase:** Phase 0 (Foundation) - Near Complete
