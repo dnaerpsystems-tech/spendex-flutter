@@ -215,7 +215,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: ${e.toString()}'),
+          content: Text('Error: $e'),
           backgroundColor: SpendexColors.expense,
           behavior: SnackBarBehavior.floating,
         ),

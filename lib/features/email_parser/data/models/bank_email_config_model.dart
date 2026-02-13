@@ -2,12 +2,6 @@ import 'package:equatable/equatable.dart';
 
 /// Bank email configuration for parsing transaction emails
 class BankEmailConfigModel extends Equatable {
-  final String bankName;
-  final String bankCode;
-  final List<String> emailDomains;
-  final List<String> senderPatterns;
-  final List<String> subjectPatterns;
-  final EmailParsingRules parsingRules;
 
   const BankEmailConfigModel({
     required this.bankName,
@@ -17,6 +11,12 @@ class BankEmailConfigModel extends Equatable {
     required this.subjectPatterns,
     required this.parsingRules,
   });
+  final String bankName;
+  final String bankCode;
+  final List<String> emailDomains;
+  final List<String> senderPatterns;
+  final List<String> subjectPatterns;
+  final EmailParsingRules parsingRules;
 
   @override
   List<Object?> get props => [
@@ -31,13 +31,6 @@ class BankEmailConfigModel extends Equatable {
 
 /// Email parsing rules for extracting transaction details
 class EmailParsingRules extends Equatable {
-  final List<RegExp> amountPatterns;
-  final List<RegExp> datePatterns;
-  final List<RegExp> merchantPatterns;
-  final List<RegExp> accountPatterns;
-  final List<String> debitKeywords;
-  final List<String> creditKeywords;
-  final List<String> transactionKeywords;
 
   const EmailParsingRules({
     required this.amountPatterns,
@@ -48,6 +41,13 @@ class EmailParsingRules extends Equatable {
     required this.creditKeywords,
     required this.transactionKeywords,
   });
+  final List<RegExp> amountPatterns;
+  final List<RegExp> datePatterns;
+  final List<RegExp> merchantPatterns;
+  final List<RegExp> accountPatterns;
+  final List<String> debitKeywords;
+  final List<String> creditKeywords;
+  final List<String> transactionKeywords;
 
   @override
   List<Object?> get props => [
@@ -69,13 +69,13 @@ class BankEmailConfigs {
   static final sbi = BankEmailConfigModel(
     bankName: 'State Bank of India',
     bankCode: 'SBI',
-    emailDomains: ['sbi.co.in', 'onlinesbi.com'],
-    senderPatterns: [
+    emailDomains: const ['sbi.co.in', 'onlinesbi.com'],
+    senderPatterns: const [
       'alerts@sbi.co.in',
       'noreply@sbi.co.in',
       'statement@sbi.co.in',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'transaction alert',
       'account statement',
       'debit alert',
@@ -85,9 +85,9 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
         RegExp(r'amount[:\s]+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -100,11 +100,11 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'a/c\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})', caseSensitive: false),
         RegExp(r'account\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
-      debitKeywords: ['debited', 'debit', 'withdrawn', 'withdrawal', 'paid'],
-      creditKeywords: ['credited', 'credit', 'received', 'deposit'],
-      transactionKeywords: ['transaction', 'txn', 'payment', 'transfer'],
+      debitKeywords: const ['debited', 'debit', 'withdrawn', 'withdrawal', 'paid'],
+      creditKeywords: const ['credited', 'credit', 'received', 'deposit'],
+      transactionKeywords: const ['transaction', 'txn', 'payment', 'transfer'],
     ),
   );
 
@@ -112,13 +112,13 @@ class BankEmailConfigs {
   static final hdfc = BankEmailConfigModel(
     bankName: 'HDFC Bank',
     bankCode: 'HDFC',
-    emailDomains: ['hdfcbank.net', 'hdfcbank.com'],
-    senderPatterns: [
+    emailDomains: const ['hdfcbank.net', 'hdfcbank.com'],
+    senderPatterns: const [
       'alerts@hdfcbank.net',
       'noreply@hdfcbank.net',
       'statement@hdfcbank.net',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'transaction alert',
       'account statement',
       'info: update on your hdfc bank',
@@ -127,9 +127,9 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
         RegExp(r'for\s+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -142,11 +142,11 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'xx(\d{4})', caseSensitive: false),
         RegExp(r'account\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
-      debitKeywords: ['debited', 'debit', 'spent', 'paid'],
-      creditKeywords: ['credited', 'credit', 'received', 'deposit'],
-      transactionKeywords: ['transaction', 'txn', 'payment', 'transfer'],
+      debitKeywords: const ['debited', 'debit', 'spent', 'paid'],
+      creditKeywords: const ['credited', 'credit', 'received', 'deposit'],
+      transactionKeywords: const ['transaction', 'txn', 'payment', 'transfer'],
     ),
   );
 
@@ -154,13 +154,13 @@ class BankEmailConfigs {
   static final icici = BankEmailConfigModel(
     bankName: 'ICICI Bank',
     bankCode: 'ICICI',
-    emailDomains: ['icicibank.com', 'icicibank.net'],
-    senderPatterns: [
+    emailDomains: const ['icicibank.com', 'icicibank.net'],
+    senderPatterns: const [
       'alerts@icicibank.com',
       'noreply@icicibank.com',
       'statement@icicibank.com',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'transaction alert',
       'account statement',
       'icici bank alert',
@@ -169,9 +169,9 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
         RegExp(r'amt[:\s]+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -183,9 +183,9 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'a/c\s+[xX*]*(\d{4})', caseSensitive: false),
       ],
-      debitKeywords: ['debited', 'debit', 'withdrawn', 'spent'],
-      creditKeywords: ['credited', 'credit', 'received'],
-      transactionKeywords: ['transaction', 'txn', 'payment'],
+      debitKeywords: const ['debited', 'debit', 'withdrawn', 'spent'],
+      creditKeywords: const ['credited', 'credit', 'received'],
+      transactionKeywords: const ['transaction', 'txn', 'payment'],
     ),
   );
 
@@ -193,13 +193,13 @@ class BankEmailConfigs {
   static final axis = BankEmailConfigModel(
     bankName: 'Axis Bank',
     bankCode: 'AXIS',
-    emailDomains: ['axisbank.com', 'axisbank.net'],
-    senderPatterns: [
+    emailDomains: const ['axisbank.com', 'axisbank.net'],
+    senderPatterns: const [
       'alerts@axisbank.com',
       'noreply@axisbank.com',
       'statement@axisbank.com',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'transaction alert',
       'account statement',
       'axis bank alert',
@@ -207,7 +207,7 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -218,9 +218,9 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'xx(\d{4})', caseSensitive: false),
       ],
-      debitKeywords: ['debited', 'debit'],
-      creditKeywords: ['credited', 'credit'],
-      transactionKeywords: ['transaction', 'payment'],
+      debitKeywords: const ['debited', 'debit'],
+      creditKeywords: const ['credited', 'credit'],
+      transactionKeywords: const ['transaction', 'payment'],
     ),
   );
 
@@ -228,13 +228,13 @@ class BankEmailConfigs {
   static final kotak = BankEmailConfigModel(
     bankName: 'Kotak Mahindra Bank',
     bankCode: 'KOTAK',
-    emailDomains: ['kotak.com', 'kotakbank.com'],
-    senderPatterns: [
+    emailDomains: const ['kotak.com', 'kotakbank.com'],
+    senderPatterns: const [
       'alerts@kotak.com',
       'noreply@kotak.com',
       'statement@kotak.com',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'transaction alert',
       'account statement',
       'kotak bank alert',
@@ -242,7 +242,7 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -253,9 +253,9 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'xx(\d{4})', caseSensitive: false),
       ],
-      debitKeywords: ['debited', 'debit'],
-      creditKeywords: ['credited', 'credit'],
-      transactionKeywords: ['transaction', 'payment'],
+      debitKeywords: const ['debited', 'debit'],
+      creditKeywords: const ['credited', 'credit'],
+      transactionKeywords: const ['transaction', 'payment'],
     ),
   );
 
@@ -263,12 +263,12 @@ class BankEmailConfigs {
   static final paytm = BankEmailConfigModel(
     bankName: 'Paytm',
     bankCode: 'PAYTM',
-    emailDomains: ['paytm.com'],
-    senderPatterns: [
+    emailDomains: const ['paytm.com'],
+    senderPatterns: const [
       'alerts@paytm.com',
       'noreply@paytm.com',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'payment confirmation',
       'transaction successful',
       'paytm transaction',
@@ -276,7 +276,7 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -287,21 +287,21 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'wallet\s+[xX*]*(\d{4})', caseSensitive: false),
       ],
-      debitKeywords: ['paid', 'sent', 'transferred'],
-      creditKeywords: ['received', 'added'],
-      transactionKeywords: ['transaction', 'payment', 'transfer'],
+      debitKeywords: const ['paid', 'sent', 'transferred'],
+      creditKeywords: const ['received', 'added'],
+      transactionKeywords: const ['transaction', 'payment', 'transfer'],
     ),
   );
 
   static final phonepe = BankEmailConfigModel(
     bankName: 'PhonePe',
     bankCode: 'PHONEPE',
-    emailDomains: ['phonepe.com'],
-    senderPatterns: [
+    emailDomains: const ['phonepe.com'],
+    senderPatterns: const [
       'alerts@phonepe.com',
       'noreply@phonepe.com',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'payment confirmation',
       'transaction successful',
       'phonepe transaction',
@@ -309,7 +309,7 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -320,21 +320,21 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'\d{10}'),
       ],
-      debitKeywords: ['paid', 'sent'],
-      creditKeywords: ['received'],
-      transactionKeywords: ['payment', 'transaction'],
+      debitKeywords: const ['paid', 'sent'],
+      creditKeywords: const ['received'],
+      transactionKeywords: const ['payment', 'transaction'],
     ),
   );
 
   static final gpay = BankEmailConfigModel(
     bankName: 'Google Pay',
     bankCode: 'GPAY',
-    emailDomains: ['google.com', 'googlepay.com'],
-    senderPatterns: [
+    emailDomains: const ['google.com', 'googlepay.com'],
+    senderPatterns: const [
       'googlepay-noreply@google.com',
       'payments-noreply@google.com',
     ],
-    subjectPatterns: [
+    subjectPatterns: const [
       'you sent',
       'you received',
       'payment',
@@ -342,7 +342,7 @@ class BankEmailConfigs {
     parsingRules: EmailParsingRules(
       amountPatterns: [
         RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false),
+            caseSensitive: false,),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -353,9 +353,9 @@ class BankEmailConfigs {
       accountPatterns: [
         RegExp(r'[\w.]+@[\w.]+'),
       ],
-      debitKeywords: ['sent', 'paid'],
-      creditKeywords: ['received'],
-      transactionKeywords: ['payment', 'transaction'],
+      debitKeywords: const ['sent', 'paid'],
+      creditKeywords: const ['received'],
+      transactionKeywords: const ['payment', 'transaction'],
     ),
   );
 

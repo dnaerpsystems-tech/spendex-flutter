@@ -29,7 +29,7 @@ class EmptyEmailState extends StatelessWidget {
                 color: SpendexColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(60),
               ),
-              child: Center(
+              child: const Center(
                 child: Icon(
                   Iconsax.sms,
                   size: 56,
@@ -72,7 +72,7 @@ class EmptyEmailState extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Iconsax.refresh,
                         color: Colors.white,
                       ),

@@ -3,13 +3,6 @@ import 'package:flutter/material.dart';
 import 'email_message_model.dart';
 
 class EmailFilterModel extends Equatable {
-  final Set<String> selectedBanks;
-  final DateTimeRange? dateRange;
-  final bool includeAttachments;
-  final Set<EmailType> emailTypes;
-  final bool onlyUnparsed;
-  final String? searchQuery;
-  final int? maxResults;
 
   const EmailFilterModel({
     this.selectedBanks = const {},
@@ -48,7 +41,7 @@ class EmailFilterModel extends Equatable {
               .map((e) => EmailType.values.firstWhere(
                     (type) => type.name == e,
                     orElse: () => EmailType.other,
-                  ))
+                  ),)
               .toSet()
           : const {
               EmailType.notification,
@@ -62,6 +55,64 @@ class EmailFilterModel extends Equatable {
           : null,
     );
   }
+
+  /// Create default filter with last 30 days
+  factory EmailFilterModel.defaultFilter() {
+    return EmailFilterModel(
+      dateRange: DateTimeRange(
+        start: DateTime.now().subtract(const Duration(days: 30)),
+        end: DateTime.now(),
+      ),
+    );
+  }
+
+  /// Create filter for last 7 days
+  factory EmailFilterModel.lastWeek() {
+    return EmailFilterModel(
+      dateRange: DateTimeRange(
+        start: DateTime.now().subtract(const Duration(days: 7)),
+        end: DateTime.now(),
+      ),
+    );
+  }
+
+  /// Create filter for last month
+  factory EmailFilterModel.lastMonth() {
+    return EmailFilterModel(
+      dateRange: DateTimeRange(
+        start: DateTime.now().subtract(const Duration(days: 30)),
+        end: DateTime.now(),
+      ),
+    );
+  }
+
+  /// Create filter for last 3 months
+  factory EmailFilterModel.lastThreeMonths() {
+    return EmailFilterModel(
+      dateRange: DateTimeRange(
+        start: DateTime.now().subtract(const Duration(days: 90)),
+        end: DateTime.now(),
+      ),
+    );
+  }
+
+  /// Create filter for current year
+  factory EmailFilterModel.currentYear() {
+    final now = DateTime.now();
+    return EmailFilterModel(
+      dateRange: DateTimeRange(
+        start: DateTime(now.year),
+        end: now,
+      ),
+    );
+  }
+  final Set<String> selectedBanks;
+  final DateTimeRange? dateRange;
+  final bool includeAttachments;
+  final Set<EmailType> emailTypes;
+  final bool onlyUnparsed;
+  final String? searchQuery;
+  final int? maxResults;
 
   Map<String, dynamic> toJson() {
     return {
@@ -121,7 +172,7 @@ class EmailFilterModel extends Equatable {
 
   /// Get filter count for UI display
   int get activeFilterCount {
-    int count = 0;
+    var count = 0;
 
     if (selectedBanks.isNotEmpty) count++;
     if (dateRange != null) count++;
@@ -132,62 +183,5 @@ class EmailFilterModel extends Equatable {
     if (maxResults != null) count++;
 
     return count;
-  }
-
-  /// Create default filter with last 30 days
-  factory EmailFilterModel.defaultFilter() {
-    return EmailFilterModel(
-      dateRange: DateTimeRange(
-        start: DateTime.now().subtract(const Duration(days: 30)),
-        end: DateTime.now(),
-      ),
-      emailTypes: const {
-        EmailType.notification,
-        EmailType.statement,
-        EmailType.receipt,
-      },
-      includeAttachments: true,
-    );
-  }
-
-  /// Create filter for last 7 days
-  factory EmailFilterModel.lastWeek() {
-    return EmailFilterModel(
-      dateRange: DateTimeRange(
-        start: DateTime.now().subtract(const Duration(days: 7)),
-        end: DateTime.now(),
-      ),
-    );
-  }
-
-  /// Create filter for last month
-  factory EmailFilterModel.lastMonth() {
-    return EmailFilterModel(
-      dateRange: DateTimeRange(
-        start: DateTime.now().subtract(const Duration(days: 30)),
-        end: DateTime.now(),
-      ),
-    );
-  }
-
-  /// Create filter for last 3 months
-  factory EmailFilterModel.lastThreeMonths() {
-    return EmailFilterModel(
-      dateRange: DateTimeRange(
-        start: DateTime.now().subtract(const Duration(days: 90)),
-        end: DateTime.now(),
-      ),
-    );
-  }
-
-  /// Create filter for current year
-  factory EmailFilterModel.currentYear() {
-    final now = DateTime.now();
-    return EmailFilterModel(
-      dateRange: DateTimeRange(
-        start: DateTime(now.year, 1, 1),
-        end: now,
-      ),
-    );
   }
 }

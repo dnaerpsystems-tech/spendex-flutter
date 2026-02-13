@@ -13,8 +13,7 @@ class DateGroupHeader extends StatelessWidget {
   /// The [date] parameter is required and specifies the date to display.
   /// If [showTotals] is true, [totalIncome] and [totalExpense] will be displayed.
   const DateGroupHeader({
-    super.key,
-    required this.date,
+    required this.date, super.key,
     this.totalIncome,
     this.totalExpense,
     this.showTotals = false,
@@ -151,8 +150,7 @@ class DateGroupHeader extends StatelessWidget {
 class SliverDateGroupHeader extends StatelessWidget {
   /// Creates a sliver date group header.
   const SliverDateGroupHeader({
-    super.key,
-    required this.date,
+    required this.date, super.key,
     this.totalIncome,
     this.totalExpense,
     this.showTotals = false,

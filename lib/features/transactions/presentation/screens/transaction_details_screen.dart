@@ -15,8 +15,7 @@ import '../providers/transactions_provider.dart';
 /// Displays detailed transaction information with edit and delete functionality
 class TransactionDetailsScreen extends ConsumerStatefulWidget {
   const TransactionDetailsScreen({
-    super.key,
-    required this.transactionId,
+    required this.transactionId, super.key,
   });
 
   final String transactionId;
@@ -419,7 +418,7 @@ class _TransactionDetailsScreenState
 
         // Loading overlay for delete operation
         if (isDeleting)
-          Container(
+          ColoredBox(
             color: Colors.black.withValues(alpha: 0.3),
             child: const Center(
               child: CircularProgressIndicator(

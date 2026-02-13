@@ -129,7 +129,6 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
   }) async {
     state = state.copyWith(
       isDetecting: true,
-      error: null,
     );
 
     final result = await _repository.detectDuplicates(
@@ -145,7 +144,6 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
         state = state.copyWith(
           isDetecting: false,
           result: detectionResult,
-          error: null,
         );
       },
     );
@@ -236,7 +234,6 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
 
     state = state.copyWith(
       isResolving: true,
-      error: null,
     );
 
     final result = await _repository.resolveDuplicates(
@@ -256,7 +253,6 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
       (success) {
         state = state.copyWith(
           isResolving: false,
-          error: null,
         );
         return success;
       },

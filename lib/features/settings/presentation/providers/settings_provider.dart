@@ -53,7 +53,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
 
   /// Load all device sessions
   Future<void> loadDeviceSessions() async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _repository.getDeviceSessions();
 
@@ -111,7 +111,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
 
   /// Load security logs
   Future<void> loadSecurityLogs({int page = 1, int limit = 20}) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _repository.getSecurityLogs(page: page, limit: limit);
 
@@ -236,7 +236,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
 
   /// Clear error message
   void clearError() {
-    state = state.copyWith(errorMessage: null);
+    state = state.copyWith();
   }
 }
 

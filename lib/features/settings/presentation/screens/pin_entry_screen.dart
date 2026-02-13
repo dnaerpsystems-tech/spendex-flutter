@@ -9,7 +9,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:local_auth/local_auth.dart';
 
 import '../../../../app/theme.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/storage/secure_storage.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -41,6 +40,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   final _secureStorage = getIt<SecureStorageService>();
   final _localAuth = LocalAuthentication();
 
+  // ignore: unused_field
   String _enteredPin = '';
   String? _errorMessage;
   int _failedAttempts = 0;
@@ -277,7 +277,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
       ),
     );
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       await ref.read(authStateProvider.notifier).logout();
       if (mounted) {
         context.go('/login');
@@ -421,8 +421,6 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   Widget _buildPinInput() {
     return PinInput(
       key: _pinInputKey,
-      length: 4,
-      obscureText: true,
       autoFocus: !_isLocked,
       onCompleted: (pin) {
         setState(() {
@@ -444,7 +442,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
+        const Icon(
           Iconsax.warning_2,
           color: SpendexColors.expense,
           size: 16,
@@ -494,7 +492,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (_isBiometricLoading)
-              SizedBox(
+              const SizedBox(
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(
@@ -503,7 +501,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
                 ),
               )
             else
-              Icon(
+              const Icon(
                 Iconsax.finger_scan,
                 color: SpendexColors.primary,
                 size: 24,
@@ -548,7 +546,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
               color: SpendexColors.expense.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
+            child: const Icon(
               Iconsax.warning_2,
               color: SpendexColors.expense,
               size: 60,

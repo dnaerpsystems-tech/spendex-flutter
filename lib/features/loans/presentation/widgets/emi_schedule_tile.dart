@@ -66,7 +66,7 @@ class _EmiScheduleTileState extends State<EmiScheduleTile> {
 
     return GestureDetector(
       onTap: widget.onTap,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: _getBackgroundColor(isDark),
           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../app/theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../shared/widgets/error_state_widget.dart';
 import '../../../../shared/widgets/loading_state_widget.dart';
@@ -69,7 +69,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
       onConfirm: _performImport,
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       // Dialog already called _performImport
       // Just wait for it to complete
     }
@@ -103,10 +103,10 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
       if (!mounted) return;
 
       // If user resolved duplicates successfully
-      if (result == true) {
+      if (result ?? false) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Transactions imported successfully'),
+          const SnackBar(
+            content: Text('Transactions imported successfully'),
             backgroundColor: SpendexColors.income,
             behavior: SnackBarBehavior.floating,
           ),
@@ -128,8 +128,8 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Transactions imported successfully'),
+        const SnackBar(
+          content: Text('Transactions imported successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -162,7 +162,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
         minChildSize: 0.5,
         maxChildSize: 0.95,
         builder: (context, scrollController) {
-          return Container(
+          return DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.dark
                   ? SpendexColors.darkCard
@@ -468,7 +468,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Iconsax.tick_circle,
                           color: Colors.white,
                         ),

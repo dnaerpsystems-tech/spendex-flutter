@@ -35,7 +35,7 @@ class ImportProgressIndicator extends StatelessWidget {
         children: [
           // Animated icon
           TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.0, end: progress),
+            tween: Tween(begin: 0, end: progress),
             duration: const Duration(milliseconds: 300),
             builder: (context, value, child) {
               return Stack(
@@ -50,7 +50,7 @@ class ImportProgressIndicator extends StatelessWidget {
                       strokeWidth: 6,
                       backgroundColor:
                           SpendexColors.primary.withValues(alpha: 0.1),
-                      valueColor: AlwaysStoppedAnimation<Color>(
+                      valueColor: const AlwaysStoppedAnimation<Color>(
                         SpendexColors.primary,
                       ),
                     ),
@@ -63,7 +63,7 @@ class ImportProgressIndicator extends StatelessWidget {
                       color: SpendexColors.primary.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
                         Iconsax.document_upload,
                         size: 32,
@@ -107,7 +107,7 @@ class ImportProgressIndicator extends StatelessWidget {
               value: progress,
               minHeight: 8,
               backgroundColor: SpendexColors.primary.withValues(alpha: 0.1),
-              valueColor: AlwaysStoppedAnimation<Color>(
+              valueColor: const AlwaysStoppedAnimation<Color>(
                 SpendexColors.primary,
               ),
             ),
@@ -136,7 +136,7 @@ class SimpleLoadingIndicator extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircularProgressIndicator(
+          const CircularProgressIndicator(
             color: SpendexColors.primary,
           ),
           const SizedBox(height: 16),

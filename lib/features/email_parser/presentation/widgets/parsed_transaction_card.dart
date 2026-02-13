@@ -109,7 +109,6 @@ class ParsedTransactionCard extends StatelessWidget {
               Text(
                 CurrencyFormatter.formatPaise(
                   transaction.amount.toInt(),
-                  decimalDigits: 2,
                 ),
                 style: SpendexTheme.headlineMedium.copyWith(
                   color: typeColor,

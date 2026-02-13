@@ -7,9 +7,9 @@ import '../models/imported_statement_model.dart';
 import '../models/parsed_transaction_model.dart';
 
 class PdfImportRepositoryImpl implements PdfImportRepository {
-  final PdfImportRemoteDataSource _remoteDataSource;
 
   PdfImportRepositoryImpl(this._remoteDataSource);
+  final PdfImportRemoteDataSource _remoteDataSource;
 
   @override
   Future<Either<Failure, ImportedStatementModel>> uploadPdf(File file) async {

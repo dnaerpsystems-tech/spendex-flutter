@@ -13,16 +13,16 @@ abstract class IndiaUtilsRemoteDataSource {
 }
 
 class IndiaUtilsRemoteDataSourceImpl implements IndiaUtilsRemoteDataSource {
-  final ApiClient _apiClient;
 
   IndiaUtilsRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, IfscDetailsModel>> lookupIfsc(String ifscCode) async {
     return _apiClient.get<IfscDetailsModel>(
       '/utils/ifsc/$ifscCode',
       fromJson: (json) => IfscDetailsModel.fromJson(
-        json as Map<String, dynamic>,
+        json! as Map<String, dynamic>,
       ),
     );
   }

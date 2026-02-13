@@ -81,7 +81,7 @@ class SipTrackerCard extends StatelessWidget {
                         SpendexTheme.radiusSm,
                       ),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Iconsax.calendar,
                       color: Colors.white,
                       size: 24,
@@ -207,7 +207,7 @@ class SipTrackerCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.info_circle,
                     size: 16,
                     color: Colors.white,

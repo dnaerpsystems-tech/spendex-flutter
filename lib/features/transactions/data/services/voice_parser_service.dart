@@ -164,7 +164,7 @@ class VoiceParserService {
     if (amount == null || amount <= 0) return null;
 
     // Extract category
-    final category = extractCategory(normalizedText);
+    final _ = extractCategory(normalizedText);
 
     // Extract description
     final description = extractDescription(normalizedText, type);
@@ -176,7 +176,6 @@ class VoiceParserService {
       type: type,
       amount: amount,
       accountId: defaultAccountId ?? '',
-      categoryId: null, // Would need to map category name to ID
       description: description.isNotEmpty ? description : null,
       payee: payee,
       date: DateTime.now(),
@@ -190,8 +189,8 @@ class VoiceParserService {
     // First try to extract numeric amount
     final match = _amountPattern.firstMatch(normalizedText);
     if (match != null) {
-      String amountStr = match.group(1)?.replaceAll(',', '') ?? '';
-      double? amount = double.tryParse(amountStr);
+      final amountStr = match.group(1)?.replaceAll(',', '') ?? '';
+      var amount = double.tryParse(amountStr);
 
       if (amount != null) {
         // Check for multipliers
@@ -214,7 +213,7 @@ class VoiceParserService {
     // Try to find word numbers
     for (final entry in _wordNumbers.entries) {
       if (normalizedText.contains(entry.key)) {
-        int multiplier = 1;
+        var multiplier = 1;
         if (normalizedText.contains('hundred')) {
           multiplier = 100;
         } else if (normalizedText.contains('thousand')) {
@@ -271,7 +270,7 @@ class VoiceParserService {
 
   /// Extract description from text
   String extractDescription(String text, TransactionType type) {
-    String normalizedText = text.toLowerCase();
+    var normalizedText = text.toLowerCase();
 
     // Remove common filler words and keywords
     final wordsToRemove = [

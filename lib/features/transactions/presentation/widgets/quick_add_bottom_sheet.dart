@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +8,6 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
 import '../../data/models/transaction_model.dart';
-import '../providers/transactions_provider.dart';
 import 'receipt_scanner_sheet.dart';
 import 'voice_input_sheet.dart';
 
@@ -57,14 +55,14 @@ class _QuickAddFabState extends ConsumerState<QuickAddFab>
       reverseCurve: Curves.easeInBack,
     );
 
-    _rotateAnimation = Tween<double>(begin: 0.0, end: 0.125).animate(
+    _rotateAnimation = Tween<double>(begin: 0, end: 0.125).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeOut,
       ),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeOut,
@@ -448,7 +446,7 @@ class _QuickAddBottomSheetState extends ConsumerState<QuickAddBottomSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),

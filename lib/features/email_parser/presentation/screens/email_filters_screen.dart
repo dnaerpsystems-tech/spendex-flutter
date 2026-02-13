@@ -78,7 +78,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: SpendexColors.primary,
             ),
           ),
@@ -252,7 +252,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Iconsax.calendar,
                           color: SpendexColors.primary,
                           size: 20,
@@ -327,7 +327,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                     value: isSelected,
                     onChanged: (selected) {
                       setState(() {
-                        if (selected == true) {
+                        if (selected ?? false) {
                           _emailTypes.add(type);
                         } else {
                           _emailTypes.remove(type);
@@ -351,7 +351,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                           : SpendexColors.lightTextSecondary,
                     ),
                   ),
-                  secondary: Icon(
+                  secondary: const Icon(
                     Iconsax.attach_circle,
                     color: SpendexColors.primary,
                   ),
@@ -361,7 +361,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                       _includeAttachments = value;
                     });
                   },
-                  activeColor: SpendexColors.primary,
+                  activeThumbColor: SpendexColors.primary,
                   contentPadding: EdgeInsets.zero,
                 ),
                 const SizedBox(height: 24),
@@ -437,9 +437,9 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Iconsax.tick_circle,
                             color: Colors.white,

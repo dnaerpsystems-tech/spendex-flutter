@@ -65,7 +65,7 @@ class SmsPlatformChannel {
 
       return result
           .cast<Map<dynamic, dynamic>>()
-          .map((item) => Map<String, dynamic>.from(item))
+          .map(Map<String, dynamic>.from)
           .toList();
     } on PlatformException catch (e) {
       throw SmsPlatformException(
@@ -73,7 +73,7 @@ class SmsPlatformChannel {
         code: e.code,
       );
     } on MissingPluginException catch (_) {
-      throw SmsPlatformException(
+      throw const SmsPlatformException(
         'SMS platform channel not implemented. '
         'Please add Android platform to the project.',
       );
@@ -92,7 +92,7 @@ class SmsPlatformChannel {
         code: e.code,
       );
     } on MissingPluginException catch (_) {
-      throw SmsPlatformException(
+      throw const SmsPlatformException(
         'SMS platform channel not implemented. '
         'Please add Android platform to the project.',
       );

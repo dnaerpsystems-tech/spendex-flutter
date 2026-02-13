@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,8 +12,7 @@ import '../providers/voice_input_provider.dart';
 /// Voice Input Sheet for speaking transactions
 class VoiceInputSheet extends ConsumerStatefulWidget {
   const VoiceInputSheet({
-    super.key,
-    required this.onTransactionParsed,
+    required this.onTransactionParsed, super.key,
   });
 
   final ValueChanged<CreateTransactionRequest?> onTransactionParsed;
@@ -53,11 +51,11 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
       duration: const Duration(milliseconds: 2000),
     );
 
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.15).animate(
+    _pulseAnimation = Tween<double>(begin: 1, end: 1.15).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
 
-    _waveAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _waveAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _waveController, curve: Curves.easeOut),
     );
   }
@@ -126,7 +124,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
       }
     }
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -493,7 +491,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
   }
 
   Widget _buildDetailRow(
-      bool isDark, IconData icon, String label, String value) {
+      bool isDark, IconData icon, String label, String value,) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Row(
@@ -645,12 +643,12 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Iconsax.tick_circle, size: 20),
-                  const SizedBox(width: 8),
-                  const Text('Add Transaction'),
+                  Icon(Iconsax.tick_circle, size: 20),
+                  SizedBox(width: 8),
+                  Text('Add Transaction'),
                 ],
               ),
             ),

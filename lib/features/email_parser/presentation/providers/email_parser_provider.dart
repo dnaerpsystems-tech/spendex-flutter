@@ -142,7 +142,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
   Future<void> loadAccounts() async {
     state = state.copyWith(
       isLoadingAccounts: true,
-      error: null,
     );
 
     final result = await _repository.getAccounts();
@@ -161,7 +160,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
           isLoadingAccounts: false,
           accounts: accounts,
           selectedAccountId: selectedId,
-          error: null,
         );
       },
     );
@@ -187,8 +185,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
   }) async {
     state = state.copyWith(
       connectionStatus: EmailConnectionStatus.connecting,
-      error: null,
-      successMessage: null,
     );
 
     final result = await _repository.connectAccount(
@@ -215,7 +211,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
           accounts: updatedAccounts,
           selectedAccountId: account.id,
           successMessage: 'Email account connected successfully',
-          error: null,
         );
         return true;
       },
@@ -226,8 +221,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
   Future<bool> disconnectAccount(String accountId) async {
     state = state.copyWith(
       connectionStatus: EmailConnectionStatus.disconnecting,
-      error: null,
-      successMessage: null,
     );
 
     final result = await _repository.disconnectAccount(accountId: accountId);
@@ -256,7 +249,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
           emails: [], // Clear emails
           selectedEmailIds: {},
           successMessage: 'Email account disconnected successfully',
-          error: null,
         );
         return true;
       },
@@ -281,7 +273,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
 
     state = state.copyWith(
       isFetchingEmails: true,
-      error: null,
     );
 
     final result = await _repository.fetchEmails(
@@ -297,7 +288,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       (emails) => state = state.copyWith(
         isFetchingEmails: false,
         emails: emails,
-        error: null,
       ),
     );
   }
@@ -309,7 +299,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       return;
     }
 
-    state = state.copyWith(isParsing: true, error: null);
+    state = state.copyWith(isParsing: true);
 
     final result = await _repository.bulkParseEmails(emails: state.emails);
 
@@ -329,7 +319,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
           isParsing: false,
           emails: parsedEmails,
           selectedEmailIds: selectedIds,
-          error: null,
         );
       },
     );
@@ -370,7 +359,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       (failure) => state = state.copyWith(error: failure.message),
       (success) => state = state.copyWith(
         filters: filters,
-        error: null,
       ),
     );
   }
@@ -382,13 +370,13 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       return false;
     }
 
-    state = state.copyWith(isImporting: true, error: null);
+    state = state.copyWith(isImporting: true);
 
     // Get parsed transactions from selected emails
     final transactions = state.emails
         .where((e) =>
             state.selectedEmailIds.contains(e.id) &&
-            e.parsedTransaction != null)
+            e.parsedTransaction != null,)
         .map((e) => e.parsedTransaction!)
         .toList();
 
@@ -418,7 +406,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
           emails: [],
           selectedEmailIds: {},
           successMessage: '$importedCount transactions imported successfully',
-          error: null,
         );
         return true;
       },
@@ -429,7 +416,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
   Future<bool> importSingleTransaction({
     required ParsedTransactionModel transaction,
   }) async {
-    state = state.copyWith(isImportingSingle: true, error: null);
+    state = state.copyWith(isImportingSingle: true);
 
     final result = await _repository.importTransaction(
       transaction: transaction,
@@ -447,7 +434,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
         state = state.copyWith(
           isImportingSingle: false,
           successMessage: 'Transaction imported successfully',
-          error: null,
         );
         return success;
       },
@@ -471,7 +457,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       isDownloadingAttachment: true,
       downloadingAttachmentId: attachmentId,
       downloadProgress: 0,
-      error: null,
     );
 
     // Step 3: Download with progress tracking
@@ -490,7 +475,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       (failure) {
         state = state.copyWith(
           isDownloadingAttachment: false,
-          downloadingAttachmentId: null,
           downloadProgress: 0,
           error: failure.message,
         );
@@ -499,9 +483,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       (file) {
         state = state.copyWith(
           isDownloadingAttachment: false,
-          downloadingAttachmentId: null,
           downloadProgress: 1,
-          error: null,
         );
         return file;
       },
@@ -514,7 +496,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       final result = await FilePicker.platform.saveFile(
         dialogTitle: 'Save Attachment',
         fileName: fileName,
-        type: FileType.any,
       );
       return result;
     } catch (e) {
@@ -535,7 +516,6 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
 
         state = state.copyWith(
           accounts: updatedAccounts,
-          error: null,
         );
       },
     );
@@ -550,7 +530,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
 
     result.fold(
       (failure) => state = state.copyWith(error: failure.message),
-      (success) => state = state.copyWith(error: null),
+      (success) => state = state.copyWith(),
     );
   }
 
@@ -559,18 +539,17 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
     state = state.copyWith(
       emails: [],
       selectedEmailIds: {},
-      error: null,
     );
   }
 
   /// Clear error
   void clearError() {
-    state = state.copyWith(error: null);
+    state = state.copyWith();
   }
 
   /// Clear success message
   void clearSuccessMessage() {
-    state = state.copyWith(successMessage: null);
+    state = state.copyWith();
   }
 }
 
@@ -587,12 +566,16 @@ final emailParserProvider =
 final selectedAccountProvider = Provider<EmailAccountModel?>((ref) {
   final state = ref.watch(emailParserProvider);
   if (state.selectedAccountId == null) return null;
-
-  return state.accounts.firstWhere(
-    (a) => a.id == state.selectedAccountId,
-    orElse: () => state.accounts.isNotEmpty ? state.accounts.first : null as EmailAccountModel,
-  );
+  final account = state.accounts.where((a) => a.id == state.selectedAccountId);
+  if (account.isNotEmpty) return account.first;
+  return state.accounts.isNotEmpty ? state.accounts.first : null;
 });
+
+
+
+
+
+
 
 /// Selected email count
 final selectedEmailCountProvider = Provider<int>((ref) {
@@ -624,7 +607,7 @@ final selectedEmailsTotalProvider = Provider<double>((ref) {
   );
 
   return selectedEmails.fold<double>(
-    0.0,
+    0,
     (sum, email) => sum + (email.parsedTransaction?.amount ?? 0.0),
   );
 });

@@ -8,20 +8,19 @@ import '../../data/models/insight_model.dart';
 import 'insight_type_icon.dart';
 
 class InsightCard extends StatelessWidget {
-  final InsightModel insight;
-  final VoidCallback? onTap;
-  final VoidCallback? onDismiss;
-  final VoidCallback? onActionTap;
-  final bool isCompact;
 
   const InsightCard({
-    super.key,
-    required this.insight,
+    required this.insight, super.key,
     this.onTap,
     this.onDismiss,
     this.onActionTap,
     this.isCompact = false,
   });
+  final InsightModel insight;
+  final VoidCallback? onTap;
+  final VoidCallback? onDismiss;
+  final VoidCallback? onActionTap;
+  final bool isCompact;
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +176,6 @@ class InsightCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: color.withOpacity(0.3),
-          width: 1,
         ),
       ),
       child: Text(

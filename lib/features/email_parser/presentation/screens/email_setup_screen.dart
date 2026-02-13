@@ -88,8 +88,8 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Email account connected successfully'),
+        const SnackBar(
+          content: Text('Email account connected successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -187,7 +187,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.info_circle,
                     color: SpendexColors.primary,
                     size: 24,
@@ -217,9 +217,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'example@gmail.com',
-                prefixIcon: const Icon(Iconsax.sms),
+                prefixIcon: Icon(Iconsax.sms),
               ),
               validator: _validateEmail,
               onChanged: _onEmailChanged,
@@ -266,9 +266,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<EmailProvider>(
-              value: _selectedProvider,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.global),
+              initialValue: _selectedProvider,
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Iconsax.global),
               ),
               items: EmailProvider.values.map((provider) {
                 String label;
@@ -342,9 +342,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: _imapServerController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'imap.gmail.com',
-                  prefixIcon: const Icon(Iconsax.cloud_connection),
+                  prefixIcon: Icon(Iconsax.cloud_connection),
                 ),
                 validator: _validateImapServer,
                 enabled: !_isConnecting,
@@ -360,9 +360,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
               TextFormField(
                 controller: _imapPortController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: '993',
-                  prefixIcon: const Icon(Iconsax.security),
+                  prefixIcon: Icon(Iconsax.security),
                 ),
                 validator: _validateImapPort,
                 enabled: !_isConnecting,
@@ -387,7 +387,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Iconsax.shield_tick,
                         color: SpendexColors.income,
                         size: 20,
@@ -402,7 +402,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  _HelpText(
+                  const _HelpText(
                     provider: 'Gmail',
                     steps: [
                       'Go to Google Account settings',
@@ -411,7 +411,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  _HelpText(
+                  const _HelpText(
                     provider: 'Outlook',
                     steps: [
                       'Go to Microsoft Account settings',
@@ -442,7 +442,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                             height: 20,
                             child: CircularProgressIndicator(
@@ -463,7 +463,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Iconsax.tick_circle,
                             color: Colors.white,
                           ),
@@ -534,7 +534,7 @@ class _HelpText extends StatelessWidget {
                   ),
                 ],
               ),
-            )),
+            ),),
       ],
     );
   }

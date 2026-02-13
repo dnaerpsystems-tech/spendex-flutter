@@ -25,7 +25,7 @@ class TaxSavingsScreen extends ConsumerStatefulWidget {
 
 class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
   late String _selectedFinancialYear;
-  double _selectedTaxSlab = 30.0;
+  double _selectedTaxSlab = 30;
   bool _isCalculatorExpanded = false;
   final TextEditingController _incomeController = TextEditingController();
   bool _isOldRegime = true;
@@ -86,8 +86,8 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
   }
 
   TaxSavingsData _calculateTaxSavings(List<InvestmentModel> investments) {
-    final Map<TaxSection, int> sectionTotals = {};
-    final Map<TaxSection, List<InvestmentModel>> sectionInvestments = {};
+    final sectionTotals = <TaxSection, int>{};
+    final sectionInvestments = <TaxSection, List<InvestmentModel>>{};
 
     for (final investment in investments) {
       if (investment.taxSaving && investment.taxSection != null) {
@@ -104,7 +104,7 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
   }
 
   int _getTotalTaxSavings(Map<TaxSection, int> sectionTotals) {
-    int total = 0;
+    var total = 0;
 
     final section80C = sectionTotals[TaxSection.section80C] ?? 0;
     total += section80C > 15000000 ? 15000000 : section80C;
@@ -135,7 +135,7 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    // final colorScheme = Theme.of(context).colorScheme;
     final investmentsState = ref.watch(investmentsStateProvider);
 
     return Scaffold(
@@ -340,7 +340,7 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.calculator,
                     color: SpendexColors.primary,
                     size: 24,
@@ -527,7 +527,6 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
       subtitle: 'Education Loan Interest (Unlimited deduction)',
       icon: Iconsax.teacher,
       amount: amount,
-      limit: null,
       investments: investments,
     );
   }
@@ -541,7 +540,6 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
       subtitle: 'Charitable Donations (50%/100% deduction applicable)',
       icon: Iconsax.heart,
       amount: amount,
-      limit: null,
       investments: investments,
       showHalfDeduction: true,
     );

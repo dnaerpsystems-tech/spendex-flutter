@@ -78,7 +78,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
 
   /// Load import history
   Future<void> loadImportHistory() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _repository.getImportHistory();
 
@@ -90,7 +90,6 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
       (history) => state = state.copyWith(
         isLoading: false,
         importHistory: history,
-        error: null,
       ),
     );
   }
@@ -99,8 +98,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
   Future<ImportedStatementModel?> uploadPdf(File file) async {
     state = state.copyWith(
       isUploading: true,
-      uploadProgress: 0.0,
-      error: null,
+      uploadProgress: 0,
     );
 
     final result = await _repository.uploadPdf(file);
@@ -109,7 +107,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
       (failure) {
         state = state.copyWith(
           isUploading: false,
-          uploadProgress: 0.0,
+          uploadProgress: 0,
           error: failure.message,
         );
         return null;
@@ -117,9 +115,8 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
       (importModel) {
         state = state.copyWith(
           isUploading: false,
-          uploadProgress: 1.0,
+          uploadProgress: 1,
           currentImport: importModel,
-          error: null,
         );
         return importModel;
       },
@@ -133,8 +130,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
   ) async {
     state = state.copyWith(
       isUploading: true,
-      uploadProgress: 0.0,
-      error: null,
+      uploadProgress: 0,
     );
 
     final result = await _repository.uploadCsv(file, columnMapping);
@@ -143,7 +139,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
       (failure) {
         state = state.copyWith(
           isUploading: false,
-          uploadProgress: 0.0,
+          uploadProgress: 0,
           error: failure.message,
         );
         return null;
@@ -151,9 +147,8 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
       (importModel) {
         state = state.copyWith(
           isUploading: false,
-          uploadProgress: 1.0,
+          uploadProgress: 1,
           currentImport: importModel,
-          error: null,
         );
         return importModel;
       },
@@ -162,7 +157,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
 
   /// Get parse results for an import
   Future<bool> getParseResults(String importId) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _repository.getParseResults(importId);
 
@@ -182,7 +177,6 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
           isLoading: false,
           parsedTransactions: transactions,
           selectedTransactions: selectedIds,
-          error: null,
         );
         return true;
       },
@@ -232,7 +226,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
       return false;
     }
 
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     // Get only selected transactions
     final selectedTxns = state.parsedTransactions
@@ -252,10 +246,8 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
       (success) {
         state = state.copyWith(
           isLoading: false,
-          currentImport: null,
           parsedTransactions: [],
           selectedTransactions: {},
-          error: null,
         );
         // Reload history to include this import
         loadImportHistory();
@@ -266,7 +258,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
 
   /// Delete an import
   Future<bool> deleteImport(String importId) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _repository.deleteImport(importId);
 
@@ -279,7 +271,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
         return false;
       },
       (success) {
-        state = state.copyWith(isLoading: false, error: null);
+        state = state.copyWith(isLoading: false);
         // Reload history
         loadImportHistory();
         return true;
@@ -290,16 +282,14 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
   /// Clear current import and parsed transactions
   void clearCurrentImport() {
     state = state.copyWith(
-      currentImport: null,
       parsedTransactions: [],
       selectedTransactions: {},
-      error: null,
     );
   }
 
   /// Clear error
   void clearError() {
-    state = state.copyWith(error: null);
+    state = state.copyWith();
   }
 }
 

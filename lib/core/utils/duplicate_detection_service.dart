@@ -175,7 +175,7 @@ class DuplicateDetectionService {
 
     // Exact match
     if (importedAmountInPaise == existingAmountInPaise) {
-      return 1.0;
+      return 1;
     }
 
     // Calculate percentage difference
@@ -195,7 +195,7 @@ class DuplicateDetectionService {
       return 0.3;
     }
 
-    return 0.0;
+    return 0;
   }
 
   /// Calculate date match score (0.0 to 1.0)
@@ -219,7 +219,7 @@ class DuplicateDetectionService {
 
     // Exact match
     if (importedDate == existingDate) {
-      return 1.0;
+      return 1;
     }
 
     // Calculate day difference
@@ -240,7 +240,7 @@ class DuplicateDetectionService {
       return 0.2;
     }
 
-    return 0.0;
+    return 0;
   }
 
   /// Calculate description similarity score (0.0 to 1.0)
@@ -254,7 +254,7 @@ class DuplicateDetectionService {
     final existingDesc = existing.description?.trim() ?? '';
 
     if (importedDesc.isEmpty || existingDesc.isEmpty) {
-      return 0.0;
+      return 0;
     }
 
     // Use the best similarity algorithm from string_similarity.dart
@@ -274,11 +274,11 @@ class DuplicateDetectionService {
 
     // If both are missing, return neutral score (doesn't affect overall)
     if (importedMerchant == null || existingPayee == null) {
-      return 0.0;
+      return 0;
     }
 
     if (importedMerchant.isEmpty || existingPayee.isEmpty) {
-      return 0.0;
+      return 0;
     }
 
     // Use case-insensitive similarity
@@ -408,7 +408,7 @@ class DuplicateDetectionService {
     double minimumConfidence = 0.70,
   }) {
     DuplicateMatchResult? bestMatch;
-    double highestConfidence = minimumConfidence;
+    var highestConfidence = minimumConfidence;
 
     for (final existing in existingTransactions) {
       final result = compareTransactions(

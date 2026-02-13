@@ -13,16 +13,18 @@ import '../models/email_filter_model.dart';
 import '../models/email_message_model.dart';
 
 class EmailParserRepositoryImpl implements EmailParserRepository {
-  final EmailRemoteDataSource _remoteDataSource;
-  final EmailLocalDataSource _localDataSource;
-  final Uuid _uuid = const Uuid();
-
-  static const String _filtersKey = 'email_parser_filters';
 
   EmailParserRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
   );
+  final EmailRemoteDataSource _remoteDataSource;
+  final EmailLocalDataSource _localDataSource;
+  // ignore: unused_field
+  final Uuid _uuid = const Uuid();
+
+  // ignore: unused_field
+  static const String _filtersKey = 'email_parser_filters';
 
   @override
   Future<Either<Failure, EmailAccountModel>> connectAccount({
@@ -53,7 +55,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
       );
 
       return remoteResult.fold(
-        (failure) => Left(failure),
+        Left.new,
         (account) async {
           // Save password locally for IMAP access
           await _localDataSource.saveAccountPassword(
@@ -91,7 +93,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
       );
 
       return remoteResult.fold(
-        (failure) => Left(failure),
+        Left.new,
         (success) async {
           // Delete password
           await _localDataSource.deleteAccountPassword(accountId: accountId);
@@ -131,7 +133,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
           final cachedResult = await _localDataSource.getCachedAccounts();
           return cachedResult.fold(
             (cacheFailure) => Left(failure), // Return original failure
-            (cachedAccounts) => Right(cachedAccounts),
+            Right.new,
           );
         },
         (accounts) async {
@@ -155,7 +157,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
       final accountsResult = await getAccounts();
 
       return accountsResult.fold(
-        (failure) => Left(failure),
+        Left.new,
         (accounts) async {
           final account = accounts.where((a) => a.id == accountId).firstOrNull;
 
@@ -174,7 +176,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
           );
 
           return passwordResult.fold(
-            (failure) => Left(failure),
+            Left.new,
             (password) async {
               if (password == null) {
                 return const Left(
@@ -193,7 +195,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
               );
 
               return imapResult.fold(
-                (failure) => Left(failure),
+                Left.new,
                 (emails) async {
                   // Cache emails
                   await _localDataSource.cacheEmails(emails);
@@ -335,7 +337,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
       );
 
       return remoteResult.fold(
-        (failure) => Left(failure),
+        Left.new,
         (account) async {
           // Update cache
           final cachedAccountsResult = await _localDataSource.getCachedAccounts();

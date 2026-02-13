@@ -13,13 +13,6 @@ enum FileType {
 }
 
 class ImportedStatementModel extends Equatable {
-  final String id;
-  final String fileName;
-  final FileType fileType;
-  final DateTime uploadDate;
-  final ImportStatus status;
-  final int transactionCount;
-  final Map<String, dynamic>? parsedData;
 
   const ImportedStatementModel({
     required this.id,
@@ -48,6 +41,13 @@ class ImportedStatementModel extends Equatable {
       parsedData: json['parsedData'] as Map<String, dynamic>?,
     );
   }
+  final String id;
+  final String fileName;
+  final FileType fileType;
+  final DateTime uploadDate;
+  final ImportStatus status;
+  final int transactionCount;
+  final Map<String, dynamic>? parsedData;
 
   Map<String, dynamic> toJson() {
     return {

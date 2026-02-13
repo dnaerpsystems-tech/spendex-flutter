@@ -9,13 +9,6 @@ enum ConsentStatus {
 }
 
 class AccountAggregatorConsentModel extends Equatable {
-  final String consentId;
-  final ConsentStatus status;
-  final List<String> accountIds;
-  final DateTime startDate;
-  final DateTime endDate;
-  final DateTime createdAt;
-  final DateTime expiresAt;
 
   const AccountAggregatorConsentModel({
     required this.consentId,
@@ -43,6 +36,13 @@ class AccountAggregatorConsentModel extends Equatable {
       expiresAt: DateTime.parse(json['expiresAt'] as String),
     );
   }
+  final String consentId;
+  final ConsentStatus status;
+  final List<String> accountIds;
+  final DateTime startDate;
+  final DateTime endDate;
+  final DateTime createdAt;
+  final DateTime expiresAt;
 
   Map<String, dynamic> toJson() {
     return {

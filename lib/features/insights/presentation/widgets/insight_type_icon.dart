@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../../app/theme.dart';
 import '../../data/models/insight_model.dart';
 
 /// Widget that displays an appropriate icon for each InsightType with color coding
 class InsightTypeIcon extends StatelessWidget {
-  final InsightType type;
-  final double size;
-  final bool showGradient;
 
   const InsightTypeIcon({
-    super.key,
-    required this.type,
+    required this.type, super.key,
     this.size = 48.0,
     this.showGradient = true,
   });
+  final InsightType type;
+  final double size;
+  final bool showGradient;
 
   /// Get icon data for the insight type
   IconData _getIconForType() {

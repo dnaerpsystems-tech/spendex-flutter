@@ -40,7 +40,7 @@ class ConfirmImportDialog extends StatelessWidget {
                 color: SpendexColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(40),
               ),
-              child: Center(
+              child: const Center(
                 child: Icon(
                   Iconsax.document_upload,
                   size: 40,
@@ -90,7 +90,7 @@ class ConfirmImportDialog extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Iconsax.receipt_item,
                             size: 20,
                             color: SpendexColors.primary,
@@ -126,7 +126,7 @@ class ConfirmImportDialog extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Iconsax.wallet_money,
                             size: 20,
                             color: SpendexColors.primary,
@@ -171,7 +171,7 @@ class ConfirmImportDialog extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.info_circle,
                     color: SpendexColors.warning,
                     size: 20,

@@ -9,17 +9,6 @@ enum EmailProvider {
 }
 
 class EmailAccountModel extends Equatable {
-  final String id;
-  final String email;
-  final EmailProvider provider;
-  final String displayName;
-  final bool isConnected;
-  final DateTime? lastSyncDate;
-  final String imapServer;
-  final int imapPort;
-  final String username;
-  final String encryptedPassword;
-  final bool useSsl;
 
   const EmailAccountModel({
     required this.id,
@@ -27,11 +16,7 @@ class EmailAccountModel extends Equatable {
     required this.provider,
     required this.displayName,
     required this.isConnected,
-    this.lastSyncDate,
-    required this.imapServer,
-    required this.imapPort,
-    required this.username,
-    required this.encryptedPassword,
+    required this.imapServer, required this.imapPort, required this.username, required this.encryptedPassword, this.lastSyncDate,
     this.useSsl = true,
   });
 
@@ -55,6 +40,17 @@ class EmailAccountModel extends Equatable {
       useSsl: json['useSsl'] as bool? ?? true,
     );
   }
+  final String id;
+  final String email;
+  final EmailProvider provider;
+  final String displayName;
+  final bool isConnected;
+  final DateTime? lastSyncDate;
+  final String imapServer;
+  final int imapPort;
+  final String username;
+  final String encryptedPassword;
+  final bool useSsl;
 
   Map<String, dynamic> toJson() {
     return {

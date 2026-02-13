@@ -10,7 +10,28 @@ import '../../data/models/monthly_stats_model.dart';
 import '../../data/models/net_worth_model.dart';
 import '../../domain/repositories/analytics_repository.dart';
 
-enum AnalyticsTab { overview, income, expense, trends, netWorth }
+enum AnalyticsTab {
+  overview,
+  income,
+  expense,
+  trends,
+  netWorth;
+
+  String get label {
+    switch (this) {
+      case AnalyticsTab.overview:
+        return 'Overview';
+      case AnalyticsTab.income:
+        return 'Income';
+      case AnalyticsTab.expense:
+        return 'Expense';
+      case AnalyticsTab.trends:
+        return 'Trends';
+      case AnalyticsTab.netWorth:
+        return 'Net Worth';
+    }
+  }
+}
 
 enum DateRangePreset { thisWeek, thisMonth, last3Months, last6Months, thisYear, lastYear, custom }
 
@@ -35,29 +56,28 @@ extension DateRangePresetExtension on DateRangePreset {
         final startOfWeek = today.subtract(Duration(days: today.weekday - 1));
         return DateTimeRange(start: startOfWeek, end: today);
       case DateRangePreset.thisMonth:
-        return DateTimeRange(start: DateTime(now.year, now.month, 1), end: today);
+        return DateTimeRange(start: DateTime(now.year, now.month), end: today);
       case DateRangePreset.last3Months:
-        return DateTimeRange(start: DateTime(now.year, now.month - 2, 1), end: today);
+        return DateTimeRange(start: DateTime(now.year, now.month - 2), end: today);
       case DateRangePreset.last6Months:
-        return DateTimeRange(start: DateTime(now.year, now.month - 5, 1), end: today);
+        return DateTimeRange(start: DateTime(now.year, now.month - 5), end: today);
       case DateRangePreset.thisYear:
-        return DateTimeRange(start: DateTime(now.year, 1, 1), end: today);
+        return DateTimeRange(start: DateTime(now.year), end: today);
       case DateRangePreset.lastYear:
-        return DateTimeRange(start: DateTime(now.year - 1, 1, 1), end: DateTime(now.year - 1, 12, 31));
+        return DateTimeRange(start: DateTime(now.year - 1), end: DateTime(now.year - 1, 12, 31));
       case DateRangePreset.custom:
-        return DateTimeRange(start: DateTime(now.year, now.month, 1), end: today);
+        return DateTimeRange(start: DateTime(now.year, now.month), end: today);
     }
   }
 }
 
 class AnalyticsState extends Equatable {
   const AnalyticsState({
-    this.isLoading = false,
+    required this.dateRange, this.isLoading = false,
     this.isLoadingMore = false,
     this.error,
     this.currentTab = AnalyticsTab.overview,
     this.dateRangePreset = DateRangePreset.thisMonth,
-    required this.dateRange,
     this.summary,
     this.incomeBreakdown,
     this.expenseBreakdown,
@@ -71,7 +91,7 @@ class AnalyticsState extends Equatable {
   factory AnalyticsState.initial() {
     final now = DateTime.now();
     return AnalyticsState(
-      dateRange: DateTimeRange(start: DateTime(now.year, now.month, 1), end: DateTime(now.year, now.month, now.day)),
+      dateRange: DateTimeRange(start: DateTime(now.year, now.month), end: DateTime(now.year, now.month, now.day)),
     );
   }
 
@@ -195,7 +215,6 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
     state = state.copyWith(
       dateRangePreset: preset,
       dateRange: preset.getDateRange(),
-      summary: null, incomeBreakdown: null, expenseBreakdown: null, dailyStats: null,
     );
     loadAnalytics();
   }
@@ -204,7 +223,6 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
     state = state.copyWith(
       dateRangePreset: DateRangePreset.custom,
       dateRange: range,
-      summary: null, incomeBreakdown: null, expenseBreakdown: null, dailyStats: null,
     );
     loadAnalytics();
   }
@@ -222,7 +240,7 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   void clearError() => state = state.copyWith(clearError: true);
 
   Future<void> refresh() async {
-    state = state.copyWith(summary: null, incomeBreakdown: null, expenseBreakdown: null, dailyStats: null, monthlyStats: null, netWorthHistory: null);
+    state = state.copyWith();
     await loadAnalytics();
   }
 }

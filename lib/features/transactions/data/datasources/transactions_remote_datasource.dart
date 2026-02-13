@@ -62,7 +62,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
             limit: meta?['limit'] as int? ?? 20,
             total: meta?['total'] as int? ?? items.length,
             totalPages: meta?['totalPages'] as int? ?? 1,
-          ));
+          ),);
         }
         return Right(PaginatedResponse<TransactionModel>(
           data: [],
@@ -70,7 +70,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
           limit: 20,
           total: 0,
           totalPages: 1,
-        ));
+        ),);
       },
     );
   }

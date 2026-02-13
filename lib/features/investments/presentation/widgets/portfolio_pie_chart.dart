@@ -82,7 +82,7 @@ class _PortfolioPieChartState extends State<PortfolioPieChart> {
               PieChart(
                 PieChartData(
                   pieTouchData: PieTouchData(
-                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    touchCallback: (event, pieTouchResponse) {
                       setState(() {
                         if (!event.isInterestedForInteractions ||
                             pieTouchResponse == null ||
@@ -134,7 +134,7 @@ class _PortfolioPieChartState extends State<PortfolioPieChart> {
           spacing: SpendexTheme.spacingMd,
           runSpacing: SpendexTheme.spacingMd,
           children: widget.allocationByType.entries.map((entry) {
-            final percentage = (entry.value / totalValue * 100);
+            final percentage = entry.value / totalValue * 100;
             final investmentType = _parseInvestmentType(entry.key);
             return _LegendItem(
               color: _getColorForType(investmentType),
@@ -157,7 +157,7 @@ class _PortfolioPieChartState extends State<PortfolioPieChart> {
     return List.generate(entries.length, (index) {
       final entry = entries[index];
       final isTouched = index == touchedIndex;
-      final percentage = (entry.value / totalValue * 100);
+      final percentage = entry.value / totalValue * 100;
       final investmentType = _parseInvestmentType(entry.key);
 
       return PieChartSectionData(
@@ -165,7 +165,7 @@ class _PortfolioPieChartState extends State<PortfolioPieChart> {
         value: entry.value.toDouble(),
         title: isTouched ? '${percentage.toStringAsFixed(1)}%' : '',
         radius: isTouched ? 70 : 60,
-        titleStyle: TextStyle(
+        titleStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
           color: Colors.white,

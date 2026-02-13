@@ -204,7 +204,7 @@ class ReceiptParserService {
     final lines = text.split('\n');
 
     // Check first 5 lines for merchant name
-    for (int i = 0; i < (lines.length < 5 ? lines.length : 5); i++) {
+    for (var i = 0; i < (lines.length < 5 ? lines.length : 5); i++) {
       final line = lines[i].trim();
 
       // Skip if too short or all numbers
@@ -255,7 +255,7 @@ class ReceiptParserService {
   List<String> extractLineItems(String text) {
     final items = <String>[];
     final lines = text.split('\n');
-    bool foundItems = false;
+    var foundItems = false;
 
     for (final line in lines) {
       final trimmed = line.trim();
@@ -271,7 +271,7 @@ class ReceiptParserService {
       }
 
       // Stop at total
-      if (RegExp(r'total|subtotal|amount', caseSensitive: false)
+      if (RegExp('total|subtotal|amount', caseSensitive: false)
           .hasMatch(trimmed)) {
         break;
       }
@@ -316,7 +316,7 @@ class ReceiptParserService {
   }
 
   bool _isAllCaps(String text) {
-    final letters = text.replaceAll(RegExp(r'[^a-zA-Z]'), '');
+    final letters = text.replaceAll(RegExp('[^a-zA-Z]'), '');
     if (letters.isEmpty) return false;
     return letters == letters.toUpperCase() && letters.length >= 3;
   }

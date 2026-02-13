@@ -134,7 +134,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
         ),
         child: Row(
           children: [
-            Icon(
+            const Icon(
               Iconsax.notification,
               size: 20,
               color: SpendexColors.primary,
@@ -201,19 +201,19 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
         // High Priority Section
         if (highPriority.isNotEmpty) ...[
           _buildSectionHeader('High Priority', SpendexColors.expense),
-          ...highPriority.map((insight) => _buildInsightCard(insight)),
+          ...highPriority.map(_buildInsightCard),
         ],
 
         // Medium Priority Section
         if (mediumPriority.isNotEmpty) ...[
           _buildSectionHeader('Medium Priority', SpendexColors.primary),
-          ...mediumPriority.map((insight) => _buildInsightCard(insight)),
+          ...mediumPriority.map(_buildInsightCard),
         ],
 
         // Low Priority Section
         if (lowPriority.isNotEmpty) ...[
           _buildSectionHeader('Low Priority', Colors.grey),
-          ...lowPriority.map((insight) => _buildInsightCard(insight)),
+          ...lowPriority.map(_buildInsightCard),
         ],
 
         // Bottom spacing for FAB
@@ -291,7 +291,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
 
   void _generateInsights() {
     // Create a default request for last 30 days
-    final request = CreateInsightRequest(
+    const request = CreateInsightRequest(
       type: InsightType.spendingPattern,
       title: 'Auto-generated insights',
       description: 'AI-generated financial insights based on recent transactions',

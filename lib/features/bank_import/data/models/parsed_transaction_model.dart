@@ -12,17 +12,6 @@ enum TransactionSource {
 }
 
 class ParsedTransactionModel extends Equatable {
-  final String id;
-  final DateTime date;
-  final double amount;
-  final TransactionType type;
-  final String description;
-  final String? merchant;
-  final String? category;
-  final String? account;
-  final double confidence;
-  final TransactionSource source;
-  final Map<String, dynamic>? rawData;
 
   const ParsedTransactionModel({
     required this.id,
@@ -30,11 +19,9 @@ class ParsedTransactionModel extends Equatable {
     required this.amount,
     required this.type,
     required this.description,
-    this.merchant,
+    required this.confidence, required this.source, this.merchant,
     this.category,
     this.account,
-    required this.confidence,
-    required this.source,
     this.rawData,
   });
 
@@ -59,6 +46,17 @@ class ParsedTransactionModel extends Equatable {
       rawData: json['rawData'] as Map<String, dynamic>?,
     );
   }
+  final String id;
+  final DateTime date;
+  final double amount;
+  final TransactionType type;
+  final String description;
+  final String? merchant;
+  final String? category;
+  final String? account;
+  final double confidence;
+  final TransactionSource source;
+  final Map<String, dynamic>? rawData;
 
   Map<String, dynamic> toJson() {
     return {

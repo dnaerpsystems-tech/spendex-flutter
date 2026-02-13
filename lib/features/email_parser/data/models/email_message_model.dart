@@ -10,11 +10,6 @@ enum EmailType {
 }
 
 class EmailAttachment extends Equatable {
-  final String id;
-  final String fileName;
-  final String mimeType;
-  final int sizeInBytes;
-  final String? downloadUrl;
 
   const EmailAttachment({
     required this.id,
@@ -33,6 +28,11 @@ class EmailAttachment extends Equatable {
       downloadUrl: json['downloadUrl'] as String?,
     );
   }
+  final String id;
+  final String fileName;
+  final String mimeType;
+  final int sizeInBytes;
+  final String? downloadUrl;
 
   Map<String, dynamic> toJson() {
     return {
@@ -55,20 +55,6 @@ class EmailAttachment extends Equatable {
 }
 
 class EmailMessageModel extends Equatable {
-  final String id;
-  final String from;
-  final String subject;
-  final String body;
-  final DateTime date;
-  final bool hasAttachment;
-  final List<EmailAttachment> attachments;
-  final bool isRead;
-  final bool isParsed;
-  final ParseStatus parseStatus;
-  final ParsedTransactionModel? parsedTransaction;
-  final EmailType emailType;
-  final String? bankName;
-  final String accountId;
 
   const EmailMessageModel({
     required this.id,
@@ -76,7 +62,7 @@ class EmailMessageModel extends Equatable {
     required this.subject,
     required this.body,
     required this.date,
-    this.hasAttachment = false,
+    required this.accountId, this.hasAttachment = false,
     this.attachments = const [],
     this.isRead = false,
     this.isParsed = false,
@@ -84,7 +70,6 @@ class EmailMessageModel extends Equatable {
     this.parsedTransaction,
     this.emailType = EmailType.other,
     this.bankName,
-    required this.accountId,
   });
 
   factory EmailMessageModel.fromJson(Map<String, dynamic> json) {
@@ -119,6 +104,20 @@ class EmailMessageModel extends Equatable {
       accountId: json['accountId'] as String,
     );
   }
+  final String id;
+  final String from;
+  final String subject;
+  final String body;
+  final DateTime date;
+  final bool hasAttachment;
+  final List<EmailAttachment> attachments;
+  final bool isRead;
+  final bool isParsed;
+  final ParseStatus parseStatus;
+  final ParsedTransactionModel? parsedTransaction;
+  final EmailType emailType;
+  final String? bankName;
+  final String accountId;
 
   Map<String, dynamic> toJson() {
     return {

@@ -62,7 +62,7 @@ class AvatarPickerSheet extends StatelessWidget {
     final backgroundColor =
         isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: const BorderRadius.vertical(

@@ -44,7 +44,6 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: _allowedExtensions,
-        allowMultiple: false,
       );
 
       if (result == null || result.files.isEmpty) {
@@ -97,7 +96,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
       });
     } catch (e) {
       setState(() {
-        _fileError = 'Failed to pick file: ${e.toString()}';
+        _fileError = 'Failed to pick file: $e';
       });
     }
   }
@@ -125,8 +124,8 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
       if (importModel != null) {
         // Upload successful, navigate to preview screen
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('File uploaded successfully'),
+          const SnackBar(
+            content: Text('File uploaded successfully'),
             backgroundColor: SpendexColors.income,
             behavior: SnackBarBehavior.floating,
           ),
@@ -141,7 +140,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      _showErrorSnackBar('Upload error: ${e.toString()}');
+      _showErrorSnackBar('Upload error: $e');
     }
   }
 
@@ -324,7 +323,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
                         ),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Iconsax.danger,
                               color: SpendexColors.expense,
                               size: 20,
@@ -360,7 +359,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
                         children: [
                           Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Iconsax.info_circle,
                                 color: SpendexColors.primary,
                                 size: 20,
@@ -408,7 +407,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Iconsax.document_upload,
                               color: Colors.white,
                             ),
@@ -433,7 +432,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
   Widget _buildRequirement(String text) {
     return Row(
       children: [
-        Icon(
+        const Icon(
           Iconsax.tick_circle,
           color: SpendexColors.primary,
           size: 16,

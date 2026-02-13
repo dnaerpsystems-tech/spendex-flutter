@@ -7,8 +7,7 @@ import '../../data/models/monthly_stats_model.dart';
 /// Bar chart showing income vs expense comparison
 class IncomeExpenseBarChart extends StatelessWidget {
   const IncomeExpenseBarChart({
-    super.key,
-    required this.stats,
+    required this.stats, super.key,
     this.height = 200,
   });
 
@@ -48,7 +47,7 @@ class IncomeExpenseBarChart extends StatelessWidget {
                 maxY: maxY,
                 barGroups: _buildBarGroups(),
                 titlesData: _buildTitles(),
-                gridData: FlGridData(show: true, drawVerticalLine: false),
+                gridData: const FlGridData(drawVerticalLine: false),
                 borderData: FlBorderData(show: false),
               ),
             ),
@@ -102,8 +101,8 @@ class IncomeExpenseBarChart extends StatelessWidget {
           ),
         ),
       ),
-      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      topTitles: const AxisTitles(),
+      rightTitles: const AxisTitles(),
     );
   }
 }

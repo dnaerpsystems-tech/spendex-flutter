@@ -18,7 +18,7 @@ class EmailFilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -50,7 +50,7 @@ class EmailFilterChip extends StatelessWidget {
           const SizedBox(width: 6),
           GestureDetector(
             onTap: onRemove,
-            child: Icon(
+            child: const Icon(
               Iconsax.close_circle,
               size: 16,
               color: SpendexColors.primary,

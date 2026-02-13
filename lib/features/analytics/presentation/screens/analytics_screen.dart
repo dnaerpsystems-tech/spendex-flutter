@@ -1,18 +1,15 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
-import '../../../../core/utils/date_formatter.dart';
 import '../../../../shared/widgets/error_state_widget.dart';
 import '../../../../shared/widgets/loading_state_widget.dart';
-import '../providers/analytics_provider.dart';
-import '../../data/models/net_worth_model.dart';
-import '../../data/models/daily_stats_model.dart';
 import '../../data/models/analytics_summary_model.dart';
 import '../../data/models/monthly_stats_model.dart';
+import '../providers/analytics_provider.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
@@ -116,7 +113,7 @@ class _DateRangeChip extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Iconsax.calendar_1, size: 16, color: SpendexColors.primary),
+            const Icon(Iconsax.calendar_1, size: 16, color: SpendexColors.primary),
             const SizedBox(width: 6),
             Text(preset.label, style: SpendexTheme.labelSmall),
             const SizedBox(width: 4),
@@ -329,23 +326,23 @@ class _BarChartCard extends StatelessWidget {
                 maxY: maxY,
                 barGroups: data.asMap().entries.map<BarChartGroupData>((entry) {
                   final i = entry.key;
-                  final s = entry.value as MonthlyStatsModel;
+                  final s = entry.value;
                   return BarChartGroupData(x: i, barRods: [
                     BarChartRodData(toY: s.incomeInRupees, color: SpendexColors.income, width: 8),
                     BarChartRodData(toY: s.expenseInRupees, color: SpendexColors.expense, width: 8),
-                  ]);
+                  ],);
                 }).toList(),
                 titlesData: FlTitlesData(
                   bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, getTitlesWidget: (v, m) {
                     final i = v.toInt();
                     if (i < 0 || i >= data.length) return const SizedBox.shrink();
                     return Text(data[i].shortLabel, style: SpendexTheme.labelSmall);
-                  })),
+                  },),),
                   leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50, getTitlesWidget: (v, m) => Text(CurrencyFormatter.formatCompact(v, showSymbol: false, decimalDigits: 0), style: SpendexTheme.labelSmall))),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(),
+                  rightTitles: const AxisTitles(),
                 ),
-                gridData: FlGridData(show: true, drawVerticalLine: false),
+                gridData: const FlGridData(drawVerticalLine: false),
                 borderData: FlBorderData(show: false),
               ),
             ),
@@ -393,7 +390,7 @@ class _CategoryContent extends StatelessWidget {
                 Text('${cat.percentage.toStringAsFixed(1)}%', style: SpendexTheme.labelSmall.copyWith(color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary)),
               ],
             ),
-          )),
+          ),),
         ],
       ),
     );
@@ -434,16 +431,15 @@ class _TrendsContent extends StatelessWidget {
                     spots: dailyStats.stats.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.expenseInRupees)).toList(),
                     isCurved: true,
                     color: SpendexColors.expense,
-                    barWidth: 2,
                     dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(show: true, color: SpendexColors.expense.withValues(alpha: 0.1)),
                   ),
                 ],
                 titlesData: const FlTitlesData(
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(),
+                  rightTitles: AxisTitles(),
                 ),
-                gridData: FlGridData(show: true, drawVerticalLine: false),
+                gridData: const FlGridData(drawVerticalLine: false),
                 borderData: FlBorderData(show: false),
               ),
             ),
@@ -490,14 +486,14 @@ class _NetWorthContent extends StatelessWidget {
                       Text('Assets', style: SpendexTheme.labelSmall.copyWith(color: Colors.white70)),
                       Text(CurrencyFormatter.formatCompact(netWorth.currentAssetsInRupees), style: SpendexTheme.titleMedium.copyWith(color: Colors.white)),
                     ],
-                  )),
+                  ),),
                   Expanded(child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Liabilities', style: SpendexTheme.labelSmall.copyWith(color: Colors.white70)),
                       Text(CurrencyFormatter.formatCompact(netWorth.currentLiabilitiesInRupees), style: SpendexTheme.titleMedium.copyWith(color: Colors.white)),
                     ],
-                  )),
+                  ),),
                 ],
               ),
             ],
@@ -532,10 +528,10 @@ class _NetWorthContent extends StatelessWidget {
                         ),
                       ],
                       titlesData: const FlTitlesData(
-                        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        topTitles: AxisTitles(),
+                        rightTitles: AxisTitles(),
                       ),
-                      gridData: FlGridData(show: true, drawVerticalLine: false),
+                      gridData: const FlGridData(drawVerticalLine: false),
                       borderData: FlBorderData(show: false),
                     ),
                   ),

@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../../app/theme.dart';
@@ -49,7 +47,8 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
   List<TransactionModel> _searchResults = [];
 
   /// Whether a search is in progress.
-  bool _isSearching = false;
+  // ignore: unused_field
+  final bool __isSearching = false;
 
   /// Speech to text instance for voice search.
   final SpeechToText _speech = SpeechToText();
@@ -321,7 +320,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
               context,
               historyItem,
               isDark,
-            )),
+            ),),
       ],
     );
   }
@@ -366,7 +365,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Builds the search results view with transactions grouped by date.
   Widget _buildSearchResults(
-      BuildContext context, List<TransactionModel> results) {
+      BuildContext context, List<TransactionModel> results,) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Group transactions by date
@@ -403,7 +402,6 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
                   // Date header
                   DateGroupHeader(
                     date: date,
-                    showTotals: false,
                   ),
                   // Transactions for this date
                   ...dayTransactions.map((transaction) => TransactionCard(
@@ -419,7 +417,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
                         },
                         showDate: false,
                         compact: true,
-                      )),
+                      ),),
                   const SizedBox(height: 8),
                 ],
               );
@@ -432,7 +430,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Groups transactions by date.
   Map<DateTime, List<TransactionModel>> _groupByDate(
-      List<TransactionModel> transactions) {
+      List<TransactionModel> transactions,) {
     final grouped = <DateTime, List<TransactionModel>>{};
 
     for (final transaction in transactions) {
@@ -522,7 +520,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Builds a suggestion chip for the empty state.
   Widget _buildSuggestionChip(
-      BuildContext context, String suggestion, bool isDark) {
+      BuildContext context, String suggestion, bool isDark,) {
     return ActionChip(
       label: Text(
         suggestion,
@@ -642,7 +640,7 @@ class _VoiceSearchDialogState extends State<_VoiceSearchDialog> {
 
     try {
       await widget.speech.listen(
-        onResult: (SpeechRecognitionResult result) {
+        onResult: (result) {
           setState(() {
             _recognizedText = result.recognizedWords;
           });
@@ -653,8 +651,6 @@ class _VoiceSearchDialogState extends State<_VoiceSearchDialog> {
         },
         listenFor: const Duration(seconds: 10),
         pauseFor: const Duration(seconds: 2),
-        partialResults: true,
-        listenMode: ListenMode.confirmation,
       );
     } catch (e) {
       widget.onResult('');

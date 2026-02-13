@@ -29,7 +29,7 @@ class IndianNumberFormatter extends TextInputFormatter {
     // Remove all non-digits
     final digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
     if (digitsOnly.isEmpty) {
-      return const TextEditingValue(text: '');
+      return const TextEditingValue();
     }
 
     // Format with Indian number system
@@ -54,7 +54,7 @@ class IndianNumberFormatter extends TextInputFormatter {
       result.add(reversed[i]);
     }
 
-    return result.reversed.join('');
+    return result.reversed.join();
   }
 }
 
@@ -83,6 +83,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   DateTime _selectedDate = DateTime.now();
   bool _isLoading = false;
   bool _isInitialized = false;
+  // ignore: unused_field
   TransactionModel? _existingTransaction;
 
   bool get isEditMode => widget.transactionId != null;
@@ -166,7 +167,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
       result.add(reversed[i]);
     }
 
-    return result.reversed.join('');
+    return result.reversed.join();
   }
 
   void _onTabChanged() {
@@ -355,7 +356,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
         _showErrorSnackBar(error ?? 'Failed to save transaction');
       }
     } catch (e) {
-      _showErrorSnackBar('An error occurred: ${e.toString()}');
+      _showErrorSnackBar('An error occurred: $e');
     } finally {
       if (mounted) {
         setState(() {

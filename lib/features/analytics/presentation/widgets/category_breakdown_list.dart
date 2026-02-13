@@ -6,9 +6,7 @@ import '../../data/models/category_breakdown_model.dart';
 /// List view of category breakdown with percentage bars
 class CategoryBreakdownList extends StatelessWidget {
   const CategoryBreakdownList({
-    super.key,
-    required this.categories,
-    required this.title,
+    required this.categories, required this.title, super.key,
     this.maxItems = 8,
     this.onCategoryTap,
   });

@@ -112,7 +112,7 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
 
   /// Load linked accounts
   Future<void> loadLinkedAccounts() async {
-    state = state.copyWith(isLoadingAccounts: true, error: null);
+    state = state.copyWith(isLoadingAccounts: true);
 
     final result = await _repository.getLinkedAccounts();
 
@@ -124,7 +124,6 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
       (accounts) => state = state.copyWith(
         isLoadingAccounts: false,
         linkedAccounts: accounts,
-        error: null,
       ),
     );
   }
@@ -170,7 +169,7 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
       return false;
     }
 
-    state = state.copyWith(isInitiatingConsent: true, error: null);
+    state = state.copyWith(isInitiatingConsent: true);
 
     final result = await _repository.initiateConsent(
       state.selectedAccounts.toList(),
@@ -189,7 +188,6 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
         state = state.copyWith(
           isInitiatingConsent: false,
           consent: consent,
-          error: null,
         );
         return true;
       },
@@ -198,7 +196,7 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
 
   /// Get consent status
   Future<void> getConsentStatus(String consentId) async {
-    state = state.copyWith(isFetchingConsentStatus: true, error: null);
+    state = state.copyWith(isFetchingConsentStatus: true);
 
     final result = await _repository.getConsentStatus(consentId);
 
@@ -210,14 +208,13 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
       (consent) => state = state.copyWith(
         isFetchingConsentStatus: false,
         consent: consent,
-        error: null,
       ),
     );
   }
 
   /// Fetch account data
   Future<bool> fetchAccountData(String consentId) async {
-    state = state.copyWith(isFetchingData: true, error: null);
+    state = state.copyWith(isFetchingData: true);
 
     final result = await _repository.fetchAccountData(consentId);
 
@@ -237,7 +234,6 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
           isFetchingData: false,
           fetchedTransactions: transactions,
           selectedTransactions: selectedIds,
-          error: null,
         );
         return true;
       },
@@ -270,7 +266,7 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
 
   /// Revoke consent
   Future<bool> revokeConsent(String consentId) async {
-    state = state.copyWith(isRevokingConsent: true, error: null);
+    state = state.copyWith(isRevokingConsent: true);
 
     final result = await _repository.revokeConsent(consentId);
 
@@ -285,11 +281,9 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
       (success) {
         state = state.copyWith(
           isRevokingConsent: false,
-          consent: null,
           selectedAccounts: {},
           fetchedTransactions: [],
           selectedTransactions: {},
-          error: null,
         );
         return true;
       },
@@ -305,7 +299,7 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
     }
 
     // Set loading state
-    state = state.copyWith(isImportingTransactions: true, error: null);
+    state = state.copyWith(isImportingTransactions: true);
 
     // Get selected transactions
     final transactions = state.fetchedTransactions
@@ -339,7 +333,6 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
           isImportingTransactions: false,
           fetchedTransactions: [],
           selectedTransactions: {},
-          error: null,
         );
         return true;
       },
@@ -351,24 +344,21 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
     state = state.copyWith(
       fetchedTransactions: [],
       selectedTransactions: {},
-      error: null,
     );
   }
 
   /// Clear consent
   void clearConsent() {
     state = state.copyWith(
-      consent: null,
       selectedAccounts: {},
       fetchedTransactions: [],
       selectedTransactions: {},
-      error: null,
     );
   }
 
   /// Clear error
   void clearError() {
-    state = state.copyWith(error: null);
+    state = state.copyWith();
   }
 }
 

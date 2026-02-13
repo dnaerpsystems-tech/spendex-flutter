@@ -28,11 +28,11 @@ abstract class InsightsRemoteDataSource {
 
 /// Implementation of [InsightsRemoteDataSource] using API client
 class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
-  final ApiClient _apiClient;
 
   InsightsRemoteDataSourceImpl({
     required ApiClient apiClient,
   }) : _apiClient = apiClient;
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, List<InsightModel>>> getAll() async {
@@ -40,24 +40,24 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
       final result = await _apiClient.get('/insights');
 
       return result.fold(
-        (failure) => Left(failure),
+        Left.new,
         (response) {
           try {
-            final List<dynamic> data = response['data'] as List<dynamic>;
+            final data = response['data'] as List<dynamic>;
             final insights = data
                 .map((json) => InsightModel.fromJson(json as Map<String, dynamic>))
                 .toList();
             return Right(insights);
           } catch (e) {
             return Left(
-              ServerFailure('Failed to parse insights: ${e.toString()}'),
+              ServerFailure('Failed to parse insights: $e'),
             );
           }
         },
       );
     } catch (e) {
       return Left(
-        ServerFailure('Failed to fetch insights: ${e.toString()}'),
+        ServerFailure('Failed to fetch insights: $e'),
       );
     }
   }
@@ -68,24 +68,24 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
       final result = await _apiClient.get('/insights/dashboard');
 
       return result.fold(
-        (failure) => Left(failure),
+        Left.new,
         (response) {
           try {
-            final List<dynamic> data = response['data'] as List<dynamic>;
+            final data = response['data'] as List<dynamic>;
             final insights = data
                 .map((json) => InsightModel.fromJson(json as Map<String, dynamic>))
                 .toList();
             return Right(insights);
           } catch (e) {
             return Left(
-              ServerFailure('Failed to parse dashboard insights: ${e.toString()}'),
+              ServerFailure('Failed to parse dashboard insights: $e'),
             );
           }
         },
       );
     } catch (e) {
       return Left(
-        ServerFailure('Failed to fetch dashboard insights: ${e.toString()}'),
+        ServerFailure('Failed to fetch dashboard insights: $e'),
       );
     }
   }
@@ -96,7 +96,7 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
       final result = await _apiClient.get('/insights/$id');
 
       return result.fold(
-        (failure) => Left(failure),
+        Left.new,
         (response) {
           try {
             final data = response['data'] as Map<String, dynamic>;
@@ -104,14 +104,14 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
             return Right(insight);
           } catch (e) {
             return Left(
-              ServerFailure('Failed to parse insight: ${e.toString()}'),
+              ServerFailure('Failed to parse insight: $e'),
             );
           }
         },
       );
     } catch (e) {
       return Left(
-        ServerFailure('Failed to fetch insight: ${e.toString()}'),
+        ServerFailure('Failed to fetch insight: $e'),
       );
     }
   }
@@ -127,24 +127,24 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
       );
 
       return result.fold(
-        (failure) => Left(failure),
+        Left.new,
         (response) {
           try {
-            final List<dynamic> data = response['data'] as List<dynamic>;
+            final data = response['data'] as List<dynamic>;
             final insights = data
                 .map((json) => InsightModel.fromJson(json as Map<String, dynamic>))
                 .toList();
             return Right(insights);
           } catch (e) {
             return Left(
-              ServerFailure('Failed to parse generated insights: ${e.toString()}'),
+              ServerFailure('Failed to parse generated insights: $e'),
             );
           }
         },
       );
     } catch (e) {
       return Left(
-        ServerFailure('Failed to generate insights: ${e.toString()}'),
+        ServerFailure('Failed to generate insights: $e'),
       );
     }
   }
@@ -155,7 +155,7 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
       final result = await _apiClient.post('/insights/$id/read');
 
       return result.fold(
-        (failure) => Left(failure),
+        Left.new,
         (response) {
           try {
             final data = response['data'] as Map<String, dynamic>;
@@ -163,14 +163,14 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
             return Right(insight);
           } catch (e) {
             return Left(
-              ServerFailure('Failed to parse insight: ${e.toString()}'),
+              ServerFailure('Failed to parse insight: $e'),
             );
           }
         },
       );
     } catch (e) {
       return Left(
-        ServerFailure('Failed to mark insight as read: ${e.toString()}'),
+        ServerFailure('Failed to mark insight as read: $e'),
       );
     }
   }
@@ -181,7 +181,7 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
       final result = await _apiClient.post('/insights/$id/dismiss');
 
       return result.fold(
-        (failure) => Left(failure),
+        Left.new,
         (response) {
           try {
             final data = response['data'] as Map<String, dynamic>;
@@ -189,14 +189,14 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
             return Right(insight);
           } catch (e) {
             return Left(
-              ServerFailure('Failed to parse insight: ${e.toString()}'),
+              ServerFailure('Failed to parse insight: $e'),
             );
           }
         },
       );
     } catch (e) {
       return Left(
-        ServerFailure('Failed to dismiss insight: ${e.toString()}'),
+        ServerFailure('Failed to dismiss insight: $e'),
       );
     }
   }

@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../app/theme.dart';
 import '../../../duplicate_detection/presentation/providers/duplicate_detection_provider.dart';
 import '../../data/models/email_account_model.dart';
 import '../providers/email_parser_provider.dart';
@@ -73,7 +73,7 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
       ),
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       final success = await ref
           .read(emailParserProvider.notifier)
           .disconnectAccount(account.id);
@@ -82,8 +82,8 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Account disconnected successfully'),
+          const SnackBar(
+            content: Text('Account disconnected successfully'),
             backgroundColor: SpendexColors.income,
             behavior: SnackBarBehavior.floating,
           ),
@@ -200,10 +200,10 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
       if (!mounted) return;
 
       // If user resolved duplicates successfully
-      if (result == true) {
+      if (result ?? false) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Transactions imported successfully'),
+          const SnackBar(
+            content: Text('Transactions imported successfully'),
             backgroundColor: SpendexColors.income,
             behavior: SnackBarBehavior.floating,
           ),
@@ -222,8 +222,8 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Transactions imported successfully'),
+        const SnackBar(
+          content: Text('Transactions imported successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -260,9 +260,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(emailParserProvider);
     final hasAccounts = ref.watch(hasConnectedAccountsProvider);
-    final selectedAccount = ref.watch(selectedAccountProvider);
+    final _ = ref.watch(selectedAccountProvider);
     final stats = ref.watch(emailStatsProvider);
-    final selectedCount = ref.watch(selectedEmailCountProvider);
+    final __ = ref.watch(selectedEmailCountProvider);
     final allSelected = ref.watch(allEmailsSelectedProvider);
 
     // Show setup screen if no accounts
@@ -292,7 +292,7 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                     color: SpendexColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(60),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Icon(
                       Iconsax.sms,
                       size: 56,
@@ -334,7 +334,7 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Iconsax.add_circle,
                           color: Colors.white,
                         ),
@@ -464,7 +464,7 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                           icon: Iconsax.calendar,
                           onRemove: () {
                             final updatedFilters =
-                                state.filters!.copyWith(dateRange: null);
+                                state.filters!.copyWith();
                             ref
                                 .read(emailParserProvider.notifier)
                                 .updateFilters(updatedFilters);
@@ -601,9 +601,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
 
     // Show loading if processing
     if (state.isFetchingEmails || state.isParsing || state.isImporting) {
-      return FloatingActionButton(
+      return const FloatingActionButton(
         onPressed: null,
-        child: const CircularProgressIndicator(
+        child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),
       );

@@ -6,12 +6,6 @@ import '../../domain/repositories/insights_repository.dart';
 
 /// State class for managing insights data and UI state
 class InsightsState extends Equatable {
-  final List<InsightModel> allInsights;
-  final List<InsightModel> dashboardInsights;
-  final InsightType? selectedType;
-  final bool isLoading;
-  final bool isGenerating;
-  final String? error;
 
   const InsightsState({
     this.allInsights = const [],
@@ -21,6 +15,12 @@ class InsightsState extends Equatable {
     this.isGenerating = false,
     this.error,
   });
+  final List<InsightModel> allInsights;
+  final List<InsightModel> dashboardInsights;
+  final InsightType? selectedType;
+  final bool isLoading;
+  final bool isGenerating;
+  final String? error;
 
   /// Creates a copy of this state with the given fields replaced
   InsightsState copyWith({
@@ -56,9 +56,9 @@ class InsightsState extends Equatable {
 
 /// Notifier for managing insights state and operations
 class InsightsNotifier extends StateNotifier<InsightsState> {
-  final InsightsRepository _repository;
 
   InsightsNotifier(this._repository) : super(const InsightsState());
+  final InsightsRepository _repository;
 
   /// Load all insights from the repository
   Future<void> loadAll() async {

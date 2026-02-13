@@ -46,8 +46,7 @@ class ExtractedReceiptData {
 /// Receipt Scanner Sheet for scanning receipts
 class ReceiptScannerSheet extends ConsumerStatefulWidget {
   const ReceiptScannerSheet({
-    super.key,
-    required this.onReceiptScanned,
+    required this.onReceiptScanned, super.key,
   });
 
   final ValueChanged<CreateTransactionRequest?> onReceiptScanned;
@@ -60,6 +59,7 @@ class ReceiptScannerSheet extends ConsumerStatefulWidget {
 class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
     with SingleTickerProviderStateMixin {
   ReceiptScanState _state = ReceiptScanState.idle;
+  // ignore: unused_field
   ExtractedReceiptData? _extractedData;
   String? _errorMessage;
 
@@ -72,7 +72,8 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
   final _descriptionController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
 
-  final _currencyFormat = NumberFormat.currency(
+  // ignore: unused_field
+  final __currencyFormat = NumberFormat.currency(
     locale: 'en_IN',
     symbol: '₹',
     decimalDigits: 0,
@@ -90,7 +91,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       duration: const Duration(seconds: 2),
     );
 
-    _scanAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _scanAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _scanAnimationController,
         curve: Curves.easeInOut,
@@ -114,13 +115,12 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
     });
 
     try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(
+      final picker = ImagePicker();
+      final image = await picker.pickImage(
         source: ImageSource.camera,
         maxWidth: 1920,
         maxHeight: 1920,
         imageQuality: 90,
-        preferredCameraDevice: CameraDevice.rear,
       );
 
       if (image != null) {
@@ -153,8 +153,8 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
     });
 
     try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(
+      final picker = ImagePicker();
+      final image = await picker.pickImage(
         source: ImageSource.gallery,
         maxWidth: 1920,
         maxHeight: 1920,
@@ -198,10 +198,10 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       final inputImage = InputImage.fromFilePath(imagePath);
 
       // Initialize text recognizer
-      textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+      textRecognizer = TextRecognizer();
 
       // Perform OCR
-      final RecognizedText recognizedText =
+      final recognizedText =
           await textRecognizer.processImage(inputImage);
 
       // Check if any text was recognized
@@ -285,13 +285,14 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
     }
   }
 
+  // ignore: unused_element
   ExtractedReceiptData _generateMockReceiptData() {
     final random = math.Random();
     final merchants = [
       'Big Bazaar',
       'DMart',
       'Reliance Fresh',
-      'Spencer\'s',
+      "Spencer's",
       'More Supermarket',
       'Amazon',
       'Flipkart',
@@ -395,7 +396,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -759,7 +760,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                       child: Container(
                         height: 3,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [
                               Colors.transparent,
                               SpendexColors.primary,
@@ -978,12 +979,12 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Iconsax.tick_circle, size: 20),
-                      const SizedBox(width: 8),
-                      const Text('Add Transaction'),
+                      Icon(Iconsax.tick_circle, size: 20),
+                      SizedBox(width: 8),
+                      Text('Add Transaction'),
                     ],
                   ),
                 ),
@@ -1003,7 +1004,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
     String? prefix,
     TextInputType? keyboardType,
   }) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark
             ? SpendexColors.darkBackground

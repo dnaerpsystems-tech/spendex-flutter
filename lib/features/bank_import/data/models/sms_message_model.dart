@@ -8,13 +8,6 @@ enum ParseStatus {
 }
 
 class SmsMessageModel extends Equatable {
-  final String id;
-  final String sender;
-  final String body;
-  final DateTime date;
-  final ParseStatus parseStatus;
-  final ParsedTransactionModel? parsedTransaction;
-  final String? bankName;
 
   const SmsMessageModel({
     required this.id,
@@ -44,6 +37,13 @@ class SmsMessageModel extends Equatable {
       bankName: json['bankName'] as String?,
     );
   }
+  final String id;
+  final String sender;
+  final String body;
+  final DateTime date;
+  final ParseStatus parseStatus;
+  final ParsedTransactionModel? parsedTransaction;
+  final String? bankName;
 
   Map<String, dynamic> toJson() {
     return {

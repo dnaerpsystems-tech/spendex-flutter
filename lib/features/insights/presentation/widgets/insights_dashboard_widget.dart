@@ -1,30 +1,29 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
+
 import '../../../../app/theme.dart';
-import '../../../../shared/widgets/error_state_widget.dart';
-import '../../../../shared/widgets/empty_state_widget.dart';
 import '../../data/models/insight_model.dart';
 import 'insight_card.dart';
 
 class InsightsDashboardWidget extends ConsumerStatefulWidget {
-  final List<InsightModel> insights;
-  final bool isLoading;
-  final String? error;
-  final VoidCallback? onViewAllTap;
-  final Function(InsightModel)? onInsightTap;
-  final Function(String)? onDismiss;
 
   const InsightsDashboardWidget({
-    super.key,
-    required this.insights,
+    required this.insights, super.key,
     this.isLoading = false,
     this.error,
     this.onViewAllTap,
     this.onInsightTap,
     this.onDismiss,
   });
+  final List<InsightModel> insights;
+  final bool isLoading;
+  final String? error;
+  final VoidCallback? onViewAllTap;
+  final Function(InsightModel)? onInsightTap;
+  final Function(String)? onDismiss;
 
   @override
   ConsumerState<InsightsDashboardWidget> createState() =>
@@ -97,7 +96,7 @@ class _InsightsDashboardWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +118,7 @@ class _InsightsDashboardWidgetState
         children: [
           Row(
             children: [
-              Icon(
+              const Icon(
                 Iconsax.lamp_charge,
                 color: SpendexColors.primary,
                 size: 20,
@@ -207,7 +206,7 @@ class _InsightsDashboardWidgetState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Iconsax.info_circle,
                 color: SpendexColors.expense,
                 size: 32,
@@ -259,7 +258,7 @@ class _InsightsDashboardWidgetState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Iconsax.magic_star,
                 color: SpendexColors.primary,
                 size: 40,
@@ -375,7 +374,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
       duration: const Duration(milliseconds: 1500),
     )..repeat();
 
-    _animation = Tween<double>(begin: -1.0, end: 2.0).animate(
+    _animation = Tween<double>(begin: -1, end: 2).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
@@ -394,12 +393,10 @@ class _ShimmerCardState extends State<_ShimmerCard>
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        return Container(
+        return DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
               colors: [
                 SpendexColors.lightSurface,
                 SpendexColors.lightSurface.withOpacity(0.5),

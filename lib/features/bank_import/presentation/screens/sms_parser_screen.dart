@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../app/theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../duplicate_detection/presentation/providers/duplicate_detection_provider.dart';
 import '../../data/models/parsed_transaction_model.dart';
@@ -65,9 +65,9 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
       // User declined permission, show info
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content:
-              const Text('SMS permission is required to read bank messages'),
+              Text('SMS permission is required to read bank messages'),
           backgroundColor: SpendexColors.warning,
           behavior: SnackBarBehavior.floating,
         ),
@@ -94,7 +94,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: SpendexColors.primary,
             ),
           ),
@@ -155,8 +155,8 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
 
     if (dateRange == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please select a date range'),
+        const SnackBar(
+          content: Text('Please select a date range'),
           backgroundColor: SpendexColors.warning,
           behavior: SnackBarBehavior.floating,
         ),
@@ -211,7 +211,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
       onConfirm: _performImport,
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       // Dialog already called _performImport
     }
   }
@@ -248,10 +248,10 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
       if (!mounted) return;
 
       // If user resolved duplicates successfully
-      if (result == true) {
+      if (result ?? false) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Transactions imported successfully'),
+          const SnackBar(
+            content: Text('Transactions imported successfully'),
             backgroundColor: SpendexColors.income,
             behavior: SnackBarBehavior.floating,
           ),
@@ -272,8 +272,8 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Transactions imported successfully'),
+        const SnackBar(
+          content: Text('Transactions imported successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -337,7 +337,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                     color: SpendexColors.warning.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(60),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Icon(
                       Iconsax.shield_cross,
                       size: 56,
@@ -448,7 +448,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Iconsax.calendar,
                           color: SpendexColors.primary,
                           size: 20,
@@ -491,7 +491,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Iconsax.bank,
                           color: SpendexColors.primary,
                           size: 20,
@@ -541,7 +541,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
@@ -566,7 +566,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Iconsax.messages,
                                 color: Colors.white,
                               ),
@@ -689,7 +689,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Iconsax.tick_circle,
                           color: Colors.white,
                         ),

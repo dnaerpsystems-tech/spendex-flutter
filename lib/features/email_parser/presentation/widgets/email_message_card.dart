@@ -244,7 +244,7 @@ class EmailMessageCard extends StatelessWidget {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Iconsax.attach_circle,
                               size: 14,
                               color: SpendexColors.primary,

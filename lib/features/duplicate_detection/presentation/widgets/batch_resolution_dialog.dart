@@ -47,7 +47,7 @@ class _BatchResolutionDialogState extends State<BatchResolutionDialog> {
             // Title
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.auto_fix_high,
                   color: SpendexColors.primary,
                   size: 28,
@@ -91,7 +91,7 @@ class _BatchResolutionDialogState extends State<BatchResolutionDialog> {
               action: DuplicateResolutionAction.skip,
               icon: Icons.block_outlined,
               title: 'Skip All',
-              description: 'Don\'t import any of these transactions',
+              description: "Don't import any of these transactions",
               color: SpendexColors.expense,
               colorScheme: colorScheme,
             ),

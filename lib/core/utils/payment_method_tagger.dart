@@ -193,13 +193,13 @@ class PaymentMethodTagger {
 
     // UPI: Small to medium amount (up to ₹1L), likely instant
     if (amount <= upiMaxAmount) {
-      if (isInstant == true || !isBankingHours) {
+      if ((isInstant ?? false) || !isBankingHours) {
         return 'upi';
       }
     }
 
     // IMPS: Up to ₹5L, instant transfer, 24/7
-    if (amount <= impsMaxAmount && (isInstant == true || !isBankingHours)) {
+    if (amount <= impsMaxAmount && ((isInstant ?? false) || !isBankingHours)) {
       return 'imps';
     }
 

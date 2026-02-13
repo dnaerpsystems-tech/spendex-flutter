@@ -4,9 +4,7 @@ import '../../../../app/theme.dart';
 /// Card for displaying rate/percentage values like savings rate
 class RateCard extends StatelessWidget {
   const RateCard({
-    super.key,
-    required this.title,
-    required this.value,
+    required this.title, required this.value, super.key,
     this.suffix = '%',
     this.goodThreshold = 20,
     this.warningThreshold = 0,

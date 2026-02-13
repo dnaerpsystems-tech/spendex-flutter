@@ -191,7 +191,7 @@ List<String> _tokenize(String s) {
   const stopWords = {
     'to', 'from', 'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at',
     'by', 'for', 'with', 'is', 'was', 'are', 'were', 'been', 'be', 'has',
-    'have', 'had', 'payment', 'transaction', 'transfer', 'upi', 'imps', 'neft'
+    'have', 'had', 'payment', 'transaction', 'transfer', 'upi', 'imps', 'neft',
   };
 
   return words.where((w) => !stopWords.contains(w) && w.length > 1).toList();

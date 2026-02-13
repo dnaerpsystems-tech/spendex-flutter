@@ -89,7 +89,7 @@ class _PortfolioDashboardScreenState
         actions: [
           if (state.isSyncing)
             const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16),
               child: SizedBox(
                 width: 24,
                 height: 24,
@@ -220,12 +220,12 @@ class _PortfolioDashboardScreenState
     final bestPerformer = investments.isEmpty
         ? null
         : investments.reduce((curr, next) =>
-            curr.returnsPercent > next.returnsPercent ? curr : next);
+            curr.returnsPercent > next.returnsPercent ? curr : next,);
 
     final worstPerformer = investments.isEmpty
         ? null
         : investments.reduce((curr, next) =>
-            curr.returnsPercent < next.returnsPercent ? curr : next);
+            curr.returnsPercent < next.returnsPercent ? curr : next,);
 
     final taxSavingInvestments = investments.where((i) => i.taxSaving).toList();
     final taxSavingsTotal = taxSavingInvestments.fold<int>(

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/di/injection.dart';
-import '../../../../core/network/api_client.dart';
 import '../../data/models/transaction_model.dart';
 import '../../domain/repositories/transactions_repository.dart';
 
@@ -253,7 +252,7 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
   /// Load all data (transactions, stats, daily totals)
   Future<void> loadAll({TransactionFilter? filter}) async {
     final now = DateTime.now();
-    final startOfMonth = DateTime(now.year, now.month, 1);
+    final startOfMonth = DateTime(now.year, now.month);
     final endOfMonth = DateTime(now.year, now.month + 1, 0);
 
     await Future.wait([
@@ -407,7 +406,7 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
 
   /// Clear filter
   void clearFilter() {
-    loadTransactions(filter: null, refresh: true);
+    loadTransactions(refresh: true);
   }
 
   /// Clear error

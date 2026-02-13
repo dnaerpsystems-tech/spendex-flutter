@@ -66,7 +66,7 @@ class _DuplicateResolutionScreenState
           if (state.result != null && state.hasDuplicates)
             PopupMenuButton<String>(
               icon: const Icon(Icons.more_vert),
-              onSelected: (value) => _handleMenuAction(value),
+              onSelected: _handleMenuAction,
               itemBuilder: (context) => [
                 const PopupMenuItem(
                   value: 'apply_all',
@@ -141,7 +141,7 @@ class _DuplicateResolutionScreenState
         iconColor: SpendexColors.primary,
         actionLabel: 'Continue Import',
         actionIcon: Icons.arrow_forward,
-        onAction: () => _confirmImport(),
+        onAction: _confirmImport,
       );
     }
 
@@ -152,7 +152,7 @@ class _DuplicateResolutionScreenState
         _buildSummaryCard(state, colorScheme),
 
         // Tabs
-        Container(
+        ColoredBox(
           color: colorScheme.surface,
           child: TabBar(
             controller: _tabController,
@@ -209,7 +209,7 @@ class _DuplicateResolutionScreenState
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.warning_amber_rounded,
             color: SpendexColors.warning,
             size: 32,
@@ -323,7 +323,7 @@ class _DuplicateResolutionScreenState
             Expanded(
               child: FilledButton(
                 onPressed: state.allResolved
-                    ? () => _confirmImport()
+                    ? _confirmImport
                     : null,
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

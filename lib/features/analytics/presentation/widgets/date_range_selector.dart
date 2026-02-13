@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../app/theme.dart';
-import '../../data/models/analytics_models.dart';
 import '../providers/analytics_provider.dart';
 
 /// Date range selector chip with preset options
@@ -12,7 +11,6 @@ class DateRangeSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final state = ref.watch(analyticsStateProvider);
 
     return GestureDetector(
       onTap: () => _showDateRangeOptions(context, ref),
@@ -28,14 +26,14 @@ class DateRangeSelector extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Iconsax.calendar,
               size: 16,
               color: SpendexColors.primary,
             ),
             const SizedBox(width: 6),
             Text(
-              state.selectedPreset.label,
+              ref.watch(analyticsDateRangePresetProvider).label,
               style: SpendexTheme.labelMedium.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -87,9 +85,7 @@ class DateRangeSelector extends ConsumerWidget {
 /// Bottom sheet for date range presets
 class DateRangeBottomSheet extends StatelessWidget {
   const DateRangeBottomSheet({
-    super.key,
-    required this.onPresetSelected,
-    required this.onCustomSelected,
+    required this.onPresetSelected, required this.onCustomSelected, super.key,
   });
 
   final void Function(DateRangePreset) onPresetSelected;
@@ -105,7 +101,7 @@ class DateRangeBottomSheet extends StatelessWidget {
         children: [
           Text(
             'Select Date Range',
-            style: SpendexTheme.titleLarge,
+            style: SpendexTheme.titleMedium,
           ),
           const SizedBox(height: 16),
           ...DateRangePreset.values

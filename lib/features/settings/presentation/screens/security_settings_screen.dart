@@ -23,7 +23,7 @@ class _SecuritySettingsScreenState
   bool _biometricEnabled = false;
   String _autoLockDuration = 'never';
   bool _biometricAvailable = false;
-  int _activeSessions = 1;
+  final int _activeSessions = 1;
   bool _isLoading = false;
 
   final SecureStorageService _secureStorage = getIt<SecureStorageService>();
@@ -93,7 +93,7 @@ class _SecuritySettingsScreenState
   Future<void> _togglePinLock(bool value) async {
     if (value) {
       final result = await context.push<bool>('/settings/set-pin');
-      if (result == true || result == null) {
+      if ((result ?? false) || result == null) {
         await _loadSecuritySettings();
       }
     } else {
@@ -125,7 +125,7 @@ class _SecuritySettingsScreenState
       ),
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       await _removePin();
     }
   }
@@ -305,7 +305,7 @@ class _SecuritySettingsScreenState
 
   Future<void> _changePin() async {
     final result = await context.push<bool>('/settings/set-pin');
-    if (result == true || result == null) {
+    if ((result ?? false) || result == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -353,7 +353,6 @@ class _SecuritySettingsScreenState
                     title: 'PIN Lock',
                     description: 'Secure your app with a PIN code',
                     isEnabled: _pinEnabled,
-                    showSwitch: true,
                     onToggle: _togglePinLock,
                   ),
                   if (_pinEnabled) ...[
@@ -373,7 +372,7 @@ class _SecuritySettingsScreenState
                       child: Column(
                         children: [
                           ListTile(
-                            leading: Icon(
+                            leading: const Icon(
                               Iconsax.edit,
                               color: SpendexColors.primary,
                             ),
@@ -475,7 +474,6 @@ class _SecuritySettingsScreenState
                     icon: Iconsax.devices,
                     title: 'Active Sessions',
                     description: 'Manage logged-in devices',
-                    isEnabled: true,
                     showSwitch: false,
                     showArrow: true,
                     onTap: () {
@@ -523,7 +521,6 @@ class _SecuritySettingsScreenState
                     description: 'Add an extra layer of security',
                     isEnabled: false,
                     showSwitch: false,
-                    showArrow: false,
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -552,7 +549,6 @@ class _SecuritySettingsScreenState
                     icon: Iconsax.document_text,
                     title: 'Security Log',
                     description: 'View recent security events',
-                    isEnabled: true,
                     showSwitch: false,
                     showArrow: true,
                     onTap: () {
@@ -635,7 +631,7 @@ class _AutoLockSelectorSheet extends StatelessWidget {
       {'value': '15', 'label': '15 minutes'},
     ];
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: const BorderRadius.vertical(

@@ -204,7 +204,7 @@ class _DuplicateMatchCardState extends State<DuplicateMatchCard> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.warning_amber_rounded,
                   size: 14,
                   color: Colors.white,
@@ -248,7 +248,7 @@ class _DuplicateMatchCardState extends State<DuplicateMatchCard> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.check_circle,
                     size: 14,
                     color: SpendexColors.primary,
@@ -274,9 +274,7 @@ class _DuplicateMatchCardState extends State<DuplicateMatchCard> {
     required double amount,
     required DateTime date,
     required String description,
-    String? merchant,
-    required bool isImported,
-    required ColorScheme colorScheme,
+    required bool isImported, required ColorScheme colorScheme, String? merchant,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

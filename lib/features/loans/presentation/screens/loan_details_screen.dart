@@ -55,6 +55,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
     }
   }
 
+  // ignore: unused_element
   Color _getStatusColor(LoanStatus status) {
     switch (status) {
       case LoanStatus.active:
@@ -676,7 +677,6 @@ class _TaxBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     String text;
     if (loanType == LoanType.home) {

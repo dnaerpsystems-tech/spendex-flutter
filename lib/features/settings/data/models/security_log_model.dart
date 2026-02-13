@@ -7,10 +7,9 @@ class SecurityLogModel extends Equatable {
     required this.action,
     required this.description,
     required this.timestamp,
-    this.deviceName,
+    required this.status, this.deviceName,
     this.ipAddress,
     this.location,
-    required this.status,
   });
 
   factory SecurityLogModel.fromJson(Map<String, dynamic> json) {

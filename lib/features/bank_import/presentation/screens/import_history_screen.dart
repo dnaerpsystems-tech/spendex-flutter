@@ -59,8 +59,8 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Import deleted successfully'),
+        const SnackBar(
+          content: Text('Import deleted successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -217,7 +217,7 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: SpendexColors.primary,
                   ),
                 ),
@@ -240,7 +240,7 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
                           _selectedStatus = null;
                         });
                       },
-                      deleteIcon: Icon(
+                      deleteIcon: const Icon(
                         Iconsax.close_circle,
                         size: 16,
                       ),
@@ -253,7 +253,7 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
                           _selectedFileType = null;
                         });
                       },
-                      deleteIcon: Icon(
+                      deleteIcon: const Icon(
                         Iconsax.close_circle,
                         size: 16,
                       ),
@@ -387,7 +387,7 @@ class _FilterSheetState extends State<_FilterSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark
             ? SpendexColors.darkBackground

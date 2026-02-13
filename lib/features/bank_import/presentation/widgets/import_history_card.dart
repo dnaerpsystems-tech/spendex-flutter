@@ -68,7 +68,7 @@ class ImportHistoryCard extends StatelessWidget {
           ? DismissDirection.endToStart
           : DismissDirection.none,
       confirmDismiss: (direction) async {
-        return await showDialog<bool>(
+        return showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Delete Import?'),

@@ -20,9 +20,9 @@ abstract class SmsParserRemoteDataSource {
 }
 
 class SmsParserRemoteDataSourceImpl implements SmsParserRemoteDataSource {
-  final ApiClient _apiClient;
 
   SmsParserRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, List<SmsMessageModel>>> syncSmsMessages(
@@ -34,11 +34,11 @@ class SmsParserRemoteDataSourceImpl implements SmsParserRemoteDataSource {
         'messages': messages.map((m) => m.toJson()).toList(),
       },
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final list = json! as List<dynamic>;
         return list
             .map((e) => SmsMessageModel.fromJson(
                   e as Map<String, dynamic>,
-                ))
+                ),)
             .toList();
       },
     );
@@ -68,11 +68,11 @@ class SmsParserRemoteDataSourceImpl implements SmsParserRemoteDataSource {
     return _apiClient.get<List<BankConfigModel>>(
       '/sms/bank-configs',
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final list = json! as List<dynamic>;
         return list
             .map((e) => BankConfigModel.fromJson(
                   e as Map<String, dynamic>,
-                ))
+                ),)
             .toList();
       },
     );

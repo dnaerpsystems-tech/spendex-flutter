@@ -22,11 +22,11 @@ abstract class SmsParserLocalDataSource {
 }
 
 class SmsParserLocalDataSourceImpl implements SmsParserLocalDataSource {
+
+  SmsParserLocalDataSourceImpl(this._secureStorage);
   final SecureStorageService _secureStorage;
   final SmsQuery _smsQuery = SmsQuery();
   static const String _trackingStatusKey = 'sms_tracking_enabled';
-
-  SmsParserLocalDataSourceImpl(this._secureStorage);
 
   @override
   Future<Either<Failure, bool>> checkPermissions() async {

@@ -144,7 +144,7 @@ class _InvestmentDetailsScreenState
 
   List<InfoRow> _buildInfoRows(InvestmentModel investment) {
     final type = investment.type;
-    final List<InfoRow> rows = [];
+    final rows = <InfoRow>[];
 
     if (type == InvestmentType.mutualFund) {
       if (investment.name.isNotEmpty) {
@@ -340,7 +340,7 @@ class _InvestmentDetailsScreenState
       ),
     );
 
-    String taxBenefitInfo = '';
+    var taxBenefitInfo = '';
     if (taxSection == TaxSection.section80C) {
       taxBenefitInfo =
           'Eligible for deduction up to ₹1.5 lakhs per year under Section 80C';
@@ -429,7 +429,7 @@ class _InvestmentDetailsScreenState
       ),
     );
 
-    if (confirmed == true && context.mounted) {
+    if ((confirmed ?? false) && context.mounted) {
       final success = await ref
           .read(investmentsStateProvider.notifier)
           .deleteInvestment(widget.investmentId);

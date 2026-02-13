@@ -36,7 +36,7 @@ class SmsPermissionDialog extends StatelessWidget {
                 color: SpendexColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(40),
               ),
-              child: Center(
+              child: const Center(
                 child: Icon(
                   Iconsax.messages,
                   size: 40,
@@ -80,7 +80,7 @@ class SmsPermissionDialog extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.shield_tick,
                     color: SpendexColors.income,
                     size: 20,
@@ -100,19 +100,19 @@ class SmsPermissionDialog extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Features list
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _FeatureItem(
                   icon: Iconsax.tick_circle,
                   text: 'Automatically detect bank transactions',
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 _FeatureItem(
                   icon: Iconsax.tick_circle,
                   text: 'Parse amount, category, and merchant',
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 _FeatureItem(
                   icon: Iconsax.tick_circle,
                   text: 'Filter by bank and date range',

@@ -11,6 +11,20 @@ class DuplicateDetectionConfig extends Equatable {
     this.minimumConfidence = 0.50,
   });
 
+  /// Factory constructor from JSON
+  factory DuplicateDetectionConfig.fromJson(Map<String, dynamic> json) {
+    return DuplicateDetectionConfig(
+      dateTolerance: json['dateTolerance'] as int? ?? 2,
+      amountTolerance: (json['amountTolerance'] as num?)?.toDouble() ?? 0.01,
+      descriptionSimilarityThreshold:
+          (json['descriptionSimilarityThreshold'] as num?)?.toDouble() ?? 0.85,
+      merchantSimilarityThreshold:
+          (json['merchantSimilarityThreshold'] as num?)?.toDouble() ?? 0.80,
+      accountAware: json['accountAware'] as bool? ?? true,
+      minimumConfidence: (json['minimumConfidence'] as num?)?.toDouble() ?? 0.50,
+    );
+  }
+
   /// Number of days ± to consider for date matching
   ///
   /// Default: 2 days
@@ -62,7 +76,6 @@ class DuplicateDetectionConfig extends Equatable {
     amountTolerance: 0.005,
     descriptionSimilarityThreshold: 0.90,
     merchantSimilarityThreshold: 0.85,
-    accountAware: true,
     minimumConfidence: 0.70,
   );
 
@@ -72,23 +85,8 @@ class DuplicateDetectionConfig extends Equatable {
     amountTolerance: 0.02,
     descriptionSimilarityThreshold: 0.75,
     merchantSimilarityThreshold: 0.70,
-    accountAware: true,
     minimumConfidence: 0.40,
   );
-
-  /// Factory constructor from JSON
-  factory DuplicateDetectionConfig.fromJson(Map<String, dynamic> json) {
-    return DuplicateDetectionConfig(
-      dateTolerance: json['dateTolerance'] as int? ?? 2,
-      amountTolerance: (json['amountTolerance'] as num?)?.toDouble() ?? 0.01,
-      descriptionSimilarityThreshold:
-          (json['descriptionSimilarityThreshold'] as num?)?.toDouble() ?? 0.85,
-      merchantSimilarityThreshold:
-          (json['merchantSimilarityThreshold'] as num?)?.toDouble() ?? 0.80,
-      accountAware: json['accountAware'] as bool? ?? true,
-      minimumConfidence: (json['minimumConfidence'] as num?)?.toDouble() ?? 0.50,
-    );
-  }
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {

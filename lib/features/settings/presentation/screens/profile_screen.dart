@@ -104,7 +104,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Personal Information'),
+        const _SectionTitle(title: 'Personal Information'),
         const SizedBox(height: SpendexTheme.spacingMd),
         Container(
           margin: const EdgeInsets.symmetric(
@@ -158,7 +158,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Account Information'),
+        const _SectionTitle(title: 'Account Information'),
         const SizedBox(height: SpendexTheme.spacingMd),
         Container(
           margin: const EdgeInsets.symmetric(
@@ -198,7 +198,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 label: 'Email Verification',
                 value: user.isEmailVerified ? 'Verified' : 'Not verified',
                 trailing: user.isEmailVerified
-                    ? Icon(
+                    ? const Icon(
                         Iconsax.tick_circle5,
                         color: SpendexColors.income,
                         size: 20,
@@ -206,12 +206,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     : TextButton(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            const SnackBar(
                               content: Text('Verification email sent'),
                             ),
                           );
                         },
-                        child: Text('Verify'),
+                        child: const Text('Verify'),
                       ),
                 showIconBackground: true,
                 iconColor: user.isEmailVerified
@@ -246,7 +246,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Subscription'),
+        const _SectionTitle(title: 'Subscription'),
         const SizedBox(height: SpendexTheme.spacingMd),
         Container(
           margin: const EdgeInsets.symmetric(
@@ -344,7 +344,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Quick Actions'),
+        const _SectionTitle(title: 'Quick Actions'),
         const SizedBox(height: SpendexTheme.spacingMd),
         Padding(
           padding: const EdgeInsets.symmetric(
@@ -423,7 +423,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
         border: Border.all(
           color: color.withValues(alpha: 0.3),
-          width: 1,
         ),
       ),
       child: Text(
@@ -743,7 +742,7 @@ class _LogoutButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Iconsax.logout,
                   color: SpendexColors.expense,
                   size: 20,

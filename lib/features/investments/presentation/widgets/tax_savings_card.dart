@@ -66,7 +66,7 @@ class TaxSavingsCard extends StatelessWidget {
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 ),
-                child: Icon(
+                child: const Icon(
                   Iconsax.shield_tick,
                   color: Colors.white,
                   size: 24,
@@ -180,7 +180,7 @@ class _TaxSectionProgress extends StatelessWidget {
             ),
             if (maxLimit != null)
               Text(
-                'Limit: ${CurrencyFormatter.formatPaiseCompact(maxLimit!, decimalDigits: 2)}',
+                'Limit: ${CurrencyFormatter.formatPaiseCompact(maxLimit!)}',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: Colors.white.withOpacity(0.8),
                 ),
@@ -262,7 +262,7 @@ class _TaxSectionProgress extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Iconsax.info_circle,
                         size: 12,
                         color: Colors.white,

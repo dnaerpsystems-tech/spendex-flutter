@@ -116,7 +116,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
   Future<void> checkPermissions() async {
     state = state.copyWith(
       permissionStatus: SmsPermissionStatus.checking,
-      error: null,
     );
 
     final result = await _repository.checkSmsPermissions();
@@ -129,7 +128,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
       (hasPermission) => state = state.copyWith(
         permissionStatus:
             hasPermission ? SmsPermissionStatus.granted : SmsPermissionStatus.denied,
-        error: null,
       ),
     );
   }
@@ -138,7 +136,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
   Future<bool> requestPermissions() async {
     state = state.copyWith(
       permissionStatus: SmsPermissionStatus.checking,
-      error: null,
     );
 
     final result = await _repository.requestSmsPermissions();
@@ -155,7 +152,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
         state = state.copyWith(
           permissionStatus:
               granted ? SmsPermissionStatus.granted : SmsPermissionStatus.denied,
-          error: null,
         );
         return granted;
       },
@@ -164,7 +160,7 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
 
   /// Load bank configs
   Future<void> loadBankConfigs() async {
-    state = state.copyWith(isLoadingBankConfigs: true, error: null);
+    state = state.copyWith(isLoadingBankConfigs: true);
 
     final result = await _repository.getBankConfigs();
 
@@ -181,7 +177,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
           isLoadingBankConfigs: false,
           bankConfigs: configs,
           selectedBanks: bankNames,
-          error: null,
         );
       },
     );
@@ -232,7 +227,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
 
     state = state.copyWith(
       isLoadingSms: true,
-      error: null,
     );
 
     final result = await _repository.readSmsMessages(
@@ -299,7 +293,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
       isParsing: false,
       smsMessages: parsedMessages,
       selectedSms: selectedIds,
-      error: null,
     );
   }
 
@@ -337,12 +330,12 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
       return false;
     }
 
-    state = state.copyWith(isImporting: true, error: null);
+    state = state.copyWith(isImporting: true);
 
     // Get parsed transactions from selected SMS
     final transactions = state.smsMessages
         .where((s) =>
-            state.selectedSms.contains(s.id) && s.parsedTransaction != null)
+            state.selectedSms.contains(s.id) && s.parsedTransaction != null,)
         .map((s) => s.parsedTransaction!)
         .toList();
 
@@ -361,7 +354,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
           isImporting: false,
           smsMessages: [],
           selectedSms: {},
-          error: null,
         );
         return true;
       },
@@ -376,7 +368,6 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
       (failure) => state = state.copyWith(error: failure.message),
       (success) => state = state.copyWith(
         isSmsTrackingEnabled: enabled,
-        error: null,
       ),
     );
   }
@@ -386,13 +377,12 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
     state = state.copyWith(
       smsMessages: [],
       selectedSms: {},
-      error: null,
     );
   }
 
   /// Clear error
   void clearError() {
-    state = state.copyWith(error: null);
+    state = state.copyWith();
   }
 }
 

@@ -36,8 +36,6 @@ class EmailDetailsScreen extends ConsumerWidget {
         return 'Payment Receipt';
       case EmailType.other:
         return 'Other';
-      case null:
-        return 'Unknown';
     }
   }
 
@@ -51,9 +49,7 @@ class EmailDetailsScreen extends ConsumerWidget {
         return Iconsax.receipt;
       case EmailType.other:
         return Iconsax.sms;
-      case null:
-        return Iconsax.sms;
-    }
+  }
   }
 
   @override
@@ -121,7 +117,7 @@ class EmailDetailsScreen extends ConsumerWidget {
                   if (!context.mounted) return;
 
                   // If user resolved duplicates successfully
-                  if (result == true) {
+                  if (result ?? false) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Transaction imported successfully'),
@@ -372,8 +368,8 @@ class EmailDetailsScreen extends ConsumerWidget {
                         onPressed: () {
                           // TODO: Implement download
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: const Text('Download coming soon'),
+                            const SnackBar(
+                              content: Text('Download coming soon'),
                               backgroundColor: SpendexColors.primary,
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -382,7 +378,7 @@ class EmailDetailsScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                )),
+                ),),
           ],
         ],
       ),
@@ -413,7 +409,8 @@ class EmailDetailsScreen extends ConsumerWidget {
     }
   }
 
-  Future<void> _downloadAttachment(
+  // ignore: unused_element
+  Future<void> __downloadAttachment(
     BuildContext context,
     WidgetRef ref,
     EmailAttachment attachment,

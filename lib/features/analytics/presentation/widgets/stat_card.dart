@@ -5,10 +5,7 @@ import '../../../../core/utils/currency_formatter.dart';
 /// Reusable stat card for displaying financial values
 class StatCard extends StatelessWidget {
   const StatCard({
-    super.key,
-    required this.title,
-    required this.value,
-    required this.color,
+    required this.title, required this.value, required this.color, super.key,
     this.subtitle,
     this.icon,
     this.showTrend = false,
@@ -94,9 +91,7 @@ class StatCard extends StatelessWidget {
 /// Trend indicator showing percentage change
 class TrendIndicator extends StatelessWidget {
   const TrendIndicator({
-    super.key,
-    required this.value,
-    required this.isPositive,
+    required this.value, required this.isPositive, super.key,
   });
 
   final double value;

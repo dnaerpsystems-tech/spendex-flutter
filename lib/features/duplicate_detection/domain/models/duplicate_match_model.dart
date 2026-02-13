@@ -92,6 +92,43 @@ class DuplicateMatchModel extends Equatable {
     this.merchantScore,
   });
 
+  /// Factory constructor from JSON
+  factory DuplicateMatchModel.fromJson(Map<String, dynamic> json) {
+    return DuplicateMatchModel(
+      id: json['id'] as String,
+      importedTransaction: ParsedTransactionModel.fromJson(
+        json['importedTransaction'] as Map<String, dynamic>,
+      ),
+      existingTransaction: TransactionModel.fromJson(
+        json['existingTransaction'] as Map<String, dynamic>,
+      ),
+      confidenceScore: (json['confidenceScore'] as num).toDouble(),
+      reasons: (json['reasons'] as List<dynamic>)
+          .map((e) => MatchReason.values.firstWhere(
+                (r) => r.name == e,
+                orElse: () => MatchReason.sameType,
+              ),)
+          .toList(),
+      resolution: json['resolution'] != null
+          ? DuplicateResolutionAction.values.firstWhere(
+              (e) => e.name == json['resolution'],
+            )
+          : null,
+      amountScore: json['amountScore'] != null
+          ? (json['amountScore'] as num).toDouble()
+          : null,
+      dateScore: json['dateScore'] != null
+          ? (json['dateScore'] as num).toDouble()
+          : null,
+      descriptionScore: json['descriptionScore'] != null
+          ? (json['descriptionScore'] as num).toDouble()
+          : null,
+      merchantScore: json['merchantScore'] != null
+          ? (json['merchantScore'] as num).toDouble()
+          : null,
+    );
+  }
+
   /// Unique identifier for this duplicate match
   final String id;
 
@@ -138,43 +175,6 @@ class DuplicateMatchModel extends Equatable {
 
   /// Whether this is a low confidence match
   bool get isLowConfidence => confidenceScore >= 0.50 && confidenceScore < 0.70;
-
-  /// Factory constructor from JSON
-  factory DuplicateMatchModel.fromJson(Map<String, dynamic> json) {
-    return DuplicateMatchModel(
-      id: json['id'] as String,
-      importedTransaction: ParsedTransactionModel.fromJson(
-        json['importedTransaction'] as Map<String, dynamic>,
-      ),
-      existingTransaction: TransactionModel.fromJson(
-        json['existingTransaction'] as Map<String, dynamic>,
-      ),
-      confidenceScore: (json['confidenceScore'] as num).toDouble(),
-      reasons: (json['reasons'] as List<dynamic>)
-          .map((e) => MatchReason.values.firstWhere(
-                (r) => r.name == e,
-                orElse: () => MatchReason.sameType,
-              ))
-          .toList(),
-      resolution: json['resolution'] != null
-          ? DuplicateResolutionAction.values.firstWhere(
-              (e) => e.name == json['resolution'],
-            )
-          : null,
-      amountScore: json['amountScore'] != null
-          ? (json['amountScore'] as num).toDouble()
-          : null,
-      dateScore: json['dateScore'] != null
-          ? (json['dateScore'] as num).toDouble()
-          : null,
-      descriptionScore: json['descriptionScore'] != null
-          ? (json['descriptionScore'] as num).toDouble()
-          : null,
-      merchantScore: json['merchantScore'] != null
-          ? (json['merchantScore'] as num).toDouble()
-          : null,
-    );
-  }
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {

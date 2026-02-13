@@ -68,8 +68,8 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Import deleted successfully'),
+        const SnackBar(
+          content: Text('Import deleted successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),

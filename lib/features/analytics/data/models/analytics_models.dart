@@ -214,44 +214,44 @@ enum DateRangePreset {
         final startOfWeek = today.subtract(Duration(days: today.weekday - 1));
         return DateTimeRange(start: startOfWeek, end: today);
       case DateRangePreset.thisMonth:
-        final startOfMonth = DateTime(now.year, now.month, 1);
+        final startOfMonth = DateTime(now.year, now.month);
         return DateTimeRange(start: startOfMonth, end: today);
       case DateRangePreset.lastMonth:
-        final startOfLastMonth = DateTime(now.year, now.month - 1, 1);
+        final startOfLastMonth = DateTime(now.year, now.month - 1);
         final endOfLastMonth = DateTime(now.year, now.month, 0);
         return DateTimeRange(start: startOfLastMonth, end: endOfLastMonth);
       case DateRangePreset.last3Months:
-        final start = DateTime(now.year, now.month - 2, 1);
+        final start = DateTime(now.year, now.month - 2);
         return DateTimeRange(start: start, end: today);
       case DateRangePreset.last6Months:
-        final start = DateTime(now.year, now.month - 5, 1);
+        final start = DateTime(now.year, now.month - 5);
         return DateTimeRange(start: start, end: today);
       case DateRangePreset.thisYear:
-        final startOfYear = DateTime(now.year, 1, 1);
+        final startOfYear = DateTime(now.year);
         return DateTimeRange(start: startOfYear, end: today);
       case DateRangePreset.lastYear:
-        final startOfLastYear = DateTime(now.year - 1, 1, 1);
+        final startOfLastYear = DateTime(now.year - 1);
         final endOfLastYear = DateTime(now.year - 1, 12, 31);
         return DateTimeRange(start: startOfLastYear, end: endOfLastYear);
       case DateRangePreset.allTime:
-        final veryOldDate = DateTime(2000, 1, 1);
+        final veryOldDate = DateTime(2000);
         return DateTimeRange(start: veryOldDate, end: today);
       case DateRangePreset.custom:
-        final startOfMonth = DateTime(now.year, now.month, 1);
+        final startOfMonth = DateTime(now.year, now.month);
         return DateTimeRange(start: startOfMonth, end: today);
     }
   }
 }
 
-double _parseDouble(dynamic value) {
-  if (value == null) return 0.0;
+double _parseDouble(value) {
+  if (value == null) return 0;
   if (value is double) return value;
   if (value is int) return value.toDouble();
   if (value is String) return double.tryParse(value) ?? 0.0;
-  return 0.0;
+  return 0;
 }
 
-Color _parseColor(dynamic value) {
+Color _parseColor(value) {
   if (value == null) return const Color(0xFF10B981);
   if (value is Color) return value;
   if (value is String) {

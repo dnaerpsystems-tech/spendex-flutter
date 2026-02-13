@@ -8,13 +8,13 @@ import '../models/parsed_transaction_model.dart';
 import '../models/sms_message_model.dart';
 
 class SmsParserRepositoryImpl implements SmsParserRepository {
-  final SmsParserRemoteDataSource _remoteDataSource;
-  final SmsParserLocalDataSource _localDataSource;
 
   SmsParserRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
   );
+  final SmsParserRemoteDataSource _remoteDataSource;
+  final SmsParserLocalDataSource _localDataSource;
 
   @override
   Future<Either<Failure, bool>> checkSmsPermissions() async {
@@ -46,7 +46,7 @@ class SmsParserRepositoryImpl implements SmsParserRepository {
       );
 
       return localResult.fold(
-        (failure) => Left(failure),
+        Left.new,
         (messages) async {
           if (messages.isEmpty) {
             return Right(messages);
@@ -55,7 +55,7 @@ class SmsParserRepositoryImpl implements SmsParserRepository {
           final syncResult = await _remoteDataSource.syncSmsMessages(messages);
           return syncResult.fold(
             (failure) => Right(messages),
-            (syncedMessages) => Right(syncedMessages),
+            Right.new,
           );
         },
       );
@@ -101,14 +101,14 @@ class SmsParserRepositoryImpl implements SmsParserRepository {
       final localResult = await _localDataSource.setTrackingStatus(enabled);
 
       return localResult.fold(
-        (failure) => Left(failure),
+        Left.new,
         (success) async {
           final remoteResult = await _remoteDataSource.toggleSmsTracking(
             enabled,
           );
           return remoteResult.fold(
             (failure) => Right(success),
-            (remoteSuccess) => Right(remoteSuccess),
+            Right.new,
           );
         },
       );

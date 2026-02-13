@@ -68,7 +68,7 @@ class InvestmentSummaryCard extends StatelessWidget {
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 ),
-                child: Icon(
+                child: const Icon(
                   Iconsax.chart_square,
                   color: Colors.white,
                   size: 24,
@@ -111,7 +111,6 @@ class InvestmentSummaryCard extends StatelessWidget {
                 label: 'Total Invested',
                 value: CurrencyFormatter.formatPaiseCompact(
                   summary.totalInvested,
-                  decimalDigits: 2,
                 ),
                 icon: Iconsax.money_send,
               ),
@@ -119,14 +118,13 @@ class InvestmentSummaryCard extends StatelessWidget {
                 label: 'Current Value',
                 value: CurrencyFormatter.formatPaiseCompact(
                   summary.currentValue,
-                  decimalDigits: 2,
                 ),
                 icon: Iconsax.wallet_money,
               ),
               _SummaryStatItem(
                 label: 'Total Returns',
                 value:
-                    '${isProfit ? '+' : ''}${CurrencyFormatter.formatPaiseCompact(summary.totalReturns, decimalDigits: 2)}',
+                    '${isProfit ? '+' : ''}${CurrencyFormatter.formatPaiseCompact(summary.totalReturns)}',
                 icon: isProfit ? Iconsax.arrow_up_3 : Iconsax.arrow_down,
                 valueColor: isProfit ? Colors.green.shade300 : Colors.red.shade300,
               ),

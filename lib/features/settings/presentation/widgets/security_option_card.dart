@@ -152,7 +152,6 @@ class SecurityOptionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
         border: Border.all(
           color: color.withValues(alpha: 0.2),
-          width: 1,
         ),
       ),
       child: Icon(

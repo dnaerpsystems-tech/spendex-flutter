@@ -50,12 +50,11 @@ extension InsightActionTypeExtension on InsightActionType {
 }
 
 class InsightDetailScreen extends ConsumerStatefulWidget {
-  final String insightId;
 
   const InsightDetailScreen({
-    super.key,
-    required this.insightId,
+    required this.insightId, super.key,
   });
+  final String insightId;
 
   @override
   ConsumerState<InsightDetailScreen> createState() =>
@@ -255,7 +254,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
 
     if (theme.brightness == Brightness.dark) {
       backgroundColor = backgroundColor.withOpacity(0.2);
-      textColor = backgroundColor.withOpacity(1.0);
+      textColor = backgroundColor.withOpacity(1);
     }
 
     return Chip(
@@ -316,7 +315,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),
@@ -522,7 +521,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
     // Convert camelCase or snake_case to Title Case
     final words = key
         .replaceAllMapped(
-          RegExp(r'([A-Z])'),
+          RegExp('([A-Z])'),
           (match) => ' ${match.group(1)}',
         )
         .replaceAll('_', ' ')
@@ -534,7 +533,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
         .join(' ');
   }
 
-  String _formatMetadataValue(String key, dynamic value) {
+  String _formatMetadataValue(String key, value) {
     if (value == null) return 'N/A';
 
     // Format currency values

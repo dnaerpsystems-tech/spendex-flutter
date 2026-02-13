@@ -27,7 +27,8 @@ class TransactionsScreen extends ConsumerStatefulWidget {
 
 class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   final ScrollController _scrollController = ScrollController();
-  final _currencyFormat = NumberFormat.currency(
+  // ignore: unused_field
+  final __currencyFormat = NumberFormat.currency(
     locale: 'en_IN',
     symbol: '\u20B9',
     decimalDigits: 0,
@@ -333,7 +334,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                 ...entry.value.map((t) => TransactionCard(
                   transaction: t,
                   onTap: () => context.push('/transactions/${t.id}'),
-                )),
+                ),),
               ],
             );
           },
@@ -362,7 +363,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 }
 
 class _FilterChip extends StatelessWidget {
-  const _FilterChip({required this.label, this.color, required this.onRemove});
+  const _FilterChip({required this.label, required this.onRemove, this.color});
   final String label;
   final Color? color;
   final VoidCallback onRemove;
@@ -465,7 +466,7 @@ class _FilterSheetState extends State<_FilterSheet> {
               Text('Filter Transactions', style: SpendexTheme.headlineMedium),
               TextButton(
                 onPressed: () => setState(() { _type = null; _dateRange = null; }),
-                child: Text('Reset', style: TextStyle(color: SpendexColors.expense)),
+                child: const Text('Reset', style: TextStyle(color: SpendexColors.expense)),
               ),
             ],
           ),
@@ -479,7 +480,7 @@ class _FilterSheetState extends State<_FilterSheet> {
               selected: _type == t,
               selectedColor: _getColor(t).withValues(alpha: 0.2),
               onSelected: (s) => setState(() => _type = s ? t : null),
-            )).toList(),
+            ),).toList(),
           ),
           const SizedBox(height: 24),
           Text('Date Range', style: SpendexTheme.titleMedium),
@@ -497,7 +498,7 @@ class _FilterSheetState extends State<_FilterSheet> {
             icon: const Icon(Iconsax.calendar),
             label: Text(_dateRange != null
                 ? '${DateFormat('MMM d').format(_dateRange!.start)} - ${DateFormat('MMM d').format(_dateRange!.end)}'
-                : 'Select Date Range'),
+                : 'Select Date Range',),
           ),
           const SizedBox(height: 32),
           SizedBox(

@@ -367,7 +367,7 @@ class DateFormatter {
   /// Example: `FY 2023-24 (01 Apr 2023 - 31 Mar 2024)`
   static String getFinancialYearRange(DateTime date) {
     final year = date.month >= 4 ? date.year : date.year - 1;
-    final startDate = DateTime(year, 4, 1);
+    final startDate = DateTime(year, 4);
     final endDate = DateTime(year + 1, 3, 31);
 
     return '${getFinancialYear(date)} (${formatDisplay(startDate)} - ${formatDisplay(endDate)})';
@@ -378,7 +378,7 @@ class DateFormatter {
   /// Example: 15 May 2023 → 01 Apr 2023
   static DateTime getFinancialYearStart(DateTime date) {
     final year = date.month >= 4 ? date.year : date.year - 1;
-    return DateTime(year, 4, 1);
+    return DateTime(year, 4);
   }
 
   /// Get end date of financial year for a given date
@@ -456,7 +456,7 @@ class DateFormatter {
 
   /// Get first day of month for a given date
   static DateTime getFirstDayOfMonth(DateTime date) {
-    return DateTime(date.year, date.month, 1);
+    return DateTime(date.year, date.month);
   }
 
   /// Get last day of month for a given date
@@ -466,7 +466,7 @@ class DateFormatter {
 
   /// Get first day of year for a given date
   static DateTime getFirstDayOfYear(DateTime date) {
-    return DateTime(date.year, 1, 1);
+    return DateTime(date.year);
   }
 
   /// Get last day of year for a given date

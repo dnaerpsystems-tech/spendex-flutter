@@ -138,7 +138,7 @@ class ProfileHeader extends StatelessWidget {
         shape: BoxShape.circle,
         gradient: hasPhoto
             ? null
-            : LinearGradient(
+            : const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
@@ -233,7 +233,6 @@ class ProfileHeader extends StatelessWidget {
         borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
         border: Border.all(
           color: planTier.color.withValues(alpha: 0.3),
-          width: 1,
         ),
       ),
       child: Row(

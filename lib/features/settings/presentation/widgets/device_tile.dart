@@ -156,7 +156,7 @@ class DeviceTile extends StatelessWidget {
   }
 
   Widget _buildDeviceIcon(bool isDark) {
-    final iconColor = SpendexColors.primary;
+    const iconColor = SpendexColors.primary;
     final backgroundColor = iconColor.withValues(alpha: 0.1);
 
     return Container(
@@ -206,7 +206,7 @@ class DeviceTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
         child: Container(
           padding: const EdgeInsets.all(SpendexTheme.spacingSm),
-          child: Icon(
+          child: const Icon(
             Iconsax.trash,
             color: SpendexColors.expense,
             size: 18,
@@ -295,7 +295,7 @@ class DeviceTile extends StatelessWidget {
       },
     );
 
-    if (result == true && onRemove != null) {
+    if ((result ?? false) && onRemove != null) {
       onRemove!();
     }
   }

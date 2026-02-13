@@ -115,9 +115,8 @@ class TransactionPreviewTile extends StatelessWidget {
                     children: [
                       // Merchant/Description
                       Text(
-                        transaction.merchant ??
-                            transaction.description ??
-                            'Transaction',
+                        transaction.merchant ?? (
+                            transaction.description.isNotEmpty ? transaction.description : 'Transaction'),
                         style: SpendexTheme.titleMedium.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
@@ -235,7 +234,7 @@ class TransactionPreviewTile extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
+                              const Icon(
                                 Iconsax.edit,
                                 size: 12,
                                 color: SpendexColors.primary,

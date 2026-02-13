@@ -660,7 +660,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
     if (_selectedType == InvestmentType.fixedDeposit ||
         _selectedType == InvestmentType.recurringDeposit) {
       final amount = double.tryParse(
-          _maturityAmountController.text.replaceAll(',', ''));
+          _maturityAmountController.text.replaceAll(',', ''),);
       return amount != null ? (amount * 100).toInt() : null;
     }
     return null;
@@ -788,11 +788,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Basic Information'),
+        const _SectionTitle(title: 'Basic Information'),
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _nameController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Investment Name',
             hintText: 'e.g., SBI FD, Reliance Stock, PPF Account',
             prefixIcon: Icon(Iconsax.edit),
@@ -826,11 +826,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _investedAmountController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Invested Amount',
             hintText: '0.00',
             prefixText: '${CurrencyFormatter.symbol} ',
-            prefixIcon: const Icon(Iconsax.wallet_money),
+            prefixIcon: Icon(Iconsax.wallet_money),
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
@@ -844,7 +844,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
           onTap: _selectPurchaseDate,
           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           child: InputDecorator(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Purchase Date (Optional)',
               hintText: 'Select date',
               prefixIcon: Icon(Iconsax.calendar),
@@ -890,11 +890,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Mutual Fund Details'),
+        const _SectionTitle(title: 'Mutual Fund Details'),
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _schemeCodeController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Scheme Code/Name',
             hintText: 'e.g., HDFC Top 100',
             prefixIcon: Icon(Iconsax.document_text),
@@ -905,7 +905,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _folioController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Folio Number (Optional)',
             hintText: 'Enter folio number',
             prefixIcon: Icon(Iconsax.card),
@@ -918,7 +918,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
             Expanded(
               child: TextFormField(
                 controller: _unitsController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Units',
                   hintText: '0.0000',
                   prefixIcon: Icon(Iconsax.note),
@@ -935,11 +935,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
             Expanded(
               child: TextFormField(
                 controller: _navController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'NAV/Price',
                   hintText: '0.00',
                   prefixText: '${CurrencyFormatter.symbol} ',
-                  prefixIcon: const Icon(Iconsax.money),
+                  prefixIcon: Icon(Iconsax.money),
                 ),
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
@@ -959,11 +959,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Stock Details'),
+        const _SectionTitle(title: 'Stock Details'),
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _symbolController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Stock Symbol',
             hintText: 'e.g., RELIANCE, TCS, INFY',
             prefixIcon: Icon(Iconsax.chart_1),
@@ -975,7 +975,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _isinController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'ISIN (Optional)',
             hintText: 'Enter ISIN',
             prefixIcon: Icon(Iconsax.barcode),
@@ -989,7 +989,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
             Expanded(
               child: TextFormField(
                 controller: _quantityController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Quantity',
                   hintText: '0',
                   prefixIcon: Icon(Iconsax.note),
@@ -1004,11 +1004,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
             Expanded(
               child: TextFormField(
                 controller: _priceController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Purchase Price',
                   hintText: '0.00',
                   prefixText: '${CurrencyFormatter.symbol} ',
-                  prefixIcon: const Icon(Iconsax.money),
+                  prefixIcon: Icon(Iconsax.money),
                 ),
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
@@ -1024,7 +1024,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _brokerController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Broker (Optional)',
             hintText: 'e.g., Zerodha, Groww, Upstox',
             prefixIcon: Icon(Iconsax.building),
@@ -1047,7 +1047,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _bankController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Bank Name',
             hintText: 'e.g., SBI, HDFC, ICICI',
             prefixIcon: Icon(Iconsax.bank),
@@ -1062,7 +1062,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
             Expanded(
               child: TextFormField(
                 controller: _interestRateController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Interest Rate',
                   hintText: '0.00',
                   suffixText: '%',
@@ -1081,7 +1081,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
             Expanded(
               child: TextFormField(
                 controller: _tenureController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Tenure',
                   hintText: '12',
                   suffixText: 'months',
@@ -1100,7 +1100,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
           onTap: _selectMaturityDate,
           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           child: InputDecorator(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Maturity Date',
               hintText: 'Auto-calculated or select',
               prefixIcon: Icon(Iconsax.calendar_1),
@@ -1120,11 +1120,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _maturityAmountController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Maturity Amount',
             hintText: 'Auto-calculated',
             prefixText: '${CurrencyFormatter.symbol} ',
-            prefixIcon: const Icon(Iconsax.wallet_money),
+            prefixIcon: Icon(Iconsax.wallet_money),
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
@@ -1167,7 +1167,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _accountNumberController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Account Number (Optional)',
             hintText: 'Enter account number',
             prefixIcon: Icon(Iconsax.card),
@@ -1177,11 +1177,11 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         const SizedBox(height: SpendexTheme.spacingMd),
         TextFormField(
           controller: _yearlyContributionController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Yearly Contribution (Optional)',
             hintText: '0.00',
             prefixText: '${CurrencyFormatter.symbol} ',
-            prefixIcon: const Icon(Iconsax.wallet_add),
+            prefixIcon: Icon(Iconsax.wallet_add),
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
@@ -1247,7 +1247,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(title: 'Tax Saving'),
+        const _SectionTitle(title: 'Tax Saving'),
         const SizedBox(height: SpendexTheme.spacingMd),
         SwitchListTile(
           value: _taxSaving,
@@ -1268,7 +1268,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
           const SizedBox(height: SpendexTheme.spacingMd),
           DropdownButtonFormField<TaxSection>(
             initialValue: _selectedTaxSection,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Tax Section',
               hintText: 'Select tax section',
               prefixIcon: Icon(Iconsax.receipt_minus),

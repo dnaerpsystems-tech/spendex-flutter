@@ -5,9 +5,9 @@ import '../datasources/india_utils_remote_datasource.dart';
 import '../models/ifsc_details_model.dart';
 
 class IndiaUtilsRepositoryImpl implements IndiaUtilsRepository {
-  final IndiaUtilsRemoteDataSource _remoteDataSource;
 
   IndiaUtilsRepositoryImpl(this._remoteDataSource);
+  final IndiaUtilsRemoteDataSource _remoteDataSource;
 
   @override
   Future<Either<Failure, IfscDetailsModel>> lookupIfsc(String ifscCode) async {

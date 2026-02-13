@@ -57,13 +57,13 @@ abstract class EmailLocalDataSource {
 }
 
 class EmailLocalDataSourceImpl implements EmailLocalDataSource {
+
+  EmailLocalDataSourceImpl(this._secureStorage);
   final SecureStorageService _secureStorage;
 
   static const String _accountsCacheKey = 'email_accounts_cache';
   static const String _emailsCacheKey = 'email_messages_cache';
   static const String _passwordKeyPrefix = 'email_password_';
-
-  EmailLocalDataSourceImpl(this._secureStorage);
 
   @override
   Future<Either<Failure, bool>> cacheEmailAccounts(
@@ -163,7 +163,7 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
       final result = await getCachedEmails();
 
       return result.fold(
-        (failure) => Left(failure),
+        Left.new,
         (emails) async {
           final filteredEmails =
               emails.where((e) => e.accountId != accountId).toList();
@@ -183,7 +183,7 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
   }) async {
     try {
       // Create IMAP client
-      final client = ImapClient(isLogEnabled: false);
+      final client = ImapClient();
 
       // Connect to IMAP server
       await client.connectToServer(
@@ -297,7 +297,8 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
   }
 
   /// Build IMAP search query from filters
-  String _buildSearchQuery(EmailFilterModel? filters) {
+  // ignore: unused_element
+  String __buildSearchQuery(EmailFilterModel? filters) {
     if (filters == null) {
       return 'ALL';
     }
@@ -406,7 +407,7 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
     if (filters.selectedBanks.isNotEmpty) {
       filtered = filtered
           .where((e) =>
-              e.bankName != null && filters.selectedBanks.contains(e.bankName))
+              e.bankName != null && filters.selectedBanks.contains(e.bankName),)
           .toList();
     }
 

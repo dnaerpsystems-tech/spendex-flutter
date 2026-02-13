@@ -68,6 +68,44 @@ enum InsightActionType {
 
 /// Model class representing an insight
 class InsightModel extends Equatable {
+
+  const InsightModel({
+    required this.id,
+    required this.type,
+    required this.title, required this.description, required this.priority, required this.actionType, required this.createdAt, this.category,
+    this.actionData,
+    this.validUntil,
+    this.isRead = false,
+    this.isDismissed = false,
+    this.metadata,
+  });
+
+  /// Create InsightModel from JSON
+  factory InsightModel.fromJson(Map<String, dynamic> json) {
+    return InsightModel(
+      id: json['id'] as String? ?? '',
+      type: InsightType.fromJson(json['type'] as String? ?? 'spendingPattern'),
+      category: json['category'] as String?,
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      priority: InsightPriority.fromJson(
+        json['priority'] as String? ?? 'medium',
+      ),
+      actionType: InsightActionType.fromJson(
+        json['action_type'] as String? ?? 'none',
+      ),
+      actionData: json['action_data'] as Map<String, dynamic>?,
+      validUntil: json['valid_until'] != null
+          ? DateTime.parse(json['valid_until'] as String)
+          : null,
+      isRead: json['is_read'] as bool? ?? false,
+      isDismissed: json['is_dismissed'] as bool? ?? false,
+      metadata: json['metadata'] as Map<String, dynamic>?,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+    );
+  }
   /// Unique identifier for the insight
   final String id;
 
@@ -106,49 +144,6 @@ class InsightModel extends Equatable {
 
   /// Timestamp when the insight was created
   final DateTime createdAt;
-
-  const InsightModel({
-    required this.id,
-    required this.type,
-    this.category,
-    required this.title,
-    required this.description,
-    required this.priority,
-    required this.actionType,
-    this.actionData,
-    this.validUntil,
-    this.isRead = false,
-    this.isDismissed = false,
-    this.metadata,
-    required this.createdAt,
-  });
-
-  /// Create InsightModel from JSON
-  factory InsightModel.fromJson(Map<String, dynamic> json) {
-    return InsightModel(
-      id: json['id'] as String? ?? '',
-      type: InsightType.fromJson(json['type'] as String? ?? 'spendingPattern'),
-      category: json['category'] as String?,
-      title: json['title'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      priority: InsightPriority.fromJson(
-        json['priority'] as String? ?? 'medium',
-      ),
-      actionType: InsightActionType.fromJson(
-        json['action_type'] as String? ?? 'none',
-      ),
-      actionData: json['action_data'] as Map<String, dynamic>?,
-      validUntil: json['valid_until'] != null
-          ? DateTime.parse(json['valid_until'] as String)
-          : null,
-      isRead: json['is_read'] as bool? ?? false,
-      isDismissed: json['is_dismissed'] as bool? ?? false,
-      metadata: json['metadata'] as Map<String, dynamic>?,
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'] as String)
-          : DateTime.now(),
-    );
-  }
 
   /// Convert InsightModel to JSON
   Map<String, dynamic> toJson() {
@@ -251,6 +246,37 @@ class InsightModel extends Equatable {
 
 /// Request model for creating a new insight
 class CreateInsightRequest extends Equatable {
+
+  const CreateInsightRequest({
+    required this.type,
+    required this.title, required this.description, this.category,
+    this.priority = InsightPriority.medium,
+    this.actionType = InsightActionType.none,
+    this.actionData,
+    this.validUntil,
+    this.metadata,
+  });
+
+  /// Create CreateInsightRequest from JSON
+  factory CreateInsightRequest.fromJson(Map<String, dynamic> json) {
+    return CreateInsightRequest(
+      type: InsightType.fromJson(json['type'] as String? ?? 'spendingPattern'),
+      category: json['category'] as String?,
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      priority: InsightPriority.fromJson(
+        json['priority'] as String? ?? 'medium',
+      ),
+      actionType: InsightActionType.fromJson(
+        json['action_type'] as String? ?? 'none',
+      ),
+      actionData: json['action_data'] as Map<String, dynamic>?,
+      validUntil: json['valid_until'] != null
+          ? DateTime.parse(json['valid_until'] as String)
+          : null,
+      metadata: json['metadata'] as Map<String, dynamic>?,
+    );
+  }
   /// Type of the insight
   final InsightType type;
 
@@ -278,18 +304,6 @@ class CreateInsightRequest extends Equatable {
   /// Additional metadata for the insight
   final Map<String, dynamic>? metadata;
 
-  const CreateInsightRequest({
-    required this.type,
-    this.category,
-    required this.title,
-    required this.description,
-    this.priority = InsightPriority.medium,
-    this.actionType = InsightActionType.none,
-    this.actionData,
-    this.validUntil,
-    this.metadata,
-  });
-
   /// Convert CreateInsightRequest to JSON
   Map<String, dynamic> toJson() {
     return {
@@ -303,27 +317,6 @@ class CreateInsightRequest extends Equatable {
       'valid_until': validUntil?.toIso8601String(),
       'metadata': metadata,
     };
-  }
-
-  /// Create CreateInsightRequest from JSON
-  factory CreateInsightRequest.fromJson(Map<String, dynamic> json) {
-    return CreateInsightRequest(
-      type: InsightType.fromJson(json['type'] as String? ?? 'spendingPattern'),
-      category: json['category'] as String?,
-      title: json['title'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      priority: InsightPriority.fromJson(
-        json['priority'] as String? ?? 'medium',
-      ),
-      actionType: InsightActionType.fromJson(
-        json['action_type'] as String? ?? 'none',
-      ),
-      actionData: json['action_data'] as Map<String, dynamic>?,
-      validUntil: json['valid_until'] != null
-          ? DateTime.parse(json['valid_until'] as String)
-          : null,
-      metadata: json['metadata'] as Map<String, dynamic>?,
-    );
   }
 
   @override
@@ -345,6 +338,47 @@ class CreateInsightRequest extends Equatable {
 
 /// Request model for updating an existing insight
 class UpdateInsightRequest extends Equatable {
+
+  const UpdateInsightRequest({
+    required this.id,
+    this.type,
+    this.category,
+    this.title,
+    this.description,
+    this.priority,
+    this.actionType,
+    this.actionData,
+    this.validUntil,
+    this.isRead,
+    this.isDismissed,
+    this.metadata,
+  });
+
+  /// Create UpdateInsightRequest from JSON
+  factory UpdateInsightRequest.fromJson(Map<String, dynamic> json) {
+    return UpdateInsightRequest(
+      id: json['id'] as String? ?? '',
+      type: json['type'] != null
+          ? InsightType.fromJson(json['type'] as String)
+          : null,
+      category: json['category'] as String?,
+      title: json['title'] as String?,
+      description: json['description'] as String?,
+      priority: json['priority'] != null
+          ? InsightPriority.fromJson(json['priority'] as String)
+          : null,
+      actionType: json['action_type'] != null
+          ? InsightActionType.fromJson(json['action_type'] as String)
+          : null,
+      actionData: json['action_data'] as Map<String, dynamic>?,
+      validUntil: json['valid_until'] != null
+          ? DateTime.parse(json['valid_until'] as String)
+          : null,
+      isRead: json['is_read'] as bool?,
+      isDismissed: json['is_dismissed'] as bool?,
+      metadata: json['metadata'] as Map<String, dynamic>?,
+    );
+  }
   /// Insight ID to update
   final String id;
 
@@ -381,24 +415,9 @@ class UpdateInsightRequest extends Equatable {
   /// Updated metadata (optional)
   final Map<String, dynamic>? metadata;
 
-  const UpdateInsightRequest({
-    required this.id,
-    this.type,
-    this.category,
-    this.title,
-    this.description,
-    this.priority,
-    this.actionType,
-    this.actionData,
-    this.validUntil,
-    this.isRead,
-    this.isDismissed,
-    this.metadata,
-  });
-
   /// Convert UpdateInsightRequest to JSON
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {'id': id};
+    final json = <String, dynamic>{'id': id};
 
     if (type != null) json['type'] = type!.toJson();
     if (category != null) json['category'] = category;
@@ -413,32 +432,6 @@ class UpdateInsightRequest extends Equatable {
     if (metadata != null) json['metadata'] = metadata;
 
     return json;
-  }
-
-  /// Create UpdateInsightRequest from JSON
-  factory UpdateInsightRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateInsightRequest(
-      id: json['id'] as String? ?? '',
-      type: json['type'] != null
-          ? InsightType.fromJson(json['type'] as String)
-          : null,
-      category: json['category'] as String?,
-      title: json['title'] as String?,
-      description: json['description'] as String?,
-      priority: json['priority'] != null
-          ? InsightPriority.fromJson(json['priority'] as String)
-          : null,
-      actionType: json['action_type'] != null
-          ? InsightActionType.fromJson(json['action_type'] as String)
-          : null,
-      actionData: json['action_data'] as Map<String, dynamic>?,
-      validUntil: json['valid_until'] != null
-          ? DateTime.parse(json['valid_until'] as String)
-          : null,
-      isRead: json['is_read'] as bool?,
-      isDismissed: json['is_dismissed'] as bool?,
-      metadata: json['metadata'] as Map<String, dynamic>?,
-    );
   }
 
   @override

@@ -19,8 +19,7 @@ class TransactionCard extends StatelessWidget {
   /// The [transaction] parameter is required and specifies the transaction to display.
   /// The [onTap] callback is triggered when the card is tapped.
   const TransactionCard({
-    super.key,
-    required this.transaction,
+    required this.transaction, super.key,
     this.onTap,
     this.showDate = true,
     this.compact = false,
@@ -66,7 +65,7 @@ class TransactionCard extends StatelessWidget {
     }
 
     // Get icon based on category or transaction type
-    final IconData iconData = _getCategoryIcon(
+    final iconData = _getCategoryIcon(
       transaction.category?.icon,
       transaction.type,
     );

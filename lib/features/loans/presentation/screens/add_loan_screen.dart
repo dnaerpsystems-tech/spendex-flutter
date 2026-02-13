@@ -570,7 +570,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                             textInputAction: TextInputAction.next,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d*\.?\d{0,2}')),
+                                  RegExp(r'^\d*\.?\d{0,2}'),),
                             ],
                             validator: _validateRate,
                             enabled: !isOperationInProgress,
@@ -608,7 +608,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                       EmiBreakdownCard(
                         emiAmount: _emiAmount,
                         principalAmount: (CurrencyFormatter.parse(
-                                    _principalController.text) ??
+                                    _principalController.text,) ??
                                 0) *
                             100,
                         totalInterest: _totalInterest,

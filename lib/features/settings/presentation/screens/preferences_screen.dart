@@ -195,7 +195,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               padding: const EdgeInsets.all(SpendexTheme.spacingLg),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.moon,
                     color: SpendexColors.primary,
                     size: 24,
@@ -264,12 +264,12 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
     final currencies = ['INR', 'USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD'];
     final currencySymbols = {
       'INR': '₹',
-      'USD': '\$',
+      'USD': r'$',
       'EUR': '€',
       'GBP': '£',
       'JPY': '¥',
-      'AUD': 'A\$',
-      'CAD': 'C\$',
+      'AUD': r'A$',
+      'CAD': r'C$',
     };
 
     showModalBottomSheet<void>(
@@ -288,7 +288,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               padding: const EdgeInsets.all(SpendexTheme.spacingLg),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.money,
                     color: SpendexColors.primary,
                     size: 24,
@@ -350,7 +350,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               padding: const EdgeInsets.all(SpendexTheme.spacingLg),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.language_square,
                     color: SpendexColors.primary,
                     size: 24,
@@ -413,7 +413,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               padding: const EdgeInsets.all(SpendexTheme.spacingLg),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.calendar,
                     color: SpendexColors.primary,
                     size: 24,
@@ -454,7 +454,6 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -479,7 +478,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SectionTitle(title: 'Appearance'),
+            const _SectionTitle(title: 'Appearance'),
             const SizedBox(height: SpendexTheme.spacingSm),
             PreferenceTile(
               icon: Iconsax.moon,
@@ -489,7 +488,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               onTap: _showThemeSelector,
             ),
             const SizedBox(height: SpendexTheme.spacing2xl),
-            _SectionTitle(title: 'Currency & Region'),
+            const _SectionTitle(title: 'Currency & Region'),
             const SizedBox(height: SpendexTheme.spacingSm),
             PreferenceTile(
               icon: Iconsax.money,
@@ -515,7 +514,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               onTap: _showDateFormatSelector,
             ),
             const SizedBox(height: SpendexTheme.spacing2xl),
-            _SectionTitle(title: 'Notifications'),
+            const _SectionTitle(title: 'Notifications'),
             const SizedBox(height: SpendexTheme.spacingSm),
             PreferenceTile(
               icon: Iconsax.notification,
@@ -572,7 +571,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   : (value) => _updatePreference('transactionAlerts', value),
             ),
             const SizedBox(height: SpendexTheme.spacing2xl),
-            _SectionTitle(title: 'Privacy & Security'),
+            const _SectionTitle(title: 'Privacy & Security'),
             const SizedBox(height: SpendexTheme.spacingSm),
             PreferenceTile(
               icon: Iconsax.eye,

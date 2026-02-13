@@ -126,7 +126,7 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
   Map<String, List<InvestmentModel>> _groupInvestmentsByType(
     List<InvestmentModel> investments,
   ) {
-    final Map<String, List<InvestmentModel>> grouped = {};
+    final grouped = <String, List<InvestmentModel>>{};
 
     for (final investment in investments) {
       final typeKey = _getTypeDisplayName(investment.type);

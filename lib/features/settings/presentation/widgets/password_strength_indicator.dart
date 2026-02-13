@@ -8,7 +8,7 @@ enum PasswordStrength {
   weak('Weak', 0.25, Color(0xFFEF4444)),
   fair('Fair', 0.50, Color(0xFFF97316)),
   good('Good', 0.75, Color(0xFFF59E0B)),
-  strong('Strong', 1.0, Color(0xFF22C55E));
+  strong('Strong', 1, Color(0xFF22C55E));
 
   const PasswordStrength(this.label, this.progress, this.color);
 
@@ -89,7 +89,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
         ),
         if (showRequirements) ...[
           const SizedBox(height: SpendexTheme.spacingMd),
-          ...requirements.map((req) => _buildRequirementItem(req)),
+          ...requirements.map(_buildRequirementItem),
         ],
       ],
     );

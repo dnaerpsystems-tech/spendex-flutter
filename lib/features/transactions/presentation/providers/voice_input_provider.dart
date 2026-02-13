@@ -116,7 +116,6 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
       _isInitialized = await _speech.initialize(
         onError: _onSpeechError,
         onStatus: _onSpeechStatus,
-        debugLogging: false,
       );
 
       if (!_isInitialized) {
@@ -128,7 +127,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
     } catch (e) {
       state = state.copyWith(
         state: VoiceInputState.error,
-        errorMessage: 'Failed to initialize speech recognition: ${e.toString()}',
+        errorMessage: 'Failed to initialize speech recognition: $e',
       );
     }
   }
@@ -192,15 +191,13 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
         onResult: _onSpeechResult,
         listenFor: const Duration(seconds: 30),
         pauseFor: const Duration(seconds: 3),
-        partialResults: true,
         onSoundLevelChange: _onSoundLevelChange,
         cancelOnError: true,
-        listenMode: ListenMode.confirmation,
       );
     } catch (e) {
       state = state.copyWith(
         state: VoiceInputState.error,
-        errorMessage: 'Failed to start listening: ${e.toString()}',
+        errorMessage: 'Failed to start listening: $e',
       );
     }
   }
@@ -219,7 +216,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
     } catch (e) {
       state = state.copyWith(
         state: VoiceInputState.error,
-        errorMessage: 'Failed to stop listening: ${e.toString()}',
+        errorMessage: 'Failed to stop listening: $e',
       );
     }
   }
@@ -328,7 +325,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
     );
 
     // Simulate typing effect
-    for (int i = 0; i <= text.length; i++) {
+    for (var i = 0; i <= text.length; i++) {
       await Future.delayed(const Duration(milliseconds: 50));
       if (state.state != VoiceInputState.listening) break;
       state = state.copyWith(recognizedText: text.substring(0, i));

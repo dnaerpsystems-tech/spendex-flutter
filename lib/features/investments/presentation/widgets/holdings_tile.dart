@@ -117,7 +117,6 @@ class _HoldingsTileState extends State<HoldingsTile> {
                             Text(
                               CurrencyFormatter.formatPaiseCompact(
                                 widget.investment.currentValue,
-                                decimalDigits: 2,
                               ),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: textPrimary,
@@ -211,7 +210,6 @@ class _HoldingsTileState extends State<HoldingsTile> {
                       label: 'Purchase Price',
                       value: CurrencyFormatter.formatPaise(
                         widget.investment.purchasePrice!,
-                        decimalDigits: 2,
                       ),
                       textPrimary: textPrimary,
                       textSecondary: textSecondary,
@@ -221,7 +219,6 @@ class _HoldingsTileState extends State<HoldingsTile> {
                       label: 'Current Price',
                       value: CurrencyFormatter.formatPaise(
                         widget.investment.currentPrice!,
-                        decimalDigits: 2,
                       ),
                       textPrimary: textPrimary,
                       textSecondary: textSecondary,

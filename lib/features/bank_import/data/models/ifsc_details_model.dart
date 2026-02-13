@@ -1,13 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class IfscDetailsModel extends Equatable {
-  final String ifsc;
-  final String bank;
-  final String branch;
-  final String? address;
-  final String? city;
-  final String? state;
-  final String? contact;
 
   const IfscDetailsModel({
     required this.ifsc,
@@ -30,6 +23,13 @@ class IfscDetailsModel extends Equatable {
       contact: json['contact'] as String?,
     );
   }
+  final String ifsc;
+  final String bank;
+  final String branch;
+  final String? address;
+  final String? city;
+  final String? state;
+  final String? contact;
 
   Map<String, dynamic> toJson() {
     return {

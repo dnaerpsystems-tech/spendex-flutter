@@ -48,12 +48,12 @@ class DuplicateDetectionRemoteDataSourceImpl
     final result = await _apiClient.post<Map<String, dynamic>>(
       ApiEndpoints.duplicateCheck,
       data: requestData,
-      fromJson: (json) => json as Map<String, dynamic>,
+      fromJson: (json) => json! as Map<String, dynamic>,
     );
 
     return result.fold(
       (failure) => throw Exception(failure.message),
-      (data) => DuplicateDetectionResult.fromJson(data),
+      DuplicateDetectionResult.fromJson,
     );
   }
 
@@ -74,7 +74,7 @@ class DuplicateDetectionRemoteDataSourceImpl
     final result = await _apiClient.post<Map<String, dynamic>>(
       ApiEndpoints.duplicateResolve,
       data: requestData,
-      fromJson: (json) => json as Map<String, dynamic>,
+      fromJson: (json) => json! as Map<String, dynamic>,
     );
 
     return result.fold(
@@ -104,12 +104,12 @@ class DuplicateDetectionRemoteDataSourceImpl
     final result = await _apiClient.get<Map<String, dynamic>>(
       ApiEndpoints.duplicateStats,
       queryParameters: queryParams,
-      fromJson: (json) => json as Map<String, dynamic>,
+      fromJson: (json) => json! as Map<String, dynamic>,
     );
 
     return result.fold(
       (failure) => throw Exception(failure.message),
-      (data) => DuplicateDetectionStats.fromJson(data),
+      DuplicateDetectionStats.fromJson,
     );
   }
 }

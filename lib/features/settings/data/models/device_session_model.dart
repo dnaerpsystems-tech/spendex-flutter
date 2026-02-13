@@ -7,12 +7,9 @@ class DeviceSessionModel extends Equatable {
     required this.deviceName,
     required this.deviceType,
     required this.os,
-    this.browser,
-    required this.lastActive,
-    required this.isCurrent,
+    required this.lastActive, required this.isCurrent, required this.createdAt, this.browser,
     this.ipAddress,
     this.location,
-    required this.createdAt,
   });
 
   factory DeviceSessionModel.fromJson(Map<String, dynamic> json) {

@@ -8,7 +8,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../app/theme.dart';
-import '../../../auth/data/models/user_model.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/avatar_picker_sheet.dart';
 
@@ -84,7 +83,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     final namePattern = RegExp(r"^[a-zA-Z\s\-']+$");
     if (!namePattern.hasMatch(trimmed)) {
-      return "Name can only contain letters, spaces, hyphens, and apostrophes";
+      return 'Name can only contain letters, spaces, hyphens, and apostrophes';
     }
 
     return null;
@@ -111,7 +110,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   Future<void> _handleCameraPhoto() async {
     try {
-      final XFile? image = await _imagePicker.pickImage(
+      final image = await _imagePicker.pickImage(
         source: ImageSource.camera,
         maxWidth: 1024,
         maxHeight: 1024,
@@ -123,13 +122,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      _showErrorSnackBar('Failed to capture photo: ${e.toString()}');
+      _showErrorSnackBar('Failed to capture photo: $e');
     }
   }
 
   Future<void> _handleGalleryPhoto() async {
     try {
-      final XFile? image = await _imagePicker.pickImage(
+      final image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         maxWidth: 1024,
         maxHeight: 1024,
@@ -141,7 +140,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      _showErrorSnackBar('Failed to select photo: ${e.toString()}');
+      _showErrorSnackBar('Failed to select photo: $e');
     }
   }
 
@@ -163,7 +162,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       _showSuccessSnackBar('Photo updated successfully');
     } catch (e) {
       if (!mounted) return;
-      _showErrorSnackBar('Failed to upload photo: ${e.toString()}');
+      _showErrorSnackBar('Failed to upload photo: $e');
 
       setState(() {
         _avatarFile = null;
@@ -195,7 +194,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       _showSuccessSnackBar('Photo removed successfully');
     } catch (e) {
       if (!mounted) return;
-      _showErrorSnackBar('Failed to remove photo: ${e.toString()}');
+      _showErrorSnackBar('Failed to remove photo: $e');
     } finally {
       if (mounted) {
         setState(() {
@@ -258,7 +257,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       context.pop();
     } catch (e) {
       if (!mounted) return;
-      _showErrorSnackBar('Failed to update profile: ${e.toString()}');
+      _showErrorSnackBar('Failed to update profile: $e');
     } finally {
       if (mounted) {
         setState(() {
@@ -330,8 +329,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
     final secondaryTextColor = isDark
         ? SpendexColors.darkTextSecondary
         : SpendexColors.lightTextSecondary;
@@ -354,7 +351,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           actions: [
             if (_isLoading)
               const Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(16),
                 child: SizedBox(
                   width: 24,
                   height: 24,
@@ -382,7 +379,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       _buildAvatar(isDark),
                       if (_isUploadingPhoto)
                         Positioned.fill(
-                          child: Container(
+                          child: DecoratedBox(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.black.withValues(alpha: 0.5),

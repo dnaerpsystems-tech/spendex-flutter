@@ -148,7 +148,7 @@ class NoLinkedAccountsEmptyState extends StatelessWidget {
       icon: Iconsax.bank,
       title: 'No Linked Accounts',
       description:
-          'You haven\'t linked any bank accounts yet. Link your accounts to start importing transactions via Account Aggregator.',
+          "You haven't linked any bank accounts yet. Link your accounts to start importing transactions via Account Aggregator.",
     );
   }
 }
@@ -163,7 +163,7 @@ class NoTransactionsParsedEmptyState extends StatelessWidget {
       icon: Iconsax.receipt_item,
       title: 'No Transactions Found',
       description:
-          'We couldn\'t extract any transactions from the uploaded file. Please make sure the file contains valid transaction data in a supported format.',
+          "We couldn't extract any transactions from the uploaded file. Please make sure the file contains valid transaction data in a supported format.",
     );
   }
 }

@@ -52,7 +52,7 @@ class ResolutionActionSelector extends StatelessWidget {
                 action: DuplicateResolutionAction.skip,
                 icon: Icons.block_outlined,
                 label: 'Skip',
-                description: 'Don\'t import',
+                description: "Don't import",
                 color: SpendexColors.expense,
                 colorScheme: colorScheme,
               ),
@@ -244,7 +244,7 @@ extension DuplicateResolutionActionUI on DuplicateResolutionAction {
   String get description {
     switch (this) {
       case DuplicateResolutionAction.skip:
-        return 'Don\'t import this transaction';
+        return "Don't import this transaction";
       case DuplicateResolutionAction.merge:
         return 'Update existing transaction';
       case DuplicateResolutionAction.keepBoth:

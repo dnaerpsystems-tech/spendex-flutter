@@ -10,6 +10,23 @@ class DuplicateDetectionResult extends Equatable {
     this.stats,
   });
 
+  /// Factory constructor from JSON
+  factory DuplicateDetectionResult.fromJson(Map<String, dynamic> json) {
+    return DuplicateDetectionResult(
+      uniqueTransactions: (json['uniqueTransactions'] as List<dynamic>?)
+              ?.map((e) => ParsedTransactionModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      duplicateMatches: (json['duplicateMatches'] as List<dynamic>?)
+              ?.map((e) => DuplicateMatchModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      stats: json['stats'] != null
+          ? DuplicateDetectionStats.fromJson(json['stats'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+
   /// Transactions that have no duplicates (safe to import)
   final List<ParsedTransactionModel> uniqueTransactions;
 
@@ -79,23 +96,6 @@ class DuplicateDetectionResult extends Equatable {
     return counts;
   }
 
-  /// Factory constructor from JSON
-  factory DuplicateDetectionResult.fromJson(Map<String, dynamic> json) {
-    return DuplicateDetectionResult(
-      uniqueTransactions: (json['uniqueTransactions'] as List<dynamic>?)
-              ?.map((e) => ParsedTransactionModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      duplicateMatches: (json['duplicateMatches'] as List<dynamic>?)
-              ?.map((e) => DuplicateMatchModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      stats: json['stats'] != null
-          ? DuplicateDetectionStats.fromJson(json['stats'] as Map<String, dynamic>)
-          : null,
-    );
-  }
-
   /// Convert to JSON
   Map<String, dynamic> toJson() {
     return {
@@ -133,6 +133,18 @@ class DuplicateDetectionStats extends Equatable {
     this.processingTimeMs,
   });
 
+  /// Factory constructor from JSON
+  factory DuplicateDetectionStats.fromJson(Map<String, dynamic> json) {
+    return DuplicateDetectionStats(
+      totalChecked: json['totalChecked'] as int,
+      duplicatesFound: json['duplicatesFound'] as int,
+      highConfidence: json['highConfidence'] as int,
+      mediumConfidence: json['mediumConfidence'] as int,
+      lowConfidence: json['lowConfidence'] as int,
+      processingTimeMs: json['processingTimeMs'] as int?,
+    );
+  }
+
   /// Total number of transactions checked
   final int totalChecked;
 
@@ -156,20 +168,8 @@ class DuplicateDetectionStats extends Equatable {
 
   /// Get duplicate percentage
   double get duplicatePercentage {
-    if (totalChecked == 0) return 0.0;
+    if (totalChecked == 0) return 0;
     return (duplicatesFound / totalChecked) * 100;
-  }
-
-  /// Factory constructor from JSON
-  factory DuplicateDetectionStats.fromJson(Map<String, dynamic> json) {
-    return DuplicateDetectionStats(
-      totalChecked: json['totalChecked'] as int,
-      duplicatesFound: json['duplicatesFound'] as int,
-      highConfidence: json['highConfidence'] as int,
-      mediumConfidence: json['mediumConfidence'] as int,
-      lowConfidence: json['lowConfidence'] as int,
-      processingTimeMs: json['processingTimeMs'] as int?,
-    );
   }
 
   /// Convert to JSON

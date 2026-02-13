@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../app/theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../shared/widgets/loading_state_widget.dart';
 import '../../../duplicate_detection/presentation/providers/duplicate_detection_provider.dart';
@@ -59,7 +59,7 @@ class _AccountAggregatorScreenState
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: SpendexColors.primary,
             ),
           ),
@@ -79,8 +79,8 @@ class _AccountAggregatorScreenState
 
     if (selectedCount == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please select at least one account'),
+        const SnackBar(
+          content: Text('Please select at least one account'),
           backgroundColor: SpendexColors.warning,
           behavior: SnackBarBehavior.floating,
         ),
@@ -90,8 +90,8 @@ class _AccountAggregatorScreenState
 
     if (dateRange == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please select a date range'),
+        const SnackBar(
+          content: Text('Please select a date range'),
           backgroundColor: SpendexColors.warning,
           behavior: SnackBarBehavior.floating,
         ),
@@ -106,8 +106,8 @@ class _AccountAggregatorScreenState
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Consent initiated successfully'),
+        const SnackBar(
+          content: Text('Consent initiated successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -129,8 +129,8 @@ class _AccountAggregatorScreenState
 
     if (consent == null || !consent.isActive) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('No active consent found'),
+        const SnackBar(
+          content: Text('No active consent found'),
           backgroundColor: SpendexColors.warning,
           behavior: SnackBarBehavior.floating,
         ),
@@ -207,8 +207,8 @@ class _AccountAggregatorScreenState
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Consent revoked successfully'),
+        const SnackBar(
+          content: Text('Consent revoked successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -237,7 +237,7 @@ class _AccountAggregatorScreenState
       onConfirm: _performImport,
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       // Dialog already called _performImport
     }
   }
@@ -270,10 +270,10 @@ class _AccountAggregatorScreenState
       if (!mounted) return;
 
       // If user resolved duplicates successfully
-      if (result == true) {
+      if (result ?? false) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Transactions imported successfully'),
+          const SnackBar(
+            content: Text('Transactions imported successfully'),
             backgroundColor: SpendexColors.income,
             behavior: SnackBarBehavior.floating,
           ),
@@ -295,8 +295,8 @@ class _AccountAggregatorScreenState
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Transactions imported successfully'),
+        const SnackBar(
+          content: Text('Transactions imported successfully'),
           backgroundColor: SpendexColors.income,
           behavior: SnackBarBehavior.floating,
         ),
@@ -490,7 +490,7 @@ class _AccountAggregatorScreenState
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Iconsax.tick_circle,
                       color: Colors.white,
                     ),
@@ -628,7 +628,7 @@ class _AccountAggregatorScreenState
                           ),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Iconsax.calendar,
                                 color: SpendexColors.primary,
                                 size: 20,
@@ -710,7 +710,7 @@ class _AccountAggregatorScreenState
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 20,
                                         height: 20,
                                         child: CircularProgressIndicator(
@@ -734,7 +734,7 @@ class _AccountAggregatorScreenState
                                 : Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Iconsax.shield_tick,
                                         color: Colors.white,
                                       ),
@@ -771,7 +771,7 @@ class _AccountAggregatorScreenState
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 20,
                                         height: 20,
                                         child: CircularProgressIndicator(
@@ -795,7 +795,7 @@ class _AccountAggregatorScreenState
                                 : Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Iconsax.cloud_add,
                                         color: Colors.white,
                                       ),
@@ -821,7 +821,7 @@ class _AccountAggregatorScreenState
                                 : _revokeConsent,
                             style: OutlinedButton.styleFrom(
                               foregroundColor: SpendexColors.expense,
-                              side: BorderSide(
+                              side: const BorderSide(
                                 color: SpendexColors.expense,
                               ),
                               shape: RoundedRectangleBorder(
@@ -831,7 +831,7 @@ class _AccountAggregatorScreenState
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   Iconsax.shield_cross,
                                   color: SpendexColors.expense,
                                 ),
@@ -933,7 +933,7 @@ class _AccountTile extends StatelessWidget {
                   color: SpendexColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Iconsax.bank,
                     color: SpendexColors.primary,

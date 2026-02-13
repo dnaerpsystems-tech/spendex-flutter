@@ -110,7 +110,6 @@ class InvestmentCard extends StatelessWidget {
                       Text(
                         CurrencyFormatter.formatPaiseCompact(
                           investment.currentValue,
-                          decimalDigits: 2,
                         ),
                         style: theme.textTheme.headlineMedium?.copyWith(
                           color: textPrimary,
@@ -191,7 +190,7 @@ class InvestmentCard extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
+                      const Icon(
                         Iconsax.shield_tick,
                         size: 16,
                         color: Colors.orange,

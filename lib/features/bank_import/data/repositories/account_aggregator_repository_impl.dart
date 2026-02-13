@@ -7,9 +7,9 @@ import '../models/aa_consent_model.dart';
 import '../models/parsed_transaction_model.dart';
 
 class AccountAggregatorRepositoryImpl implements AccountAggregatorRepository {
-  final AccountAggregatorRemoteDataSource _remoteDataSource;
 
   AccountAggregatorRepositoryImpl(this._remoteDataSource);
+  final AccountAggregatorRemoteDataSource _remoteDataSource;
 
   @override
   Future<Either<Failure, AccountAggregatorConsentModel>> initiateConsent(

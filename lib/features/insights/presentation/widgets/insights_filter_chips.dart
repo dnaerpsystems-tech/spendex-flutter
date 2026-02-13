@@ -33,6 +33,11 @@ extension InsightTypeExtension on InsightType {
 
 /// A horizontal scrollable filter chips widget for filtering insights by type
 class InsightsFilterChips extends StatelessWidget {
+
+  const InsightsFilterChips({
+    required this.selectedType, required this.onTypeSelected, super.key,
+    this.typeCounts = const {},
+  });
   /// Currently selected insight type (null means "All")
   final InsightType? selectedType;
 
@@ -41,13 +46,6 @@ class InsightsFilterChips extends StatelessWidget {
 
   /// Count of insights per type for displaying badges
   final Map<InsightType, int> typeCounts;
-
-  const InsightsFilterChips({
-    super.key,
-    required this.selectedType,
-    required this.onTypeSelected,
-    this.typeCounts = const {},
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +100,6 @@ class InsightsFilterChips extends StatelessWidget {
     required VoidCallback onTap,
     required bool isDark,
   }) {
-    final theme = Theme.of(context);
 
     return Stack(
       clipBehavior: Clip.none,

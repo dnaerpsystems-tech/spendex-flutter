@@ -61,7 +61,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark
             ? SpendexColors.darkBackground
@@ -138,7 +138,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.bank,
                     size: 16,
                     color: SpendexColors.primary,
@@ -210,7 +210,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
                                   .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Icon(
                                 Iconsax.bank,
                                 color: SpendexColors.primary,
@@ -247,7 +247,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
 
                           // Checkmark icon if selected
                           if (isSelected)
-                            Icon(
+                            const Icon(
                               Iconsax.tick_circle5,
                               color: SpendexColors.primary,
                               size: 24,

@@ -67,9 +67,9 @@ abstract class EmailRemoteDataSource {
 }
 
 class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
-  final ApiClient _apiClient;
 
   EmailRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, EmailAccountModel>> connectEmailAccount({
@@ -109,7 +109,7 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
         'filters': filters?.toJson(),
       },
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final list = json! as List<dynamic>;
         return list
             .map((e) => EmailMessageModel.fromJson(e as Map<String, dynamic>))
             .toList();
@@ -172,7 +172,7 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
     return _apiClient.get<List<EmailAccountModel>>(
       '/email/accounts',
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final list = json! as List<dynamic>;
         return list
             .map((e) => EmailAccountModel.fromJson(e as Map<String, dynamic>))
             .toList();

@@ -28,9 +28,9 @@ abstract class PdfImportRemoteDataSource {
 }
 
 class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
-  final ApiClient _apiClient;
 
   PdfImportRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, ImportedStatementModel>> uploadPdf(File file) async {
@@ -39,7 +39,7 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
       file: file,
       fieldName: 'file',
       fromJson: (json) => ImportedStatementModel.fromJson(
-        json as Map<String, dynamic>,
+        json! as Map<String, dynamic>,
       ),
     );
   }
@@ -55,7 +55,7 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
       fieldName: 'file',
       additionalData: {'columnMapping': columnMapping},
       fromJson: (json) => ImportedStatementModel.fromJson(
-        json as Map<String, dynamic>,
+        json! as Map<String, dynamic>,
       ),
     );
   }
@@ -67,11 +67,11 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
     return _apiClient.get<List<ParsedTransactionModel>>(
       '/import/$importId/results',
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final list = json! as List<dynamic>;
         return list
             .map((e) => ParsedTransactionModel.fromJson(
                   e as Map<String, dynamic>,
-                ))
+                ),)
             .toList();
       },
     );
@@ -103,11 +103,11 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
     return _apiClient.get<List<ImportedStatementModel>>(
       '/import/history',
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final list = json! as List<dynamic>;
         return list
             .map((e) => ImportedStatementModel.fromJson(
                   e as Map<String, dynamic>,
-                ))
+                ),)
             .toList();
       },
     );

@@ -5,9 +5,9 @@ import '../datasources/insights_remote_datasource.dart';
 import '../models/insight_model.dart';
 
 class InsightsRepositoryImpl implements InsightsRepository {
-  final InsightsRemoteDataSource _dataSource;
 
   InsightsRepositoryImpl(this._dataSource);
+  final InsightsRemoteDataSource _dataSource;
 
   @override
   Future<Either<Failure, List<InsightModel>>> getAll() {
@@ -26,7 +26,7 @@ class InsightsRepositoryImpl implements InsightsRepository {
 
   @override
   Future<Either<Failure, List<InsightModel>>> generateInsights(
-      CreateInsightRequest request) {
+      CreateInsightRequest request,) {
     return _dataSource.generateInsights(request.toJson());
   }
 
@@ -39,7 +39,7 @@ class InsightsRepositoryImpl implements InsightsRepository {
   Future<Either<Failure, bool>> dismiss(String id) async {
     final result = await _dataSource.dismiss(id);
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (insight) => const Right(true),
     );
   }

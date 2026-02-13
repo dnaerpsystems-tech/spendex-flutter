@@ -30,9 +30,9 @@ abstract class AccountAggregatorRemoteDataSource {
 
 class AccountAggregatorRemoteDataSourceImpl
     implements AccountAggregatorRemoteDataSource {
-  final ApiClient _apiClient;
 
   AccountAggregatorRemoteDataSourceImpl(this._apiClient);
+  final ApiClient _apiClient;
 
   @override
   Future<Either<Failure, AccountAggregatorConsentModel>> initiateConsent(
@@ -47,7 +47,7 @@ class AccountAggregatorRemoteDataSourceImpl
         'endDate': dateRange.end.toIso8601String(),
       },
       fromJson: (json) => AccountAggregatorConsentModel.fromJson(
-        json as Map<String, dynamic>,
+        json! as Map<String, dynamic>,
       ),
     );
   }
@@ -59,7 +59,7 @@ class AccountAggregatorRemoteDataSourceImpl
     return _apiClient.get<AccountAggregatorConsentModel>(
       '/aa/consent/$consentId/status',
       fromJson: (json) => AccountAggregatorConsentModel.fromJson(
-        json as Map<String, dynamic>,
+        json! as Map<String, dynamic>,
       ),
     );
   }
@@ -72,11 +72,11 @@ class AccountAggregatorRemoteDataSourceImpl
       '/aa/data/fetch',
       data: {'consentId': consentId},
       fromJson: (json) {
-        final list = json as List<dynamic>;
+        final list = json! as List<dynamic>;
         return list
             .map((e) => ParsedTransactionModel.fromJson(
                   e as Map<String, dynamic>,
-                ))
+                ),)
             .toList();
       },
     );
