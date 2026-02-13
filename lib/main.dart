@@ -1,3 +1,4 @@
+import 'core/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,31 +12,31 @@ import 'core/di/injection.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode) {
-    debugPrint('Main: Flutter initialized');
+    AppLogger.d('Main: Flutter initialized');
   }
 
   // Load environment variables
   try {
     await dotenv.load();
     if (kDebugMode) {
-      debugPrint('Main: Dotenv loaded');
+      AppLogger.d('Main: Dotenv loaded');
     }
   } catch (e) {
     if (kDebugMode) {
-      debugPrint('Main: Dotenv error: $e');
+      AppLogger.d('Main: Dotenv error: $e');
     }
   }
 
   // Initialize Hive for local storage
   await Hive.initFlutter();
   if (kDebugMode) {
-    debugPrint('Main: Hive initialized');
+    AppLogger.d('Main: Hive initialized');
   }
 
   // Initialize dependency injection
   await configureDependencies();
   if (kDebugMode) {
-    debugPrint('Main: Dependencies configured');
+    AppLogger.d('Main: Dependencies configured');
   }
 
   // Set preferred orientations
@@ -54,7 +55,7 @@ Future<void> main() async {
   );
 
   if (kDebugMode) {
-    debugPrint('Main: Running app');
+    AppLogger.d('Main: Running app');
   }
   runApp(
     const ProviderScope(

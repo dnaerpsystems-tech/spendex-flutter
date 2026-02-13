@@ -1,5 +1,5 @@
+import '../../../../core/utils/app_logger.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -303,7 +303,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
 
   /// Handle speech recognition status changes
   void _onSpeechStatus(String status) {
-    debugPrint('Speech status: $status');
+    AppLogger.d('Speech status: $status');
 
     if (status == 'done' && state.state == VoiceInputState.listening) {
       if (state.recognizedText.isEmpty) {
@@ -421,7 +421,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
           clearError: true,
         );
       } catch (e) {
-        debugPrint('Error canceling speech: $e');
+        AppLogger.d('Error canceling speech: $e');
       }
     }
   }

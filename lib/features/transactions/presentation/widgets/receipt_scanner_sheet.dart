@@ -1,3 +1,4 @@
+import '../../../../core/utils/app_logger.dart';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -236,7 +237,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
 
   void _handleOcrError(String error) {
     if (kDebugMode) {
-      debugPrint('OCR Error: $error');
+      AppLogger.d('OCR Error: $error');
     }
 
     setState(() {
@@ -249,7 +250,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
 
   Future<void> _parseReceiptText(String ocrText) async {
     if (kDebugMode) {
-      debugPrint('OCR Text: $ocrText');
+      AppLogger.d('OCR Text: $ocrText');
     }
 
     try {
@@ -258,8 +259,8 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       final extractedData = parserService.parseReceiptText(ocrText);
 
       if (kDebugMode) {
-        debugPrint('Parsed Amount: ${extractedData.amount}');
-        debugPrint('Parsed Merchant: ${extractedData.merchantName}');
+        AppLogger.d('Parsed Amount: ${extractedData.amount}');
+        AppLogger.d('Parsed Merchant: ${extractedData.merchantName}');
       }
 
       // Validate that we got at least an amount
@@ -274,7 +275,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       });
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('Parse Error: $e');
+        AppLogger.d('Parse Error: $e');
       }
 
       setState(() {

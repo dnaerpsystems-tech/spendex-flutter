@@ -1,3 +1,4 @@
+import '../utils/app_logger.dart';
 import 'dart:async';
 
 import 'package:dio/dio.dart';
@@ -33,7 +34,7 @@ class AuthInterceptor extends QueuedInterceptor {
     // Attach refresh token cookie for endpoints that need it
     final refreshToken = await _storage.getRefreshToken();
     if (refreshToken != null && refreshToken.isNotEmpty) {
-      options.headers['Cookie'] = 'fintrace_refresh=$refreshToken';
+      options.headers['Cookie'] = 'spendex_refresh=$refreshToken';
     }
 
     handler.next(options);
@@ -100,11 +101,11 @@ class AuthInterceptor extends QueuedInterceptor {
     }
 
     for (final cookie in setCookieHeaders) {
-      if (cookie.startsWith('fintrace_refresh=')) {
+      if (cookie.startsWith('spendex_refresh=')) {
         final tokenValue = cookie
             .split(';')
             .first
-            .replaceFirst('fintrace_refresh=', '');
+            .replaceFirst('spendex_refresh=', '');
         if (tokenValue.isNotEmpty) {
           _storage.saveRefreshToken(tokenValue);
         }
@@ -128,7 +129,7 @@ class AuthInterceptor extends QueuedInterceptor {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Cookie': 'fintrace_refresh=$refreshToken',
+            'Cookie': 'spendex_refresh=$refreshToken',
           },
         ),
       );
@@ -150,11 +151,11 @@ class AuthInterceptor extends QueuedInterceptor {
           final setCookieHeaders = response.headers['set-cookie'];
           if (setCookieHeaders != null) {
             for (final cookie in setCookieHeaders) {
-              if (cookie.startsWith('fintrace_refresh=')) {
+              if (cookie.startsWith('spendex_refresh=')) {
                 final newRefresh = cookie
                     .split(';')
                     .first
-                    .replaceFirst('fintrace_refresh=', '');
+                    .replaceFirst('spendex_refresh=', '');
                 if (newRefresh.isNotEmpty) {
                   await _storage.saveRefreshToken(newRefresh);
                 }
@@ -164,7 +165,7 @@ class AuthInterceptor extends QueuedInterceptor {
           }
 
           if (kDebugMode) {
-            debugPrint('AuthInterceptor: Token refreshed successfully');
+            AppLogger.d('AuthInterceptor: Token refreshed successfully');
           }
           return true;
         }
@@ -173,7 +174,7 @@ class AuthInterceptor extends QueuedInterceptor {
       return false;
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('AuthInterceptor: Token refresh failed: $e');
+        AppLogger.d('AuthInterceptor: Token refresh failed: $e');
       }
       return false;
     }

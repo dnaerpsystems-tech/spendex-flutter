@@ -1,3 +1,4 @@
+import '../config/environment.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -129,7 +130,7 @@ void _registerCore() {
   // Dio
   final dio = Dio(
     BaseOptions(
-      baseUrl: 'https://api.spendex.in/api/v1',
+      baseUrl: EnvironmentConfig.apiBaseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),

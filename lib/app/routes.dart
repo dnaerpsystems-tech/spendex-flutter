@@ -1,3 +1,4 @@
+import '../core/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -265,7 +266,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: authNotifier,
     redirect: (context, state) {
       if (kDebugMode) {
-        debugPrint('Router redirect: ${state.matchedLocation}');
+        AppLogger.d('Router redirect: ${state.matchedLocation}');
       }
       final authState = ref.read(authStateProvider);
       final isAuthenticated = authState.isAuthenticated;
@@ -278,7 +279,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isOnOnboarding = state.matchedLocation == AppRoutes.onboarding;
 
       if (kDebugMode) {
-        debugPrint('Router: isOnSplash=$isOnSplash, isOnOnboarding=$isOnOnboarding, isAuth=$isAuthenticated');
+        AppLogger.d('Router: isOnSplash=$isOnSplash, isOnOnboarding=$isOnOnboarding, isAuth=$isAuthenticated');
       }
 
       // Allow splash and onboarding without redirection
