@@ -161,4 +161,15 @@ class ApiEndpoints {
   static const String duplicateCheck = '/transactions/check-duplicates';
   static const String duplicateResolve = '/transactions/resolve-duplicates';
   static const String duplicateStats = '/transactions/duplicate-stats';
+
+  // Analytics Endpoints
+  static const String analyticsOverview = '/analytics/overview';
+  static const String analyticsIncome = '/analytics/income';
+  static const String analyticsExpense = '/analytics/expense';
+  static const String analyticsTrends = '/analytics/trends';
+  static const String analyticsNetWorth = '/analytics/net-worth';
+  static const String analyticsExport = '/analytics/export';
+  static const String analyticsCategoryBreakdown = '/analytics/category-breakdown';
+  static const String analyticsMonthlyStats = '/analytics/monthly-stats';
+  static const String analyticsDailyStats = '/analytics/daily-stats';
 }

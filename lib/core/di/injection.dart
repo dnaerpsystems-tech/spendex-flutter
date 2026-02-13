@@ -46,6 +46,7 @@ import '../../features/goals/domain/repositories/goals_repository.dart';
 import '../../features/insights/data/datasources/insights_remote_datasource.dart';
 import '../../features/insights/data/repositories/insights_repository_impl.dart';
 import '../../features/insights/domain/repositories/insights_repository.dart';
+import '../../features/analytics/data/datasources/analytics_remote_datasource.dart';import '../../features/analytics/data/repositories/analytics_repository_impl.dart';import '../../features/analytics/domain/repositories/analytics_repository.dart';
 import '../../features/investments/data/datasources/investments_remote_datasource.dart';
 import '../../features/investments/data/repositories/investments_repository_impl.dart';
 import '../../features/investments/domain/repositories/investments_repository.dart';
@@ -249,6 +250,11 @@ void _registerDataSources() {
     // Insights
     ..registerLazySingleton<InsightsRemoteDataSource>(
       () => InsightsRemoteDataSourceImpl(apiClient: getIt<ApiClient>()),
+    )
+
+    // Analytics
+    ..registerLazySingleton<AnalyticsRemoteDataSource>(
+      () => AnalyticsRemoteDataSourceImpl(getIt<ApiClient>()),
     );
 }
 
@@ -350,5 +356,10 @@ void _registerRepositories() {
     // Insights
     ..registerLazySingleton<InsightsRepository>(
       () => InsightsRepositoryImpl(getIt<InsightsRemoteDataSource>()),
+    )
+
+    // Analytics
+    ..registerLazySingleton<AnalyticsRepository>(
+      () => AnalyticsRepositoryImpl(getIt<AnalyticsRemoteDataSource>()),
     );
 }

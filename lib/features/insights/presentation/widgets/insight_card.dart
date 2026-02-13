@@ -39,7 +39,7 @@ class InsightCard extends StatelessWidget {
             onPressed: (_) {
               onDismiss?.call();
             },
-            backgroundColor: SpendexTheme.errorColor,
+            backgroundColor: SpendexColors.expense,
             foregroundColor: Colors.white,
             icon: Iconsax.trash,
             label: 'Dismiss',
@@ -224,7 +224,7 @@ class InsightCard extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onActionTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: SpendexTheme.primaryColor,
+          backgroundColor: SpendexColors.primary,
           foregroundColor: Colors.white,
           elevation: 2,
           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -255,12 +255,12 @@ class InsightCard extends StatelessWidget {
     switch (insight.priority) {
       case InsightPriority.high:
         return isDark
-            ? AppTheme.errorColor.withOpacity(0.1)
-            : AppTheme.errorColor.withOpacity(0.05);
+            ? SpendexColors.expense.withOpacity(0.1)
+            : SpendexColors.expense.withOpacity(0.05);
       case InsightPriority.medium:
         return isDark
-            ? AppTheme.primaryColor.withOpacity(0.1)
-            : AppTheme.primaryColor.withOpacity(0.05);
+            ? SpendexColors.primary.withOpacity(0.1)
+            : SpendexColors.primary.withOpacity(0.05);
       case InsightPriority.low:
         return isDark
             ? Colors.grey.withOpacity(0.1)
@@ -277,9 +277,9 @@ class InsightCard extends StatelessWidget {
 
     switch (insight.priority) {
       case InsightPriority.high:
-        return AppTheme.errorColor.withOpacity(0.4);
+        return SpendexColors.expense.withOpacity(0.4);
       case InsightPriority.medium:
-        return AppTheme.primaryColor.withOpacity(0.4);
+        return SpendexColors.primary.withOpacity(0.4);
       case InsightPriority.low:
         return theme.dividerColor.withOpacity(0.5);
     }
@@ -288,9 +288,9 @@ class InsightCard extends StatelessWidget {
   (Color, String) _getPriorityInfo() {
     switch (insight.priority) {
       case InsightPriority.high:
-        return (AppTheme.errorColor, 'HIGH');
+        return (SpendexColors.expense, 'HIGH');
       case InsightPriority.medium:
-        return (AppTheme.primaryColor, 'MEDIUM');
+        return (SpendexColors.primary, 'MEDIUM');
       case InsightPriority.low:
         return (Colors.grey, 'LOW');
     }
@@ -298,16 +298,20 @@ class InsightCard extends StatelessWidget {
 
   String _getActionLabel() {
     switch (insight.actionType) {
-      case InsightActionType.viewDetails:
-        return 'View Details';
+      case InsightActionType.viewTransactions:
+        return 'View Transactions';
       case InsightActionType.setGoal:
         return 'Set Goal';
-      case InsightActionType.createBudget:
+      case InsightActionType.setBudget:
         return 'Create Budget';
-      case InsightActionType.reviewTransactions:
-        return 'Review Transactions';
-      case InsightActionType.updateCategory:
-        return 'Update Category';
+      case InsightActionType.viewCategory:
+        return 'View Category';
+      case InsightActionType.viewMerchant:
+        return 'View Merchant';
+      case InsightActionType.viewAccount:
+        return 'View Account';
+      case InsightActionType.viewLoan:
+        return 'View Loan';
       case InsightActionType.none:
         return '';
     }

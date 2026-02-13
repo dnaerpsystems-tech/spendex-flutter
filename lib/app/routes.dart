@@ -54,6 +54,7 @@ import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/transactions/presentation/screens/add_transaction_screen.dart';
 import '../features/transactions/presentation/screens/transaction_details_screen.dart';
 import '../features/transactions/presentation/screens/transactions_screen.dart';
+import '../features/analytics/presentation/screens/analytics_screen.dart';
 import '../shared/widgets/main_scaffold.dart';
 import '../shared/widgets/onboarding_screen.dart';
 import '../shared/widgets/splash_screen.dart';
@@ -379,12 +380,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'analytics',
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: _PlaceholderScreen(
-                    title: 'Analytics',
-                    icon: Iconsax.chart,
-                    description:
-                        'View detailed analytics and insights about your spending patterns and financial health.',
-                  ),
+                  child: AnalyticsScreen(),
                 ),
               ),
               GoRoute(

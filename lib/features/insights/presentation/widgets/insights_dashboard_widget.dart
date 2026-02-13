@@ -197,10 +197,10 @@ class _InsightsDashboardWidgetState
       child: Container(
         height: 140,
         decoration: BoxDecoration(
-          color: SpendexColors.error.withOpacity(0.05),
+          color: SpendexColors.expense.withOpacity(0.05),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: SpendexColors.error.withOpacity(0.2),
+            color: SpendexColors.expense.withOpacity(0.2),
           ),
         ),
         child: Center(
@@ -209,14 +209,14 @@ class _InsightsDashboardWidgetState
             children: [
               Icon(
                 Iconsax.info_circle,
-                color: SpendexColors.error,
+                color: SpendexColors.expense,
                 size: 32,
               ),
               const SizedBox(height: 8),
               Text(
                 widget.error ?? 'Failed to load insights',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: SpendexColors.error,
+                  color: SpendexColors.expense,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -226,7 +226,7 @@ class _InsightsDashboardWidgetState
                 icon: const Icon(Iconsax.refresh, size: 16),
                 label: const Text('Retry'),
                 style: TextButton.styleFrom(
-                  foregroundColor: SpendexColors.error,
+                  foregroundColor: SpendexColors.expense,
                 ),
               ),
             ],
@@ -247,7 +247,7 @@ class _InsightsDashboardWidgetState
             end: Alignment.bottomRight,
             colors: [
               SpendexColors.primary.withOpacity(0.05),
-              SpendexColors.secondary.withOpacity(0.05),
+              SpendexColors.primaryLight.withOpacity(0.05),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
@@ -268,7 +268,7 @@ class _InsightsDashboardWidgetState
               Text(
                 'Generate insights to get started',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: SpendexColors.textSecondary,
+                  color: SpendexColors.lightTextSecondary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -349,7 +349,7 @@ class _InsightsDashboardWidgetState
             shape: BoxShape.circle,
             color: _currentPage == index
                 ? SpendexColors.primary
-                : SpendexColors.textSecondary.withOpacity(0.5),
+                : SpendexColors.lightTextSecondary.withOpacity(0.5),
           ),
         ),
       ),
@@ -401,9 +401,9 @@ class _ShimmerCardState extends State<_ShimmerCard>
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: [
-                SpendexColors.surface,
-                SpendexColors.surface.withOpacity(0.5),
-                SpendexColors.surface,
+                SpendexColors.lightSurface,
+                SpendexColors.lightSurface.withOpacity(0.5),
+                SpendexColors.lightSurface,
               ],
               stops: [
                 _animation.value - 0.3,
@@ -421,7 +421,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                   width: 100,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: SpendexColors.textSecondary.withOpacity(0.2),
+                    color: SpendexColors.lightTextSecondary.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
@@ -430,7 +430,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                   width: double.infinity,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: SpendexColors.textSecondary.withOpacity(0.2),
+                    color: SpendexColors.lightTextSecondary.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -439,7 +439,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                   width: double.infinity,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: SpendexColors.textSecondary.withOpacity(0.2),
+                    color: SpendexColors.lightTextSecondary.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -450,7 +450,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                       width: 60,
                       height: 10,
                       decoration: BoxDecoration(
-                        color: SpendexColors.textSecondary.withOpacity(0.2),
+                        color: SpendexColors.lightTextSecondary.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
@@ -459,7 +459,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                       width: 40,
                       height: 10,
                       decoration: BoxDecoration(
-                        color: SpendexColors.textSecondary.withOpacity(0.2),
+                        color: SpendexColors.lightTextSecondary.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
