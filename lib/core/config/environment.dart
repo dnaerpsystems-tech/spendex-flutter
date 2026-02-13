@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 /// Environment configuration for Spendex
 enum Environment { development, staging, production }
 
@@ -38,9 +40,11 @@ class EnvironmentConfig {
     }
   }
 
-  /// Initialize environment from string (useful for build flavors)
-  static void initialize(String env) {
-    switch (env.toLowerCase()) {
+  /// Initialize environment from dotenv or string
+  /// If no argument provided, reads from .env file
+  static void initialize([String? env]) {
+    final envString = env ?? dotenv.maybeGet('ENVIRONMENT') ?? 'production';
+    switch (envString.toLowerCase()) {
       case 'development':
       case 'dev':
         current = Environment.development;

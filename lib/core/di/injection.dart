@@ -62,8 +62,12 @@ import '../../features/settings/domain/repositories/settings_repository.dart';
 import '../../features/transactions/data/datasources/transactions_remote_datasource.dart';
 import '../../features/transactions/data/repositories/transactions_repository_impl.dart';
 import '../../features/transactions/domain/repositories/transactions_repository.dart';
+
 import '../network/api_client.dart';
 import '../network/api_interceptor.dart';
+import '../network/ssl_pinning.dart';
+import '../security/auto_lock_service.dart';
+import '../security/pin_service.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
 
@@ -75,6 +79,9 @@ Future<void> configureDependencies() async {
 
   // Core
   _registerCore();
+
+  // Security Services
+  _registerSecurityServices();
 
   // Data Sources
   _registerDataSources();
@@ -142,6 +149,9 @@ void _registerCore() {
   );
   getIt.registerSingleton<Dio>(dio);
 
+  // Apply SSL Certificate Pinning
+  SslPinning.configure(dio);
+
   // Auth Interceptor - must be added BEFORE LogInterceptor
   // so auth headers appear in logs and are sent with requests
   final authInterceptor = AuthInterceptor(
@@ -158,6 +168,19 @@ void _registerCore() {
   // API Client
   getIt.registerLazySingleton<ApiClient>(
     () => ApiClient(getIt<Dio>()),
+  );
+}
+
+/// Register security services (PIN, Auto-Lock).
+void _registerSecurityServices() {
+  // PIN Service - uses FlutterSecureStorage for secure PIN hash storage
+  getIt.registerLazySingleton<PinService>(
+    () => PinServiceImpl(getIt<FlutterSecureStorage>()),
+  );
+
+  // Auto-Lock Service - uses SharedPreferences for timeout settings
+  getIt.registerLazySingleton<AutoLockService>(
+    () => AutoLockServiceImpl(getIt<SharedPreferences>()),
   );
 }
 

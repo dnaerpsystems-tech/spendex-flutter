@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/settings/presentation/providers/theme_provider.dart';
+import '../shared/widgets/auto_lock_wrapper.dart';
 import 'routes.dart';
 import 'theme.dart';
 
@@ -35,7 +36,9 @@ class SpendexApp extends ConsumerWidget {
           data: MediaQuery.of(context).copyWith(
             textScaler: TextScaler.noScaling,
           ),
-          child: child ?? const SizedBox.shrink(),
+          child: AutoLockWrapper(
+            child: child ?? const SizedBox.shrink(),
+          ),
         );
       },
     );
