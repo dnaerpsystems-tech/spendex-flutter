@@ -1,36 +1,58 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/di/injection.dart';
-import '../../../../core/storage/secure_storage.dart';
+import '../../../../core/security/pin_service.dart';
+import '../../../../core/security/security_provider.dart';
 import '../widgets/pin_input.dart';
 
-class SetPinScreen extends StatefulWidget {
+/// Set PIN Screen for configuring user's PIN authentication.
+///
+/// Features:
+/// - 2-step PIN entry (create and confirm)
+/// - PIN validation (no repeating/sequential/common PINs)
+/// - Uses PinService from DI for secure PIN storage with salt
+/// - Step indicator with progress bar
+/// - Animated transitions between steps
+/// - Error handling with haptic feedback
+/// - Material 3 design with dark mode support
+class SetPinScreen extends ConsumerStatefulWidget {
   const SetPinScreen({super.key});
 
   @override
-  State<SetPinScreen> createState() => _SetPinScreenState();
+  ConsumerState<SetPinScreen> createState() => _SetPinScreenState();
 }
 
-class _SetPinScreenState extends State<SetPinScreen>
+class _SetPinScreenState extends ConsumerState<SetPinScreen>
     with SingleTickerProviderStateMixin {
+  // Get PinService from DI
+  late final PinService _pinService;
+
   int _currentStep = 0;
   String _enteredPin = '';
   String _confirmPin = '';
   bool _isLoading = false;
   String? _errorMessage;
   String _currentPinValue = '';
-
   final int _pinLength = 4;
 
-  final SecureStorageService _secureStorage = getIt<SecureStorageService>();
+  @override
+  void initState() {
+    super.initState();
+    _pinService = getIt<PinService>();
+  }
 
+  /// Validates the entered PIN against security requirements.
+  ///
+  /// Checks:
+  /// - PIN length must be exactly [_pinLength] digits
+  /// - Cannot be all same digits (e.g., 1111)
+  /// - Cannot be sequential (e.g., 1234 or 4321)
+  /// - Cannot be a common/weak PIN
   bool _validatePin(String pin) {
     setState(() {
       _errorMessage = null;
@@ -67,10 +89,12 @@ class _SetPinScreenState extends State<SetPinScreen>
     return true;
   }
 
+  /// Checks if PIN contains all same digits.
   bool _isRepeating(String pin) {
     return pin.split('').toSet().length == 1;
   }
 
+  /// Checks if PIN is a sequential number (ascending or descending).
   bool _isSequential(String pin) {
     var isAscending = true;
     var isDescending = true;
@@ -82,7 +106,6 @@ class _SetPinScreenState extends State<SetPinScreen>
       if (next != current + 1) {
         isAscending = false;
       }
-
       if (next != current - 1) {
         isDescending = false;
       }
@@ -91,6 +114,7 @@ class _SetPinScreenState extends State<SetPinScreen>
     return isAscending || isDescending;
   }
 
+  /// Checks if PIN is in the list of commonly used PINs.
   bool _isCommonPin(String pin) {
     const commonPins = [
       '1234',
@@ -105,21 +129,20 @@ class _SetPinScreenState extends State<SetPinScreen>
       '8888',
       '9999',
       '1212',
-      '7777',
       '2580',
       '1004',
+      '4321',
+      '1122',
+      '0123',
+      '9876',
     ];
     return commonPins.contains(pin);
   }
 
-  String _hashPin(String pin) {
-    final bytes = utf8.encode(pin);
-    final hash = sha256.convert(bytes);
-    return hash.toString();
-  }
-
+  /// Handles PIN completion for both steps.
   void _onPinCompleted(String pin) {
     if (_currentStep == 0) {
+      // Step 1: Create PIN
       if (_validatePin(pin)) {
         setState(() {
           _enteredPin = pin;
@@ -134,6 +157,7 @@ class _SetPinScreenState extends State<SetPinScreen>
         HapticFeedback.heavyImpact();
       }
     } else if (_currentStep == 1) {
+      // Step 2: Confirm PIN
       setState(() {
         _confirmPin = pin;
       });
@@ -153,6 +177,12 @@ class _SetPinScreenState extends State<SetPinScreen>
     }
   }
 
+  /// Saves the PIN using PinService.
+  ///
+  /// The PinService handles:
+  /// - Generating a secure salt
+  /// - Hashing the PIN with SHA-256
+  /// - Storing both hash and salt in secure storage
   Future<void> _savePin() async {
     setState(() {
       _isLoading = true;
@@ -160,12 +190,15 @@ class _SetPinScreenState extends State<SetPinScreen>
     });
 
     try {
-      final hashedPin = _hashPin(_enteredPin);
+      // Use PinService to set PIN (handles hashing with salt)
+      await _pinService.setPin(_enteredPin);
 
-      await _secureStorage.savePin(hashedPin);
-
+      // Clear sensitive data
       _enteredPin = '';
       _confirmPin = '';
+
+      // Refresh the PIN auth state provider
+      ref.read(pinAuthStateProvider.notifier).refresh();
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -178,7 +211,6 @@ class _SetPinScreenState extends State<SetPinScreen>
             ),
           ),
         );
-
         context.pop();
       }
     } catch (e) {
@@ -195,8 +227,10 @@ class _SetPinScreenState extends State<SetPinScreen>
     }
   }
 
+  /// Handles back navigation with proper step handling.
   void _onBackPressed() {
     if (_currentStep == 1) {
+      // Go back to step 1
       setState(() {
         _currentStep = 0;
         _enteredPin = '';
@@ -216,7 +250,7 @@ class _SetPinScreenState extends State<SetPinScreen>
     return PopScope(
       canPop: _currentStep == 0,
       onPopInvokedWithResult: (didPop, result) {
-        if (!didPop && _currentStep == 1) {
+        if (didPop == false && _currentStep == 1) {
           _onBackPressed();
         }
       },
@@ -287,6 +321,7 @@ class _SetPinScreenState extends State<SetPinScreen>
   }
 }
 
+/// Step indicator widget showing progress through the PIN setup flow.
 class _StepIndicator extends StatelessWidget {
   const _StepIndicator({
     required this.currentStep,
@@ -336,6 +371,7 @@ class _StepIndicator extends StatelessWidget {
   }
 }
 
+/// Individual PIN step view with icon, title, and PIN input.
 class _PinStepView extends StatefulWidget {
   const _PinStepView({
     required super.key,
@@ -425,6 +461,8 @@ class _PinStepViewState extends State<_PinStepView>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: SpendexTheme.spacing4xl),
+
+          // Animated icon
           ScaleTransition(
             scale: _iconAnimation,
             child: Container(
@@ -441,19 +479,24 @@ class _PinStepViewState extends State<_PinStepView>
               ),
             ),
           ),
-          const SizedBox(height: SpendexTheme.spacing3xl),
+
+          const SizedBox(height: SpendexTheme.spacing2xl),
+
+          // Title
           Text(
             widget.title,
             style: SpendexTheme.headlineMedium.copyWith(
+              fontSize: 24,
               color: widget.isDark
                   ? SpendexColors.darkTextPrimary
                   : SpendexColors.lightTextPrimary,
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: SpendexTheme.spacingMd),
+
+          const SizedBox(height: SpendexTheme.spacingSm),
+
+          // Subtitle
           Text(
             widget.subtitle,
             style: SpendexTheme.bodyMedium.copyWith(
@@ -463,17 +506,43 @@ class _PinStepViewState extends State<_PinStepView>
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: SpendexTheme.spacing4xl),
+
+          const SizedBox(height: SpendexTheme.spacing3xl),
+
+          // PIN input or loading indicator
           if (widget.isLoading)
-            const CircularProgressIndicator()
+            Column(
+              children: [
+                const SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: SpendexColors.primary,
+                  ),
+                ),
+                const SizedBox(height: SpendexTheme.spacingLg),
+                Text(
+                  'Setting up your PIN...',
+                  style: SpendexTheme.bodyMedium.copyWith(
+                    color: widget.isDark
+                        ? SpendexColors.darkTextSecondary
+                        : SpendexColors.lightTextSecondary,
+                  ),
+                ),
+              ],
+            )
           else
             PinInput(
               key: _pinInputKey,
               length: widget.pinLength,
               onCompleted: widget.onCompleted,
+              autoFocus: true,
             ),
-          const SizedBox(height: SpendexTheme.spacing2xl),
-          if (widget.errorMessage != null)
+
+          // Error message
+          if (widget.errorMessage != null) ...[
+            const SizedBox(height: SpendexTheme.spacingLg),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: SpendexTheme.spacingLg,
@@ -482,15 +551,12 @@ class _PinStepViewState extends State<_PinStepView>
               decoration: BoxDecoration(
                 color: SpendexColors.expense.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
-                border: Border.all(
-                  color: SpendexColors.expense.withValues(alpha: 0.3),
-                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Iconsax.info_circle,
+                  Icon(
+                    Iconsax.warning_2,
                     color: SpendexColors.expense,
                     size: 20,
                   ),
@@ -501,12 +567,80 @@ class _PinStepViewState extends State<_PinStepView>
                       style: SpendexTheme.bodyMedium.copyWith(
                         color: SpendexColors.expense,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
               ),
             ),
+          ],
+
+          const SizedBox(height: SpendexTheme.spacing3xl),
+
+          // PIN requirements hint (only on step 1)
+          if (widget.icon == Iconsax.lock) ...[
+            _buildRequirementsHint(),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRequirementsHint() {
+    return Container(
+      padding: const EdgeInsets.all(SpendexTheme.spacingLg),
+      decoration: BoxDecoration(
+        color: widget.isDark
+            ? SpendexColors.darkSurface
+            : SpendexColors.lightSurface,
+        borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
+        border: Border.all(
+          color: widget.isDark
+              ? SpendexColors.darkBorder
+              : SpendexColors.lightBorder,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'PIN Requirements:',
+            style: SpendexTheme.titleMedium.copyWith(
+              color: widget.isDark
+                  ? SpendexColors.darkTextPrimary
+                  : SpendexColors.lightTextPrimary,
+            ),
+          ),
+          const SizedBox(height: SpendexTheme.spacingSm),
+          _buildRequirementItem('Must be 4 digits'),
+          _buildRequirementItem('No repeating digits (1111)'),
+          _buildRequirementItem('No sequential numbers (1234)'),
+          _buildRequirementItem('No common PINs'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRequirementItem(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Icon(
+            Iconsax.tick_circle,
+            size: 16,
+            color: widget.isDark
+                ? SpendexColors.darkTextSecondary
+                : SpendexColors.lightTextSecondary,
+          ),
+          const SizedBox(width: SpendexTheme.spacingSm),
+          Text(
+            text,
+            style: SpendexTheme.bodySmall.copyWith(
+              color: widget.isDark
+                  ? SpendexColors.darkTextSecondary
+                  : SpendexColors.lightTextSecondary,
+            ),
+          ),
         ],
       ),
     );

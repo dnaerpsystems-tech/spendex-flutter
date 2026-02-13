@@ -68,6 +68,7 @@ import '../network/api_interceptor.dart';
 import '../network/ssl_pinning.dart';
 import '../security/auto_lock_service.dart';
 import '../security/pin_service.dart';
+import '../security/biometric_service.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
 
@@ -176,6 +177,11 @@ void _registerSecurityServices() {
   // PIN Service - uses FlutterSecureStorage for secure PIN hash storage
   getIt.registerLazySingleton<PinService>(
     () => PinServiceImpl(getIt<FlutterSecureStorage>()),
+  );
+
+  // Biometric Service - uses FlutterSecureStorage for biometric state
+  getIt.registerLazySingleton<BiometricService>(
+    () => BiometricServiceImpl(getIt<FlutterSecureStorage>()),
   );
 
   // Auto-Lock Service - uses SharedPreferences for timeout settings

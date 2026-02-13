@@ -1,28 +1,26 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:local_auth/local_auth.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/di/injection.dart';
-import '../../../../core/storage/secure_storage.dart';
+import '../../../../core/security/biometric_service.dart';
+import '../../../../core/security/pin_service.dart';
+import '../../../../core/security/security_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/pin_input.dart';
 
 /// PIN Entry/Lock Screen with biometric authentication and failed attempts tracking.
 ///
 /// Features:
-/// - 4-digit PIN entry with verification
-/// - Biometric authentication (fingerprint/face)
-/// - Failed attempts tracking (max 5 attempts)
+/// - 4-digit PIN entry with verification using PinService
+/// - Biometric authentication (fingerprint/face) using BiometricService
+/// - Failed attempts tracking via PinService (max 5 attempts)
 /// - Auto-lockout for 30 minutes after 5 failed attempts
 /// - Countdown timer during lockout period
-/// - Secure PIN hashing with SHA-256
 /// - User avatar and info display
 /// - Forgot PIN option (requires logout)
 /// - Screenshot prevention
@@ -37,8 +35,10 @@ class PinEntryScreen extends ConsumerStatefulWidget {
 class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _pinInputKey = GlobalKey<PinInputState>();
-  final _secureStorage = getIt<SecureStorageService>();
-  final _localAuth = LocalAuthentication();
+
+  // Services from DI
+  late final PinService _pinService;
+  late final BiometricService _biometricService;
 
   // ignore: unused_field
   String _enteredPin = '';
@@ -50,10 +50,14 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   Timer? _countdownTimer;
   bool _isBiometricLoading = false;
   bool _isBiometricAvailable = false;
+  bool _isBiometricEnabled = false;
 
   @override
   void initState() {
     super.initState();
+    // Get services from DI
+    _pinService = getIt<PinService>();
+    _biometricService = getIt<BiometricService>();
     _initializeScreen();
   }
 
@@ -71,40 +75,42 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   Future<void> _loadFailedAttempts() async {
-    final attemptsStr = await _secureStorage.read('pin_failed_attempts');
-    if (attemptsStr != null) {
-      setState(() {
-        _failedAttempts = int.tryParse(attemptsStr) ?? 0;
-      });
+    try {
+      final attempts = await _pinService.getFailedAttempts();
+      if (mounted) {
+        setState(() {
+          _failedAttempts = attempts;
+        });
+      }
+    } catch (e) {
+      // Ignore errors loading failed attempts
     }
   }
 
   Future<void> _checkLockoutStatus() async {
-    final lockoutEndStr = await _secureStorage.read('pin_lockout_end');
-    if (lockoutEndStr != null) {
-      final lockoutEnd = DateTime.tryParse(lockoutEndStr);
-      if (lockoutEnd != null) {
-        if (lockoutEnd.isAfter(DateTime.now())) {
+    try {
+      final isLocked = await _pinService.isLocked();
+      if (isLocked) {
+        final lockoutEndTime = await _pinService.getLockoutEndTime();
+        if (mounted) {
           setState(() {
             _isLocked = true;
-            _lockoutEndTime = lockoutEnd;
+            _lockoutEndTime = lockoutEndTime;
           });
           _startCountdownTimer();
-        } else {
-          await _clearLockout();
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            _isLocked = false;
+            _lockoutEndTime = null;
+            _failedAttempts = 0;
+          });
         }
       }
+    } catch (e) {
+      // Ignore errors checking lockout
     }
-  }
-
-  Future<void> _clearLockout() async {
-    await _secureStorage.delete('pin_lockout_end');
-    await _secureStorage.delete('pin_failed_attempts');
-    setState(() {
-      _isLocked = false;
-      _lockoutEndTime = null;
-      _failedAttempts = 0;
-    });
   }
 
   void _startCountdownTimer() {
@@ -122,76 +128,102 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
         timer.cancel();
         _clearLockout();
       } else {
-        setState(() {
-          final minutes = difference.inMinutes;
-          final seconds = difference.inSeconds % 60;
-          _remainingTime = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-        });
+        if (mounted) {
+          setState(() {
+            final minutes = difference.inMinutes;
+            final seconds = difference.inSeconds % 60;
+            _remainingTime = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+          });
+        }
       }
     });
   }
 
-  Future<void> _checkBiometricAvailability() async {
+  Future<void> _clearLockout() async {
     try {
-      final canCheck = await _localAuth.canCheckBiometrics;
-      final isDeviceSupported = await _localAuth.isDeviceSupported();
-      setState(() {
-        _isBiometricAvailable = canCheck && isDeviceSupported;
-      });
+      await _pinService.resetFailedAttempts();
+      if (mounted) {
+        setState(() {
+          _isLocked = false;
+          _lockoutEndTime = null;
+          _failedAttempts = 0;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isBiometricAvailable = false;
-      });
+      // Ignore errors clearing lockout
     }
   }
 
-  String _hashPin(String pin) {
-    final bytes = utf8.encode(pin);
-    final hash = sha256.convert(bytes);
-    return hash.toString();
+  Future<void> _checkBiometricAvailability() async {
+    try {
+      final isAvailable = await _biometricService.isBiometricAvailable();
+      final isEnabled = await _biometricService.isBiometricEnabled();
+      if (mounted) {
+        setState(() {
+          _isBiometricAvailable = isAvailable;
+          _isBiometricEnabled = isEnabled;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isBiometricAvailable = false;
+          _isBiometricEnabled = false;
+        });
+      }
+    }
   }
 
   Future<void> _verifyPin(String pin) async {
     if (_isLocked) return;
 
-    final storedHash = await _secureStorage.read('pin_hash');
-    if (storedHash == null) {
-      setState(() {
-        _errorMessage = 'PIN not configured. Please set up your PIN.';
-      });
-      return;
-    }
+    try {
+      final isValid = await _pinService.verifyPin(pin);
 
-    final enteredHash = _hashPin(pin);
-
-    if (enteredHash == storedHash) {
-      await _secureStorage.delete('pin_failed_attempts');
-      _enteredPin = '';
-      if (mounted) {
-        context.go('/home');
-      }
-    } else {
-      _failedAttempts++;
-      await _secureStorage.save('pin_failed_attempts', _failedAttempts.toString());
-
-      if (_failedAttempts >= 5) {
-        final lockoutEnd = DateTime.now().add(const Duration(minutes: 30));
-        await _secureStorage.save('pin_lockout_end', lockoutEnd.toIso8601String());
-        setState(() {
-          _isLocked = true;
-          _lockoutEndTime = lockoutEnd;
-          _errorMessage = null;
-        });
-        _startCountdownTimer();
+      if (isValid) {
+        _enteredPin = '';
+        // Refresh the PIN auth state provider
+        ref.read(pinAuthStateProvider.notifier).refresh();
+        if (mounted) {
+          context.go('/home');
+        }
       } else {
-        final remainingAttempts = 5 - _failedAttempts;
+        // PIN was incorrect - get updated state from service
+        final failedAttempts = await _pinService.getFailedAttempts();
+        final isLocked = await _pinService.isLocked();
+
+        if (isLocked) {
+          final lockoutEndTime = await _pinService.getLockoutEndTime();
+          if (mounted) {
+            setState(() {
+              _isLocked = true;
+              _lockoutEndTime = lockoutEndTime;
+              _failedAttempts = failedAttempts;
+              _errorMessage = null;
+            });
+            _startCountdownTimer();
+          }
+        } else {
+          final remainingAttempts = PinAuthState.maxAttempts - failedAttempts;
+          if (mounted) {
+            setState(() {
+              _failedAttempts = failedAttempts;
+              _errorMessage = 'Incorrect PIN. $remainingAttempts ${remainingAttempts == 1 ? 'attempt' : 'attempts'} remaining.';
+            });
+            _pinInputKey.currentState?.showError();
+            _pinInputKey.currentState?.clear();
+          }
+        }
+        _enteredPin = '';
+      }
+    } catch (e) {
+      if (mounted) {
         setState(() {
-          _errorMessage = 'Incorrect PIN. $remainingAttempts ${remainingAttempts == 1 ? 'attempt' : 'attempts'} remaining.';
+          _errorMessage = 'Failed to verify PIN. Please try again.';
         });
         _pinInputKey.currentState?.showError();
         _pinInputKey.currentState?.clear();
       }
-
       _enteredPin = '';
     }
   }
@@ -205,28 +237,31 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
     });
 
     try {
-      final authenticated = await _localAuth.authenticate(
-        localizedReason: 'Unlock Spendex',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: true,
-        ),
+      final authenticated = await _biometricService.authenticateWithBiometric(
+        reason: 'Unlock Spendex',
       );
 
       if (authenticated) {
-        await _secureStorage.delete('pin_failed_attempts');
+        // Reset failed attempts on successful biometric auth
+        await _pinService.resetFailedAttempts();
+        ref.read(pinAuthStateProvider.notifier).resetFailedAttempts();
+
         if (mounted) {
           context.go('/home');
         }
       } else {
-        setState(() {
-          _errorMessage = 'Biometric authentication failed';
-        });
+        if (mounted) {
+          setState(() {
+            _errorMessage = 'Biometric authentication failed';
+          });
+        }
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Biometric authentication error';
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Biometric authentication error';
+        });
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -299,6 +334,9 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   Widget _buildPinEntryScreen(AuthState authState, bool isDark) {
+    // Show biometric button only if available AND enabled
+    final showBiometric = _isBiometricAvailable && _isBiometricEnabled;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(SpendexTheme.spacing2xl),
       child: Form(
@@ -320,12 +358,12 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
               const SizedBox(height: SpendexTheme.spacingLg),
               _buildErrorMessage(_errorMessage!, isDark),
             ],
-            if (_failedAttempts > 0 && _failedAttempts < 5) ...[
+            if (_failedAttempts > 0 && _failedAttempts < PinAuthState.maxAttempts) ...[
               const SizedBox(height: SpendexTheme.spacingMd),
               _buildAttemptsIndicator(isDark),
             ],
             const SizedBox(height: SpendexTheme.spacing4xl),
-            if (_isBiometricAvailable) ...[
+            if (showBiometric) ...[
               _buildBiometricButton(isDark),
               const SizedBox(height: SpendexTheme.spacing2xl),
             ],
@@ -421,7 +459,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   Widget _buildPinInput() {
     return PinInput(
       key: _pinInputKey,
-      autoFocus: !_isLocked,
+      autoFocus: _isLocked == false,
       onCompleted: (pin) {
         setState(() {
           _enteredPin = pin;
@@ -439,82 +477,89 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   Widget _buildErrorMessage(String message, bool isDark) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(
-          Iconsax.warning_2,
-          color: SpendexColors.expense,
-          size: 16,
-        ),
-        const SizedBox(width: SpendexTheme.spacingSm),
-        Flexible(
-          child: Text(
-            message,
-            style: SpendexTheme.bodyMedium.copyWith(
-              color: SpendexColors.expense,
-            ),
-            textAlign: TextAlign.center,
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpendexTheme.spacingLg,
+        vertical: SpendexTheme.spacingMd,
+      ),
+      decoration: BoxDecoration(
+        color: SpendexColors.expense.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Iconsax.warning_2,
+            color: SpendexColors.expense,
+            size: 20,
           ),
-        ),
-      ],
+          const SizedBox(width: SpendexTheme.spacingSm),
+          Flexible(
+            child: Text(
+              message,
+              style: SpendexTheme.bodyMedium.copyWith(
+                color: SpendexColors.expense,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildAttemptsIndicator(bool isDark) {
-    final remaining = 5 - _failedAttempts;
-    return Text(
-      '$remaining of 5 attempts remaining',
-      style: SpendexTheme.labelMedium.copyWith(
-        color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
-      ),
-      textAlign: TextAlign.center,
+    final remainingAttempts = PinAuthState.maxAttempts - _failedAttempts;
+    final isWarning = remainingAttempts <= 2;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(PinAuthState.maxAttempts, (index) {
+        final isFailed = index < _failedAttempts;
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isFailed
+                ? (isWarning ? SpendexColors.expense : SpendexColors.warning)
+                : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
+          ),
+        );
+      }),
     );
   }
 
   Widget _buildBiometricButton(bool isDark) {
-    return InkWell(
+    return GestureDetector(
       onTap: _isBiometricLoading ? null : _authenticateWithBiometric,
-      borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpendexTheme.spacing2xl,
-          vertical: SpendexTheme.spacingLg,
-        ),
+        padding: const EdgeInsets.all(SpendexTheme.spacingLg),
         decoration: BoxDecoration(
-          color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
-          borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
+          color: isDark
+              ? SpendexColors.darkSurface
+              : SpendexColors.lightSurface,
+          shape: BoxShape.circle,
           border: Border.all(
-            color: SpendexColors.primary.withValues(alpha: 0.3),
+            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+            width: 2,
           ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_isBiometricLoading)
-              const SizedBox(
-                width: 24,
-                height: 24,
+        child: _isBiometricLoading
+            ? SizedBox(
+                width: 32,
+                height: 32,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   color: SpendexColors.primary,
                 ),
               )
-            else
-              const Icon(
+            : Icon(
                 Iconsax.finger_scan,
-                color: SpendexColors.primary,
-                size: 24,
-              ),
-            const SizedBox(width: SpendexTheme.spacingMd),
-            Text(
-              _isBiometricLoading ? 'Authenticating...' : 'Use Biometric',
-              style: SpendexTheme.titleMedium.copyWith(
+                size: 32,
                 color: SpendexColors.primary,
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -524,8 +569,9 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
       onPressed: _showForgotPinDialog,
       child: Text(
         'Forgot PIN?',
-        style: SpendexTheme.titleMedium.copyWith(
-          color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
+        style: SpendexTheme.bodyMedium.copyWith(
+          color: SpendexColors.primary,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -534,90 +580,76 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   Widget _buildLockoutScreen() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Padding(
-      padding: const EdgeInsets.all(SpendexTheme.spacing2xl),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              color: SpendexColors.expense.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Iconsax.warning_2,
-              color: SpendexColors.expense,
-              size: 60,
-            ),
-          ),
-          const SizedBox(height: SpendexTheme.spacing3xl),
-          Text(
-            'Too Many Attempts',
-            style: SpendexTheme.headlineMedium.copyWith(
-              fontSize: 24,
-              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: SpendexTheme.spacingLg),
-          Text(
-            'Your account is locked for security.\nPlease try again in',
-            style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: SpendexTheme.spacing2xl),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: SpendexTheme.spacing3xl,
-              vertical: SpendexTheme.spacingXl,
-            ),
-            decoration: BoxDecoration(
-              color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
-              borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
-              border: Border.all(
-                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(SpendexTheme.spacing2xl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: SpendexColors.expense.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
               ),
-            ),
-            child: Text(
-              _remainingTime,
-              style: SpendexTheme.displayLarge.copyWith(
+              child: Icon(
+                Iconsax.lock,
+                size: 60,
                 color: SpendexColors.expense,
-                fontSize: 48,
-                fontWeight: FontWeight.w700,
               ),
             ),
-          ),
-          const SizedBox(height: SpendexTheme.spacing4xl),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () async {
-                await ref.read(authStateProvider.notifier).logout();
-                if (mounted) {
-                  context.go('/login');
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: SpendexColors.expense,
-                side: const BorderSide(color: SpendexColors.expense),
-                padding: const EdgeInsets.symmetric(vertical: SpendexTheme.spacingLg),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
-                ),
+            const SizedBox(height: SpendexTheme.spacing2xl),
+            Text(
+              'Account Locked',
+              style: SpendexTheme.headlineMedium.copyWith(
+                fontSize: 24,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
-              child: Text(
-                'Logout',
-                style: SpendexTheme.titleMedium.copyWith(
-                  color: SpendexColors.expense,
-                ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: SpendexTheme.spacingMd),
+            Text(
+              'Too many failed attempts.\nPlease wait before trying again.',
+              style: SpendexTheme.bodyMedium.copyWith(
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: SpendexTheme.spacing3xl),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: SpendexTheme.spacing2xl,
+                vertical: SpendexTheme.spacingLg,
+              ),
+              decoration: BoxDecoration(
+                color: SpendexColors.expense.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Iconsax.timer_1,
+                    color: SpendexColors.expense,
+                    size: 24,
+                  ),
+                  const SizedBox(width: SpendexTheme.spacingMd),
+                  Text(
+                    _remainingTime.isNotEmpty ? _remainingTime : '30:00',
+                    style: SpendexTheme.headlineMedium.copyWith(
+                      fontSize: 32,
+                      color: SpendexColors.expense,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: SpendexTheme.spacing4xl),
+            _buildForgotPinButton(isDark),
+          ],
+        ),
       ),
     );
   }

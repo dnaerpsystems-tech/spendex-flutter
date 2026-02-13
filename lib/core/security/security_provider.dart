@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../di/injection.dart';
 import 'auto_lock_service.dart';
+import 'biometric_service.dart';
 import 'device_security.dart';
 import 'pin_service.dart';
 
@@ -17,6 +18,29 @@ final pinServiceProvider = Provider<PinService>((ref) {
 /// Returns the singleton instance from GetIt.
 final autoLockServiceProvider = Provider<AutoLockService>((ref) {
   return getIt<AutoLockService>();
+});
+
+/// Provider for the biometric service.
+///
+/// Returns the singleton instance from GetIt.
+final biometricServiceProvider = Provider<BiometricService>((ref) {
+  return getIt<BiometricService>();
+});
+
+/// Provider for biometric availability status.
+///
+/// Checks if biometric authentication is available on the device.
+final biometricAvailableProvider = FutureProvider<bool>((ref) async {
+  final service = ref.watch(biometricServiceProvider);
+  return service.isBiometricAvailable();
+});
+
+/// Provider for biometric enabled status.
+///
+/// Checks if the user has enabled biometric authentication.
+final biometricEnabledProvider = FutureProvider<bool>((ref) async {
+  final service = ref.watch(biometricServiceProvider);
+  return service.isBiometricEnabled();
 });
 
 /// State class for PIN authentication.
@@ -223,6 +247,16 @@ class PinAuthNotifier extends StateNotifier<PinAuthState> {
       );
     }
   }
+
+  /// Reset failed attempts (used after successful biometric auth).
+  Future<void> resetFailedAttempts() async {
+    await _pinService.resetFailedAttempts();
+    state = state.copyWith(
+      failedAttempts: 0,
+      isLocked: false,
+      clearLockout: true,
+    );
+  }
 }
 
 /// Provider for PIN authentication state.
@@ -253,6 +287,8 @@ class SecurityState {
     this.deviceSecurityResult,
     this.autoLockEnabled = true,
     this.autoLockTimeout = const Duration(minutes: 5),
+    this.biometricAvailable = false,
+    this.biometricEnabled = false,
   });
 
   /// PIN authentication state.
@@ -266,6 +302,12 @@ class SecurityState {
 
   /// Auto-lock timeout duration.
   final Duration autoLockTimeout;
+
+  /// Whether biometric authentication is available on device.
+  final bool biometricAvailable;
+
+  /// Whether biometric authentication is enabled for this app.
+  final bool biometricEnabled;
 
   /// Whether the app should show PIN entry screen.
   bool get requiresAuth => pinAuthState.isPinSet;
@@ -282,12 +324,16 @@ class SecurityState {
     SecurityCheckResult? deviceSecurityResult,
     bool? autoLockEnabled,
     Duration? autoLockTimeout,
+    bool? biometricAvailable,
+    bool? biometricEnabled,
   }) {
     return SecurityState(
       pinAuthState: pinAuthState ?? this.pinAuthState,
       deviceSecurityResult: deviceSecurityResult ?? this.deviceSecurityResult,
       autoLockEnabled: autoLockEnabled ?? this.autoLockEnabled,
       autoLockTimeout: autoLockTimeout ?? this.autoLockTimeout,
+      biometricAvailable: biometricAvailable ?? this.biometricAvailable,
+      biometricEnabled: biometricEnabled ?? this.biometricEnabled,
     );
   }
 }
@@ -297,11 +343,15 @@ final securityStateProvider = Provider<SecurityState>((ref) {
   final pinAuthState = ref.watch(pinAuthStateProvider);
   final deviceSecurityAsync = ref.watch(deviceSecurityCheckProvider);
   final autoLockService = ref.watch(autoLockServiceProvider);
+  final biometricAvailableAsync = ref.watch(biometricAvailableProvider);
+  final biometricEnabledAsync = ref.watch(biometricEnabledProvider);
 
   return SecurityState(
     pinAuthState: pinAuthState,
     deviceSecurityResult: deviceSecurityAsync.valueOrNull,
     autoLockEnabled: autoLockService.isEnabled,
     autoLockTimeout: autoLockService.timeout,
+    biometricAvailable: biometricAvailableAsync.valueOrNull ?? false,
+    biometricEnabled: biometricEnabledAsync.valueOrNull ?? false,
   );
 });

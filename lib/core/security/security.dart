@@ -5,6 +5,7 @@
 library security;
 
 export 'auto_lock_service.dart';
+export 'biometric_service.dart';
 export 'device_security.dart';
 export 'pin_service.dart';
 export 'screen_security.dart';
