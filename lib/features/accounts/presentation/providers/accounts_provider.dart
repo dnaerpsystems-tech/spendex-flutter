@@ -370,7 +370,7 @@ class AccountsNotifier extends StateNotifier<AccountsState> {
 
 /// Accounts State Provider
 final accountsStateProvider =
-    StateNotifierProvider<AccountsNotifier, AccountsState>((ref) {
+    StateNotifierProvider.autoDispose<AccountsNotifier, AccountsState>((ref) {
   return AccountsNotifier(getIt<AccountsRepository>());
 });
 

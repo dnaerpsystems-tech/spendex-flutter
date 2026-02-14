@@ -357,7 +357,7 @@ class LoansNotifier extends StateNotifier<LoansState> {
 
 /// Loans State Provider
 final loansStateProvider =
-    StateNotifierProvider<LoansNotifier, LoansState>((ref) {
+    StateNotifierProvider.autoDispose<LoansNotifier, LoansState>((ref) {
   return LoansNotifier(getIt<LoansRepository>());
 });
 

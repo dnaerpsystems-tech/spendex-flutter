@@ -1,0 +1,36 @@
+# Spendex Code Owners
+# These owners will be requested for review when someone opens a PR
+# that modifies code that they own.
+
+# Default owners for everything in the repo
+* @spendex-team
+
+# Core application code
+/lib/ @spendex-team
+/lib/core/ @spendex-team @core-maintainers
+/lib/features/ @spendex-team
+
+# Platform-specific code
+/android/ @android-team @spendex-team
+/ios/ @ios-team @spendex-team
+/windows/ @windows-team @spendex-team
+
+# Tests
+/test/ @spendex-team @qa-team
+
+# CI/CD and DevOps
+/.github/ @devops-team @spendex-team
+/scripts/ @devops-team @spendex-team
+
+# Documentation
+*.md @docs-team @spendex-team
+/docs/ @docs-team @spendex-team
+
+# Configuration files
+pubspec.yaml @spendex-team
+analysis_options.yaml @spendex-team
+lefthook.yml @devops-team
+
+# Security-sensitive files
+/.env* @security-team @spendex-team
+/lib/core/security/ @security-team @spendex-team

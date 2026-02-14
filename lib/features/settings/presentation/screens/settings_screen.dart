@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-
+import 'package:spendex/l10n/app_localizations.dart';
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
+import '../../../../core/localization/locale_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/theme_provider.dart';
 
@@ -15,11 +16,13 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final currentLocale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('More'),
+        title: Text(l10n.settings),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -56,7 +59,7 @@ class SettingsScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            user?.name ?? 'User',
+                            user?.name ?? l10n.profile,
                             style: SpendexTheme.headlineMedium.copyWith(
                               color: Theme.of(context).colorScheme.onSurface,
                             ),
@@ -76,57 +79,55 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 32),
-
+            
             // Features Section
             _buildSectionTitle(context, 'Features'),
             const SizedBox(height: 12),
             _SettingsTile(
               icon: Iconsax.wallet_1,
-              title: 'Accounts',
+              title: l10n.accounts,
               onTap: () => context.push(AppRoutes.accounts),
             ),
             _SettingsTile(
               icon: Iconsax.percentage_circle,
-              title: 'Budgets',
+              title: l10n.budgets,
               onTap: () => context.push(AppRoutes.budgets),
             ),
             _SettingsTile(
               icon: Iconsax.flag,
-              title: 'Goals',
+              title: l10n.goals,
               onTap: () => context.push(AppRoutes.goals),
             ),
             _SettingsTile(
               icon: Iconsax.home_2,
-              title: 'Loans',
+              title: l10n.loans,
               onTap: () => context.push(AppRoutes.loans),
             ),
             _SettingsTile(
               icon: Iconsax.chart,
-              title: 'Investments',
+              title: l10n.investments,
               onTap: () => context.push(AppRoutes.investments),
             ),
             _SettingsTile(
               icon: Iconsax.document_upload,
-              title: 'Bank Import',
-              subtitle: 'Import from PDF, SMS, AA',
+              title: l10n.bankImport,
+              subtitle: l10n.importFromBank,
               onTap: () => context.push(AppRoutes.bankImport),
             ),
             _SettingsTile(
               icon: Iconsax.people,
-              title: 'Family',
+              title: l10n.family,
               onTap: () => context.push(AppRoutes.family),
             ),
-
             const SizedBox(height: 24),
-
+            
             // Preferences Section
-            _buildSectionTitle(context, 'Preferences'),
+            _buildSectionTitle(context, l10n.appearance),
             const SizedBox(height: 12),
             _SettingsTile(
               icon: themeMode == ThemeMode.dark ? Iconsax.moon : Iconsax.sun_1,
-              title: 'Dark Mode',
+              title: l10n.darkTheme,
               trailing: Switch(
                 value: themeMode == ThemeMode.dark,
                 onChanged: (value) {
@@ -138,25 +139,24 @@ class SettingsScreen extends ConsumerWidget {
             ),
             _SettingsTile(
               icon: Iconsax.notification,
-              title: 'Notifications',
+              title: l10n.notifications,
               onTap: () {},
             ),
             _SettingsTile(
               icon: Iconsax.finger_scan,
-              title: 'Biometric Lock',
+              title: l10n.enableBiometric,
               onTap: () {},
             ),
             _SettingsTile(
               icon: Iconsax.global,
-              title: 'Language',
-              subtitle: 'English',
-              onTap: () {},
+              title: l10n.language,
+              subtitle: SupportedLocales.getDisplayName(currentLocale),
+              onTap: () => _showLanguageDialog(context, ref, l10n),
             ),
-
             const SizedBox(height: 24),
-
+            
             // Subscription Section
-            _buildSectionTitle(context, 'Subscription'),
+            _buildSectionTitle(context, l10n.subscription),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(20),
@@ -184,14 +184,14 @@ class SettingsScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Upgrade to Pro',
+                          l10n.upgradePlan,
                           style: SpendexTheme.titleMedium.copyWith(
                             color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Unlock all features',
+                          l10n.unlimitedTransactions,
                           style: SpendexTheme.bodyMedium.copyWith(
                             color: Colors.white.withValues(alpha: 0.8),
                           ),
@@ -210,67 +210,64 @@ class SettingsScreen extends ConsumerWidget {
                         vertical: 10,
                       ),
                     ),
-                    child: const Text('Upgrade'),
+                    child: Text(l10n.subscribe),
                   ),
                 ],
               ),
             ),
-
             const SizedBox(height: 24),
-
+            
             // Support Section
-            _buildSectionTitle(context, 'Support'),
+            _buildSectionTitle(context, l10n.helpAndSupport),
             const SizedBox(height: 12),
             _SettingsTile(
               icon: Iconsax.message_question,
-              title: 'Help & FAQ',
+              title: l10n.faq,
               onTap: () {},
             ),
             _SettingsTile(
               icon: Iconsax.sms,
-              title: 'Contact Support',
+              title: l10n.contactSupport,
               onTap: () {},
             ),
             _SettingsTile(
               icon: Iconsax.star,
-              title: 'Rate App',
+              title: l10n.rateApp,
               onTap: () {},
             ),
             _SettingsTile(
               icon: Iconsax.share,
-              title: 'Share App',
+              title: l10n.shareApp,
               onTap: () {},
             ),
-
             const SizedBox(height: 24),
-
+            
             // Logout
             _SettingsTile(
               icon: Iconsax.logout,
-              title: 'Logout',
+              title: l10n.logout,
               textColor: SpendexColors.expense,
               onTap: () async {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Logout'),
-                    content: const Text('Are you sure you want to logout?'),
+                    title: Text(l10n.logout),
+                    content: Text(l10n.logoutConfirmation),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Cancel'),
+                        child: Text(l10n.cancel),
                       ),
                       ElevatedButton(
                         onPressed: () => Navigator.pop(context, true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: SpendexColors.expense,
                         ),
-                        child: const Text('Logout'),
+                        child: Text(l10n.logout),
                       ),
                     ],
                   ),
                 );
-
                 if (confirm ?? false) {
                   await ref.read(authStateProvider.notifier).logout();
                   if (context.mounted) {
@@ -279,19 +276,17 @@ class SettingsScreen extends ConsumerWidget {
                 }
               },
             ),
-
             const SizedBox(height: 32),
-
+            
             // App Version
             Center(
               child: Text(
-                'Spendex v1.0.0',
+                l10n.version('1.0.0'),
                 style: SpendexTheme.bodyMedium.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ),
-
             const SizedBox(height: 100),
           ],
         ),
@@ -307,10 +302,59 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+
+  void _showLanguageDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    final currentLocale = ref.read(localeProvider);
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.selectLanguage),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: SupportedLocales.all.map((locale) {
+            final isSelected = currentLocale.languageCode == locale.languageCode;
+
+            return ListTile(
+              leading: Text(
+                locale.languageCode == 'hi' ? '🇮🇳' : '🇺🇸',
+                style: const TextStyle(fontSize: 24),
+              ),
+              title: Text(SupportedLocales.getNativeName(locale)),
+              trailing: isSelected
+                  ? Icon(
+                      Icons.check_circle,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : null,
+              selected: isSelected,
+              onTap: () async {
+                await ref.read(localeProvider.notifier).setLocale(locale);
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.languageChanged),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              },
+            );
+          }).toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _SettingsTile extends StatelessWidget {
-
   const _SettingsTile({
     required this.icon,
     required this.title,
@@ -319,6 +363,7 @@ class _SettingsTile extends StatelessWidget {
     this.textColor,
     this.onTap,
   });
+
   final IconData icon;
   final String title;
   final String? subtitle;

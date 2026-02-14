@@ -1,0 +1,325 @@
+import "package:dartz/dartz.dart";
+import "../constants/app_constants.dart";
+import "../errors/failures.dart";
+import "../../features/subscription/data/models/subscription_models.dart";
+import "../../features/subscription/domain/repositories/subscription_repository.dart";
+
+/// Feature types that can be gated behind a subscription.
+enum GatedFeature {
+  /// Unlimited accounts (Free: 2, Pro: 10, Premium: Unlimited)
+  unlimitedAccounts,
+
+  /// Unlimited budgets (Free: 3, Pro: 10, Premium: Unlimited)
+  unlimitedBudgets,
+
+  /// Unlimited goals (Free: 2, Pro: 5, Premium: Unlimited)
+  unlimitedGoals,
+
+  /// Advanced analytics (Pro+)
+  advancedAnalytics,
+
+  /// AI-powered insights (Pro+)
+  aiInsights,
+
+  /// Receipt scanning (Pro+)
+  receiptScanning,
+
+  /// Voice input (Pro+)
+  voiceInput,
+
+  /// Bank import via Account Aggregator (Pro+)
+  accountAggregator,
+
+  /// Email parsing (Pro+)
+  emailParsing,
+
+  /// Family sharing (Premium only)
+  familySharing,
+
+  /// Investment tracking (Pro+)
+  investmentTracking,
+
+  /// Loan tracking (Pro+)
+  loanTracking,
+
+  /// Export to PDF/CSV (Pro+)
+  exportReports,
+
+  /// Priority support (Premium only)
+  prioritySupport,
+
+  /// Tax reports (Premium only)
+  taxReports,
+}
+
+/// Result of checking a feature gate.
+class FeatureGateResult {
+  /// Whether the feature is allowed.
+  final bool isAllowed;
+
+  /// The current count if this is a count-based feature.
+  final int? currentCount;
+
+  /// The limit for this feature.
+  final int? limit;
+
+  /// The required plan to access this feature.
+  final SubscriptionPlan? requiredPlan;
+
+  /// Message to show if blocked.
+  final String? message;
+
+  const FeatureGateResult({
+    required this.isAllowed,
+    this.currentCount,
+    this.limit,
+    this.requiredPlan,
+    this.message,
+  });
+
+  /// Returns true if the user has reached their limit.
+  bool get isAtLimit => limit != null && currentCount != null && currentCount! >= limit!;
+
+  /// Returns the remaining count for count-based features.
+  int? get remaining => limit != null && currentCount != null ? limit! - currentCount! : null;
+}
+
+/// Service for checking subscription-based feature gates.
+///
+/// This service determines which features a user can access based on
+/// their current subscription plan and usage.
+class PaywallService {
+  /// Creates a new [PaywallService].
+  PaywallService(this._repository);
+
+  final SubscriptionRepository _repository;
+
+  // Cache for current subscription and usage
+  SubscriptionModel? _cachedSubscription;
+  UsageModel? _cachedUsage;
+  DateTime? _cacheTime;
+
+  static const Duration _cacheExpiry = Duration(minutes: 5);
+
+  /// Gets the limits for each plan.
+  static const Map<SubscriptionPlan, Map<String, int>> planLimits = {
+    SubscriptionPlan.free: {
+      "accounts": 2,
+      "budgets": 3,
+      "goals": 2,
+      "transactions_per_month": 100,
+    },
+    SubscriptionPlan.pro: {
+      "accounts": 10,
+      "budgets": 10,
+      "goals": 5,
+      "transactions_per_month": 1000,
+    },
+    SubscriptionPlan.premium: {
+      "accounts": -1, // Unlimited
+      "budgets": -1,
+      "goals": -1,
+      "transactions_per_month": -1,
+    },
+  };
+
+  /// Features available for each plan.
+  static const Map<SubscriptionPlan, Set<GatedFeature>> planFeatures = {
+    SubscriptionPlan.free: {},
+    SubscriptionPlan.pro: {
+      GatedFeature.advancedAnalytics,
+      GatedFeature.aiInsights,
+      GatedFeature.receiptScanning,
+      GatedFeature.voiceInput,
+      GatedFeature.accountAggregator,
+      GatedFeature.emailParsing,
+      GatedFeature.investmentTracking,
+      GatedFeature.loanTracking,
+      GatedFeature.exportReports,
+    },
+    SubscriptionPlan.premium: {
+      GatedFeature.advancedAnalytics,
+      GatedFeature.aiInsights,
+      GatedFeature.receiptScanning,
+      GatedFeature.voiceInput,
+      GatedFeature.accountAggregator,
+      GatedFeature.emailParsing,
+      GatedFeature.investmentTracking,
+      GatedFeature.loanTracking,
+      GatedFeature.exportReports,
+      GatedFeature.familySharing,
+      GatedFeature.prioritySupport,
+      GatedFeature.taxReports,
+    },
+  };
+
+  /// Refreshes the subscription and usage cache.
+  Future<void> refreshCache() async {
+    final subscriptionResult = await _repository.getCurrentSubscription();
+    subscriptionResult.fold(
+      (failure) => null,
+      (subscription) => _cachedSubscription = subscription,
+    );
+
+    final usageResult = await _repository.getUsage();
+    usageResult.fold(
+      (failure) => null,
+      (usage) => _cachedUsage = usage,
+    );
+
+    _cacheTime = DateTime.now();
+  }
+
+  /// Gets the cached subscription, refreshing if expired.
+  Future<SubscriptionModel?> _getSubscription() async {
+    if (_shouldRefreshCache()) {
+      await refreshCache();
+    }
+    return _cachedSubscription;
+  }
+
+  /// Gets the cached usage, refreshing if expired.
+  Future<UsageModel?> _getUsage() async {
+    if (_shouldRefreshCache()) {
+      await refreshCache();
+    }
+    return _cachedUsage;
+  }
+
+  bool _shouldRefreshCache() {
+    if (_cacheTime == null) return true;
+    return DateTime.now().difference(_cacheTime!) > _cacheExpiry;
+  }
+
+  /// Gets the current subscription plan.
+  Future<SubscriptionPlan> getCurrentPlan() async {
+    final subscription = await _getSubscription();
+    return subscription?.plan ?? SubscriptionPlan.free;
+  }
+
+  /// Checks if a feature is available for the current subscription.
+  Future<FeatureGateResult> checkFeature(GatedFeature feature) async {
+    final plan = await getCurrentPlan();
+    final usage = await _getUsage();
+
+    // Check if feature is included in plan
+    final allowedFeatures = planFeatures[plan] ?? {};
+    final isFeatureAllowed = allowedFeatures.contains(feature);
+
+    // Handle count-based features
+    switch (feature) {
+      case GatedFeature.unlimitedAccounts:
+        return _checkCountFeature(
+          plan: plan,
+          key: "accounts",
+          currentCount: usage?.accountsCount ?? 0,
+        );
+      case GatedFeature.unlimitedBudgets:
+        return _checkCountFeature(
+          plan: plan,
+          key: "budgets",
+          currentCount: usage?.budgetsCount ?? 0,
+        );
+      case GatedFeature.unlimitedGoals:
+        return _checkCountFeature(
+          plan: plan,
+          key: "goals",
+          currentCount: usage?.goalsCount ?? 0,
+        );
+      default:
+        return FeatureGateResult(
+          isAllowed: isFeatureAllowed,
+          requiredPlan: _getRequiredPlan(feature),
+          message: isFeatureAllowed
+              ? null
+              : "Upgrade to ${_getRequiredPlan(feature)?.name ?? "Pro"} to access this feature",
+        );
+    }
+  }
+
+  FeatureGateResult _checkCountFeature({
+    required SubscriptionPlan plan,
+    required String key,
+    required int currentCount,
+  }) {
+    final limits = planLimits[plan] ?? {};
+    final limit = limits[key] ?? 0;
+
+    // -1 means unlimited
+    if (limit == -1) {
+      return FeatureGateResult(
+        isAllowed: true,
+        currentCount: currentCount,
+        limit: null,
+      );
+    }
+
+    final isAtLimit = currentCount >= limit;
+    return FeatureGateResult(
+      isAllowed: !isAtLimit,
+      currentCount: currentCount,
+      limit: limit,
+      requiredPlan: isAtLimit ? _getNextPlan(plan) : null,
+      message: isAtLimit
+          ? "You have reached your limit of $limit ${key}. Upgrade to add more."
+          : null,
+    );
+  }
+
+  /// Checks if the user can add more of a count-based resource.
+  Future<FeatureGateResult> canAddMore(GatedFeature feature) async {
+    return checkFeature(feature);
+  }
+
+  /// Gets the required plan for a feature.
+  SubscriptionPlan? _getRequiredPlan(GatedFeature feature) {
+    if (planFeatures[SubscriptionPlan.pro]?.contains(feature) ?? false) {
+      return SubscriptionPlan.pro;
+    }
+    if (planFeatures[SubscriptionPlan.premium]?.contains(feature) ?? false) {
+      return SubscriptionPlan.premium;
+    }
+    return null;
+  }
+
+  /// Gets the next higher plan.
+  SubscriptionPlan _getNextPlan(SubscriptionPlan current) {
+    switch (current) {
+      case SubscriptionPlan.free:
+        return SubscriptionPlan.pro;
+      case SubscriptionPlan.pro:
+        return SubscriptionPlan.premium;
+      case SubscriptionPlan.premium:
+        return SubscriptionPlan.premium;
+    }
+  }
+
+  /// Checks if the user is on a trial.
+  Future<bool> isOnTrial() async {
+    final subscription = await _getSubscription();
+    return subscription?.status == SubscriptionStatus.trialing;
+  }
+
+  /// Gets the trial days remaining.
+  Future<int> getTrialDaysRemaining() async {
+    final subscription = await _getSubscription();
+    if (subscription?.status != SubscriptionStatus.trialing) return 0;
+    if (subscription?.trialEnd == null) return 0;
+
+    final remaining = subscription!.trialEnd!.difference(DateTime.now());
+    return remaining.inDays;
+  }
+
+  /// Gets the current usage.
+  Future<UsageModel?> getUsage() => _getUsage();
+
+  /// Gets the current subscription.
+  Future<SubscriptionModel?> getSubscription() => _getSubscription();
+
+  /// Clears the cache.
+  void clearCache() {
+    _cachedSubscription = null;
+    _cachedUsage = null;
+    _cacheTime = null;
+  }
+}

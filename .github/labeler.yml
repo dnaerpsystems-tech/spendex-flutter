@@ -1,0 +1,89 @@
+# Labeler configuration for automatic PR labeling
+# Used by actions/labeler@v5
+
+# Core application code
+core:
+  - changed-files:
+      - any-glob-to-any-file: lib/core/**/*
+
+# Feature modules
+features:
+  - changed-files:
+      - any-glob-to-any-file: lib/features/**/*
+
+# UI changes
+ui:
+  - changed-files:
+      - any-glob-to-any-file:
+          - lib/**/*_screen.dart
+          - lib/**/*_page.dart
+          - lib/**/*_widget.dart
+          - lib/**/widgets/**/*
+
+# Android
+android:
+  - changed-files:
+      - any-glob-to-any-file: android/**/*
+
+# iOS
+ios:
+  - changed-files:
+      - any-glob-to-any-file: ios/**/*
+
+# Windows
+windows:
+  - changed-files:
+      - any-glob-to-any-file: windows/**/*
+
+# Tests
+tests:
+  - changed-files:
+      - any-glob-to-any-file: test/**/*
+
+# Documentation
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - docs/**/*
+
+# CI/CD
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**/*
+          - scripts/**/*
+
+# Dependencies
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - pubspec.yaml
+          - pubspec.lock
+          - android/build.gradle
+          - android/app/build.gradle
+
+# Configuration
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - analysis_options.yaml
+          - lefthook.yml
+          - .gitignore
+          - .env*
+
+# Assets
+assets:
+  - changed-files:
+      - any-glob-to-any-file: assets/**/*
+
+# Size labels
+size/XS:
+  - changed-files:
+      - any-glob-to-any-file: "*"
+    all:
+      - head-branch: "^.{1,10}$"
+
+size/S:
+  - changed-files:
+      - any-glob-to-any-file: "*"

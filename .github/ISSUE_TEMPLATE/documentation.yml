@@ -1,0 +1,65 @@
+name: 📝 Documentation Update
+description: Suggest improvements or report issues in documentation
+title: "[Docs]: "
+labels: ["documentation"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation!
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of Documentation Update
+      options:
+        - Fix typo/error
+        - Add missing documentation
+        - Improve existing documentation
+        - Add code examples
+        - Update outdated information
+        - Translate documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Documentation Location
+      description: Which file or section needs updating?
+      placeholder: e.g., README.md, docs/getting-started.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Documentation
+      description: What does the current documentation say? (if applicable)
+      placeholder: Copy the current text or describe the issue...
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed Changes
+      description: What changes would you like to see?
+      placeholder: Describe the changes or provide the new text...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any additional context or screenshots.
+      placeholder: Additional information...
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to submit a PR for this change

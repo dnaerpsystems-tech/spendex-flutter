@@ -423,7 +423,7 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
 
 /// Transactions State Provider
 final transactionsStateProvider =
-    StateNotifierProvider<TransactionsNotifier, TransactionsState>((ref) {
+    StateNotifierProvider.autoDispose<TransactionsNotifier, TransactionsState>((ref) {
   return TransactionsNotifier(getIt<TransactionsRepository>());
 });
 

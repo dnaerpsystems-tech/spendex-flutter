@@ -337,7 +337,7 @@ class BudgetsNotifier extends StateNotifier<BudgetsState> {
 
 /// Budgets State Provider
 final budgetsStateProvider =
-    StateNotifierProvider<BudgetsNotifier, BudgetsState>((ref) {
+    StateNotifierProvider.autoDispose<BudgetsNotifier, BudgetsState>((ref) {
   return BudgetsNotifier(getIt<BudgetsRepository>());
 });
 

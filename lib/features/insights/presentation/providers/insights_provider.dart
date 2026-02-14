@@ -231,7 +231,7 @@ class InsightsNotifier extends StateNotifier<InsightsState> {
 
 /// Main state notifier provider for insights
 final insightsStateProvider =
-    StateNotifierProvider<InsightsNotifier, InsightsState>((ref) {
+    StateNotifierProvider.autoDispose<InsightsNotifier, InsightsState>((ref) {
   return InsightsNotifier(getIt<InsightsRepository>());
 });
 

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/spendex-app/spendex/discussions
+    about: Use discussions for questions, ideas, and general conversation
+  - name: 📚 Documentation
+    url: https://github.com/spendex-app/spendex/wiki
+    about: Check our documentation for answers to common questions
+  - name: 🔒 Security Issues
+    url: https://github.com/spendex-app/spendex/security/advisories/new
+    about: Report security vulnerabilities privately

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../../app/theme.dart';
 
 /// A reusable error state widget with Material 3 theming.
@@ -8,7 +7,6 @@ import '../../app/theme.dart';
 /// Displays an error icon, message, and an optional retry button.
 /// Use this widget to present error states consistently across the app.
 class ErrorStateWidget extends StatelessWidget {
-
   const ErrorStateWidget({
     required this.message,
     super.key,
@@ -18,6 +16,7 @@ class ErrorStateWidget extends StatelessWidget {
     this.onRetry,
     this.retryLabel,
     this.compact = false,
+    this.semanticLabel,
   });
 
   /// The error message to display.
@@ -42,6 +41,21 @@ class ErrorStateWidget extends StatelessWidget {
   /// Whether to use a compact layout without the icon container.
   final bool compact;
 
+  /// Semantic label for screen readers. Defaults to error message.
+  final String? semanticLabel;
+
+  String _buildSemanticLabel() {
+    final parts = <String>['Error'];
+    if (title != null) {
+      parts.add(title!);
+    }
+    parts.add(message);
+    if (onRetry != null) {
+      parts.add('Double tap to ${retryLabel ?? "retry"}');
+    }
+    return semanticLabel ?? parts.join('. ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -51,52 +65,67 @@ class ErrorStateWidget extends StatelessWidget {
       return _buildCompact(context, colorScheme, effectiveIconColor);
     }
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: effectiveIconColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Icon(
-                icon ?? Iconsax.warning_2,
-                color: effectiveIconColor,
-                size: 40,
-              ),
-            ),
-            const SizedBox(height: 24),
-            if (title != null) ...[
-              Text(
-                title!,
-                style: SpendexTheme.headlineMedium.copyWith(
-                  color: colorScheme.onSurface,
+    return Semantics(
+      label: _buildSemanticLabel(),
+      liveRegion: true,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ExcludeSemantics(
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: effectiveIconColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Icon(
+                    icon ?? Iconsax.warning_2,
+                    color: effectiveIconColor,
+                    size: 40,
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-            ],
-            Text(
-              message,
-              style: SpendexTheme.bodyMedium.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            if (onRetry != null) ...[
               const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: onRetry,
-                icon: const Icon(Iconsax.refresh),
-                label: Text(retryLabel ?? 'Retry'),
+              if (title != null) ...[
+                ExcludeSemantics(
+                  child: Text(
+                    title!,
+                    style: SpendexTheme.headlineMedium.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+              ExcludeSemantics(
+                child: Text(
+                  message,
+                  style: SpendexTheme.bodyMedium.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
+              if (onRetry != null) ...[
+                const SizedBox(height: 24),
+                Semantics(
+                  button: true,
+                  label: retryLabel ?? 'Retry',
+                  onTap: onRetry,
+                  child: ElevatedButton.icon(
+                    onPressed: onRetry,
+                    icon: const Icon(Iconsax.refresh),
+                    label: Text(retryLabel ?? 'Retry'),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -107,30 +136,43 @@ class ErrorStateWidget extends StatelessWidget {
     ColorScheme colorScheme,
     Color effectiveIconColor,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: [
-          Icon(
-            icon ?? Iconsax.warning_2,
-            color: effectiveIconColor,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              message,
-              style: SpendexTheme.bodyMedium.copyWith(
-                color: colorScheme.onSurfaceVariant,
+    return Semantics(
+      label: _buildSemanticLabel(),
+      liveRegion: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            ExcludeSemantics(
+              child: Icon(
+                icon ?? Iconsax.warning_2,
+                color: effectiveIconColor,
+                size: 20,
               ),
             ),
-          ),
-          if (onRetry != null)
-            TextButton(
-              onPressed: onRetry,
-              child: Text(retryLabel ?? 'Retry'),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ExcludeSemantics(
+                child: Text(
+                  message,
+                  style: SpendexTheme.bodyMedium.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
             ),
-        ],
+            if (onRetry != null)
+              Semantics(
+                button: true,
+                label: retryLabel ?? 'Retry',
+                onTap: onRetry,
+                child: TextButton(
+                  onPressed: onRetry,
+                  child: Text(retryLabel ?? 'Retry'),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -140,7 +182,6 @@ class ErrorStateWidget extends StatelessWidget {
 ///
 /// Use this inside [CustomScrollView] or other sliver-based layouts.
 class SliverErrorStateWidget extends StatelessWidget {
-
   const SliverErrorStateWidget({
     required this.message,
     super.key,
@@ -149,6 +190,7 @@ class SliverErrorStateWidget extends StatelessWidget {
     this.iconColor,
     this.onRetry,
     this.retryLabel,
+    this.semanticLabel,
   });
 
   /// The error message to display.
@@ -169,6 +211,9 @@ class SliverErrorStateWidget extends StatelessWidget {
   /// Label for the retry button.
   final String? retryLabel;
 
+  /// Semantic label for screen readers.
+  final String? semanticLabel;
+
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
@@ -180,6 +225,7 @@ class SliverErrorStateWidget extends StatelessWidget {
         iconColor: iconColor,
         onRetry: onRetry,
         retryLabel: retryLabel,
+        semanticLabel: semanticLabel,
       ),
     );
   }

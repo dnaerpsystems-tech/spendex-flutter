@@ -352,7 +352,7 @@ class GoalsNotifier extends StateNotifier<GoalsState> {
 
 /// Goals State Provider
 final goalsStateProvider =
-    StateNotifierProvider<GoalsNotifier, GoalsState>((ref) {
+    StateNotifierProvider.autoDispose<GoalsNotifier, GoalsState>((ref) {
   return GoalsNotifier(getIt<GoalsRepository>());
 });
 

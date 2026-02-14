@@ -374,7 +374,7 @@ class CategoriesNotifier extends StateNotifier<CategoriesState> {
 
 /// Categories State Provider
 final categoriesStateProvider =
-    StateNotifierProvider<CategoriesNotifier, CategoriesState>((ref) {
+    StateNotifierProvider.autoDispose<CategoriesNotifier, CategoriesState>((ref) {
   return CategoriesNotifier(getIt<CategoriesRepository>());
 });
 

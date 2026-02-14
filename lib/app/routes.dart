@@ -1,3 +1,4 @@
+import '../core/firebase/analytics_service.dart';
 import '../core/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,9 @@ import '../features/bank_import/presentation/screens/sms_parser_screen.dart';
 import '../features/budgets/presentation/screens/add_budget_screen.dart';
 import '../features/budgets/presentation/screens/budget_details_screen.dart';
 import '../features/budgets/presentation/screens/budgets_screen.dart';
+import '../features/categories/presentation/screens/add_category_screen.dart';
+import '../features/categories/presentation/screens/categories_screen.dart';
+import '../features/categories/presentation/screens/category_details_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../features/duplicate_detection/presentation/screens/duplicate_resolution_screen.dart';
 import '../features/email_parser/presentation/screens/email_details_screen.dart';
@@ -36,6 +40,9 @@ import '../features/goals/presentation/screens/goal_details_screen.dart';
 import '../features/goals/presentation/screens/goals_screen.dart';
 import '../features/insights/presentation/screens/insight_detail_screen.dart';
 import '../features/insights/presentation/screens/insights_screen.dart';
+import '../features/family/presentation/screens/family_screen.dart';
+import '../features/notifications/presentation/screens/notifications_screen.dart';
+import '../features/subscription/presentation/screens/screens.dart';
 import '../features/investments/presentation/screens/add_investment_screen.dart';
 import '../features/investments/presentation/screens/holdings_screen.dart';
 import '../features/investments/presentation/screens/investment_details_screen.dart';
@@ -221,6 +228,10 @@ class AppRoutes {
   static const String insights = '/insights';
   static const String family = '/family';
   static const String subscription = '/subscription';
+  static const String subscriptionPlans = '/subscription/plans';
+  static const String subscriptionCheckout = '/subscription/checkout';
+  static const String subscriptionUpi = '/subscription/upi';
+  static const String subscriptionInvoices = '/subscription/invoices';
   static const String settings = '/settings';
   static const String profile = '/profile';
   static const String notifications = '/notifications';
@@ -261,6 +272,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
+    observers: [AnalyticsService.observer],
     debugLogDiagnostics: true,
     initialLocation: AppRoutes.splash,
     refreshListenable: authNotifier,
@@ -427,27 +439,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Category Routes
       GoRoute(
         path: AppRoutes.categories,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Categories',
-          icon: Iconsax.category,
-          description: 'Manage your income and expense categories.',
-        ),
+        builder: (context, state) => const CategoriesScreen(),
       ),
       GoRoute(
         path: AppRoutes.addCategory,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Add Category',
-          icon: Iconsax.add_circle,
-          description: 'Create a new category for your transactions.',
-        ),
+        builder: (context, state) => const AddCategoryScreen(),
       ),
       GoRoute(
-        path: AppRoutes.categoryDetails,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Category Details',
-          icon: Iconsax.category_2,
-          description: 'View and edit category details.',
-        ),
+        path: '${AppRoutes.categoryDetails}/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return CategoryDetailsScreen(categoryId: id);
+        },
       ),
 
       // Budget Routes
@@ -554,21 +557,35 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Other Routes
       GoRoute(
         path: AppRoutes.family,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Family',
-          icon: Iconsax.people,
-          description:
-              'Manage family members and share accounts for collaborative financial tracking.',
-        ),
+        builder: (context, state) => const FamilyScreen(),
       ),
       GoRoute(
         path: AppRoutes.subscription,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Subscription',
-          icon: Iconsax.crown,
-          description:
-              'Upgrade to Pro or Premium for unlimited features and AI insights.',
-        ),
+        builder: (context, state) => const SubscriptionScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptionPlans,
+        builder: (context, state) => const PlansScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptionCheckout,
+        builder: (context, state) {
+          final planId = state.uri.queryParameters['planId'] ?? '';
+          final billingCycle = state.uri.queryParameters['billingCycle'] ?? 'monthly';
+          return CheckoutScreen(planId: planId, billingCycle: billingCycle);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptionUpi,
+        builder: (context, state) {
+          final orderId = state.uri.queryParameters['orderId'] ?? '';
+          final amount = double.tryParse(state.uri.queryParameters['amount'] ?? '0') ?? 0.0;
+          return UpiPaymentScreen(orderId: orderId, amount: amount);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptionInvoices,
+        builder: (context, state) => const InvoicesScreen(),
       ),
       GoRoute(
         path: AppRoutes.settings,
@@ -609,12 +626,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.notifications,
-        builder: (context, state) => const _PlaceholderScreen(
-          title: 'Notifications',
-          icon: Iconsax.notification,
-          description:
-              'View all your notifications including budget alerts, bill reminders, and insights.',
-        ),
+        builder: (context, state) => const NotificationsScreen(),
       ),
 
       // Bank Import Routes

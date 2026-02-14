@@ -402,7 +402,7 @@ class InvestmentsNotifier extends StateNotifier<InvestmentsState> {
 
 /// Investments State Provider
 final investmentsStateProvider =
-    StateNotifierProvider<InvestmentsNotifier, InvestmentsState>((ref) {
+    StateNotifierProvider.autoDispose<InvestmentsNotifier, InvestmentsState>((ref) {
   return InvestmentsNotifier(getIt<InvestmentsRepository>());
 });
 
