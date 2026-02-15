@@ -1,7 +1,8 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/foundation.dart';
-import '../utils/app_logger.dart';
-import 'analytics_events.dart';
+import "package:firebase_analytics/firebase_analytics.dart";
+import "package:flutter/foundation.dart";
+import "../utils/app_logger.dart";
+import "analytics_events.dart";
+import "firebase_service.dart";
 
 /// Firebase Analytics service for tracking user behavior
 class AnalyticsService {
@@ -10,14 +11,16 @@ class AnalyticsService {
   static FirebaseAnalytics? _analytics;
   static FirebaseAnalyticsObserver? _observer;
 
-  static FirebaseAnalytics get instance {
+  static FirebaseAnalytics? get instance {
+    if (!FirebaseService.isSupported) return null;
     _analytics ??= FirebaseAnalytics.instance;
-    return _analytics!;
+    return _analytics;
   }
 
-  static FirebaseAnalyticsObserver get observer {
-    _observer ??= FirebaseAnalyticsObserver(analytics: instance);
-    return _observer!;
+  static FirebaseAnalyticsObserver? get observer {
+    if (!FirebaseService.isSupported) return null;
+    _observer ??= FirebaseAnalyticsObserver(analytics: instance!);
+    return _observer;
   }
 
   /// Log screen view
@@ -26,11 +29,13 @@ class AnalyticsService {
     String? screenClass,
   }) async {
     if (kDebugMode) {
-      AppLogger.d('Analytics: Screen view - $screenName');
+      AppLogger.d("Analytics: Screen view - $screenName");
       return;
     }
 
-    await instance.logScreenView(
+    if (!FirebaseService.isSupported) return;
+
+    await instance?.logScreenView(
       screenName: screenName,
       screenClass: screenClass ?? screenName,
     );
@@ -42,18 +47,20 @@ class AnalyticsService {
     Map<String, Object?>? parameters,
   }) async {
     if (kDebugMode) {
-      AppLogger.d('Analytics: Event - $name, params: $parameters');
+      AppLogger.d("Analytics: Event - $name, params: $parameters");
       return;
     }
+
+    if (!FirebaseService.isSupported) return;
 
     // Filter out null values to match Firebase Analytics requirements
     final filteredParameters = parameters
         ?.map(
-          (key, value) => MapEntry(key, value ?? ''),
+          (key, value) => MapEntry(key, value ?? ""),
         )
         .cast<String, Object>();
 
-    await instance.logEvent(
+    await instance?.logEvent(
       name: name,
       parameters: filteredParameters,
     );
@@ -62,11 +69,13 @@ class AnalyticsService {
   /// Set user ID for analytics
   static Future<void> setUserId(String? userId) async {
     if (kDebugMode) {
-      AppLogger.d('Analytics: Set user ID - $userId');
+      AppLogger.d("Analytics: Set user ID - $userId");
       return;
     }
 
-    await instance.setUserId(id: userId);
+    if (!FirebaseService.isSupported) return;
+
+    await instance?.setUserId(id: userId);
   }
 
   /// Set user property
@@ -75,11 +84,13 @@ class AnalyticsService {
     required String? value,
   }) async {
     if (kDebugMode) {
-      AppLogger.d('Analytics: Set user property - $name: $value');
+      AppLogger.d("Analytics: Set user property - $name: $value");
       return;
     }
 
-    await instance.setUserProperty(name: name, value: value);
+    if (!FirebaseService.isSupported) return;
+
+    await instance?.setUserProperty(name: name, value: value);
   }
 
   // ============================================================
@@ -91,7 +102,7 @@ class AnalyticsService {
     await logEvent(
       name: AnalyticsEvents.eventLogin,
       parameters: {
-        'method': method ?? 'email',
+        "method": method ?? "email",
       },
     );
   }
@@ -101,7 +112,7 @@ class AnalyticsService {
     await logEvent(
       name: AnalyticsEvents.eventSignUp,
       parameters: {
-        'method': method ?? 'email',
+        "method": method ?? "email",
       },
     );
   }
@@ -116,10 +127,10 @@ class AnalyticsService {
     await logEvent(
       name: AnalyticsEvents.eventTransactionCreated,
       parameters: {
-        'type': type,
-        'amount': amount,
-        'category': category,
-        'payment_method': paymentMethod,
+        "type": type,
+        "amount": amount,
+        "category": category,
+        "payment_method": paymentMethod,
       },
     );
   }
@@ -133,9 +144,9 @@ class AnalyticsService {
     await logEvent(
       name: AnalyticsEvents.eventBudgetCreated,
       parameters: {
-        'category': category,
-        'amount': amount,
-        'period': period,
+        "category": category,
+        "amount": amount,
+        "period": period,
       },
     );
   }
@@ -148,8 +159,8 @@ class AnalyticsService {
     await logEvent(
       name: AnalyticsEvents.eventGoalCreated,
       parameters: {
-        'goal_name': name,
-        'target_amount': targetAmount,
+        "goal_name": name,
+        "target_amount": targetAmount,
       },
     );
   }
@@ -161,14 +172,16 @@ class AnalyticsService {
     required double amount,
     required String currency,
   }) async {
-    await instance.logPurchase(
+    if (!FirebaseService.isSupported) return;
+
+    await instance?.logPurchase(
       currency: currency,
       value: amount,
       items: [
         AnalyticsEventItem(
           itemId: planId,
           itemName: planName,
-          itemCategory: 'subscription',
+          itemCategory: "subscription",
         ),
       ],
     );
@@ -182,7 +195,7 @@ class AnalyticsService {
     await logEvent(
       name: AnalyticsEvents.eventFeatureUsed,
       parameters: {
-        'feature_name': featureName,
+        "feature_name": featureName,
         ...?additionalParams,
       },
     );
@@ -195,11 +208,11 @@ class AnalyticsService {
     String? screenName,
   }) async {
     await logEvent(
-      name: 'app_error',
+      name: "app_error",
       parameters: {
-        'error_type': errorType,
-        'error_message': errorMessage.substring(0, errorMessage.length.clamp(0, 100)),
-        'screen_name': screenName,
+        "error_type": errorType,
+        "error_message": errorMessage.substring(0, errorMessage.length.clamp(0, 100)),
+        "screen_name": screenName,
       },
     );
   }
