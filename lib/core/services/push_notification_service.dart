@@ -1,17 +1,16 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import '../utils/app_logger.dart';
+import "dart:convert";
+import "dart:io";
+import "package:firebase_messaging/firebase_messaging.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter_local_notifications/flutter_local_notifications.dart";
+import "../firebase/firebase_service.dart";
+import "../utils/app_logger.dart";
 
 /// Background message handler - must be top-level function
-@pragma('vm:entry-point')
+@pragma("vm:entry-point")
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
-    AppLogger.d('Background message received: ${message.messageId}');
+    AppLogger.d("Background message received: ${message.messageId}");
   }
 }
 
@@ -19,7 +18,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class PushNotificationService {
   PushNotificationService._();
 
-  static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  static FirebaseMessaging? _messaging;
+  static FirebaseMessaging? get _messagingInstance {
+    if (!FirebaseService.isSupported) return null;
+    _messaging ??= FirebaseMessaging.instance;
+    return _messaging;
+  }
+
   static final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
 
@@ -34,9 +39,9 @@ class PushNotificationService {
 
   /// Android notification channel for high importance notifications
   static const AndroidNotificationChannel _channel = AndroidNotificationChannel(
-    'spendex_notifications',
-    'Spendex Notifications',
-    description: 'Notifications for budget alerts, transactions, and updates',
+    "spendex_notifications",
+    "Spendex Notifications",
+    description: "Notifications for budget alerts, transactions, and updates",
     importance: Importance.high,
   );
 
@@ -46,17 +51,24 @@ class PushNotificationService {
       return;
     }
 
+    // Skip on unsupported platforms
+    if (!FirebaseService.isSupported) {
+      AppLogger.d("PushNotificationService: Skipped on unsupported platform");
+      _initialized = true;
+      return;
+    }
+
     try {
       // Set background message handler
       FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
       // Request permission
-      final settings = await _messaging.requestPermission(
+      final settings = await _messagingInstance!.requestPermission(
         announcement: true,
       );
 
       if (kDebugMode) {
-        AppLogger.d('PushNotificationService: Permission status: ${settings.authorizationStatus}');
+        AppLogger.d("PushNotificationService: Permission status: ${settings.authorizationStatus}");
       }
 
       if (settings.authorizationStatus == AuthorizationStatus.authorized ||
@@ -65,13 +77,13 @@ class PushNotificationService {
         await _initializeLocalNotifications();
 
         // Get FCM token
-        _fcmToken = await _messaging.getToken();
+        _fcmToken = await _messagingInstance!.getToken();
         if (kDebugMode) {
-          AppLogger.d('PushNotificationService: FCM Token: $_fcmToken');
+          AppLogger.d("PushNotificationService: FCM Token: $_fcmToken");
         }
 
         // Listen for token refresh
-        _messaging.onTokenRefresh.listen((newToken) {
+        _messagingInstance!.onTokenRefresh.listen((newToken) {
           _fcmToken = newToken;
           _onTokenRefresh(newToken);
         });
@@ -83,32 +95,31 @@ class PushNotificationService {
         FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
 
         // Check for initial message (app opened from terminated state)
-        final initialMessage = await _messaging.getInitialMessage();
+        final initialMessage = await _messagingInstance!.getInitialMessage();
         if (initialMessage != null) {
           _handleNotificationTap(initialMessage);
         }
 
         _initialized = true;
         if (kDebugMode) {
-          AppLogger.d('PushNotificationService: Initialized successfully');
+          AppLogger.d("PushNotificationService: Initialized successfully");
         }
       }
     } catch (e, stack) {
       if (kDebugMode) {
-        AppLogger.e('PushNotificationService: Initialization failed', e, stack);
+        AppLogger.e("PushNotificationService: Initialization failed", e, stack);
       }
     }
   }
 
   /// Initialize local notifications for foreground display
   static Future<void> _initializeLocalNotifications() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
-
     const initSettings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
@@ -130,13 +141,13 @@ class PushNotificationService {
   /// Handle foreground messages
   static void _handleForegroundMessage(RemoteMessage message) {
     if (kDebugMode) {
-      AppLogger.d('PushNotificationService: Foreground message: ${message.messageId}');
+      AppLogger.d("PushNotificationService: Foreground message: ${message.messageId}");
     }
 
     final notification = message.notification;
     final android = message.notification?.android;
 
-    // Show local notification if there's a notification payload
+    // Show local notification if there is a notification payload
     if (notification != null) {
       _localNotifications.show(
         notification.hashCode,
@@ -147,7 +158,7 @@ class PushNotificationService {
             _channel.id,
             _channel.name,
             channelDescription: _channel.description,
-            icon: android?.smallIcon ?? '@mipmap/ic_launcher',
+            icon: android?.smallIcon ?? "@mipmap/ic_launcher",
             importance: Importance.high,
             priority: Priority.high,
           ),
@@ -165,28 +176,25 @@ class PushNotificationService {
   /// Handle notification tap (background/terminated state)
   static void _handleNotificationTap(RemoteMessage message) {
     if (kDebugMode) {
-      AppLogger.d('PushNotificationService: Notification tapped: ${message.data}');
+      AppLogger.d("PushNotificationService: Notification tapped: ${message.data}");
     }
-    // Handle navigation based on message data
     _processNotificationAction(message.data);
   }
 
   /// Handle local notification tap
   static void _onLocalNotificationTap(NotificationResponse response) {
     if (kDebugMode) {
-      AppLogger.d('PushNotificationService: Local notification tapped: ${response.payload}');
+      AppLogger.d("PushNotificationService: Local notification tapped: ${response.payload}");
     }
 
     if (response.payload != null) {
       try {
-        // For now, just log the payload. Proper JSON parsing would be needed
-        // if we need to process notification actions
         if (kDebugMode) {
-          AppLogger.d('PushNotificationService: Payload: ${response.payload}');
+          AppLogger.d("PushNotificationService: Payload: ${response.payload}");
         }
       } catch (e) {
         if (kDebugMode) {
-          AppLogger.e('PushNotificationService: Failed to parse payload', e);
+          AppLogger.e("PushNotificationService: Failed to parse payload", e);
         }
       }
     }
@@ -194,49 +202,47 @@ class PushNotificationService {
 
   /// Process notification action and navigate
   static void _processNotificationAction(Map<String, dynamic> data) {
-    final type = data['type'] as String?;
-    final id = data['id'] as String?;
+    final type = data["type"] as String?;
+    final id = data["id"] as String?;
 
-    // Navigation will be handled by the app's router
-    // This is a placeholder for the actual navigation logic
     if (kDebugMode) {
-      AppLogger.d('PushNotificationService: Action type=$type, id=$id');
+      AppLogger.d("PushNotificationService: Action type=$type, id=$id");
     }
   }
 
   /// Handle token refresh
   static void _onTokenRefresh(String newToken) {
     if (kDebugMode) {
-      AppLogger.d('PushNotificationService: Token refreshed: $newToken');
+      AppLogger.d("PushNotificationService: Token refreshed: $newToken");
     }
-    // Send new token to backend
-    // TODO(backend): Implement token registration API call
   }
 
   /// Subscribe to a topic
   static Future<void> subscribeToTopic(String topic) async {
+    if (!FirebaseService.isSupported) return;
     try {
-      await _messaging.subscribeToTopic(topic);
+      await _messagingInstance?.subscribeToTopic(topic);
       if (kDebugMode) {
-        AppLogger.d('PushNotificationService: Subscribed to topic: $topic');
+        AppLogger.d("PushNotificationService: Subscribed to topic: $topic");
       }
     } catch (e) {
       if (kDebugMode) {
-        AppLogger.e('PushNotificationService: Failed to subscribe to topic', e);
+        AppLogger.e("PushNotificationService: Failed to subscribe to topic", e);
       }
     }
   }
 
   /// Unsubscribe from a topic
   static Future<void> unsubscribeFromTopic(String topic) async {
+    if (!FirebaseService.isSupported) return;
     try {
-      await _messaging.unsubscribeFromTopic(topic);
+      await _messagingInstance?.unsubscribeFromTopic(topic);
       if (kDebugMode) {
-        AppLogger.d('PushNotificationService: Unsubscribed from topic: $topic');
+        AppLogger.d("PushNotificationService: Unsubscribed from topic: $topic");
       }
     } catch (e) {
       if (kDebugMode) {
-        AppLogger.e('PushNotificationService: Failed to unsubscribe from topic', e);
+        AppLogger.e("PushNotificationService: Failed to unsubscribe from topic", e);
       }
     }
   }
