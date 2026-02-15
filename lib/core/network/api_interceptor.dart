@@ -1,4 +1,3 @@
-import '../utils/app_logger.dart';
 import 'dart:async';
 
 import 'package:dio/dio.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../constants/api_endpoints.dart';
 import '../storage/secure_storage.dart';
+import '../utils/app_logger.dart';
 
 /// Auth Interceptor for handling JWT token attachment and refresh
 class AuthInterceptor extends QueuedInterceptor {
@@ -102,10 +102,7 @@ class AuthInterceptor extends QueuedInterceptor {
 
     for (final cookie in setCookieHeaders) {
       if (cookie.startsWith('spendex_refresh=')) {
-        final tokenValue = cookie
-            .split(';')
-            .first
-            .replaceFirst('spendex_refresh=', '');
+        final tokenValue = cookie.split(';').first.replaceFirst('spendex_refresh=', '');
         if (tokenValue.isNotEmpty) {
           _storage.saveRefreshToken(tokenValue);
         }
@@ -139,9 +136,7 @@ class AuthInterceptor extends QueuedInterceptor {
       );
 
       final responseData = response.data;
-      if (response.statusCode == 200 &&
-          responseData != null &&
-          responseData['success'] == true) {
+      if (response.statusCode == 200 && responseData != null && responseData['success'] == true) {
         final data = responseData['data'] as Map<String, dynamic>?;
         if (data != null && data['accessToken'] != null) {
           final newAccessToken = data['accessToken'] as String;
@@ -152,10 +147,7 @@ class AuthInterceptor extends QueuedInterceptor {
           if (setCookieHeaders != null) {
             for (final cookie in setCookieHeaders) {
               if (cookie.startsWith('spendex_refresh=')) {
-                final newRefresh = cookie
-                    .split(';')
-                    .first
-                    .replaceFirst('spendex_refresh=', '');
+                final newRefresh = cookie.split(';').first.replaceFirst('spendex_refresh=', '');
                 if (newRefresh.isNotEmpty) {
                   await _storage.saveRefreshToken(newRefresh);
                 }

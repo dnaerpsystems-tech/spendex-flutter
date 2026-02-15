@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import '../providers/offline_provider.dart';
+
 import '../models/sync_result.dart';
+import '../providers/offline_provider.dart';
 
 /// Widget that shows sync status in a compact form
 class SyncStatusIndicator extends ConsumerWidget {
@@ -96,7 +97,7 @@ class SyncStatusIndicator extends ConsumerWidget {
     }
 
     return Icon(
-      Iconsax.cloud_tick,
+      Iconsax.cloud,
       size: 16,
       color: theme.colorScheme.primary,
     );
@@ -175,9 +176,7 @@ class SyncDetailsSheet extends ConsumerWidget {
             children: [
               Icon(
                 syncState.isOnline ? Iconsax.cloud : Iconsax.cloud_cross,
-                color: syncState.isOnline
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.error,
+                color: syncState.isOnline ? theme.colorScheme.primary : theme.colorScheme.error,
               ),
               const SizedBox(width: 12),
               Text(
@@ -194,9 +193,7 @@ class SyncDetailsSheet extends ConsumerWidget {
             'Connection',
             syncState.isOnline ? 'Online' : 'Offline',
             syncState.isOnline ? Iconsax.tick_circle : Iconsax.close_circle,
-            syncState.isOnline
-                ? theme.colorScheme.primary
-                : theme.colorScheme.error,
+            syncState.isOnline ? theme.colorScheme.primary : theme.colorScheme.error,
           ),
           const SizedBox(height: 12),
 
@@ -206,9 +203,7 @@ class SyncDetailsSheet extends ConsumerWidget {
             'Pending changes',
             '${syncState.pendingCount}',
             Iconsax.document_upload,
-            syncState.pendingCount > 0
-                ? theme.colorScheme.tertiary
-                : theme.colorScheme.outline,
+            syncState.pendingCount > 0 ? theme.colorScheme.tertiary : theme.colorScheme.outline,
           ),
           const SizedBox(height: 12),
 
@@ -313,15 +308,25 @@ class SyncDetailsSheet extends ConsumerWidget {
   }
 
   String _formatLastSync(DateTime? lastSync) {
-    if (lastSync == null) return 'Never';
+    if (lastSync == null) {
+      return 'Never';
+    }
 
     final now = DateTime.now();
     final diff = now.difference(lastSync);
 
-    if (diff.inMinutes < 1) return 'Just now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    if (diff.inMinutes < 1) {
+      return 'Just now';
+    }
+    if (diff.inMinutes < 60) {
+      return '${diff.inMinutes}m ago';
+    }
+    if (diff.inHours < 24) {
+      return '${diff.inHours}h ago';
+    }
+    if (diff.inDays < 7) {
+      return '${diff.inDays}d ago';
+    }
 
     return '${lastSync.day}/${lastSync.month}/${lastSync.year}';
   }

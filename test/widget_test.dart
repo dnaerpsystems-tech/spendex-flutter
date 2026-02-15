@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// Basic widget tests for Spendex app
 void main() {
   group('Widget Tests', () {
-    testWidgets('MaterialApp can be created', (WidgetTester tester) async {
+    testWidgets('MaterialApp can be created', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -18,7 +18,7 @@ void main() {
       expect(find.text('Spendex'), findsOneWidget);
     });
 
-    testWidgets('Scaffold renders correctly', (WidgetTester tester) async {
+    testWidgets('Scaffold renders correctly', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -32,7 +32,7 @@ void main() {
       expect(find.text('Hello World'), findsOneWidget);
     });
 
-    testWidgets('Button tap works', (WidgetTester tester) async {
+    testWidgets('Button tap works', (tester) async {
       var tapped = false;
 
       await tester.pumpWidget(
@@ -52,7 +52,7 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('TextField accepts input', (WidgetTester tester) async {
+    testWidgets('TextField accepts input', (tester) async {
       final controller = TextEditingController();
 
       await tester.pumpWidget(

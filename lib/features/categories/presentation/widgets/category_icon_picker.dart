@@ -25,7 +25,6 @@ enum IconCategory {
 
 /// Icon entry containing the icon data and its name
 class IconEntry {
-
   const IconEntry({
     required this.name,
     required this.icon,
@@ -41,14 +40,15 @@ class IconEntry {
 /// A comprehensive icon picker that displays a searchable grid of Iconsax icons
 /// organized by categories. Returns the selected icon name as a String.
 class CategoryIconPicker extends StatefulWidget {
-
   const CategoryIconPicker({
-    required this.onIconSelected, super.key,
+    required this.onIconSelected,
+    super.key,
     this.selectedIcon,
     this.showSearch = true,
     this.showCategories = true,
     this.maxHeight,
   });
+
   /// Currently selected icon name
   final String? selectedIcon;
 
@@ -145,7 +145,8 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
     IconEntry(name: 'chart_2', icon: Iconsax.chart_2, category: IconCategory.finance),
     IconEntry(name: 'receipt', icon: Iconsax.receipt, category: IconCategory.finance),
     IconEntry(name: 'receipt_2', icon: Iconsax.receipt_2, category: IconCategory.finance),
-    IconEntry(name: 'percentage_square', icon: Iconsax.percentage_square, category: IconCategory.finance),
+    IconEntry(
+        name: 'percentage_square', icon: Iconsax.percentage_square, category: IconCategory.finance,),
 
     // Personal Care
     IconEntry(name: 'pet', icon: Iconsax.pet, category: IconCategory.personal),
@@ -204,8 +205,7 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
   List<IconEntry> get _filteredIcons {
     return _allIcons.where((entry) {
       // Filter by category
-      if (_selectedCategory != IconCategory.all &&
-          entry.category != _selectedCategory) {
+      if (_selectedCategory != IconCategory.all && entry.category != _selectedCategory) {
         return false;
       }
 
@@ -225,9 +225,7 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      constraints: widget.maxHeight != null
-          ? BoxConstraints(maxHeight: widget.maxHeight!)
-          : null,
+      constraints: widget.maxHeight != null ? BoxConstraints(maxHeight: widget.maxHeight!) : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -260,24 +258,18 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
       decoration: InputDecoration(
         hintText: 'Search icons...',
         hintStyle: SpendexTheme.bodyMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
         ),
         prefixIcon: Icon(
           Iconsax.search_normal,
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
           size: 20,
         ),
         suffixIcon: _searchQuery.isNotEmpty
             ? IconButton(
                 icon: Icon(
                   Iconsax.close_circle,
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   size: 20,
                 ),
                 onPressed: () {
@@ -289,9 +281,7 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
               )
             : null,
         filled: true,
-        fillColor: isDark
-            ? SpendexColors.darkSurface
-            : SpendexColors.lightSurface,
+        fillColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: SpendexTheme.spacingLg,
           vertical: SpendexTheme.spacingMd,
@@ -299,17 +289,13 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           borderSide: BorderSide(
-            color: isDark
-                ? SpendexColors.darkBorder
-                : SpendexColors.lightBorder,
+            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           borderSide: BorderSide(
-            color: isDark
-                ? SpendexColors.darkBorder
-                : SpendexColors.lightBorder,
+            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -399,17 +385,14 @@ class _CategoryIconPickerState extends State<CategoryIconPicker> {
               Icon(
                 Iconsax.search_status,
                 size: 48,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               const SizedBox(height: SpendexTheme.spacingMd),
               Text(
                 'No icons found',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
               ),
             ],
@@ -489,9 +472,7 @@ Future<String?> showCategoryIconPicker(
           return Container(
             height: MediaQuery.of(context).size.height * 0.75,
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkCard
-                  : SpendexColors.lightCard,
+              color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(SpendexTheme.radiusXl),
               ),
@@ -504,9 +485,7 @@ Future<String?> showCategoryIconPicker(
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                   ),
                 ),

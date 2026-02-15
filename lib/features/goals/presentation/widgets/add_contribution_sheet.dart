@@ -24,8 +24,7 @@ class AddContributionSheet extends ConsumerStatefulWidget {
   final String goalId;
 
   @override
-  ConsumerState<AddContributionSheet> createState() =>
-      _AddContributionSheetState();
+  ConsumerState<AddContributionSheet> createState() => _AddContributionSheetState();
 }
 
 class _AddContributionSheetState extends ConsumerState<AddContributionSheet> {
@@ -130,9 +129,8 @@ class _AddContributionSheetState extends ConsumerState<AddContributionSheet> {
                   Text(
                     'Add Contribution',
                     style: SpendexTheme.headlineMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ],
@@ -179,8 +177,7 @@ class _AddContributionSheetState extends ConsumerState<AddContributionSheet> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
                       : const Text('Add Contribution'),

@@ -210,10 +210,14 @@ class PinServiceImpl implements PinService {
   @override
   Future<bool> isLocked() async {
     final lockUntilStr = await _storage.read(key: _lockUntilKey);
-    if (lockUntilStr == null) return false;
+    if (lockUntilStr == null) {
+      return false;
+    }
 
     final lockUntil = DateTime.tryParse(lockUntilStr);
-    if (lockUntil == null) return false;
+    if (lockUntil == null) {
+      return false;
+    }
 
     if (DateTime.now().isAfter(lockUntil)) {
       // Lock has expired - reset
@@ -227,10 +231,14 @@ class PinServiceImpl implements PinService {
   @override
   Future<Duration?> getLockDuration() async {
     final lockUntilStr = await _storage.read(key: _lockUntilKey);
-    if (lockUntilStr == null) return null;
+    if (lockUntilStr == null) {
+      return null;
+    }
 
     final lockUntil = DateTime.tryParse(lockUntilStr);
-    if (lockUntil == null) return null;
+    if (lockUntil == null) {
+      return null;
+    }
 
     final remaining = lockUntil.difference(DateTime.now());
     return remaining.isNegative ? null : remaining;
@@ -239,10 +247,14 @@ class PinServiceImpl implements PinService {
   @override
   Future<DateTime?> getLockoutEndTime() async {
     final lockUntilStr = await _storage.read(key: _lockUntilKey);
-    if (lockUntilStr == null) return null;
+    if (lockUntilStr == null) {
+      return null;
+    }
 
     final lockUntil = DateTime.tryParse(lockUntilStr);
-    if (lockUntil == null) return null;
+    if (lockUntil == null) {
+      return null;
+    }
 
     if (DateTime.now().isAfter(lockUntil)) {
       return null;

@@ -11,14 +11,15 @@ import '../../../../core/constants/app_constants.dart';
 /// with support for custom color input via hex code.
 /// Returns the selected color as a hex String (without #).
 class CategoryColorPicker extends StatefulWidget {
-
   const CategoryColorPicker({
-    required this.onColorSelected, super.key,
+    required this.onColorSelected,
+    super.key,
     this.selectedColor,
     this.showCustomColorInput = true,
     this.compact = false,
     this.previewSize = 44,
   });
+
   /// Currently selected color hex value (without #)
   final String? selectedColor;
 
@@ -248,9 +249,7 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
         width: widget.previewSize,
         height: widget.previewSize,
         decoration: BoxDecoration(
-          color: isDark
-              ? SpendexColors.darkSurface
-              : SpendexColors.lightSurface,
+          color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
           shape: BoxShape.circle,
           border: Border.all(
             color: _isCustomColorSelected
@@ -287,23 +286,18 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: currentColor ?? (isDark
-                ? SpendexColors.darkBorder
-                : SpendexColors.lightBorder),
+            color: currentColor ?? (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
             borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
             border: Border.all(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
             ),
           ),
           child: currentColor == null
               ? Center(
                   child: Icon(
                     Iconsax.colorfilter,
-                    color: isDark
-                        ? SpendexColors.darkTextTertiary
-                        : SpendexColors.lightTextTertiary,
+                    color:
+                        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     size: 18,
                   ),
                 )
@@ -323,22 +317,16 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
             decoration: InputDecoration(
               prefixText: '# ',
               prefixStyle: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               hintText: 'Enter hex color',
               hintStyle: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               errorText: _customColorError,
               counterText: '',
               filled: true,
-              fillColor: isDark
-                  ? SpendexColors.darkSurface
-                  : SpendexColors.lightSurface,
+              fillColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: SpendexTheme.spacingLg,
                 vertical: SpendexTheme.spacingMd,
@@ -346,17 +334,13 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                 borderSide: BorderSide(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                 borderSide: BorderSide(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
@@ -392,14 +376,10 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkSurface
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkSurface : SpendexColors.lightBackground,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
         border: Border.all(
-          color: isDark
-              ? SpendexColors.darkBorder
-              : SpendexColors.lightBorder,
+          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
         ),
       ),
       child: Row(
@@ -430,18 +410,15 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
                 Text(
                   'Selected Color',
                   style: SpendexTheme.labelMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '#${widget.selectedColor!.toUpperCase()}',
                   style: SpendexTheme.titleMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     fontFamily: 'monospace',
                   ),
                 ),
@@ -453,9 +430,7 @@ class _CategoryColorPickerState extends State<CategoryColorPicker> {
           IconButton(
             icon: Icon(
               Iconsax.copy,
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               size: 20,
             ),
             onPressed: () {
@@ -512,9 +487,7 @@ Future<String?> showCategoryColorPicker(
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkCard
-                  : SpendexColors.lightCard,
+              color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(SpendexTheme.radiusXl),
               ),
@@ -528,9 +501,7 @@ Future<String?> showCategoryColorPicker(
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                   ),
                 ),

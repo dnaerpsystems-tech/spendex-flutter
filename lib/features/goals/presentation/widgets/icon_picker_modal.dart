@@ -60,9 +60,7 @@ class IconPickerModal extends StatelessWidget {
               Text(
                 'Select Icon',
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const Spacer(),
@@ -92,17 +90,12 @@ class IconPickerModal extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? SpendexColors.primary.withValues(alpha: 0.15)
-                        : (isDark
-                            ? SpendexColors.darkSurface
-                            : SpendexColors.lightSurface),
-                    borderRadius:
-                        BorderRadius.circular(SpendexTheme.radiusMd),
+                        : (isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface),
+                    borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                     border: Border.all(
                       color: isSelected
                           ? SpendexColors.primary
-                          : (isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder),
+                          : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
                       width: isSelected ? 2 : 1,
                     ),
                   ),

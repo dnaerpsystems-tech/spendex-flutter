@@ -15,7 +15,7 @@ class DuplicateDetectionState extends Equatable {
     this.resolutions = const {},
     this.isResolving = false,
     this.error,
-    this.config = const DuplicateDetectionConfig(),
+    this.config = DuplicateDetectionConfig.defaultConfig,
   });
 
   /// Initial state
@@ -25,7 +25,7 @@ class DuplicateDetectionState extends Equatable {
         resolutions = const {},
         isResolving = false,
         error = null,
-        config = const DuplicateDetectionConfig();
+        config = DuplicateDetectionConfig.defaultConfig;
 
   /// Detecting state
   const DuplicateDetectionState.detecting()
@@ -34,7 +34,7 @@ class DuplicateDetectionState extends Equatable {
         resolutions = const {},
         isResolving = false,
         error = null,
-        config = const DuplicateDetectionConfig();
+        config = DuplicateDetectionConfig.defaultConfig;
 
   /// Detected state with results
   const DuplicateDetectionState.detected(this.result)
@@ -42,7 +42,7 @@ class DuplicateDetectionState extends Equatable {
         resolutions = const {},
         isResolving = false,
         error = null,
-        config = const DuplicateDetectionConfig();
+        config = DuplicateDetectionConfig.defaultConfig;
 
   /// Error state
   const DuplicateDetectionState.error(this.error)
@@ -50,7 +50,7 @@ class DuplicateDetectionState extends Equatable {
         result = null,
         resolutions = const {},
         isResolving = false,
-        config = const DuplicateDetectionConfig();
+        config = DuplicateDetectionConfig.defaultConfig;
 
   /// Whether duplicate detection is in progress
   final bool isDetecting;
@@ -117,8 +117,7 @@ class DuplicateDetectionState extends Equatable {
 
 /// Duplicate Detection State Notifier
 class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> {
-  DuplicateDetectionNotifier(this._repository)
-      : super(const DuplicateDetectionState.initial());
+  DuplicateDetectionNotifier(this._repository) : super(const DuplicateDetectionState.initial());
 
   final DuplicateDetectionRepository _repository;
 
@@ -159,15 +158,17 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
 
   /// Remove resolution for a specific duplicate match
   void removeResolution(String matchId) {
-    final updatedResolutions = Map<String, DuplicateResolutionAction>.from(state.resolutions);
-    updatedResolutions.remove(matchId);
+    final updatedResolutions = Map<String, DuplicateResolutionAction>.from(state.resolutions)
+      ..remove(matchId);
 
     state = state.copyWith(resolutions: updatedResolutions);
   }
 
   /// Apply the same resolution action to all duplicates
   void applyToAll(DuplicateResolutionAction action) {
-    if (state.result == null) return;
+    if (state.result == null) {
+      return;
+    }
 
     final updatedResolutions = <String, DuplicateResolutionAction>{};
 
@@ -180,7 +181,9 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
 
   /// Apply resolution to all high confidence duplicates
   void applyToHighConfidence(DuplicateResolutionAction action) {
-    if (state.result == null) return;
+    if (state.result == null) {
+      return;
+    }
 
     final updatedResolutions = Map<String, DuplicateResolutionAction>.from(state.resolutions);
 
@@ -193,7 +196,9 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
 
   /// Apply resolution to all medium confidence duplicates
   void applyToMediumConfidence(DuplicateResolutionAction action) {
-    if (state.result == null) return;
+    if (state.result == null) {
+      return;
+    }
 
     final updatedResolutions = Map<String, DuplicateResolutionAction>.from(state.resolutions);
 
@@ -206,7 +211,9 @@ class DuplicateDetectionNotifier extends StateNotifier<DuplicateDetectionState> 
 
   /// Apply resolution to all low confidence duplicates
   void applyToLowConfidence(DuplicateResolutionAction action) {
-    if (state.result == null) return;
+    if (state.result == null) {
+      return;
+    }
 
     final updatedResolutions = Map<String, DuplicateResolutionAction>.from(state.resolutions);
 
@@ -277,7 +284,6 @@ final duplicateDetectionProvider =
 );
 
 /// Provider for duplicate detection repository
-final duplicateDetectionRepositoryProvider =
-    Provider<DuplicateDetectionRepository>(
+final duplicateDetectionRepositoryProvider = Provider<DuplicateDetectionRepository>(
   (ref) => getIt<DuplicateDetectionRepository>(),
 );

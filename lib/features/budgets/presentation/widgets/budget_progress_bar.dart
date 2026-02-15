@@ -6,9 +6,9 @@ import '../../../../app/theme.dart';
 /// Budget Progress Bar Widget
 /// An animated progress bar with color coding based on percentage
 class BudgetProgressBar extends StatefulWidget {
-
   const BudgetProgressBar({
-    required this.percentage, super.key,
+    required this.percentage,
+    super.key,
     this.alertThreshold = 80,
     this.height = 8,
     this.showLabel = false,
@@ -30,8 +30,7 @@ class BudgetProgressBar extends StatefulWidget {
   State<BudgetProgressBar> createState() => _BudgetProgressBarState();
 }
 
-class _BudgetProgressBarState extends State<BudgetProgressBar>
-    with SingleTickerProviderStateMixin {
+class _BudgetProgressBarState extends State<BudgetProgressBar> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -45,10 +44,12 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
     _animation = Tween<double>(
       begin: 0,
       end: widget.percentage.clamp(0, 100) / 100,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic,
-    ),);
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutCubic,
+      ),
+    );
 
     if (widget.animate) {
       _controller.forward();
@@ -64,10 +65,12 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
       _animation = Tween<double>(
         begin: _animation.value,
         end: widget.percentage.clamp(0, 100) / 100,
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutCubic,
-      ),);
+      ).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeOutCubic,
+        ),
+      );
       _controller.forward(from: 0);
     }
   }
@@ -173,8 +176,7 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
                       boxShadow: widget.percentage > 0
                           ? [
                               BoxShadow(
-                                color: _getProgressColor(widget.percentage)
-                                    .withValues(alpha: 0.3),
+                                color: _getProgressColor(widget.percentage).withValues(alpha: 0.3),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),
@@ -194,7 +196,6 @@ class _BudgetProgressBarState extends State<BudgetProgressBar>
 
 /// Pulsing Icon for over-budget indication
 class _PulsingIcon extends StatefulWidget {
-
   const _PulsingIcon({
     required this.icon,
     required this.color,
@@ -208,8 +209,7 @@ class _PulsingIcon extends StatefulWidget {
   State<_PulsingIcon> createState() => _PulsingIconState();
 }
 
-class _PulsingIconState extends State<_PulsingIcon>
-    with SingleTickerProviderStateMixin {
+class _PulsingIconState extends State<_PulsingIcon> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -267,9 +267,9 @@ class _PulsingIconState extends State<_PulsingIcon>
 
 /// Circular Budget Progress Indicator
 class BudgetCircularProgress extends StatefulWidget {
-
   const BudgetCircularProgress({
-    required this.percentage, super.key,
+    required this.percentage,
+    super.key,
     this.alertThreshold = 80,
     this.size = 120,
     this.strokeWidth = 10,
@@ -306,10 +306,12 @@ class _BudgetCircularProgressState extends State<BudgetCircularProgress>
     _animation = Tween<double>(
       begin: 0,
       end: widget.percentage.clamp(0, 100) / 100,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic,
-    ),);
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutCubic,
+      ),
+    );
 
     if (widget.animate) {
       _controller.forward();
@@ -325,10 +327,12 @@ class _BudgetCircularProgressState extends State<BudgetCircularProgress>
       _animation = Tween<double>(
         begin: _animation.value,
         end: widget.percentage.clamp(0, 100) / 100,
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutCubic,
-      ),);
+      ).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeOutCubic,
+        ),
+      );
       _controller.forward(from: 0);
     }
   }
@@ -372,9 +376,7 @@ class _BudgetCircularProgressState extends State<BudgetCircularProgress>
               strokeWidth: widget.strokeWidth,
               backgroundColor: Colors.transparent,
               valueColor: AlwaysStoppedAnimation<Color>(
-                isDark
-                    ? Colors.white.withValues(alpha: 0.1)
-                    : Colors.black.withValues(alpha: 0.06),
+                isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.06),
               ),
             ),
           ),

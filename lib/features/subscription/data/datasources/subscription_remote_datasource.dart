@@ -98,6 +98,16 @@ abstract class SubscriptionRemoteDataSource {
   ///
   /// Returns a list of payment methods saved by the user.
   Future<Either<Failure, PaymentMethodsResponse>> getPaymentMethods();
+
+  /// Set a payment method as default
+  ///
+  /// Marks the specified payment method as the default for future payments.
+  Future<Either<Failure, void>> setDefaultPaymentMethod(String paymentMethodId);
+
+  /// Check payment status
+  ///
+  /// Checks the current status of a payment transaction.
+  Future<Either<Failure, String>> checkPaymentStatus(String transactionId);
 }
 
 /// Subscription Remote DataSource Implementation
@@ -123,13 +133,13 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
           return Right(PlansResponse.fromJson(data));
         }
         if (data is List) {
-          return Right(PlansResponse(
-            plans: data
-                .map((e) => PlanModel.fromJson(e as Map<String, dynamic>))
-                .toList(),
-          ));
+          return Right(
+            PlansResponse(
+              plans: data.map((e) => PlanModel.fromJson(e as Map<String, dynamic>)).toList(),
+            ),
+          );
         }
-        return Right(const PlansResponse(plans: []));
+        return const Right(PlansResponse(plans: []));
       },
     );
   }
@@ -138,8 +148,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
   Future<Either<Failure, SubscriptionModel>> getCurrentSubscription() async {
     return _apiClient.get<SubscriptionModel>(
       ApiEndpoints.subscriptionCurrent,
-      fromJson: (json) =>
-          SubscriptionModel.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => SubscriptionModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -158,8 +167,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
     return _apiClient.post<CheckoutResponse>(
       ApiEndpoints.subscriptionCheckout,
       data: request.toJson(),
-      fromJson: (json) =>
-          CheckoutResponse.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => CheckoutResponse.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -170,8 +178,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
     return _apiClient.post<SubscriptionModel>(
       ApiEndpoints.subscriptionVerifyPayment,
       data: request.toJson(),
-      fromJson: (json) =>
-          SubscriptionModel.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => SubscriptionModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -186,8 +193,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
         'planId': planId,
         'billingCycle': billingCycle.value,
       },
-      fromJson: (json) =>
-          CheckoutResponse.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => CheckoutResponse.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -198,8 +204,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
     return _apiClient.post<SubscriptionModel>(
       ApiEndpoints.subscriptionDowngrade,
       data: {'planId': planId},
-      fromJson: (json) =>
-          SubscriptionModel.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => SubscriptionModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -210,8 +215,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
     return _apiClient.post<SubscriptionModel>(
       ApiEndpoints.subscriptionCancel,
       data: request.toJson(),
-      fromJson: (json) =>
-          SubscriptionModel.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => SubscriptionModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -219,8 +223,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
   Future<Either<Failure, SubscriptionModel>> resumeSubscription() async {
     return _apiClient.post<SubscriptionModel>(
       ApiEndpoints.subscriptionResume,
-      fromJson: (json) =>
-          SubscriptionModel.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => SubscriptionModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -246,23 +249,25 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
           return Right(InvoicesResponse.fromJson(data));
         }
         if (data is List) {
-          return Right(InvoicesResponse(
-            invoices: data
-                .map((e) => InvoiceModel.fromJson(e as Map<String, dynamic>))
-                .toList(),
-            total: data.length,
-            page: page,
-            pageSize: limit,
-            totalPages: 1,
-          ));
+          return Right(
+            InvoicesResponse(
+              invoices: data.map((e) => InvoiceModel.fromJson(e as Map<String, dynamic>)).toList(),
+              total: data.length,
+              page: page,
+              pageSize: limit,
+              totalPages: 1,
+            ),
+          );
         }
-        return Right(const InvoicesResponse(
-          invoices: [],
-          total: 0,
-          page: 1,
-          pageSize: 20,
-          totalPages: 0,
-        ));
+        return const Right(
+          InvoicesResponse(
+            invoices: [],
+            total: 0,
+            page: 1,
+            pageSize: 20,
+            totalPages: 0,
+          ),
+        );
       },
     );
   }
@@ -289,9 +294,11 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
         if (data is String) {
           return Right(data);
         }
-        return Left(const ServerFailure(
-          message: 'Failed to get invoice download URL',
-        ));
+        return const Left(
+          ServerFailure(
+            'Failed to get invoice download URL',
+          ),
+        );
       },
     );
   }
@@ -303,8 +310,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
     return _apiClient.post<UpiCreateResponse>(
       ApiEndpoints.subscriptionUpiCreate,
       data: request.toJson(),
-      fromJson: (json) =>
-          UpiCreateResponse.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => UpiCreateResponse.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -315,8 +321,7 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
     return _apiClient.post<SubscriptionModel>(
       ApiEndpoints.subscriptionUpiVerify,
       data: {'transactionId': transactionId},
-      fromJson: (json) =>
-          SubscriptionModel.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => SubscriptionModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 
@@ -333,14 +338,48 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
           return Right(PaymentMethodsResponse.fromJson(data));
         }
         if (data is List) {
-          return Right(PaymentMethodsResponse(
-            paymentMethods: data
-                .map((e) =>
-                    PaymentMethodModel.fromJson(e as Map<String, dynamic>))
-                .toList(),
-          ));
+          return Right(
+            PaymentMethodsResponse(
+              paymentMethods: data
+                  .map(
+                    (e) => PaymentMethodModel.fromJson(e as Map<String, dynamic>),
+                  )
+                  .toList(),
+            ),
+          );
         }
-        return Right(const PaymentMethodsResponse(paymentMethods: []));
+        return const Right(PaymentMethodsResponse(paymentMethods: []));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> setDefaultPaymentMethod(
+    String paymentMethodId,
+  ) async {
+    return _apiClient.put<void>(
+      '${ApiEndpoints.utilsPaymentMethods}/$paymentMethodId/default',
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> checkPaymentStatus(
+    String transactionId,
+  ) async {
+    final result = await _apiClient.get<dynamic>(
+      '${ApiEndpoints.subscriptionPayments}/$transactionId/status',
+    );
+
+    return result.fold(
+      Left.new,
+      (data) {
+        if (data is Map<String, dynamic>) {
+          return Right(data['status'] as String? ?? 'UNKNOWN');
+        }
+        if (data is String) {
+          return Right(data);
+        }
+        return const Right('UNKNOWN');
       },
     );
   }

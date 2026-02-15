@@ -3,7 +3,6 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Goal Model
 class GoalModel extends Equatable {
-
   const GoalModel({
     required this.id,
     required this.name,
@@ -27,9 +26,7 @@ class GoalModel extends Equatable {
       targetAmount: json['targetAmount'] as int,
       currentAmount: json['currentAmount'] as int,
       progress: (json['progress'] as num).toDouble(),
-      targetDate: json['targetDate'] != null
-          ? DateTime.parse(json['targetDate'] as String)
-          : null,
+      targetDate: json['targetDate'] != null ? DateTime.parse(json['targetDate'] as String) : null,
       icon: json['icon'] as String?,
       color: json['color'] as String?,
       status: GoalStatus.values.firstWhere(
@@ -109,8 +106,7 @@ class GoalModel extends Equatable {
   double get targetAmountInRupees => targetAmount / 100;
   double get currentAmountInRupees => currentAmount / 100;
   double get remainingInRupees => (targetAmount - currentAmount) / 100;
-  double? get monthlyRequiredInRupees =>
-      monthlyRequired != null ? monthlyRequired! / 100 : null;
+  double? get monthlyRequiredInRupees => monthlyRequired != null ? monthlyRequired! / 100 : null;
 
   bool get isCompleted => status == GoalStatus.completed;
   bool get isActive => status == GoalStatus.active;
@@ -142,12 +138,13 @@ class GoalModel extends Equatable {
 
 /// Goal Contribution
 class GoalContribution extends Equatable {
-
   const GoalContribution({
     required this.id,
     required this.goalId,
     required this.amount,
-    required this.date, required this.createdAt, this.note,
+    required this.date,
+    required this.createdAt,
+    this.note,
   });
 
   factory GoalContribution.fromJson(Map<String, dynamic> json) {
@@ -175,7 +172,6 @@ class GoalContribution extends Equatable {
 
 /// Goals Summary
 class GoalsSummary extends Equatable {
-
   const GoalsSummary({
     required this.totalTarget,
     required this.totalSaved,
@@ -202,8 +198,7 @@ class GoalsSummary extends Equatable {
   double get totalTargetInRupees => totalTarget / 100;
   double get totalSavedInRupees => totalSaved / 100;
   double get totalRemainingInRupees => totalRemaining / 100;
-  double get overallProgress =>
-      totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
+  double get overallProgress => totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 
   @override
   List<Object?> get props => [
@@ -217,7 +212,6 @@ class GoalsSummary extends Equatable {
 
 /// Create Goal Request
 class CreateGoalRequest {
-
   const CreateGoalRequest({
     required this.name,
     required this.targetAmount,
@@ -247,7 +241,6 @@ class CreateGoalRequest {
 
 /// Add Contribution Request
 class AddContributionRequest {
-
   const AddContributionRequest({
     required this.amount,
     this.note,

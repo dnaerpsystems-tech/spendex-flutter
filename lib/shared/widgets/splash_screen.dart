@@ -15,8 +15,7 @@ class SplashScreen extends ConsumerStatefulWidget {
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
@@ -61,8 +60,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // Check authentication status with timeout
     try {
       await authNotifier.checkAuthStatus().timeout(
-        const Duration(seconds: 5),
-      );
+            const Duration(seconds: 5),
+          );
     } catch (_) {
       // Auth check failed or timed out, continue with unauthenticated state
     }

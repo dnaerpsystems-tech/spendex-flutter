@@ -64,16 +64,13 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
   Future<void> _loadLoan() async {
     setState(() => _isLoadingLoan = true);
 
-    final loan = await ref
-        .read(loansStateProvider.notifier)
-        .loadLoanById(widget.loanId!);
+    final loan = await ref.read(loansStateProvider.notifier).loadLoanById(widget.loanId!);
 
     if (loan != null && mounted) {
       setState(() {
         _existingLoan = loan;
         _nameController.text = loan.name;
-        _principalController.text =
-            loan.principalAmountInRupees.toStringAsFixed(0);
+        _principalController.text = loan.principalAmountInRupees.toStringAsFixed(0);
         _rateController.text = loan.interestRate.toStringAsFixed(2);
         _tenureController.text = loan.tenure.toString();
         _selectedType = loan.type;
@@ -288,8 +285,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
 
     setState(() => _isLoading = true);
 
-    final principalInRupees =
-        CurrencyFormatter.parse(_principalController.text) ?? 0;
+    final principalInRupees = CurrencyFormatter.parse(_principalController.text) ?? 0;
     final principalInPaise = (principalInRupees * 100).toInt();
     final rate = double.parse(_rateController.text);
     final tenure = int.parse(_tenureController.text);
@@ -301,20 +297,14 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
       interestRate: rate,
       tenure: tenure,
       startDate: _selectedStartDate!,
-      lender: _lenderController.text.trim().isEmpty
-          ? null
-          : _lenderController.text.trim(),
-      accountNumber: _accountController.text.trim().isEmpty
-          ? null
-          : _accountController.text.trim(),
+      lender: _lenderController.text.trim().isEmpty ? null : _lenderController.text.trim(),
+      accountNumber: _accountController.text.trim().isEmpty ? null : _accountController.text.trim(),
     );
 
     LoanModel? result;
 
     if (_isEditMode) {
-      result = await ref
-          .read(loansStateProvider.notifier)
-          .updateLoan(widget.loanId!, request);
+      result = await ref.read(loansStateProvider.notifier).updateLoan(widget.loanId!, request);
     } else {
       result = await ref.read(loansStateProvider.notifier).createLoan(request);
     }
@@ -351,9 +341,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
     final isOperationInProgress = loansState.isCreating || loansState.isUpdating;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: Text(_isEditMode ? 'Edit Loan' : 'Add Loan'),
         centerTitle: true,
@@ -376,7 +364,6 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                       isDark: isDark,
                     ),
                     const SizedBox(height: 12),
-
                     TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
@@ -384,9 +371,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                         hintText: 'e.g., Home Loan - HDFC',
                         prefixIcon: const Icon(Iconsax.text),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.next,
@@ -401,9 +386,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                       }) =>
                           null,
                     ),
-
                     const SizedBox(height: 16),
-
                     GestureDetector(
                       onTap: isOperationInProgress ? null : _openLoanTypePicker,
                       child: Container(
@@ -412,15 +395,10 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                           vertical: 14,
                         ),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkCard
-                              : SpendexColors.lightCard,
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusMd),
+                          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                           border: Border.all(
-                            color: isDark
-                                ? SpendexColors.darkBorder
-                                : SpendexColors.lightBorder,
+                            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                           ),
                         ),
                         child: Row(
@@ -429,8 +407,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF7C3AED)
-                                      .withValues(alpha: 0.12),
+                                  color: const Color(0xFF7C3AED).withValues(alpha: 0.12),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(
@@ -472,9 +449,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 16),
-
                     TextFormField(
                       controller: _lenderController,
                       decoration: InputDecoration(
@@ -482,17 +457,13 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                         hintText: 'e.g., HDFC Bank, SBI',
                         prefixIcon: const Icon(Iconsax.bank),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.next,
                       enabled: !isOperationInProgress,
                     ),
-
                     const SizedBox(height: 16),
-
                     TextFormField(
                       controller: _accountController,
                       decoration: InputDecoration(
@@ -500,22 +471,17 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                         hintText: 'e.g., 1234567890',
                         prefixIcon: const Icon(Iconsax.card),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       textInputAction: TextInputAction.next,
                       enabled: !isOperationInProgress,
                     ),
-
                     const SizedBox(height: 24),
-
                     _SectionTitle(
                       title: 'EMI Calculator',
                       isDark: isDark,
                     ),
                     const SizedBox(height: 12),
-
                     TextFormField(
                       controller: _principalController,
                       decoration: InputDecoration(
@@ -533,9 +499,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                         ),
                         prefixIconConstraints: const BoxConstraints(),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
@@ -546,9 +510,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                       validator: _validatePrincipal,
                       enabled: !isOperationInProgress,
                     ),
-
                     const SizedBox(height: 16),
-
                     Row(
                       children: [
                         Expanded(
@@ -560,9 +522,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                               suffixText: '%',
                               prefixIcon: const Icon(Iconsax.percentage_circle),
                               filled: true,
-                              fillColor: isDark
-                                  ? SpendexColors.darkCard
-                                  : SpendexColors.lightCard,
+                              fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                             ),
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
@@ -570,7 +530,8 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                             textInputAction: TextInputAction.next,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d*\.?\d{0,2}'),),
+                                RegExp(r'^\d*\.?\d{0,2}'),
+                              ),
                             ],
                             validator: _validateRate,
                             enabled: !isOperationInProgress,
@@ -586,9 +547,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                               suffixText: 'months',
                               prefixIcon: const Icon(Iconsax.calendar),
                               filled: true,
-                              fillColor: isDark
-                                  ? SpendexColors.darkCard
-                                  : SpendexColors.lightCard,
+                              fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                             ),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
@@ -601,23 +560,20 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 20),
-
                     if (_emiAmount > 0)
                       EmiBreakdownCard(
                         emiAmount: _emiAmount,
                         principalAmount: (CurrencyFormatter.parse(
-                                    _principalController.text,) ??
+                                  _principalController.text,
+                                ) ??
                                 0) *
                             100,
                         totalInterest: _totalInterest,
                         totalAmount: _totalAmount,
                         isDark: isDark,
                       ),
-
                     const SizedBox(height: 20),
-
                     _SectionTitle(
                       title: 'Start Date',
                       isDark: isDark,
@@ -631,15 +587,10 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                           vertical: 14,
                         ),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkCard
-                              : SpendexColors.lightCard,
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusMd),
+                          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                           border: Border.all(
-                            color: isDark
-                                ? SpendexColors.darkBorder
-                                : SpendexColors.lightBorder,
+                            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                           ),
                         ),
                         child: Row(
@@ -655,8 +606,7 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                               child: Text(
                                 _selectedStartDate == null
                                     ? 'Select start date'
-                                    : DateFormat('dd MMM yyyy')
-                                        .format(_selectedStartDate!),
+                                    : DateFormat('dd MMM yyyy').format(_selectedStartDate!),
                                 style: SpendexTheme.bodyMedium.copyWith(
                                   color: _selectedStartDate == null
                                       ? (isDark
@@ -679,22 +629,17 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 32),
-
                     SizedBox(
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: isOperationInProgress || _isLoading
-                            ? null
-                            : _saveLoan,
+                        onPressed: isOperationInProgress || _isLoading ? null : _saveLoan,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: SpendexColors.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(SpendexTheme.radiusMd),
+                            borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                           ),
                         ),
                         child: isOperationInProgress || _isLoading
@@ -714,7 +659,6 @@ class _AddLoanScreenState extends ConsumerState<AddLoanScreen> {
                               ),
                       ),
                     ),
-
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -738,9 +682,7 @@ class _SectionTitle extends StatelessWidget {
     return Text(
       title,
       style: SpendexTheme.labelMedium.copyWith(
-        color: isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary,
+        color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         fontWeight: FontWeight.w600,
       ),
     );

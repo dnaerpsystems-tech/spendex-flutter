@@ -1,12 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-
 import 'package:spendex/core/network/api_client.dart';
 import 'package:spendex/core/storage/secure_storage.dart';
-import 'package:spendex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:spendex/features/accounts/domain/repositories/accounts_repository.dart';
-import 'package:spendex/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:spendex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:spendex/features/subscription/domain/repositories/subscription_repository.dart';
+import 'package:spendex/features/transactions/domain/repositories/transactions_repository.dart';
 
 // ===========================================================================
 // Mock Repository Classes
@@ -18,8 +18,8 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 /// Mock AccountsRepository for testing accounts providers
 class MockAccountsRepository extends Mock implements AccountsRepository {}
 
-/// Mock TransactionRepository for testing transaction providers
-class MockTransactionRepository extends Mock implements TransactionRepository {}
+/// Mock TransactionsRepository for testing transaction providers
+class MockTransactionRepository extends Mock implements TransactionsRepository {}
 
 /// Mock SubscriptionRepository for testing subscription providers
 class MockSubscriptionRepository extends Mock implements SubscriptionRepository {}
@@ -39,9 +39,8 @@ class ProviderOverridesBuilder {
   final List<Override> _overrides = [];
 
   /// Add a custom override
-  ProviderOverridesBuilder addOverride(Override override) {
+  void addOverride(Override override) {
     _overrides.add(override);
-    return this;
   }
 
   /// Build the list of overrides
@@ -78,10 +77,10 @@ ProviderScope createTestProviderScope({
 
 /// Matcher for checking provider state
 class StateMatcher<T> {
-  final bool Function(T) predicate;
-  final String description;
 
   StateMatcher(this.predicate, this.description);
+  final bool Function(T) predicate;
+  final String description;
 
   bool matches(T state) => predicate(state);
 
@@ -114,6 +113,3 @@ Future<void> pumpMultiple(int count) async {
     await Future.delayed(const Duration(milliseconds: 50));
   }
 }
-
-// Placeholder for Flutter imports in widget tests
-class Widget {}

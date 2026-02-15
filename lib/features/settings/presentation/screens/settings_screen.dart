@@ -80,7 +80,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 32),
-            
+
             // Features Section
             _buildSectionTitle(context, 'Features'),
             const SizedBox(height: 12),
@@ -121,7 +121,7 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => context.push(AppRoutes.family),
             ),
             const SizedBox(height: 24),
-            
+
             // Preferences Section
             _buildSectionTitle(context, l10n.appearance),
             const SizedBox(height: 12),
@@ -154,7 +154,7 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => _showLanguageDialog(context, ref, l10n),
             ),
             const SizedBox(height: 24),
-            
+
             // Subscription Section
             _buildSectionTitle(context, l10n.subscription),
             const SizedBox(height: 12),
@@ -216,7 +216,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // Support Section
             _buildSectionTitle(context, l10n.helpAndSupport),
             const SizedBox(height: 12),
@@ -241,7 +241,7 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () {},
             ),
             const SizedBox(height: 24),
-            
+
             // Logout
             _SettingsTile(
               icon: Iconsax.logout,
@@ -277,7 +277,7 @@ class SettingsScreen extends ConsumerWidget {
               },
             ),
             const SizedBox(height: 32),
-            
+
             // App Version
             Center(
               child: Text(
@@ -305,7 +305,7 @@ class SettingsScreen extends ConsumerWidget {
 
   void _showLanguageDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     final currentLocale = ref.read(localeProvider);
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

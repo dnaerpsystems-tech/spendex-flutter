@@ -100,10 +100,8 @@ class AnalyticsSummaryModel extends Equatable {
       'averageDailySpend': averageDailySpend,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
-      if (previousPeriodIncome != null)
-        'previousPeriodIncome': previousPeriodIncome,
-      if (previousPeriodExpense != null)
-        'previousPeriodExpense': previousPeriodExpense,
+      if (previousPeriodIncome != null) 'previousPeriodIncome': previousPeriodIncome,
+      if (previousPeriodExpense != null) 'previousPeriodExpense': previousPeriodExpense,
       if (incomeGrowth != null) 'incomeGrowth': incomeGrowth,
       if (expenseGrowth != null) 'expenseGrowth': expenseGrowth,
     };
@@ -133,8 +131,7 @@ class AnalyticsSummaryModel extends Equatable {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       previousPeriodIncome: previousPeriodIncome ?? this.previousPeriodIncome,
-      previousPeriodExpense:
-          previousPeriodExpense ?? this.previousPeriodExpense,
+      previousPeriodExpense: previousPeriodExpense ?? this.previousPeriodExpense,
       incomeGrowth: incomeGrowth ?? this.incomeGrowth,
       expenseGrowth: expenseGrowth ?? this.expenseGrowth,
     );

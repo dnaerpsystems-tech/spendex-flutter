@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'email_message_model.dart';
 
 class EmailFilterModel extends Equatable {
-
   const EmailFilterModel({
     this.selectedBanks = const {},
     this.dateRange,
@@ -21,9 +20,7 @@ class EmailFilterModel extends Equatable {
   factory EmailFilterModel.fromJson(Map<String, dynamic> json) {
     return EmailFilterModel(
       selectedBanks: json['selectedBanks'] != null
-          ? (json['selectedBanks'] as List<dynamic>)
-              .map((e) => e as String)
-              .toSet()
+          ? (json['selectedBanks'] as List<dynamic>).map((e) => e as String).toSet()
           : const {},
       dateRange: json['dateRange'] != null
           ? DateTimeRange(
@@ -38,10 +35,12 @@ class EmailFilterModel extends Equatable {
       includeAttachments: json['includeAttachments'] as bool? ?? true,
       emailTypes: json['emailTypes'] != null
           ? (json['emailTypes'] as List<dynamic>)
-              .map((e) => EmailType.values.firstWhere(
-                    (type) => type.name == e,
-                    orElse: () => EmailType.other,
-                  ),)
+              .map(
+                (e) => EmailType.values.firstWhere(
+                  (type) => type.name == e,
+                  orElse: () => EmailType.other,
+                ),
+              )
               .toSet()
           : const {
               EmailType.notification,
@@ -50,9 +49,7 @@ class EmailFilterModel extends Equatable {
             },
       onlyUnparsed: json['onlyUnparsed'] as bool? ?? false,
       searchQuery: json['searchQuery'] as String?,
-      maxResults: json['maxResults'] != null
-          ? (json['maxResults'] as num).toInt()
-          : null,
+      maxResults: json['maxResults'] != null ? (json['maxResults'] as num).toInt() : null,
     );
   }
 
@@ -174,13 +171,27 @@ class EmailFilterModel extends Equatable {
   int get activeFilterCount {
     var count = 0;
 
-    if (selectedBanks.isNotEmpty) count++;
-    if (dateRange != null) count++;
-    if (!includeAttachments) count++;
-    if (emailTypes.length < 3) count++;
-    if (onlyUnparsed) count++;
-    if (searchQuery != null && searchQuery!.isNotEmpty) count++;
-    if (maxResults != null) count++;
+    if (selectedBanks.isNotEmpty) {
+      count++;
+    }
+    if (dateRange != null) {
+      count++;
+    }
+    if (!includeAttachments) {
+      count++;
+    }
+    if (emailTypes.length < 3) {
+      count++;
+    }
+    if (onlyUnparsed) {
+      count++;
+    }
+    if (searchQuery != null && searchQuery!.isNotEmpty) {
+      count++;
+    }
+    if (maxResults != null) {
+      count++;
+    }
 
     return count;
   }

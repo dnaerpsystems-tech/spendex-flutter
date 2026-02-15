@@ -9,14 +9,17 @@ enum EmailProvider {
 }
 
 class EmailAccountModel extends Equatable {
-
   const EmailAccountModel({
     required this.id,
     required this.email,
     required this.provider,
     required this.displayName,
     required this.isConnected,
-    required this.imapServer, required this.imapPort, required this.username, required this.encryptedPassword, this.lastSyncDate,
+    required this.imapServer,
+    required this.imapPort,
+    required this.username,
+    required this.encryptedPassword,
+    this.lastSyncDate,
     this.useSsl = true,
   });
 
@@ -30,9 +33,8 @@ class EmailAccountModel extends Equatable {
       ),
       displayName: json['displayName'] as String,
       isConnected: json['isConnected'] as bool? ?? false,
-      lastSyncDate: json['lastSyncDate'] != null
-          ? DateTime.parse(json['lastSyncDate'] as String)
-          : null,
+      lastSyncDate:
+          json['lastSyncDate'] != null ? DateTime.parse(json['lastSyncDate'] as String) : null,
       imapServer: json['imapServer'] as String,
       imapPort: (json['imapPort'] as num).toInt(),
       username: json['username'] as String,

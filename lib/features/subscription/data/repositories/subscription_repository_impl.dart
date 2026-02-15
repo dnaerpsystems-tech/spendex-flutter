@@ -106,4 +106,14 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   Future<Either<Failure, PaymentMethodsResponse>> getPaymentMethods() {
     return _remoteDataSource.getPaymentMethods();
   }
+
+  @override
+  Future<Either<Failure, void>> setDefaultPaymentMethod(String paymentMethodId) {
+    return _remoteDataSource.setDefaultPaymentMethod(paymentMethodId);
+  }
+
+  @override
+  Future<Either<Failure, String>> checkPaymentStatus(String transactionId) {
+    return _remoteDataSource.checkPaymentStatus(transactionId);
+  }
 }

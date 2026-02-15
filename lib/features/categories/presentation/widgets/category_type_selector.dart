@@ -9,14 +9,16 @@ import '../../../../core/constants/app_constants.dart';
 /// A beautiful segmented control for selecting between Income and Expense
 /// category types. Features smooth animations and proper theme support.
 class CategoryTypeSelector extends StatelessWidget {
-
   const CategoryTypeSelector({
-    required this.selectedType, required this.onTypeChanged, super.key,
+    required this.selectedType,
+    required this.onTypeChanged,
+    super.key,
     this.enabled = true,
     this.showIcons = true,
     this.height = 52,
     this.padding = const EdgeInsets.all(4),
   });
+
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -43,14 +45,10 @@ class CategoryTypeSelector extends StatelessWidget {
       height: height,
       padding: padding,
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkSurface
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkSurface : SpendexColors.lightBackground,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
         border: Border.all(
-          color: isDark
-              ? SpendexColors.darkBorder
-              : SpendexColors.lightBorder,
+          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
         ),
       ),
       child: LayoutBuilder(
@@ -135,9 +133,8 @@ class CategoryTypeSelector extends StatelessWidget {
   }) {
     final isIncome = type == CategoryType.income;
     final icon = isIncome ? Iconsax.arrow_down : Iconsax.arrow_up;
-    final unselectedColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final unselectedColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return GestureDetector(
       onTap: enabled ? () => onTypeChanged(type) : null,
@@ -181,11 +178,13 @@ class CategoryTypeSelector extends StatelessWidget {
 ///
 /// A smaller version of the type selector for use in forms or tight spaces.
 class CompactCategoryTypeSelector extends StatelessWidget {
-
   const CompactCategoryTypeSelector({
-    required this.selectedType, required this.onTypeChanged, super.key,
+    required this.selectedType,
+    required this.onTypeChanged,
+    super.key,
     this.enabled = true,
   });
+
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -283,11 +282,13 @@ class CompactCategoryTypeSelector extends StatelessWidget {
 /// A single toggle button that switches between Income and Expense on tap.
 /// Displays the current type with an icon.
 class CategoryTypeToggleButton extends StatelessWidget {
-
   const CategoryTypeToggleButton({
-    required this.selectedType, required this.onTypeChanged, super.key,
+    required this.selectedType,
+    required this.onTypeChanged,
+    super.key,
     this.enabled = true,
   });
+
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -305,9 +306,7 @@ class CategoryTypeToggleButton extends StatelessWidget {
     return GestureDetector(
       onTap: enabled
           ? () {
-              final newType = isIncome
-                  ? CategoryType.expense
-                  : CategoryType.income;
+              final newType = isIncome ? CategoryType.expense : CategoryType.income;
               onTypeChanged(newType);
             }
           : null,
@@ -375,12 +374,14 @@ class CategoryTypeToggleButton extends StatelessWidget {
 ///
 /// Traditional radio button style selection for Income/Expense types.
 class CategoryTypeRadioButtons extends StatelessWidget {
-
   const CategoryTypeRadioButtons({
-    required this.selectedType, required this.onTypeChanged, super.key,
+    required this.selectedType,
+    required this.onTypeChanged,
+    super.key,
     this.enabled = true,
     this.direction = Axis.horizontal,
   });
+
   /// Currently selected category type
   final CategoryType selectedType;
 
@@ -408,19 +409,17 @@ class CategoryTypeRadioButtons extends StatelessWidget {
 
     if (direction == Axis.horizontal) {
       return Row(
-        children: items
-            .expand((item) => [item, const SizedBox(width: SpendexTheme.spacingLg)])
-            .toList()
-          ..removeLast(),
+        children:
+            items.expand((item) => [item, const SizedBox(width: SpendexTheme.spacingLg)]).toList()
+              ..removeLast(),
       );
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: items
-          .expand((item) => [item, const SizedBox(height: SpendexTheme.spacingMd)])
-          .toList()
-        ..removeLast(),
+      children:
+          items.expand((item) => [item, const SizedBox(height: SpendexTheme.spacingMd)]).toList()
+            ..removeLast(),
     );
   }
 
@@ -489,12 +488,8 @@ class CategoryTypeRadioButtons extends StatelessWidget {
               type.label,
               style: SpendexTheme.bodyMedium.copyWith(
                 color: isSelected
-                    ? (isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary)
-                    : (isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary),
+                    ? (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary)
+                    : (isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary),
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
             ),

@@ -20,32 +20,12 @@ class SecurityCheckResult extends Equatable {
     this.errorMessage,
   });
 
-  /// Whether the device is considered secure for financial operations.
-  final bool isSecure;
-
-  /// Whether the device is rooted (Android) or jailbroken (iOS).
-  final bool isJailbroken;
-
-  /// Whether developer mode is enabled on the device.
-  final bool isDeveloperMode;
-
-  /// Whether this is a real physical device (vs emulator/simulator).
-  final bool isRealDevice;
-
-  /// Whether a debugger is currently attached.
-  final bool isDebuggerAttached;
-
-  /// Error message if the security check failed.
-  final String? errorMessage;
-
   /// Create a result indicating a secure device.
   factory SecurityCheckResult.secure() {
     return const SecurityCheckResult(
       isSecure: true,
       isJailbroken: false,
       isDeveloperMode: false,
-      isRealDevice: true,
-      isDebuggerAttached: false,
     );
   }
 
@@ -77,14 +57,34 @@ class SecurityCheckResult extends Equatable {
     );
   }
 
+  /// Whether the device is considered secure for financial operations.
+  final bool isSecure;
+
+  /// Whether the device is rooted (Android) or jailbroken (iOS).
+  final bool isJailbroken;
+
+  /// Whether developer mode is enabled on the device.
+  final bool isDeveloperMode;
+
+  /// Whether this is a real physical device (vs emulator/simulator).
+  final bool isRealDevice;
+
+  /// Whether a debugger is currently attached.
+  final bool isDebuggerAttached;
+
+  /// Error message if the security check failed.
+  final String? errorMessage;
+
   /// Get a list of security warnings.
   List<String> get warnings {
     final result = <String>[];
 
     if (isJailbroken) {
-      result.add(Platform.isIOS
-          ? 'This device appears to be jailbroken'
-          : 'This device appears to be rooted');
+      result.add(
+        Platform.isIOS
+            ? 'This device appears to be jailbroken'
+            : 'This device appears to be rooted',
+      );
     }
 
     if (isDeveloperMode) {

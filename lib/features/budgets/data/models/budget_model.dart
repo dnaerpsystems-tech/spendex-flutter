@@ -4,7 +4,6 @@ import '../../../categories/data/models/category_model.dart';
 
 /// Budget Model
 class BudgetModel extends Equatable {
-
   const BudgetModel({
     required this.id,
     required this.name,
@@ -12,7 +11,12 @@ class BudgetModel extends Equatable {
     required this.spent,
     required this.remaining,
     required this.percentage,
-    required this.period, required this.startDate, required this.endDate, required this.createdAt, required this.updatedAt, this.categoryId,
+    required this.period,
+    required this.startDate,
+    required this.endDate,
+    required this.createdAt,
+    required this.updatedAt,
+    this.categoryId,
     this.alertThreshold = 80,
     this.isActive = true,
     this.rollover = false,
@@ -165,7 +169,6 @@ enum BudgetStatus {
 
 /// Budgets Summary
 class BudgetsSummary extends Equatable {
-
   const BudgetsSummary({
     required this.totalBudget,
     required this.totalSpent,
@@ -192,8 +195,7 @@ class BudgetsSummary extends Equatable {
   double get totalBudgetInRupees => totalBudget / 100;
   double get totalSpentInRupees => totalSpent / 100;
   double get totalRemainingInRupees => totalRemaining / 100;
-  double get overallPercentage =>
-      totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
+  double get overallPercentage => totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
 
   @override
   List<Object?> get props => [
@@ -207,11 +209,11 @@ class BudgetsSummary extends Equatable {
 
 /// Create Budget Request
 class CreateBudgetRequest {
-
   const CreateBudgetRequest({
     required this.name,
     required this.amount,
-    required this.period, this.categoryId,
+    required this.period,
+    this.categoryId,
     this.alertThreshold,
     this.rollover,
   });

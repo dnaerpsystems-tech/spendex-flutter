@@ -42,7 +42,7 @@ class InvoiceCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: SpendexColors.primary.withOpacity(0.1),
+                  color: SpendexColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 ),
                 child: const Icon(
@@ -59,9 +59,8 @@ class InvoiceCard extends StatelessWidget {
                     Text(
                       invoice.invoiceNumber,
                       style: SpendexTheme.titleMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -82,10 +81,10 @@ class InvoiceCard extends StatelessWidget {
                   vertical: SpendexTheme.spacingXs,
                 ),
                 decoration: BoxDecoration(
-                  color: statusConfig.color.withOpacity(0.1),
+                  color: statusConfig.color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                   border: Border.all(
-                    color: statusConfig.color.withOpacity(0.3),
+                    color: statusConfig.color.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -108,8 +107,7 @@ class InvoiceCard extends StatelessWidget {
           const SizedBox(height: SpendexTheme.spacingLg),
           Divider(
             height: 1,
-            color:
-                isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
+            color: isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
           ),
           const SizedBox(height: SpendexTheme.spacingLg),
           Row(
@@ -144,18 +142,16 @@ class InvoiceCard extends StatelessWidget {
                   Text(
                     'Amount',
                     style: SpendexTheme.labelSmall.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextTertiary
-                          : SpendexColors.lightTextTertiary,
+                      color:
+                          isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '₹${invoice.amount}',
                     style: SpendexTheme.headlineSmall.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ],
@@ -197,22 +193,28 @@ class InvoiceCard extends StatelessWidget {
   _StatusConfig _getStatusConfig(InvoiceStatus status) {
     switch (status) {
       case InvoiceStatus.paid:
-        return _StatusConfig(
+        return const _StatusConfig(
           label: 'Paid',
           icon: Iconsax.tick_circle5,
           color: SpendexColors.income,
         );
       case InvoiceStatus.pending:
-        return _StatusConfig(
+        return const _StatusConfig(
           label: 'Pending',
           icon: Iconsax.clock,
           color: SpendexColors.warning,
         );
       case InvoiceStatus.failed:
-        return _StatusConfig(
+        return const _StatusConfig(
           label: 'Failed',
           icon: Iconsax.close_circle5,
           color: SpendexColors.expense,
+        );
+      case InvoiceStatus.refunded:
+        return const _StatusConfig(
+          label: 'Refunded',
+          icon: Iconsax.refresh_circle,
+          color: SpendexColors.primary,
         );
     }
   }
@@ -237,8 +239,8 @@ class InvoiceCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final skeletonColor = isDark
-        ? SpendexColors.darkBorder.withOpacity(0.5)
-        : SpendexColors.lightBorder.withOpacity(0.5);
+        ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+        : SpendexColors.lightBorder.withValues(alpha: 0.5);
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
@@ -272,8 +274,7 @@ class InvoiceCardSkeleton extends StatelessWidget {
                       height: 16,
                       decoration: BoxDecoration(
                         color: skeletonColor,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -282,8 +283,7 @@ class InvoiceCardSkeleton extends StatelessWidget {
                       height: 12,
                       decoration: BoxDecoration(
                         color: skeletonColor,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],

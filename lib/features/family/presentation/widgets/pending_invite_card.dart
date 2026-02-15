@@ -89,9 +89,7 @@ class PendingInviteCard extends StatelessWidget {
         Text(
           invite.email,
           style: SpendexTheme.titleMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             fontWeight: FontWeight.w600,
             decoration: isExpired ? TextDecoration.lineThrough : null,
           ),
@@ -130,9 +128,7 @@ class PendingInviteCard extends StatelessWidget {
     return PopupMenuButton<String>(
       icon: Icon(
         Iconsax.more,
-        color: isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary,
+        color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
@@ -154,17 +150,13 @@ class PendingInviteCard extends StatelessWidget {
                 Icon(
                   Iconsax.refresh,
                   size: 18,
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
                 const SizedBox(width: 12),
                 Text(
                   'Resend Invite',
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   ),
                 ),
               ],
@@ -199,17 +191,13 @@ class PendingInviteCard extends StatelessWidget {
         Icon(
           Iconsax.user,
           size: 14,
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
         ),
         const SizedBox(width: 4),
         Text(
           'Invited by ${invite.invitedByName}',
           style: SpendexTheme.labelSmall.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary,
+            color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             fontSize: 11,
           ),
         ),
@@ -217,9 +205,7 @@ class PendingInviteCard extends StatelessWidget {
         Icon(
           Iconsax.timer_1,
           size: 14,
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
         ),
         const SizedBox(width: 4),
         Text(
@@ -227,9 +213,7 @@ class PendingInviteCard extends StatelessWidget {
           style: SpendexTheme.labelSmall.copyWith(
             color: isExpired
                 ? SpendexColors.expense
-                : (isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary),
+                : (isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary),
             fontSize: 11,
           ),
         ),
@@ -238,8 +222,10 @@ class PendingInviteCard extends StatelessWidget {
   }
 
   String _formatTimeRemaining(Duration duration) {
-    if (duration.isNegative) return 'Expired';
-    
+    if (duration.isNegative) {
+      return 'Expired';
+    }
+
     if (duration.inDays > 0) {
       return '${duration.inDays}d left';
     } else if (duration.inHours > 0) {
@@ -259,12 +245,10 @@ class PendingInviteCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final shimmerBase = isDark
-        ? Colors.white.withValues(alpha: 0.05)
-        : Colors.black.withValues(alpha: 0.05);
-    final shimmerHighlight = isDark
-        ? Colors.white.withValues(alpha: 0.1)
-        : Colors.black.withValues(alpha: 0.08);
+    final shimmerBase =
+        isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
+    final shimmerHighlight =
+        isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),

@@ -8,7 +8,6 @@ import '../../domain/repositories/accounts_repository.dart';
 
 /// Accounts State
 class AccountsState extends Equatable {
-
   const AccountsState({
     this.accounts = const [],
     this.summary,
@@ -108,8 +107,7 @@ class AccountsState extends Equatable {
   }
 
   /// Check if any operation is in progress
-  bool get isOperationInProgress =>
-      isCreating || isUpdating || isDeleting || isTransferring;
+  bool get isOperationInProgress => isCreating || isUpdating || isDeleting || isTransferring;
 
   @override
   List<Object?> get props => [
@@ -128,7 +126,6 @@ class AccountsState extends Equatable {
 
 /// Accounts State Notifier
 class AccountsNotifier extends StateNotifier<AccountsState> {
-
   AccountsNotifier(this._repository) : super(const AccountsState.initial());
   final AccountsRepository _repository;
 

@@ -39,8 +39,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       ref.read(notificationsStateProvider.notifier).loadMore();
     }
   }
@@ -53,8 +52,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
 
     // Listen for success messages
     ref.listen<NotificationsState>(notificationsStateProvider, (prev, next) {
-      if (next.successMessage != null &&
-          prev?.successMessage != next.successMessage) {
+      if (next.successMessage != null && prev?.successMessage != next.successMessage) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.successMessage ?? ''),
@@ -78,28 +76,20 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
     });
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
-        backgroundColor: isDark
-            ? SpendexColors.darkSurface
-            : SpendexColors.lightSurface,
+        backgroundColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         elevation: 0,
         title: Text(
           'Notifications',
           style: SpendexTheme.headlineMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
         ),
         leading: IconButton(
           icon: Icon(
             Iconsax.arrow_left,
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -110,9 +100,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               state.filterType != null ? Iconsax.filter5 : Iconsax.filter,
               color: state.filterType != null
                   ? SpendexColors.primary
-                  : (isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary),
+                  : (isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary),
             ),
             tooltip: 'Filter by type',
             onSelected: (type) {
@@ -120,7 +108,6 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
             },
             itemBuilder: (context) => [
               PopupMenuItem<NotificationType?>(
-                value: null,
                 child: Row(
                   children: [
                     Icon(
@@ -136,40 +123,38 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                     Text(
                       'All notifications',
                       style: SpendexTheme.bodyMedium.copyWith(
-                        color: state.filterType == null
-                            ? SpendexColors.primary
-                            : null,
+                        color: state.filterType == null ? SpendexColors.primary : null,
                       ),
                     ),
                   ],
                 ),
               ),
               const PopupMenuDivider(),
-              ...NotificationType.values.map((type) => PopupMenuItem<NotificationType>(
-                    value: type,
-                    child: Row(
-                      children: [
-                        Icon(
-                          _getIconForType(type),
-                          size: 20,
-                          color: state.filterType == type
-                              ? SpendexColors.primary
-                              : (isDark
-                                  ? SpendexColors.darkTextSecondary
-                                  : SpendexColors.lightTextSecondary),
+              ...NotificationType.values.map(
+                (type) => PopupMenuItem<NotificationType>(
+                  value: type,
+                  child: Row(
+                    children: [
+                      Icon(
+                        _getIconForType(type),
+                        size: 20,
+                        color: state.filterType == type
+                            ? SpendexColors.primary
+                            : (isDark
+                                ? SpendexColors.darkTextSecondary
+                                : SpendexColors.lightTextSecondary),
+                      ),
+                      const SizedBox(width: SpendexTheme.spacingSm),
+                      Text(
+                        type.label,
+                        style: SpendexTheme.bodyMedium.copyWith(
+                          color: state.filterType == type ? SpendexColors.primary : null,
                         ),
-                        const SizedBox(width: SpendexTheme.spacingSm),
-                        Text(
-                          type.label,
-                          style: SpendexTheme.bodyMedium.copyWith(
-                            color: state.filterType == type
-                                ? SpendexColors.primary
-                                : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
 
@@ -197,9 +182,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               onPressed: state.isMarkingAllRead
                   ? null
                   : () {
-                      ref
-                          .read(notificationsStateProvider.notifier)
-                          .markAllAsRead();
+                      ref.read(notificationsStateProvider.notifier).markAllAsRead();
                     },
             ),
           const SizedBox(width: SpendexTheme.spacingSm),
@@ -207,9 +190,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
         bottom: TabBar(
           controller: _tabController,
           labelColor: SpendexColors.primary,
-          unselectedLabelColor: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          unselectedLabelColor:
+              isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           indicatorColor: SpendexColors.primary,
           indicatorSize: TabBarIndicatorSize.label,
           tabs: [
@@ -226,7 +208,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: SpendexColors.primary.withOpacity(0.1),
+                        color: SpendexColors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -254,7 +236,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: SpendexColors.expense.withOpacity(0.1),
+                        color: SpendexColors.expense.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -338,9 +320,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: isDark
-                        ? SpendexColors.darkTextTertiary
-                        : SpendexColors.lightTextTertiary,
+                    color:
+                        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   ),
                 ),
               ),
@@ -352,14 +333,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
             notification: notification,
             onTap: () => _handleNotificationTap(notification),
             onDismissed: () {
-              ref
-                  .read(notificationsStateProvider.notifier)
-                  .deleteNotification(notification.id);
+              ref.read(notificationsStateProvider.notifier).deleteNotification(notification.id);
             },
             onMarkAsRead: () {
-              ref
-                  .read(notificationsStateProvider.notifier)
-                  .markAsRead(notification.id);
+              ref.read(notificationsStateProvider.notifier).markAsRead(notification.id);
             },
           );
         },
@@ -382,27 +359,21 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: (isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder)
-                    .withOpacity(0.5),
+                color: (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder)
+                    .withValues(alpha: 0.5),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
                 size: 40,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
             ),
             const SizedBox(height: SpendexTheme.spacingLg),
             Text(
               message,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -410,9 +381,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
             Text(
               "We'll notify you when something important happens",
               style: SpendexTheme.bodySmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -424,17 +393,14 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
 
   void _handleNotificationTap(NotificationModel notification) {
     // Handle navigation based on notification action
-    if (notification.action == null ||
-        notification.action == NotificationAction.none) {
+    if (notification.action == null || notification.action == NotificationAction.none) {
       return;
     }
 
     // Deep link handling would go here
     // For now, just mark as read
     if (notification.isRead == false) {
-      ref
-          .read(notificationsStateProvider.notifier)
-          .markAsRead(notification.id);
+      ref.read(notificationsStateProvider.notifier).markAsRead(notification.id);
     }
   }
 

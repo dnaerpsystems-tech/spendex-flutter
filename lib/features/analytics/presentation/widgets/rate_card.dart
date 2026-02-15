@@ -4,7 +4,9 @@ import '../../../../app/theme.dart';
 /// Card for displaying rate/percentage values like savings rate
 class RateCard extends StatelessWidget {
   const RateCard({
-    required this.title, required this.value, super.key,
+    required this.title,
+    required this.value,
+    super.key,
     this.suffix = '%',
     this.goodThreshold = 20,
     this.warningThreshold = 0,
@@ -38,9 +40,7 @@ class RateCard extends StatelessWidget {
           Text(
             title,
             style: SpendexTheme.labelSmall.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: 8),

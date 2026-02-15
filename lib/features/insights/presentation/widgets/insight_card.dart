@@ -8,9 +8,9 @@ import '../../data/models/insight_model.dart';
 import 'insight_type_icon.dart';
 
 class InsightCard extends StatelessWidget {
-
   const InsightCard({
-    required this.insight, super.key,
+    required this.insight,
+    super.key,
     this.onTap,
     this.onDismiss,
     this.onActionTap,
@@ -71,7 +71,7 @@ class InsightCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -156,7 +156,7 @@ class InsightCard extends StatelessWidget {
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
             onPressed: onDismiss,
-            color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
           ),
       ],
     );
@@ -172,10 +172,10 @@ class InsightCard extends StatelessWidget {
         vertical: isCompact ? 2 : 4,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
         ),
       ),
       child: Text(
@@ -199,13 +199,13 @@ class InsightCard extends StatelessWidget {
         Icon(
           Iconsax.clock,
           size: isCompact ? 12 : 14,
-          color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+          color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
         ),
         const SizedBox(width: 4),
         Text(
           timeAgo,
           style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
             fontSize: isCompact ? 10 : 11,
           ),
         ),
@@ -247,22 +247,20 @@ class InsightCard extends StatelessWidget {
     final baseColor = theme.cardColor;
 
     if (insight.isRead) {
-      return baseColor.withOpacity(0.7);
+      return baseColor.withValues(alpha: 0.7);
     }
 
     switch (insight.priority) {
       case InsightPriority.high:
         return isDark
-            ? SpendexColors.expense.withOpacity(0.1)
-            : SpendexColors.expense.withOpacity(0.05);
+            ? SpendexColors.expense.withValues(alpha: 0.1)
+            : SpendexColors.expense.withValues(alpha: 0.05);
       case InsightPriority.medium:
         return isDark
-            ? SpendexColors.primary.withOpacity(0.1)
-            : SpendexColors.primary.withOpacity(0.05);
+            ? SpendexColors.primary.withValues(alpha: 0.1)
+            : SpendexColors.primary.withValues(alpha: 0.05);
       case InsightPriority.low:
-        return isDark
-            ? Colors.grey.withOpacity(0.1)
-            : Colors.grey.withOpacity(0.05);
+        return isDark ? Colors.grey.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.05);
     }
   }
 
@@ -270,16 +268,16 @@ class InsightCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     if (insight.isRead) {
-      return theme.dividerColor.withOpacity(0.3);
+      return theme.dividerColor.withValues(alpha: 0.3);
     }
 
     switch (insight.priority) {
       case InsightPriority.high:
-        return SpendexColors.expense.withOpacity(0.4);
+        return SpendexColors.expense.withValues(alpha: 0.4);
       case InsightPriority.medium:
-        return SpendexColors.primary.withOpacity(0.4);
+        return SpendexColors.primary.withValues(alpha: 0.4);
       case InsightPriority.low:
-        return theme.dividerColor.withOpacity(0.5);
+        return theme.dividerColor.withValues(alpha: 0.5);
     }
   }
 

@@ -52,10 +52,8 @@ class SyncResult extends Equatable {
               ?.map((e) => SyncConflict.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      errorMessages: (json['errorMessages'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+      errorMessages:
+          (json['errorMessages'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
     );
   }
 
@@ -172,22 +170,22 @@ class SyncProgress extends Equatable {
 enum SyncPhase {
   /// Starting sync
   starting,
-  
+
   /// Uploading local changes
   uploading,
-  
+
   /// Downloading server changes
   downloading,
-  
+
   /// Resolving conflicts
   resolvingConflicts,
-  
+
   /// Finalizing sync
   finalizing,
-  
+
   /// Sync complete
   complete,
-  
+
   /// Sync failed
   failed,
 }

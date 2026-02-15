@@ -46,8 +46,8 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
   void initState() {
     super.initState();
 
-    final currentFilters = ref.read(emailParserProvider).filters ??
-        EmailFilterModel.defaultFilter();
+    final currentFilters =
+        ref.read(emailParserProvider).filters ?? EmailFilterModel.defaultFilter();
 
     _selectedBanks = Set.from(currentFilters.selectedBanks);
     _dateRange = currentFilters.dateRange;
@@ -125,7 +125,9 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
   }
 
   String _formatDateRange(DateTimeRange? range) {
-    if (range == null) return 'Select date range';
+    if (range == null) {
+      return 'Select date range';
+    }
 
     final formatter = DateFormat('dd MMM yyyy');
     return '${formatter.format(range.start)} - ${formatter.format(range.end)}';
@@ -149,9 +151,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
               ),
             ),
@@ -212,17 +212,14 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                           }
                         });
                       },
-                      backgroundColor: isDark
-                          ? SpendexColors.darkBackground
-                          : SpendexColors.lightBackground,
+                      backgroundColor:
+                          isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
                       selectedColor: SpendexColors.primary.withValues(alpha: 0.2),
                       checkmarkColor: SpendexColors.primary,
                       side: BorderSide(
                         color: isSelected
                             ? SpendexColors.primary
-                            : (isDark
-                                ? SpendexColors.darkBorder
-                                : SpendexColors.lightBorder),
+                            : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
                       ),
                     );
                   }).toList(),
@@ -244,9 +241,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -287,9 +282,7 @@ class _EmailFiltersScreenState extends ConsumerState<EmailFiltersScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                ...EmailType.values
-                    .where((type) => type != EmailType.other)
-                    .map((type) {
+                ...EmailType.values.where((type) => type != EmailType.other).map((type) {
                   final isSelected = _emailTypes.contains(type);
                   String label;
                   IconData icon;

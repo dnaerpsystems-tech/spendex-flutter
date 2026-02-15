@@ -66,5 +66,12 @@ class NetWorthResponse extends Equatable {
   bool get isPositiveGrowth => netWorthGrowthPercentage != null && netWorthGrowthPercentage! > 0;
 
   @override
-  List<Object?> get props => [history, currentAssets, currentLiabilities, currentNetWorth, netWorthGrowth, netWorthGrowthPercentage];
+  List<Object?> get props => [
+        history,
+        currentAssets,
+        currentLiabilities,
+        currentNetWorth,
+        netWorthGrowth,
+        netWorthGrowthPercentage,
+      ];
 }

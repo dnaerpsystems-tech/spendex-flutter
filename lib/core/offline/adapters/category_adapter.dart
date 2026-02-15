@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import '../../../features/categories/data/models/category_model.dart';
+
 import '../../../core/constants/app_constants.dart';
+import '../../../features/categories/data/models/category_model.dart';
 
 /// Hive TypeAdapter for CategoryModel
 class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
@@ -13,7 +14,7 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    
+
     return CategoryModel(
       id: fields[0] as String,
       name: fields[1] as String,
@@ -60,9 +61,7 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CategoryModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CategoryModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 /// Hive TypeAdapter for CategoryType enum
@@ -86,7 +85,5 @@ class CategoryTypeAdapter extends TypeAdapter<CategoryType> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CategoryTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CategoryTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

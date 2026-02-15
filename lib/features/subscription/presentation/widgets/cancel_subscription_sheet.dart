@@ -14,12 +14,11 @@ class CancelSubscriptionSheet extends StatefulWidget {
   });
 
   final SubscriptionModel subscription;
-  final void Function(String reason, bool cancelImmediately)? onCancel;
+  final void Function(String reason, {required bool cancelImmediately})? onCancel;
   final bool isLoading;
 
   @override
-  State<CancelSubscriptionSheet> createState() =>
-      _CancelSubscriptionSheetState();
+  State<CancelSubscriptionSheet> createState() => _CancelSubscriptionSheetState();
 }
 
 class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
@@ -40,7 +39,7 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: const BorderRadius.vertical(
@@ -55,9 +54,7 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
             height: 4,
             margin: const EdgeInsets.only(top: SpendexTheme.spacingMd),
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
             ),
           ),
@@ -73,9 +70,8 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: SpendexColors.expense.withOpacity(0.1),
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusSm),
+                          color: SpendexColors.expense.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         ),
                         child: const Icon(
                           Iconsax.warning_2,
@@ -97,7 +93,7 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                               ),
                             ),
                             Text(
-                              'We\'re sorry to see you go',
+                              "We're sorry to see you go",
                               style: SpendexTheme.bodySmall.copyWith(
                                 color: isDark
                                     ? SpendexColors.darkTextSecondary
@@ -113,11 +109,10 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                   Container(
                     padding: const EdgeInsets.all(SpendexTheme.spacingLg),
                     decoration: BoxDecoration(
-                      color: SpendexColors.warning.withOpacity(0.1),
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusMd),
+                      color: SpendexColors.warning.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                       border: Border.all(
-                        color: SpendexColors.warning.withOpacity(0.3),
+                        color: SpendexColors.warning.withValues(alpha: 0.3),
                       ),
                     ),
                     child: Row(
@@ -144,9 +139,8 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                   Text(
                     'Why are you cancelling?',
                     style: SpendexTheme.titleMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                   const SizedBox(height: SpendexTheme.spacingMd),
@@ -163,10 +157,8 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                             _selectedReason = selected ? reason : null;
                           });
                         },
-                        selectedColor: SpendexColors.primary.withOpacity(0.2),
-                        backgroundColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        selectedColor: SpendexColors.primary.withValues(alpha: 0.2),
+                        backgroundColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                         side: BorderSide(
                           color: isSelected
                               ? SpendexColors.primary
@@ -188,15 +180,10 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                   Container(
                     padding: const EdgeInsets.all(SpendexTheme.spacingMd),
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? SpendexColors.darkCard
-                          : SpendexColors.lightCard,
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusMd),
+                      color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                       border: Border.all(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       ),
                     ),
                     child: Row(
@@ -229,57 +216,55 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                           onChanged: (value) {
                             setState(() => _cancelImmediately = value);
                           },
-                          activeColor: SpendexColors.expense,
+                          activeThumbColor: SpendexColors.expense,
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: SpendexTheme.spacing2xl),
                   Text(
-                    'Features you\'ll lose',
+                    "Features you'll lose",
                     style: SpendexTheme.titleMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                   const SizedBox(height: SpendexTheme.spacingMd),
-                  ...widget.subscription.plan.features.take(5).map(
-                        (feature) => Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: SpendexTheme.spacingSm,
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color:
-                                      SpendexColors.expense.withOpacity(0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Iconsax.close_circle5,
-                                  size: 14,
-                                  color: SpendexColors.expense,
-                                ),
-                              ),
-                              const SizedBox(width: SpendexTheme.spacingSm),
-                              Expanded(
-                                child: Text(
-                                  feature,
-                                  style: SpendexTheme.bodySmall.copyWith(
-                                    color: isDark
-                                        ? SpendexColors.darkTextSecondary
-                                        : SpendexColors.lightTextSecondary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                  ...(widget.subscription.plan?.features.take(5) ?? []).map(
+                    (feature) => Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: SpendexTheme.spacingSm,
                       ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: SpendexColors.expense.withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Iconsax.close_circle5,
+                              size: 14,
+                              color: SpendexColors.expense,
+                            ),
+                          ),
+                          const SizedBox(width: SpendexTheme.spacingSm),
+                          Expanded(
+                            child: Text(
+                              feature,
+                              style: SpendexTheme.bodySmall.copyWith(
+                                color: isDark
+                                    ? SpendexColors.darkTextSecondary
+                                    : SpendexColors.lightTextSecondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: SpendexTheme.spacing2xl),
                   Row(
                     children: [
@@ -291,9 +276,7 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                                 ? SpendexColors.darkTextPrimary
                                 : SpendexColors.lightTextPrimary,
                             side: BorderSide(
-                              color: isDark
-                                  ? SpendexColors.darkBorder
-                                  : SpendexColors.lightBorder,
+                              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                             ),
                             minimumSize: const Size(0, 48),
                           ),
@@ -308,7 +291,7 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
                               : () {
                                   widget.onCancel?.call(
                                     _selectedReason ?? '',
-                                    _cancelImmediately,
+                                    cancelImmediately: _cancelImmediately,
                                   );
                                 },
                           style: ElevatedButton.styleFrom(
@@ -347,7 +330,7 @@ class _CancelSubscriptionSheetState extends State<CancelSubscriptionSheet> {
 Future<void> showCancelSubscriptionSheet(
   BuildContext context, {
   required SubscriptionModel subscription,
-  void Function(String reason, bool cancelImmediately)? onCancel,
+  void Function(String reason, {required bool cancelImmediately})? onCancel,
   bool isLoading = false,
 }) {
   return showModalBottomSheet<void>(

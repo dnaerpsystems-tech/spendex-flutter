@@ -271,8 +271,7 @@ class ReceiptParserService {
       }
 
       // Stop at total
-      if (RegExp('total|subtotal|amount', caseSensitive: false)
-          .hasMatch(trimmed)) {
+      if (RegExp('total|subtotal|amount', caseSensitive: false).hasMatch(trimmed)) {
         break;
       }
 
@@ -317,7 +316,9 @@ class ReceiptParserService {
 
   bool _isAllCaps(String text) {
     final letters = text.replaceAll(RegExp('[^a-zA-Z]'), '');
-    if (letters.isEmpty) return false;
+    if (letters.isEmpty) {
+      return false;
+    }
     return letters == letters.toUpperCase() && letters.length >= 3;
   }
 
@@ -337,7 +338,9 @@ class ReceiptParserService {
 
   String _toTitleCase(String text) {
     return text.split(' ').map((word) {
-      if (word.isEmpty) return word;
+      if (word.isEmpty) {
+        return word;
+      }
       return word[0].toUpperCase() + word.substring(1).toLowerCase();
     }).join(' ');
   }

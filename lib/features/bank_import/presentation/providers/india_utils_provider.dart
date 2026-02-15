@@ -11,8 +11,7 @@ final indiaUtilsRepositoryProvider = Provider<IndiaUtilsRepository>((ref) {
 
 /// Provider for IFSC lookup
 /// Returns IfscDetailsModel for a given IFSC code
-final ifscLookupProvider =
-    FutureProvider.family<IfscDetailsModel?, String>((ref, ifscCode) async {
+final ifscLookupProvider = FutureProvider.family<IfscDetailsModel?, String>((ref, ifscCode) async {
   if (ifscCode.isEmpty || ifscCode.length != 11) {
     return null;
   }
@@ -28,8 +27,7 @@ final ifscLookupProvider =
 
 /// Provider for UPI validation
 /// Returns true if UPI ID is valid
-final upiValidationProvider =
-    FutureProvider.family<bool, String>((ref, upiId) async {
+final upiValidationProvider = FutureProvider.family<bool, String>((ref, upiId) async {
   if (upiId.isEmpty || !upiId.contains('@')) {
     return false;
   }
@@ -45,8 +43,7 @@ final upiValidationProvider =
 
 /// Provider for payment methods
 /// Returns list of available payment methods
-final paymentMethodsProvider =
-    FutureProvider<List<PaymentMethod>>((ref) async {
+final paymentMethodsProvider = FutureProvider<List<PaymentMethod>>((ref) async {
   final repository = ref.watch(indiaUtilsRepositoryProvider);
   final result = await repository.getPaymentMethods();
 

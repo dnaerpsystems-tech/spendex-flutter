@@ -5,6 +5,8 @@ enum Environment { development, staging, production }
 
 /// Environment configuration class
 class EnvironmentConfig {
+  EnvironmentConfig._();
+
   static Environment current = Environment.production;
 
   /// Get the API base URL based on current environment
@@ -38,6 +40,11 @@ class EnvironmentConfig {
       case Environment.production:
         return 'Spendex';
     }
+  }
+
+  /// Razorpay API key based on environment
+  static String get razorpayKey {
+    return dotenv.maybeGet('RAZORPAY_KEY') ?? 'rzp_test_default_key';
   }
 
   /// Initialize environment from dotenv or string

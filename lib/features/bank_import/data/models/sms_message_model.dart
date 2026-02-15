@@ -8,7 +8,6 @@ enum ParseStatus {
 }
 
 class SmsMessageModel extends Equatable {
-
   const SmsMessageModel({
     required this.id,
     required this.sender,

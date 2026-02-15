@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// Robot pattern for transaction testing
 class TransactionRobot {
-  final WidgetTester tester;
   
   TransactionRobot(this.tester);
+  final WidgetTester tester;
   
   Future<void> navigateToTransactions() async {
     final transactionsTab = find.byIcon(Icons.receipt_long);

@@ -16,11 +16,10 @@ abstract class SmsParserRemoteDataSource {
 
   Future<Either<Failure, List<BankConfigModel>>> getBankConfigs();
 
-  Future<Either<Failure, bool>> toggleSmsTracking(bool enabled);
+  Future<Either<Failure, bool>> toggleSmsTracking({required bool enabled});
 }
 
 class SmsParserRemoteDataSourceImpl implements SmsParserRemoteDataSource {
-
   SmsParserRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -36,9 +35,11 @@ class SmsParserRemoteDataSourceImpl implements SmsParserRemoteDataSource {
       fromJson: (json) {
         final list = json! as List<dynamic>;
         return list
-            .map((e) => SmsMessageModel.fromJson(
-                  e as Map<String, dynamic>,
-                ),)
+            .map(
+              (e) => SmsMessageModel.fromJson(
+                e as Map<String, dynamic>,
+              ),
+            )
             .toList();
       },
     );
@@ -54,7 +55,9 @@ class SmsParserRemoteDataSourceImpl implements SmsParserRemoteDataSource {
         'transactions': transactions.map((t) => t.toJson()).toList(),
       },
       fromJson: (json) {
-        if (json is int) return json;
+        if (json is int) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return (json['count'] as num?)?.toInt() ?? 0;
         }
@@ -70,21 +73,25 @@ class SmsParserRemoteDataSourceImpl implements SmsParserRemoteDataSource {
       fromJson: (json) {
         final list = json! as List<dynamic>;
         return list
-            .map((e) => BankConfigModel.fromJson(
-                  e as Map<String, dynamic>,
-                ),)
+            .map(
+              (e) => BankConfigModel.fromJson(
+                e as Map<String, dynamic>,
+              ),
+            )
             .toList();
       },
     );
   }
 
   @override
-  Future<Either<Failure, bool>> toggleSmsTracking(bool enabled) async {
+  Future<Either<Failure, bool>> toggleSmsTracking({required bool enabled}) async {
     return _apiClient.put<bool>(
       '/sms/tracking',
       data: {'enabled': enabled},
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['enabled'] as bool? ?? false;
         }

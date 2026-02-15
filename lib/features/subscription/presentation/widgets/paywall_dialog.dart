@@ -1,10 +1,8 @@
-import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:go_router/go_router.dart";
-import "package:iconsax/iconsax.dart";
-import "../../../../app/routes.dart";
-import "../../../../core/services/paywall_service.dart";
-import "../../data/models/subscription_models.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import '../../../../app/routes.dart';
+import '../../../../core/services/paywall_service.dart';
 
 /// A dialog that prompts users to upgrade their subscription.
 ///
@@ -13,9 +11,9 @@ import "../../data/models/subscription_models.dart";
 class PaywallDialog extends StatelessWidget {
   /// Creates a new [PaywallDialog].
   const PaywallDialog({
-    super.key,
     required this.feature,
     required this.gateResult,
+    super.key,
     this.title,
     this.description,
   });
@@ -42,7 +40,6 @@ class PaywallDialog extends StatelessWidget {
   }) {
     return showDialog<bool>(
       context: context,
-      barrierDismissible: true,
       builder: (context) => PaywallDialog(
         feature: feature,
         gateResult: gateResult,
@@ -54,9 +51,9 @@ class PaywallDialog extends StatelessWidget {
 
   String _getDefaultTitle() {
     if (gateResult.isAtLimit) {
-      return "Limit Reached";
+      return 'Limit Reached';
     }
-    return "Upgrade Required";
+    return 'Upgrade Required';
   }
 
   String _getDefaultDescription() {
@@ -64,8 +61,8 @@ class PaywallDialog extends StatelessWidget {
       return gateResult.message!;
     }
 
-    final planName = gateResult.requiredPlan?.name ?? "Pro";
-    return "Upgrade to $planName to unlock this feature and get access to premium capabilities.";
+    final planName = gateResult.requiredPlan?.name ?? 'Pro';
+    return 'Upgrade to $planName to unlock this feature and get access to premium capabilities.';
   }
 
   IconData _getFeatureIcon() {
@@ -104,26 +101,26 @@ class PaywallDialog extends StatelessWidget {
   }
 
   List<String> _getPlanBenefits() {
-    final plan = gateResult.requiredPlan ?? SubscriptionPlan.pro;
+    final plan = gateResult.requiredPlan ?? PaywallService.planPro;
 
-    if (plan == SubscriptionPlan.premium) {
+    if (plan == PaywallService.planPremium) {
       return [
-        "Unlimited accounts, budgets & goals",
-        "Advanced AI-powered insights",
-        "Family sharing with up to 6 members",
-        "Priority support",
-        "Tax reports & export",
-        "All Pro features included",
+        'Unlimited accounts, budgets & goals',
+        'Advanced AI-powered insights',
+        'Family sharing with up to 6 members',
+        'Priority support',
+        'Tax reports & export',
+        'All Pro features included',
       ];
     }
 
     return [
-      "Up to 10 accounts, 10 budgets & 5 goals",
-      "AI-powered spending insights",
-      "Receipt scanning & voice input",
-      "Bank account aggregation",
-      "Investment & loan tracking",
-      "Export reports to PDF/CSV",
+      'Up to 10 accounts, 10 budgets & 5 goals',
+      'AI-powered spending insights',
+      'Receipt scanning & voice input',
+      'Bank account aggregation',
+      'Investment & loan tracking',
+      'Export reports to PDF/CSV',
     ];
   }
 
@@ -131,9 +128,8 @@ class PaywallDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
-    final planName = gateResult.requiredPlan?.name ?? "Pro";
+    final planName = gateResult.requiredPlan?.name ?? 'Pro';
     final isLimit = gateResult.isAtLimit;
 
     return Dialog(
@@ -165,7 +161,7 @@ class PaywallDialog extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: gateResult.requiredPlan == SubscriptionPlan.premium
+                    colors: gateResult.requiredPlan == PaywallService.planPremium
                         ? [
                             const Color(0xFFB8860B),
                             const Color(0xFFDAA520),
@@ -242,7 +238,7 @@ class PaywallDialog extends StatelessWidget {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            "You are using ${gateResult.currentCount} of ${gateResult.limit}",
+                            'You are using ${gateResult.currentCount} of ${gateResult.limit}',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: colorScheme.error,
                             ),
@@ -260,39 +256,41 @@ class PaywallDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "$planName includes:",
+                      '$planName includes:',
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ..._getPlanBenefits().map((benefit) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: colorScheme.primaryContainer,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Iconsax.tick_circle,
-                                  color: colorScheme.primary,
-                                  size: 16,
-                                ),
+                    ..._getPlanBenefits().map(
+                      (benefit) => Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: colorScheme.primaryContainer,
+                                shape: BoxShape.circle,
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  benefit,
-                                  style: theme.textTheme.bodyMedium,
-                                ),
+                              child: Icon(
+                                Iconsax.tick_circle,
+                                color: colorScheme.primary,
+                                size: 16,
                               ),
-                            ],
-                          ),
-                        )),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                benefit,
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -311,7 +309,7 @@ class PaywallDialog extends StatelessWidget {
                           context.push(AppRoutes.subscriptionPlans);
                         },
                         icon: const Icon(Iconsax.crown),
-                        label: Text("Upgrade to $planName"),
+                        label: Text('Upgrade to $planName'),
                         style: FilledButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
@@ -329,7 +327,7 @@ class PaywallDialog extends StatelessWidget {
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        child: const Text("Maybe Later"),
+                        child: const Text('Maybe Later'),
                       ),
                     ),
                   ],
@@ -346,9 +344,9 @@ class PaywallDialog extends StatelessWidget {
 /// A compact paywall banner for inline display.
 class PaywallBanner extends StatelessWidget {
   const PaywallBanner({
-    super.key,
     required this.feature,
     required this.gateResult,
+    super.key,
     this.onUpgrade,
     this.compact = false,
   });
@@ -380,7 +378,7 @@ class PaywallBanner extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              gateResult.requiredPlan?.name ?? "Pro",
+              gateResult.requiredPlan?.name ?? 'Pro',
               style: theme.textTheme.labelSmall?.copyWith(
                 color: colorScheme.primary,
                 fontWeight: FontWeight.bold,
@@ -425,14 +423,14 @@ class PaywallBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  gateResult.message ?? "Upgrade to unlock",
+                  gateResult.message ?? 'Upgrade to unlock',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 if (gateResult.isAtLimit)
                   Text(
-                    "${gateResult.currentCount}/${gateResult.limit} used",
+                    '${gateResult.currentCount}/${gateResult.limit} used',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
@@ -442,7 +440,7 @@ class PaywallBanner extends StatelessWidget {
           ),
           TextButton(
             onPressed: onUpgrade ?? () => context.push(AppRoutes.subscriptionPlans),
-            child: const Text("Upgrade"),
+            child: const Text('Upgrade'),
           ),
         ],
       ),

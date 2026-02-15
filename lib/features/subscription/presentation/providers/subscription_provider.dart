@@ -154,30 +154,44 @@ class SubscriptionState extends Equatable {
 
   /// Check if user has an active subscription
   bool get hasActiveSubscription {
-    if (currentSubscription == null) return false;
+    if (currentSubscription == null) {
+      return false;
+    }
     return currentSubscription!.isActive || currentSubscription!.isTrialing;
   }
 
   /// Check if user is on the free plan
   bool get isOnFreePlan {
-    if (currentSubscription == null) return true;
+    if (currentSubscription == null) {
+      return true;
+    }
     return currentSubscription!.plan?.isFree ?? true;
   }
 
   /// Check if user is on a trial period
   bool get isOnTrial {
-    if (currentSubscription == null) return false;
+    if (currentSubscription == null) {
+      return false;
+    }
     return currentSubscription!.isTrialing;
   }
 
   /// Check if user can upgrade their subscription
   bool get canUpgrade {
-    if (currentSubscription == null) return true;
-    if (hasActiveSubscription == false) return true;
-    if (selectedPlan == null) return false;
+    if (currentSubscription == null) {
+      return true;
+    }
+    if (hasActiveSubscription == false) {
+      return true;
+    }
+    if (selectedPlan == null) {
+      return false;
+    }
 
     final currentPlan = currentSubscription!.plan;
-    if (currentPlan == null) return true;
+    if (currentPlan == null) {
+      return true;
+    }
 
     // Can upgrade if selected plan price is higher
     return selectedPlan!.monthlyEquivalentPrice > currentPlan.monthlyEquivalentPrice;
@@ -185,31 +199,46 @@ class SubscriptionState extends Equatable {
 
   /// Check if user can downgrade their subscription
   bool get canDowngrade {
-    if (currentSubscription == null) return false;
-    if (hasActiveSubscription == false) return false;
-    if (selectedPlan == null) return false;
+    if (currentSubscription == null) {
+      return false;
+    }
+    if (hasActiveSubscription == false) {
+      return false;
+    }
+    if (selectedPlan == null) {
+      return false;
+    }
 
     final currentPlan = currentSubscription!.plan;
-    if (currentPlan == null) return false;
+    if (currentPlan == null) {
+      return false;
+    }
 
     // Can downgrade if selected plan price is lower but not free
     return selectedPlan!.monthlyEquivalentPrice < currentPlan.monthlyEquivalentPrice &&
-           selectedPlan!.isFree == false;
+        selectedPlan!.isFree == false;
   }
 
   /// Check if user can cancel their subscription
   bool get canCancel {
-    if (currentSubscription == null) return false;
-    if (hasActiveSubscription == false) return false;
-    if (currentSubscription!.cancelAtPeriodEnd) return false;
+    if (currentSubscription == null) {
+      return false;
+    }
+    if (hasActiveSubscription == false) {
+      return false;
+    }
+    if (currentSubscription!.cancelAtPeriodEnd) {
+      return false;
+    }
     return true;
   }
 
   /// Check if user can resume a cancelled subscription
   bool get canResume {
-    if (currentSubscription == null) return false;
-    return currentSubscription!.cancelAtPeriodEnd &&
-           currentSubscription!.isValid;
+    if (currentSubscription == null) {
+      return false;
+    }
+    return currentSubscription!.cancelAtPeriodEnd && currentSubscription!.isValid;
   }
 
   /// Get current plan name
@@ -222,7 +251,9 @@ class SubscriptionState extends Equatable {
 
   /// Get subscription status text for display
   String get subscriptionStatusText {
-    if (currentSubscription == null) return 'No subscription';
+    if (currentSubscription == null) {
+      return 'No subscription';
+    }
     return currentSubscription!.statusMessage;
   }
 
@@ -254,13 +285,17 @@ class SubscriptionState extends Equatable {
 
   /// Calculate price difference for upgrade
   int get upgradePriceDifference {
-    if (selectedPlan == null || currentSubscription?.plan == null) return 0;
+    if (selectedPlan == null || currentSubscription?.plan == null) {
+      return 0;
+    }
     return selectedPlan!.price - currentSubscription!.plan!.price;
   }
 
   /// Calculate prorated amount for upgrade (remaining days)
   double get proratedUpgradeAmount {
-    if (currentSubscription == null || selectedPlan == null) return 0;
+    if (currentSubscription == null || selectedPlan == null) {
+      return 0;
+    }
     final daysRemaining = currentSubscription!.daysRemaining;
     final dailyRate = upgradePriceDifference / 30;
     return (dailyRate * daysRemaining) / 100;
@@ -301,37 +336,30 @@ class SubscriptionState extends Equatable {
   }) {
     return SubscriptionState(
       plans: plans ?? this.plans,
-      currentSubscription: clearCurrentSubscription
-          ? null
-          : (currentSubscription ?? this.currentSubscription),
+      currentSubscription:
+          clearCurrentSubscription ? null : (currentSubscription ?? this.currentSubscription),
       usage: usage ?? this.usage,
       invoices: invoices ?? this.invoices,
       paymentMethods: paymentMethods ?? this.paymentMethods,
-      checkoutSession: clearCheckoutSession
-          ? null
-          : (checkoutSession ?? this.checkoutSession),
+      checkoutSession: clearCheckoutSession ? null : (checkoutSession ?? this.checkoutSession),
       upiSession: clearUpiSession ? null : (upiSession ?? this.upiSession),
       isLoadingPlans: isLoadingPlans ?? this.isLoadingPlans,
-      isLoadingSubscription:
-          isLoadingSubscription ?? this.isLoadingSubscription,
+      isLoadingSubscription: isLoadingSubscription ?? this.isLoadingSubscription,
       isLoadingUsage: isLoadingUsage ?? this.isLoadingUsage,
       isLoadingInvoices: isLoadingInvoices ?? this.isLoadingInvoices,
-      isLoadingPaymentMethods:
-          isLoadingPaymentMethods ?? this.isLoadingPaymentMethods,
+      isLoadingPaymentMethods: isLoadingPaymentMethods ?? this.isLoadingPaymentMethods,
       isCheckingOut: isCheckingOut ?? this.isCheckingOut,
       isVerifyingPayment: isVerifyingPayment ?? this.isVerifyingPayment,
       isUpgrading: isUpgrading ?? this.isUpgrading,
       isDowngrading: isDowngrading ?? this.isDowngrading,
       isCancelling: isCancelling ?? this.isCancelling,
       isResuming: isResuming ?? this.isResuming,
-      selectedPlan:
-          clearSelectedPlan ? null : (selectedPlan ?? this.selectedPlan),
+      selectedPlan: clearSelectedPlan ? null : (selectedPlan ?? this.selectedPlan),
       selectedBillingCycle: selectedBillingCycle ?? this.selectedBillingCycle,
       invoicesPage: invoicesPage ?? this.invoicesPage,
       hasMoreInvoices: hasMoreInvoices ?? this.hasMoreInvoices,
       error: clearError ? null : (error ?? this.error),
-      successMessage:
-          clearSuccessMessage ? null : (successMessage ?? this.successMessage),
+      successMessage: clearSuccessMessage ? null : (successMessage ?? this.successMessage),
     );
   }
 
@@ -374,8 +402,7 @@ class SubscriptionState extends Equatable {
 /// plan selection, checkout, payment verification, upgrades, downgrades,
 /// cancellations, and invoice management.
 class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
-  SubscriptionNotifier(this._repository)
-      : super(const SubscriptionState.initial());
+  SubscriptionNotifier(this._repository) : super(const SubscriptionState.initial());
 
   final SubscriptionRepository _repository;
 
@@ -386,7 +413,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// Fetches all available subscription plans from the API.
   /// Sets [isLoadingPlans] to true during the operation.
   Future<void> loadPlans() async {
-    if (state.isLoadingPlans) return;
+    if (state.isLoadingPlans) {
+      return;
+    }
 
     state = state.copyWith(isLoadingPlans: true, clearError: true);
 
@@ -413,7 +442,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// Fetches the current user's subscription details.
   /// Returns null subscription if user has no active subscription.
   Future<void> loadSubscription() async {
-    if (state.isLoadingSubscription) return;
+    if (state.isLoadingSubscription) {
+      return;
+    }
 
     state = state.copyWith(isLoadingSubscription: true, clearError: true);
 
@@ -422,8 +453,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     result.fold(
       (failure) {
         // No subscription is a valid state, not an error
-        if (failure.code == 'NOT_FOUND' ||
-            failure.code == 'SUBSCRIPTION_NOT_FOUND') {
+        if (failure.code == 'NOT_FOUND' || failure.code == 'SUBSCRIPTION_NOT_FOUND') {
           state = state.copyWith(
             isLoadingSubscription: false,
             clearCurrentSubscription: true,
@@ -448,7 +478,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   ///
   /// Fetches the user's current feature usage against their plan limits.
   Future<void> loadUsage() async {
-    if (state.isLoadingUsage) return;
+    if (state.isLoadingUsage) {
+      return;
+    }
 
     state = state.copyWith(isLoadingUsage: true, clearError: true);
 
@@ -475,7 +507,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// Fetches the user's invoice history with pagination.
   /// Set [refresh] to true to reload from the first page.
   Future<void> loadInvoices({bool refresh = false}) async {
-    if (state.isLoadingInvoices) return;
+    if (state.isLoadingInvoices) {
+      return;
+    }
 
     final page = refresh ? 1 : state.invoicesPage;
 
@@ -495,9 +529,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         );
       },
       (response) {
-        final newInvoices = refresh
-            ? response.invoices
-            : [...state.invoices, ...response.invoices];
+        final newInvoices = refresh ? response.invoices : [...state.invoices, ...response.invoices];
 
         state = state.copyWith(
           isLoadingInvoices: false,
@@ -513,7 +545,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   ///
   /// Fetches all saved payment methods for the user.
   Future<void> loadPaymentMethods() async {
-    if (state.isLoadingPaymentMethods) return;
+    if (state.isLoadingPaymentMethods) {
+      return;
+    }
 
     state = state.copyWith(isLoadingPaymentMethods: true, clearError: true);
 
@@ -558,7 +592,17 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     );
   }
 
+  /// Set billing cycle (alias for selectBillingCycle)
+  void setBillingCycle(BillingCycle cycle) {
+    selectBillingCycle(cycle);
+  }
+
   // ==================== Checkout & Payment Methods ====================
+
+  /// Create checkout session (alias for startCheckout)
+  Future<CheckoutResponse?> createCheckout(PaymentMethodType paymentMethod) async {
+    return startCheckout(paymentMethod);
+  }
 
   /// Start checkout process for a new subscription
   ///
@@ -569,7 +613,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// - A plan is selected
   /// - Selected plan is not free
   Future<CheckoutResponse?> startCheckout(PaymentMethodType paymentMethod) async {
-    if (state.isCheckingOut) return null;
+    if (state.isCheckingOut) {
+      return null;
+    }
 
     // Validate plan selection
     if (state.selectedPlan == null) {
@@ -624,7 +670,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// - Clears checkout session and selected plan
   /// - Sets success message
   Future<bool> verifyPayment(PaymentVerificationRequest request) async {
-    if (state.isVerifyingPayment) return false;
+    if (state.isVerifyingPayment) {
+      return false;
+    }
 
     state = state.copyWith(isVerifyingPayment: true, clearError: true);
 
@@ -661,7 +709,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// - VPA contains @ symbol
   /// - Checkout session exists
   Future<UpiCreateResponse?> createUpiPayment(String vpa) async {
-    if (state.isCheckingOut) return null;
+    if (state.isCheckingOut) {
+      return null;
+    }
 
     if (vpa.trim().isEmpty) {
       state = state.copyWith(error: 'Please enter a valid UPI ID');
@@ -711,7 +761,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// Verifies UPI payment using the transaction ID.
   /// Returns true on successful verification, false otherwise.
   Future<bool> verifyUpiPayment(String transactionId) async {
-    if (state.isVerifyingPayment) return false;
+    if (state.isVerifyingPayment) {
+      return false;
+    }
 
     if (transactionId.trim().isEmpty) {
       state = state.copyWith(error: 'Invalid transaction ID');
@@ -756,7 +808,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// - User can upgrade (selected plan is higher tier)
   /// - Not already on the selected plan
   Future<CheckoutResponse?> upgradeSubscription() async {
-    if (state.isUpgrading) return null;
+    if (state.isUpgrading) {
+      return null;
+    }
 
     // Validate plan selection
     if (state.selectedPlan == null) {
@@ -814,7 +868,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// - User has active subscription
   /// - Target plan is lower tier
   Future<bool> downgradeSubscription(String planId) async {
-    if (state.isDowngrading) return false;
+    if (state.isDowngrading) {
+      return false;
+    }
 
     if (planId.isEmpty) {
       state = state.copyWith(error: 'Invalid plan ID');
@@ -887,7 +943,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     String? reason,
     bool isFamilyOwner = false,
   }) async {
-    if (state.isCancelling) return false;
+    if (state.isCancelling) {
+      return false;
+    }
 
     // Validate cancellation eligibility
     if (state.canCancel == false) {
@@ -900,7 +958,8 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     // Prevent family owners from cancelling (they must transfer ownership first)
     if (isFamilyOwner) {
       state = state.copyWith(
-        error: 'Family owners cannot cancel subscription. Please transfer ownership first or remove all family members.',
+        error:
+            'Family owners cannot cancel subscription. Please transfer ownership first or remove all family members.',
       );
       return false;
     }
@@ -947,7 +1006,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// - Subscription is scheduled for cancellation
   /// - Subscription is still valid (not yet expired)
   Future<bool> resumeSubscription() async {
-    if (state.isResuming) return false;
+    if (state.isResuming) {
+      return false;
+    }
 
     // Validate resume eligibility
     if (state.canResume == false) {
@@ -974,6 +1035,48 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
           isResuming: false,
           currentSubscription: subscription,
           successMessage: 'Your subscription has been resumed',
+        );
+        return true;
+      },
+    );
+  }
+
+  // ==================== Payment Method Methods ====================
+
+  /// Set a payment method as default
+  ///
+  /// Updates the default payment method for the user.
+  /// Returns true on success, false otherwise.
+  Future<bool> setDefaultPaymentMethod(String paymentMethodId) async {
+    if (paymentMethodId.isEmpty) {
+      state = state.copyWith(error: 'Invalid payment method ID');
+      return false;
+    }
+
+    state = state.copyWith(isLoadingPaymentMethods: true, clearError: true);
+
+    final result = await _repository.setDefaultPaymentMethod(paymentMethodId);
+
+    return result.fold(
+      (failure) {
+        state = state.copyWith(
+          isLoadingPaymentMethods: false,
+          error: failure.message,
+        );
+        return false;
+      },
+      (_) {
+        // Update local state
+        final updatedMethods = state.paymentMethods.map((method) {
+          return method.copyWith(
+            isDefault: method.id == paymentMethodId,
+          );
+        }).toList();
+
+        state = state.copyWith(
+          isLoadingPaymentMethods: false,
+          paymentMethods: updatedMethods,
+          successMessage: 'Default payment method updated',
         );
         return true;
       },
@@ -1008,10 +1111,45 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// Fetches the next page of invoices if available.
   /// Does nothing if already loading or no more pages.
   Future<void> loadMoreInvoices() async {
-    if (state.hasMoreInvoices == false || state.isLoadingInvoices) return;
+    if (state.hasMoreInvoices == false || state.isLoadingInvoices) {
+      return;
+    }
 
     state = state.copyWith(invoicesPage: state.invoicesPage + 1);
     await loadInvoices();
+  }
+
+  /// Refresh invoices (alias for loadInvoices with refresh=true)
+  Future<void> refreshInvoices() async {
+    await loadInvoices(refresh: true);
+  }
+
+  /// Check payment status for a transaction
+  ///
+  /// Polls the payment status for a specific transaction ID.
+  /// Returns true if payment is complete, false otherwise.
+  Future<bool> checkPaymentStatus(String transactionId) async {
+    if (transactionId.isEmpty) {
+      state = state.copyWith(error: 'Invalid transaction ID');
+      return false;
+    }
+
+    final result = await _repository.checkPaymentStatus(transactionId);
+
+    return result.fold(
+      (failure) {
+        state = state.copyWith(error: failure.message);
+        return false;
+      },
+      (status) {
+        // If payment is successful, update subscription
+        if (status == 'SUCCESS' || status == 'PAID') {
+          loadSubscription();
+          return true;
+        }
+        return false;
+      },
+    );
   }
 
   // ==================== Utility Methods ====================
@@ -1042,6 +1180,34 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   /// Removes the current success message from state.
   void clearSuccessMessage() {
     state = state.copyWith(clearSuccessMessage: true);
+  }
+
+  /// Clear all messages (errors and success)
+  ///
+  /// Removes both error and success messages from state.
+  void clearMessages() {
+    state = state.copyWith(
+      clearError: true,
+      clearSuccessMessage: true,
+    );
+  }
+
+  /// Downgrade to free plan
+  ///
+  /// Cancels the current subscription and returns to the free plan.
+  /// Returns true on success, false otherwise.
+  Future<bool> downgradeToFree() async {
+    if (state.isDowngrading) {
+      return false;
+    }
+
+    if (state.currentSubscription == null) {
+      state = state.copyWith(error: 'No active subscription to downgrade');
+      return false;
+    }
+
+    // Cancel subscription immediately to downgrade to free
+    return cancelSubscription(immediate: true, reason: 'Downgrade to free plan');
   }
 
   /// Reset state to initial

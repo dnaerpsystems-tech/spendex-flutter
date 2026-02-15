@@ -43,7 +43,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
 
   /// Load available plans
   Future<void> _loadPlans() async {
-    await ref.read(subscriptionProvider.notifier).loadPlans();
+    await ref.read(subscriptionStateProvider.notifier).loadPlans();
   }
 
   /// Handle refresh
@@ -53,12 +53,12 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
 
   /// Handle billing cycle change
   void _onBillingCycleChanged(BillingCycle cycle) {
-    ref.read(subscriptionProvider.notifier).setBillingCycle(cycle);
+    ref.read(subscriptionStateProvider.notifier).setBillingCycle(cycle);
   }
 
   /// Handle plan selection
   void _onPlanSelected(PlanModel plan) {
-    ref.read(subscriptionProvider.notifier).selectPlan(plan);
+    ref.read(subscriptionStateProvider.notifier).selectPlan(plan);
 
     // Handle free plan differently
     if (plan.isFree) {
@@ -73,11 +73,9 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
   /// Show dialog for free plan selection
   void _showFreePlanDialog(PlanModel plan) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     showDialog(
       context: context,
@@ -138,7 +136,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Iconsax.close_circle,
             size: 16,
             color: SpendexColors.expense,
@@ -155,7 +153,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
 
   /// Handle free plan selection
   Future<void> _handleFreePlanSelection() async {
-    await ref.read(subscriptionProvider.notifier).downgradeToFree();
+    await ref.read(subscriptionStateProvider.notifier).downgradeToFree();
     if (mounted) {
       context.pop();
     }
@@ -163,14 +161,13 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(subscriptionProvider);
+    final state = ref.watch(subscriptionStateProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     // Listen for success/error messages
-    ref.listen<SubscriptionState>(subscriptionProvider, (previous, next) {
-      if (next.successMessage != null &&
-          next.successMessage != previous?.successMessage) {
+    ref.listen<SubscriptionState>(subscriptionStateProvider, (previous, next) {
+      if (next.successMessage != null && next.successMessage != previous?.successMessage) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.successMessage ?? ''),
@@ -178,7 +175,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        ref.read(subscriptionProvider.notifier).clearMessages();
+        ref.read(subscriptionStateProvider.notifier).clearMessages();
       }
 
       if (next.error != null && next.error != previous?.error) {
@@ -189,7 +186,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        ref.read(subscriptionProvider.notifier).clearMessages();
+        ref.read(subscriptionStateProvider.notifier).clearMessages();
       }
     });
 
@@ -231,7 +228,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
       return const EmptyStateWidget(
         icon: Iconsax.box_1,
         title: 'No Plans Available',
-        message: 'Please check back later for available subscription plans.',
+        subtitle: 'Please check back later for available subscription plans.',
       );
     }
 
@@ -243,8 +240,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
     ThemeData theme,
     bool isDark,
   ) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     // Filter plans by selected billing cycle
     final filteredPlans = state.plans.where((plan) {
@@ -266,8 +262,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
           const SizedBox(height: SpendexTheme.spacing2xl),
 
           // Savings indicator for yearly
-          if (state.selectedBillingCycle == BillingCycle.yearly)
-            _buildSavingsBanner(isDark),
+          if (state.selectedBillingCycle == BillingCycle.yearly) _buildSavingsBanner(isDark),
 
           if (state.selectedBillingCycle == BillingCycle.yearly)
             const SizedBox(height: SpendexTheme.spacingLg),
@@ -275,13 +270,12 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
           // Plans list
           ...filteredPlans.map((plan) {
             final isCurrentPlan = plan.id == currentPlanId;
-            final isSelected = state.selectedPlan?.id == plan.id;
 
             return Padding(
               padding: const EdgeInsets.only(bottom: SpendexTheme.spacingMd),
               child: PlanCard(
                 plan: plan,
-                isSelected: isSelected,
+                billingCycle: state.selectedBillingCycle,
                 isCurrentPlan: isCurrentPlan,
                 onSelect: () => _onPlanSelected(plan),
               ),
@@ -306,13 +300,10 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
 
   /// Build billing cycle toggle
   Widget _buildBillingCycleToggle(SubscriptionState state, bool isDark) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingXs),
@@ -460,15 +451,12 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
     Color textPrimary,
     bool isDark,
   ) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
@@ -495,8 +483,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
                     padding: const EdgeInsets.all(SpendexTheme.spacingSm),
                     decoration: BoxDecoration(
                       color: SpendexColors.primary.withValues(alpha: 0.1),
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusSm),
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                     ),
                     child: const Icon(
                       Iconsax.diagram,
@@ -550,9 +537,8 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
                 ),
               ],
             ),
-            crossFadeState: _isComparisonExpanded
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
+            crossFadeState:
+                _isComparisonExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
             duration: const Duration(milliseconds: 300),
           ),
         ],
@@ -562,16 +548,15 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
 
   /// Build money-back guarantee section
   Widget _buildGuaranteeSection(bool isDark) {
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Iconsax.shield_tick,
               color: SpendexColors.primary,
               size: 24,
@@ -588,7 +573,7 @@ class _PlansScreenState extends ConsumerState<PlansScreen> {
         ),
         const SizedBox(height: SpendexTheme.spacingSm),
         Text(
-          'Try any plan risk-free. If you\'re not satisfied within 7 days, we\'ll refund your payment.',
+          "Try any plan risk-free. If you're not satisfied within 7 days, we'll refund your payment.",
           textAlign: TextAlign.center,
           style: SpendexTheme.bodySmall.copyWith(
             color: textSecondary,

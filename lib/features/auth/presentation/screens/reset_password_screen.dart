@@ -37,8 +37,7 @@ class ResetPasswordScreen extends ConsumerStatefulWidget {
   final String token;
 
   @override
-  ConsumerState<ResetPasswordScreen> createState() =>
-      _ResetPasswordScreenState();
+  ConsumerState<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
 class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
@@ -420,8 +419,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
     }
 
     // Check if form is dirty
-    if (_passwordController.text.isNotEmpty ||
-        _confirmPasswordController.text.isNotEmpty) {
+    if (_passwordController.text.isNotEmpty || _confirmPasswordController.text.isNotEmpty) {
       final result = await _showExitConfirmation();
       return result ?? false;
     }
@@ -437,25 +435,20 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          backgroundColor:
-              isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
+          backgroundColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           title: Text(
             'Discard Changes?',
             style: SpendexTheme.headlineMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           content: Text(
             'You have unsaved changes. Are you sure you want to leave?',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           actions: [
@@ -501,8 +494,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          backgroundColor:
-              isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
+          backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
           appBar: _isSuccess
               ? null
               : AppBar(
@@ -511,9 +503,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                   leading: IconButton(
                     icon: Icon(
                       Iconsax.arrow_left,
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                     onPressed: _isLoading
                         ? null
@@ -546,9 +537,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                       ),
                     );
                   },
-                  child: _isSuccess
-                      ? _buildSuccessView(isDark)
-                      : _buildFormView(isDark),
+                  child: _isSuccess ? _buildSuccessView(isDark) : _buildFormView(isDark),
                 ),
               ),
             ),
@@ -588,9 +577,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
               Text(
                 'Create New Password',
                 style: SpendexTheme.displayLarge.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   fontSize: 28,
                 ),
                 textAlign: TextAlign.center,
@@ -604,9 +591,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                 child: Text(
                   'Your new password must be different from previously used passwords.',
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,
@@ -619,7 +605,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: SpendexColors.primary.withValues(alpha:0.1),
+                    color: SpendexColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -699,9 +685,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
             child: Text(
               'Password Reset Successfully!',
               style: SpendexTheme.displayLarge.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 fontSize: 26,
               ),
               textAlign: TextAlign.center,
@@ -718,9 +702,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
               child: Text(
                 'Your password has been reset successfully. You can now log in with your new password.',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,
@@ -748,7 +731,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: SpendexColors.primary.withValues(alpha:0.1),
+                color: SpendexColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -783,9 +766,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
     return AnimatedBuilder(
       animation: isSuccess ? _successScaleAnimation : _iconPulseAnimation,
       builder: (context, child) {
-        final scale = isSuccess
-            ? _successScaleAnimation.value
-            : _iconPulseAnimation.value;
+        final scale = isSuccess ? _successScaleAnimation.value : _iconPulseAnimation.value;
         return Transform.scale(
           scale: scale,
           child: child,
@@ -796,14 +777,12 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
         width: 100,
         height: 100,
         decoration: BoxDecoration(
-          gradient: isSuccess
-              ? SpendexColors.incomeGradient
-              : SpendexColors.primaryGradient,
+          gradient: isSuccess ? SpendexColors.incomeGradient : SpendexColors.primaryGradient,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: (isSuccess ? SpendexColors.income : SpendexColors.primary)
-                  .withValues(alpha:0.3),
+              color:
+                  (isSuccess ? SpendexColors.income : SpendexColors.primary).withValues(alpha: 0.3),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
@@ -913,10 +892,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
         width: double.infinity,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: SpendexColors.expense.withValues(alpha:0.1),
+          color: SpendexColors.expense.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: SpendexColors.expense.withValues(alpha:0.3),
+            color: SpendexColors.expense.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
@@ -942,7 +921,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                     Text(
                       'Redirecting to forgot password...',
                       style: SpendexTheme.labelMedium.copyWith(
-                        color: SpendexColors.expense.withValues(alpha:0.8),
+                        color: SpendexColors.expense.withValues(alpha: 0.8),
                       ),
                     ),
                   ],
@@ -958,7 +937,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                 },
                 child: Icon(
                   Iconsax.close_circle,
-                  color: SpendexColors.expense.withValues(alpha:0.7),
+                  color: SpendexColors.expense.withValues(alpha: 0.7),
                   size: 18,
                 ),
               ),
@@ -991,9 +970,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
         Text(
           'Remember your password? ',
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         AuthTextButton(

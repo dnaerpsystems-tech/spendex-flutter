@@ -14,7 +14,6 @@ import '../widgets/budget_progress_bar.dart';
 /// Budget Details Screen
 /// Displays detailed budget information, progress, and spending breakdown
 class BudgetDetailsScreen extends ConsumerStatefulWidget {
-
   const BudgetDetailsScreen({required this.budgetId, super.key});
   final String budgetId;
 
@@ -84,9 +83,7 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
         content: Text(
           'Are you sure you want to delete "${budget.name}"? This action cannot be undone.',
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         actions: [
@@ -98,9 +95,8 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
             onPressed: () async {
               Navigator.pop(context);
 
-              final success = await ref
-                  .read(budgetsStateProvider.notifier)
-                  .deleteBudget(widget.budgetId);
+              final success =
+                  await ref.read(budgetsStateProvider.notifier).deleteBudget(widget.budgetId);
 
               if (context.mounted) {
                 if (success) {
@@ -141,9 +137,7 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
     final budget = budgetsState.selectedBudget;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Budget Details'),
         centerTitle: true,
@@ -279,9 +273,7 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
               Text(
                 'Spending Progress',
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               Container(
@@ -457,9 +449,7 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
           Text(
             'Budget Details',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -518,9 +508,7 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
         Text(
           'Quick Actions',
           style: SpendexTheme.titleMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
         ),
         const SizedBox(height: 12),
@@ -553,7 +541,6 @@ class _BudgetDetailsScreenState extends ConsumerState<BudgetDetailsScreen> {
 }
 
 class _InfoRow extends StatelessWidget {
-
   const _InfoRow({
     required this.icon,
     required this.label,
@@ -572,27 +559,21 @@ class _InfoRow extends StatelessWidget {
         Icon(
           icon,
           size: 18,
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             label,
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ),
         Text(
           value,
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -602,7 +583,6 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _ActionButton extends StatelessWidget {
-
   const _ActionButton({
     required this.icon,
     required this.label,

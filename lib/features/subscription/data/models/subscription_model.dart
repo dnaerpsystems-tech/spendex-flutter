@@ -35,21 +35,17 @@ class SubscriptionModel extends Equatable {
         (e) => e.value == json['status'],
         orElse: () => SubscriptionStatus.active,
       ),
-      plan: json['plan'] != null
-          ? PlanModel.fromJson(json['plan'] as Map<String, dynamic>)
-          : null,
+      plan: json['plan'] != null ? PlanModel.fromJson(json['plan'] as Map<String, dynamic>) : null,
       currentPeriodStart: DateTime.parse(json['currentPeriodStart'] as String),
       currentPeriodEnd: DateTime.parse(json['currentPeriodEnd'] as String),
-      trialEnd: json['trialEnd'] != null
-          ? DateTime.parse(json['trialEnd'] as String)
-          : null,
+      trialEnd: json['trialEnd'] != null ? DateTime.parse(json['trialEnd'] as String) : null,
       cancelAtPeriodEnd: json['cancelAtPeriodEnd'] as bool? ?? false,
-      cancelledAt: json['cancelledAt'] != null
-          ? DateTime.parse(json['cancelledAt'] as String)
-          : null,
+      cancelledAt:
+          json['cancelledAt'] != null ? DateTime.parse(json['cancelledAt'] as String) : null,
       paymentMethod: json['paymentMethod'] != null
           ? PaymentMethodModel.fromJson(
-              json['paymentMethod'] as Map<String, dynamic>)
+              json['paymentMethod'] as Map<String, dynamic>,
+            )
           : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -171,27 +167,37 @@ class SubscriptionModel extends Equatable {
   /// Get the number of days remaining in the current period
   int get daysRemaining {
     final now = DateTime.now();
-    if (now.isAfter(currentPeriodEnd)) return 0;
+    if (now.isAfter(currentPeriodEnd)) {
+      return 0;
+    }
     return currentPeriodEnd.difference(now).inDays;
   }
 
   /// Get the number of days remaining in trial
   int get trialDaysRemaining {
-    if (trialEnd == null) return 0;
+    if (trialEnd == null) {
+      return 0;
+    }
     final now = DateTime.now();
-    if (now.isAfter(trialEnd!)) return 0;
+    if (now.isAfter(trialEnd!)) {
+      return 0;
+    }
     return trialEnd!.difference(now).inDays;
   }
 
   /// Check if trial is ending soon (less than 3 days)
   bool get isTrialEnding {
-    if (!isTrialing || trialEnd == null) return false;
+    if (!isTrialing || trialEnd == null) {
+      return false;
+    }
     return trialDaysRemaining <= 3 && trialDaysRemaining > 0;
   }
 
   /// Check if subscription is ending soon (less than 7 days)
   bool get isEndingSoon {
-    if (cancelAtPeriodEnd) return daysRemaining <= 7;
+    if (cancelAtPeriodEnd) {
+      return daysRemaining <= 7;
+    }
     return false;
   }
 
@@ -200,11 +206,11 @@ class SubscriptionModel extends Equatable {
 
   /// Get percentage of current period completed
   double get periodProgressPercentage {
-    final totalDays =
-        currentPeriodEnd.difference(currentPeriodStart).inDays;
-    final daysUsed =
-        DateTime.now().difference(currentPeriodStart).inDays;
-    if (totalDays <= 0) return 0;
+    final totalDays = currentPeriodEnd.difference(currentPeriodStart).inDays;
+    final daysUsed = DateTime.now().difference(currentPeriodStart).inDays;
+    if (totalDays <= 0) {
+      return 0;
+    }
     return (daysUsed / totalDays * 100).clamp(0, 100);
   }
 

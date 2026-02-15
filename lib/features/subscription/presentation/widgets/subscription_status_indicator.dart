@@ -1,11 +1,10 @@
-import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:go_router/go_router.dart";
-import "package:iconsax/iconsax.dart";
-import "../../../../app/routes.dart";
-import "../../../../core/constants/app_constants.dart";
-import "../../data/models/subscription_models.dart";
-import "../providers/paywall_provider.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import '../../../../app/routes.dart';
+import '../../../../core/services/paywall_service.dart';
+import '../providers/paywall_provider.dart';
 
 /// A compact widget showing the current subscription status.
 ///
@@ -162,7 +161,7 @@ class SubscriptionStatusIndicator extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    "${state.trialDaysRemaining} days left",
+                    '${state.trialDaysRemaining} days left',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: colorScheme.onTertiaryContainer,
                       fontWeight: FontWeight.w500,
@@ -180,14 +179,14 @@ class SubscriptionStatusIndicator extends ConsumerWidget {
             ),
           ),
           // Upgrade button
-          if (showUpgradeButton && plan != SubscriptionPlan.premium) ...[
+          if (showUpgradeButton && plan != PaywallService.planPremium) ...[
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
                 onPressed: () => context.push(AppRoutes.subscriptionPlans),
                 icon: const Icon(Iconsax.crown, size: 18),
-                label: Text(plan == SubscriptionPlan.free ? "Start Free Trial" : "Upgrade"),
+                label: Text(plan == PaywallService.planFree ? 'Start Free Trial' : 'Upgrade'),
                 style: FilledButton.styleFrom(
                   backgroundColor: config.color,
                   foregroundColor: Colors.white,
@@ -206,38 +205,43 @@ class SubscriptionStatusIndicator extends ConsumerWidget {
 
   _PlanConfig _getPlanConfig(SubscriptionPlan plan, ColorScheme colorScheme) {
     switch (plan) {
-      case SubscriptionPlan.free:
+      case PaywallService.planFree:
         return _PlanConfig(
           color: colorScheme.outline,
           icon: Iconsax.user,
-          description: "Basic features with limited accounts and budgets.",
+          description: 'Basic features with limited accounts and budgets.',
         );
-      case SubscriptionPlan.pro:
+      case PaywallService.planPro:
         return _PlanConfig(
           color: colorScheme.primary,
           icon: Iconsax.star,
-          description: "All features including AI insights and receipt scanning.",
+          description: 'All features including AI insights and receipt scanning.',
         );
-      case SubscriptionPlan.premium:
-        return _PlanConfig(
-          color: const Color(0xFFDAA520), // Gold
+      case PaywallService.planPremium:
+        return const _PlanConfig(
+          color: Color(0xFFDAA520), // Gold
           icon: Iconsax.crown,
-          description: "Unlimited everything with family sharing and priority support.",
+          description: 'Unlimited everything with family sharing and priority support.',
+        );
+      default:
+        return _PlanConfig(
+          color: colorScheme.outline,
+          icon: Iconsax.user,
+          description: 'Basic features with limited accounts and budgets.',
         );
     }
   }
 }
 
 class _PlanConfig {
-  final Color color;
-  final IconData icon;
-  final String description;
-
   const _PlanConfig({
     required this.color,
     required this.icon,
     required this.description,
   });
+  final Color color;
+  final IconData icon;
+  final String description;
 }
 
 /// A small badge showing just the plan name.
@@ -279,12 +283,14 @@ class SubscriptionPlanBadge extends ConsumerWidget {
 
   Color _getColor(SubscriptionPlan plan, ColorScheme colorScheme) {
     switch (plan) {
-      case SubscriptionPlan.free:
+      case PaywallService.planFree:
         return colorScheme.outline;
-      case SubscriptionPlan.pro:
+      case PaywallService.planPro:
         return colorScheme.primary;
-      case SubscriptionPlan.premium:
+      case PaywallService.planPremium:
         return const Color(0xFFDAA520);
+      default:
+        return colorScheme.outline;
     }
   }
 }
@@ -315,15 +321,15 @@ class SubscriptionListTile extends ConsumerWidget {
           color: _getColor(plan, colorScheme),
         ),
       ),
-      title: const Text("Subscription"),
+      title: const Text('Subscription'),
       subtitle: isLoading
-          ? const Text("Loading...")
+          ? const Text('Loading...')
           : Text(
               paywallState.isOnTrial
-                  ? "${plan.name} (${paywallState.trialDaysRemaining} days trial)"
+                  ? '${plan.name} (${paywallState.trialDaysRemaining} days trial)'
                   : plan.name,
             ),
-      trailing: plan != SubscriptionPlan.premium
+      trailing: plan != PaywallService.planPremium
           ? Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
@@ -331,7 +337,7 @@ class SubscriptionListTile extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
-                "Upgrade",
+                'Upgrade',
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -344,23 +350,27 @@ class SubscriptionListTile extends ConsumerWidget {
 
   Color _getColor(SubscriptionPlan plan, ColorScheme colorScheme) {
     switch (plan) {
-      case SubscriptionPlan.free:
+      case PaywallService.planFree:
         return colorScheme.outline;
-      case SubscriptionPlan.pro:
+      case PaywallService.planPro:
         return colorScheme.primary;
-      case SubscriptionPlan.premium:
+      case PaywallService.planPremium:
         return const Color(0xFFDAA520);
+      default:
+        return colorScheme.outline;
     }
   }
 
   IconData _getIcon(SubscriptionPlan plan) {
     switch (plan) {
-      case SubscriptionPlan.free:
+      case PaywallService.planFree:
         return Iconsax.user;
-      case SubscriptionPlan.pro:
+      case PaywallService.planPro:
         return Iconsax.star;
-      case SubscriptionPlan.premium:
+      case PaywallService.planPremium:
         return Iconsax.crown;
+      default:
+        return Iconsax.user;
     }
   }
 }

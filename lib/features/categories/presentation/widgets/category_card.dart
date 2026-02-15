@@ -11,14 +11,15 @@ import '../../data/models/category_model.dart';
 /// A beautiful card displaying category information with customizable appearance.
 /// Supports compact and expanded modes, loading skeleton, and spending info display.
 class CategoryCard extends StatelessWidget {
-
   const CategoryCard({
-    required this.category, super.key,
+    required this.category,
+    super.key,
     this.spendingInfo,
     this.onTap,
     this.compact = false,
     this.showSpendingInfo = false,
   });
+
   /// The category to display
   final CategoryModel category;
 
@@ -87,9 +88,7 @@ class CategoryCard extends StatelessWidget {
               Text(
                 category.name,
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -194,9 +193,8 @@ class CategoryCard extends StatelessWidget {
                   Text(
                     _formatCurrency(spendingInfo!.totalSpentInRupees),
                     style: SpendexTheme.titleMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -217,9 +215,7 @@ class CategoryCard extends StatelessWidget {
             // Arrow Icon
             Icon(
               Iconsax.arrow_right_3,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               size: 18,
             ),
           ],
@@ -310,9 +306,7 @@ class CategoryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
       ),
       child: Column(
@@ -322,9 +316,7 @@ class CategoryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(SpendexTheme.radiusXs),
             child: LinearProgressIndicator(
               value: (spendingInfo!.percentage / 100).clamp(0.0, 1.0),
-              backgroundColor: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              backgroundColor: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               valueColor: AlwaysStoppedAnimation<Color>(color),
               minHeight: 8,
             ),
@@ -365,18 +357,14 @@ class CategoryCard extends StatelessWidget {
         Text(
           label,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary,
+            color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
           ),
         ),
         const SizedBox(height: 2),
         Text(
           value,
           style: SpendexTheme.titleMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -392,9 +380,7 @@ class CategoryCard extends StatelessWidget {
         vertical: SpendexTheme.spacingXs,
       ),
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkBorder
-            : SpendexColors.lightBorder,
+        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
       ),
       child: Row(
@@ -402,18 +388,14 @@ class CategoryCard extends StatelessWidget {
         children: [
           Icon(
             Iconsax.lock1,
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             size: 12,
           ),
           const SizedBox(width: 4),
           Text(
             'System Category',
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ],
@@ -436,9 +418,7 @@ class CategoryCard extends StatelessWidget {
     }
 
     // Default color based on category type
-    return category.type == CategoryType.income
-        ? SpendexColors.income
-        : SpendexColors.primary;
+    return category.type == CategoryType.income ? SpendexColors.income : SpendexColors.primary;
   }
 
   /// Gets the category icon from the model or returns a default
@@ -461,11 +441,11 @@ class CategoryCard extends StatelessWidget {
 ///
 /// A loading skeleton placeholder for the CategoryCard widget.
 class CategoryCardSkeleton extends StatelessWidget {
-
   const CategoryCardSkeleton({
     super.key,
     this.compact = false,
   });
+
   /// Whether to display in compact mode
   final bool compact;
 
@@ -681,13 +661,17 @@ IconData getDefaultCategoryIcon(String categoryName) {
   final nameLower = categoryName.toLowerCase();
 
   // Try to match common category names
-  if (nameLower.contains('food') || nameLower.contains('restaurant') || nameLower.contains('dining')) {
+  if (nameLower.contains('food') ||
+      nameLower.contains('restaurant') ||
+      nameLower.contains('dining')) {
     return Iconsax.coffee;
   }
   if (nameLower.contains('shop') || nameLower.contains('retail')) {
     return Iconsax.shopping_bag;
   }
-  if (nameLower.contains('transport') || nameLower.contains('travel') || nameLower.contains('fuel')) {
+  if (nameLower.contains('transport') ||
+      nameLower.contains('travel') ||
+      nameLower.contains('fuel')) {
     return Iconsax.car;
   }
   if (nameLower.contains('health') || nameLower.contains('medical')) {

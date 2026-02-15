@@ -387,10 +387,13 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
                   Row(
                     children: [
                       Expanded(
+                        // ignore: deprecated_member_use
                         child: RadioListTile<bool>(
                           title: const Text('Old Regime'),
                           value: true,
+                          // ignore: deprecated_member_use
                           groupValue: _isOldRegime,
+                          // ignore: deprecated_member_use
                           onChanged: (value) {
                             setState(() {
                               _isOldRegime = value ?? true;
@@ -401,10 +404,13 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
                         ),
                       ),
                       Expanded(
+                        // ignore: deprecated_member_use
                         child: RadioListTile<bool>(
                           title: const Text('New Regime'),
                           value: false,
+                          // ignore: deprecated_member_use
                           groupValue: _isOldRegime,
+                          // ignore: deprecated_member_use
                           onChanged: (value) {
                             setState(() {
                               _isOldRegime = value ?? false;
@@ -462,7 +468,9 @@ class _TaxSavingsScreenState extends ConsumerState<TaxSavingsScreen> {
 
   String _calculateEstimatedSavings() {
     final income = double.tryParse(_incomeController.text) ?? 0;
-    if (income == 0) return '₹0';
+    if (income == 0) {
+      return '₹0';
+    }
 
     final investmentsState = ref.read(investmentsStateProvider);
     final taxSavingsData = _calculateTaxSavings(investmentsState.investments);

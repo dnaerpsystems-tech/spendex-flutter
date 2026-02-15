@@ -51,7 +51,9 @@ class EmailAccountCard extends StatelessWidget {
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return 'Never synced';
+    if (date == null) {
+      return 'Never synced';
+    }
     return 'Last sync: ${DateFormat('dd MMM yyyy, HH:mm').format(date)}';
   }
 

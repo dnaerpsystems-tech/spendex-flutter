@@ -9,7 +9,6 @@ import '../../data/models/account_model.dart';
 /// Account Card Widget
 /// A beautiful card displaying account information with gradient backgrounds
 class AccountCard extends StatelessWidget {
-
   const AccountCard({
     required this.account,
     super.key,
@@ -290,18 +289,14 @@ class AccountCard extends StatelessWidget {
               Text(
                 formatCurrency(account.balanceInRupees),
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             const SizedBox(width: 8),
             Icon(
               Iconsax.arrow_right_3,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               size: 18,
             ),
           ],
@@ -324,9 +319,7 @@ class AccountCard extends StatelessWidget {
             value: (utilized / 100).clamp(0.0, 1.0),
             backgroundColor: Colors.white.withValues(alpha: 0.2),
             valueColor: AlwaysStoppedAnimation<Color>(
-              utilized > 80
-                  ? SpendexColors.expense
-                  : Colors.white.withValues(alpha: 0.8),
+              utilized > 80 ? SpendexColors.expense : Colors.white.withValues(alpha: 0.8),
             ),
             minHeight: 6,
           ),

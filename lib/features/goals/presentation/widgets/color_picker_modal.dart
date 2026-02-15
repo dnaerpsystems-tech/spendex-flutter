@@ -56,9 +56,7 @@ class ColorPickerModal extends StatelessWidget {
               Text(
                 'Select Color',
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const Spacer(),

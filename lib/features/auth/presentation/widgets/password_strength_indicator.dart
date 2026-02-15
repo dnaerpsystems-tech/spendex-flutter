@@ -21,7 +21,6 @@ enum PasswordStrength {
 
 /// Represents a single password requirement
 class PasswordRequirement {
-
   const PasswordRequirement({
     required this.label,
     required this.isMet,
@@ -40,16 +39,13 @@ class PasswordValidator {
   static bool hasMinLength(String password) => password.length >= 8;
 
   /// Contains uppercase letter (A-Z)
-  static bool hasUppercase(String password) =>
-      password.contains(RegExp('[A-Z]'));
+  static bool hasUppercase(String password) => password.contains(RegExp('[A-Z]'));
 
   /// Contains lowercase letter (a-z)
-  static bool hasLowercase(String password) =>
-      password.contains(RegExp('[a-z]'));
+  static bool hasLowercase(String password) => password.contains(RegExp('[a-z]'));
 
   /// Contains number (0-9)
-  static bool hasNumber(String password) =>
-      password.contains(RegExp('[0-9]'));
+  static bool hasNumber(String password) => password.contains(RegExp('[0-9]'));
 
   /// Contains special character (@$!%*?&)
   static bool hasSpecialChar(String password) =>
@@ -155,7 +151,6 @@ class PasswordValidator {
 /// Shows animated progress bar with color based on strength
 /// and individual requirement checks
 class PasswordStrengthIndicator extends StatefulWidget {
-
   const PasswordStrengthIndicator({
     required this.password,
     super.key,
@@ -171,8 +166,7 @@ class PasswordStrengthIndicator extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
 
   @override
-  State<PasswordStrengthIndicator> createState() =>
-      _PasswordStrengthIndicatorState();
+  State<PasswordStrengthIndicator> createState() => _PasswordStrengthIndicatorState();
 }
 
 class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
@@ -242,8 +236,7 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
   }
 
   Widget _buildStrengthBar(PasswordStrength strength, bool isDark) {
-    final backgroundColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final backgroundColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0, end: strength.progress),
@@ -267,14 +260,13 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
                       gradient: LinearGradient(
                         colors: [
                           strength.color,
-                          strength.color.withValues(alpha:0.8),
+                          strength.color.withValues(alpha: 0.8),
                         ],
                       ),
-                      borderRadius:
-                          BorderRadius.circular(widget.barHeight / 2),
+                      borderRadius: BorderRadius.circular(widget.barHeight / 2),
                       boxShadow: [
                         BoxShadow(
-                          color: strength.color.withValues(alpha:0.4),
+                          color: strength.color.withValues(alpha: 0.4),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -297,7 +289,7 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
         key: ValueKey(strength),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
-          color: strength.color.withValues(alpha:0.1),
+          color: strength.color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
@@ -313,8 +305,7 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
 
   Widget _buildRequirementItem(PasswordRequirement requirement, bool isDark) {
     const metColor = SpendexColors.income;
-    final unmetColor =
-        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
+    final unmetColor = isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
@@ -331,12 +322,10 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
                 width: 18,
                 height: 18,
                 decoration: BoxDecoration(
-                  color: requirement.isMet
-                      ? metColor.withValues(alpha:0.1)
-                      : Colors.transparent,
+                  color: requirement.isMet ? metColor.withValues(alpha: 0.1) : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: color.withValues(alpha:0.3),
+                    color: color.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Center(
@@ -364,8 +353,7 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
                   duration: const Duration(milliseconds: 200),
                   style: SpendexTheme.labelMedium.copyWith(
                     color: color,
-                    decoration:
-                        requirement.isMet ? TextDecoration.lineThrough : null,
+                    decoration: requirement.isMet ? TextDecoration.lineThrough : null,
                     decorationColor: color,
                   ),
                   child: Text(requirement.label),
@@ -382,7 +370,6 @@ class _PasswordStrengthIndicatorState extends State<PasswordStrengthIndicator>
 /// Compact Password Strength Indicator
 /// Shows only the progress bar without requirements
 class PasswordStrengthBar extends StatelessWidget {
-
   const PasswordStrengthBar({
     required this.password,
     super.key,
@@ -407,7 +394,6 @@ class PasswordStrengthBar extends StatelessWidget {
 /// Password Match Indicator
 /// Shows if confirm password matches the original password
 class PasswordMatchIndicator extends StatelessWidget {
-
   const PasswordMatchIndicator({
     required this.password,
     required this.confirmPassword,
@@ -425,11 +411,8 @@ class PasswordMatchIndicator extends StatelessWidget {
     }
 
     final isMatch = password == confirmPassword && password.isNotEmpty;
-    final color = isMatch
-        ? SpendexColors.income
-        : SpendexColors.expense;
-    final unmetColor =
-        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
+    final color = isMatch ? SpendexColors.income : SpendexColors.expense;
+    final unmetColor = isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0, end: 1),
@@ -445,10 +428,10 @@ class PasswordMatchIndicator extends StatelessWidget {
                 width: 18,
                 height: 18,
                 decoration: BoxDecoration(
-                  color: isMatch ? color.withValues(alpha:0.1) : Colors.transparent,
+                  color: isMatch ? color.withValues(alpha: 0.1) : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: (isMatch ? color : unmetColor).withValues(alpha:0.3),
+                    color: (isMatch ? color : unmetColor).withValues(alpha: 0.3),
                   ),
                 ),
                 child: Center(
@@ -491,7 +474,6 @@ class PasswordMatchIndicator extends StatelessWidget {
 /// Segmented Password Strength Bar
 /// Shows strength as segmented blocks instead of a continuous bar
 class SegmentedPasswordStrengthBar extends StatelessWidget {
-
   const SegmentedPasswordStrengthBar({
     required this.password,
     super.key,
@@ -509,8 +491,7 @@ class SegmentedPasswordStrengthBar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final strength = PasswordValidator.getStrength(password);
     final filledSegments = PasswordValidator.getMetRequirementsCount(password);
-    final backgroundColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final backgroundColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     return Row(
       children: List.generate(segments, (index) {

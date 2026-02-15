@@ -1,13 +1,23 @@
-import "package:flutter_test/flutter_test.dart";
-import "package:mocktail/mocktail.dart";
-import "package:dartz/dartz.dart";
-import "package:spendex/core/constants/app_constants.dart";
-import "package:spendex/core/errors/failures.dart";
-import "package:spendex/core/services/paywall_service.dart";
-import "package:spendex/features/subscription/data/models/subscription_models.dart";
-import "package:spendex/features/subscription/domain/repositories/subscription_repository.dart";
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:spendex/core/constants/app_constants.dart';
+import 'package:spendex/core/errors/failures.dart';
+import 'package:spendex/core/services/paywall_service.dart';
+import 'package:spendex/features/subscription/data/models/subscription_models.dart';
+import 'package:spendex/features/subscription/domain/repositories/subscription_repository.dart';
 
 class MockSubscriptionRepository extends Mock implements SubscriptionRepository {}
+
+// Helper to create default PlanLimits
+const _defaultLimits = PlanLimits(
+  transactions: 50,
+  accounts: 2,
+  budgets: 3,
+  goals: 2,
+  familyMembers: 0,
+  aiInsights: 5,
+);
 
 void main() {
   late PaywallService paywallService;
@@ -18,28 +28,28 @@ void main() {
     paywallService = PaywallService(mockRepository);
   });
 
-  group("PaywallService", () {
-    group("getCurrentPlan", () {
-      test("returns free plan when no subscription exists", () async {
+  group('PaywallService', () {
+    group('getCurrentPlan', () {
+      test('returns free plan when no subscription exists', () async {
         // Arrange
         when(() => mockRepository.getCurrentSubscription())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final result = await paywallService.getCurrentPlan();
 
         // Assert
-        expect(result, equals(SubscriptionPlan.free));
+        expect(result, equals('plan_free'));
       });
 
-      test("returns pro plan when user has pro subscription", () async {
+      test('returns pro plan when user has pro subscription', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.pro,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_pro',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -49,21 +59,21 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final result = await paywallService.getCurrentPlan();
 
         // Assert
-        expect(result, equals(SubscriptionPlan.pro));
+        expect(result, equals('plan_pro'));
       });
 
-      test("returns premium plan when user has premium subscription", () async {
+      test('returns premium plan when user has premium subscription', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.premium,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_premium',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -73,23 +83,23 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final result = await paywallService.getCurrentPlan();
 
         // Assert
-        expect(result, equals(SubscriptionPlan.premium));
+        expect(result, equals('plan_premium'));
       });
     });
 
-    group("checkFeature - count-based limits", () {
-      test("allows adding account when under free plan limit", () async {
+    group('checkFeature - count-based limits', () {
+      test('allows adding account when under free plan limit', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.free,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_free',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -97,12 +107,15 @@ void main() {
           updatedAt: DateTime.now(),
         );
         final usage = UsageModel(
-          accountsCount: 1, // Under limit of 2
-          budgetsCount: 0,
-          goalsCount: 0,
-          transactionsThisMonth: 0,
-          storageUsedMb: 0,
-          apiCallsThisMonth: 0,
+          accountsUsed: 1, // Under limit of 2
+          budgetsUsed: 0,
+          goalsUsed: 0,
+          transactionsUsed: 0,
+          familyMembersUsed: 0,
+          aiInsightsUsed: 0,
+          limits: _defaultLimits,
+          periodStart: DateTime.now(),
+          periodEnd: DateTime.now().add(const Duration(days: 30)),
         );
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
@@ -119,12 +132,12 @@ void main() {
         expect(result.remaining, equals(1));
       });
 
-      test("blocks adding account when at free plan limit", () async {
+      test('blocks adding account when at free plan limit', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.free,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_free',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -132,12 +145,15 @@ void main() {
           updatedAt: DateTime.now(),
         );
         final usage = UsageModel(
-          accountsCount: 2, // At limit
-          budgetsCount: 0,
-          goalsCount: 0,
-          transactionsThisMonth: 0,
-          storageUsedMb: 0,
-          apiCallsThisMonth: 0,
+          accountsUsed: 2, // At limit
+          budgetsUsed: 0,
+          goalsUsed: 0,
+          transactionsUsed: 0,
+          familyMembersUsed: 0,
+          aiInsightsUsed: 0,
+          limits: _defaultLimits,
+          periodStart: DateTime.now(),
+          periodEnd: DateTime.now().add(const Duration(days: 30)),
         );
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
@@ -152,29 +168,40 @@ void main() {
         expect(result.isAtLimit, isTrue);
         expect(result.currentCount, equals(2));
         expect(result.limit, equals(2));
-        expect(result.requiredPlan, equals(SubscriptionPlan.pro));
-        expect(result.message, contains("limit"));
+        expect(result.requiredPlan, equals('plan_pro'));
+        expect(result.message, contains('limit'));
       });
 
-      test("allows adding budget when pro plan has higher limit", () async {
+      test('allows adding budget when pro plan has higher limit', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.pro,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_pro',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         );
+        const proLimits = PlanLimits(
+          transactions: 1000,
+          accounts: 10,
+          budgets: 10,
+          goals: 5,
+          familyMembers: 0,
+          aiInsights: 50,
+        );
         final usage = UsageModel(
-          accountsCount: 0,
-          budgetsCount: 5, // Under pro limit of 10
-          goalsCount: 0,
-          transactionsThisMonth: 0,
-          storageUsedMb: 0,
-          apiCallsThisMonth: 0,
+          accountsUsed: 0,
+          budgetsUsed: 5, // Under pro limit of 10
+          goalsUsed: 0,
+          transactionsUsed: 0,
+          familyMembersUsed: 0,
+          aiInsightsUsed: 0,
+          limits: proLimits,
+          periodStart: DateTime.now(),
+          periodEnd: DateTime.now().add(const Duration(days: 30)),
         );
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
@@ -190,25 +217,36 @@ void main() {
         expect(result.limit, equals(10));
       });
 
-      test("allows unlimited goals for premium plan", () async {
+      test('allows unlimited goals for premium plan', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.premium,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_premium',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         );
+        const premiumLimits = PlanLimits(
+          transactions: -1,
+          accounts: -1,
+          budgets: -1,
+          goals: -1,
+          familyMembers: -1,
+          aiInsights: -1,
+        );
         final usage = UsageModel(
-          accountsCount: 0,
-          budgetsCount: 0,
-          goalsCount: 100, // Any count should be allowed
-          transactionsThisMonth: 0,
-          storageUsedMb: 0,
-          apiCallsThisMonth: 0,
+          accountsUsed: 0,
+          budgetsUsed: 0,
+          goalsUsed: 100, // Any count should be allowed
+          transactionsUsed: 0,
+          familyMembersUsed: 0,
+          aiInsightsUsed: 0,
+          limits: premiumLimits,
+          periodStart: DateTime.now(),
+          periodEnd: DateTime.now().add(const Duration(days: 30)),
         );
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
@@ -224,13 +262,13 @@ void main() {
       });
     });
 
-    group("checkFeature - boolean features", () {
-      test("blocks AI insights for free plan", () async {
+    group('checkFeature - boolean features', () {
+      test('blocks AI insights for free plan', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.free,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_free',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -240,22 +278,22 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final result = await paywallService.checkFeature(GatedFeature.aiInsights);
 
         // Assert
         expect(result.isAllowed, isFalse);
-        expect(result.requiredPlan, equals(SubscriptionPlan.pro));
+        expect(result.requiredPlan, equals('plan_pro'));
       });
 
-      test("allows AI insights for pro plan", () async {
+      test('allows AI insights for pro plan', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.pro,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_pro',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -265,7 +303,7 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final result = await paywallService.checkFeature(GatedFeature.aiInsights);
@@ -274,12 +312,12 @@ void main() {
         expect(result.isAllowed, isTrue);
       });
 
-      test("blocks family sharing for pro plan", () async {
+      test('blocks family sharing for pro plan', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.pro,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_pro',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -289,22 +327,22 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final result = await paywallService.checkFeature(GatedFeature.familySharing);
 
         // Assert
         expect(result.isAllowed, isFalse);
-        expect(result.requiredPlan, equals(SubscriptionPlan.premium));
+        expect(result.requiredPlan, equals('plan_premium'));
       });
 
-      test("allows family sharing for premium plan", () async {
+      test('allows family sharing for premium plan', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.premium,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_premium',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -314,7 +352,7 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final result = await paywallService.checkFeature(GatedFeature.familySharing);
@@ -324,13 +362,13 @@ void main() {
       });
     });
 
-    group("trial detection", () {
-      test("detects user on trial", () async {
+    group('trial detection', () {
+      test('detects user on trial', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.pro,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_pro',
           status: SubscriptionStatus.trialing,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -341,7 +379,7 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final isOnTrial = await paywallService.isOnTrial();
@@ -352,12 +390,12 @@ void main() {
         expect(trialDays, equals(7));
       });
 
-      test("returns false for non-trial subscription", () async {
+      test('returns false for non-trial subscription', () async {
         // Arrange
         final subscription = SubscriptionModel(
-          id: "sub_123",
-          userId: "user_123",
-          plan: SubscriptionPlan.pro,
+          id: 'sub_123',
+          userId: 'user_123',
+          planId: 'plan_pro',
           status: SubscriptionStatus.active,
           currentPeriodStart: DateTime.now(),
           currentPeriodEnd: DateTime.now().add(const Duration(days: 30)),
@@ -367,7 +405,7 @@ void main() {
         when(() => mockRepository.getCurrentSubscription())
             .thenAnswer((_) async => Right(subscription));
         when(() => mockRepository.getUsage())
-            .thenAnswer((_) async => Left(const ServerFailure(message: "Not found")));
+            .thenAnswer((_) async => const Left(ServerFailure('Not found')));
 
         // Act
         final isOnTrial = await paywallService.isOnTrial();
@@ -377,40 +415,40 @@ void main() {
       });
     });
 
-    group("plan limits", () {
-      test("free plan has correct limits", () {
-        final limits = PaywallService.planLimits[SubscriptionPlan.free]!;
-        expect(limits["accounts"], equals(2));
-        expect(limits["budgets"], equals(3));
-        expect(limits["goals"], equals(2));
-        expect(limits["transactions_per_month"], equals(100));
+    group('plan limits', () {
+      test('free plan has correct limits', () {
+        final limits = PaywallService.planLimits['plan_free']!;
+        expect(limits['accounts'], equals(2));
+        expect(limits['budgets'], equals(3));
+        expect(limits['goals'], equals(2));
+        expect(limits['transactions_per_month'], equals(100));
       });
 
-      test("pro plan has correct limits", () {
-        final limits = PaywallService.planLimits[SubscriptionPlan.pro]!;
-        expect(limits["accounts"], equals(10));
-        expect(limits["budgets"], equals(10));
-        expect(limits["goals"], equals(5));
-        expect(limits["transactions_per_month"], equals(1000));
+      test('pro plan has correct limits', () {
+        final limits = PaywallService.planLimits['plan_pro']!;
+        expect(limits['accounts'], equals(10));
+        expect(limits['budgets'], equals(10));
+        expect(limits['goals'], equals(5));
+        expect(limits['transactions_per_month'], equals(1000));
       });
 
-      test("premium plan has unlimited (-1) limits", () {
-        final limits = PaywallService.planLimits[SubscriptionPlan.premium]!;
-        expect(limits["accounts"], equals(-1));
-        expect(limits["budgets"], equals(-1));
-        expect(limits["goals"], equals(-1));
-        expect(limits["transactions_per_month"], equals(-1));
+      test('premium plan has unlimited (-1) limits', () {
+        final limits = PaywallService.planLimits['plan_premium']!;
+        expect(limits['accounts'], equals(-1));
+        expect(limits['budgets'], equals(-1));
+        expect(limits['goals'], equals(-1));
+        expect(limits['transactions_per_month'], equals(-1));
       });
     });
 
-    group("plan features", () {
-      test("free plan has no premium features", () {
-        final features = PaywallService.planFeatures[SubscriptionPlan.free]!;
+    group('plan features', () {
+      test('free plan has no premium features', () {
+        final features = PaywallService.planFeatures['plan_free']!;
         expect(features, isEmpty);
       });
 
-      test("pro plan has expected features", () {
-        final features = PaywallService.planFeatures[SubscriptionPlan.pro]!;
+      test('pro plan has expected features', () {
+        final features = PaywallService.planFeatures['plan_pro']!;
         expect(features.contains(GatedFeature.aiInsights), isTrue);
         expect(features.contains(GatedFeature.advancedAnalytics), isTrue);
         expect(features.contains(GatedFeature.receiptScanning), isTrue);
@@ -418,8 +456,8 @@ void main() {
         expect(features.contains(GatedFeature.familySharing), isFalse); // Premium only
       });
 
-      test("premium plan has all features", () {
-        final features = PaywallService.planFeatures[SubscriptionPlan.premium]!;
+      test('premium plan has all features', () {
+        final features = PaywallService.planFeatures['plan_premium']!;
         expect(features.contains(GatedFeature.aiInsights), isTrue);
         expect(features.contains(GatedFeature.familySharing), isTrue);
         expect(features.contains(GatedFeature.prioritySupport), isTrue);
@@ -427,9 +465,9 @@ void main() {
       });
     });
 
-    group("FeatureGateResult", () {
-      test("calculates isAtLimit correctly", () {
-        final result = FeatureGateResult(
+    group('FeatureGateResult', () {
+      test('calculates isAtLimit correctly', () {
+        const result = FeatureGateResult(
           isAllowed: false,
           currentCount: 2,
           limit: 2,
@@ -437,8 +475,8 @@ void main() {
         expect(result.isAtLimit, isTrue);
       });
 
-      test("calculates remaining correctly", () {
-        final result = FeatureGateResult(
+      test('calculates remaining correctly', () {
+        const result = FeatureGateResult(
           isAllowed: true,
           currentCount: 1,
           limit: 5,
@@ -446,11 +484,10 @@ void main() {
         expect(result.remaining, equals(4));
       });
 
-      test("remaining is null for unlimited", () {
+      test('remaining is null for unlimited', () {
         const result = FeatureGateResult(
           isAllowed: true,
           currentCount: 100,
-          limit: null,
         );
         expect(result.remaining, isNull);
       });

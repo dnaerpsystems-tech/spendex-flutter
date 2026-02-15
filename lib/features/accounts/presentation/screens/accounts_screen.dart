@@ -52,9 +52,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
     final accountsState = ref.watch(accountsStateProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Accounts'),
         centerTitle: true,
@@ -151,9 +149,8 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
         indicatorPadding: const EdgeInsets.all(4),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary,
+        unselectedLabelColor:
+            isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         labelStyle: SpendexTheme.titleMedium,
         unselectedLabelStyle: SpendexTheme.titleMedium,
         tabs: const [
@@ -184,12 +181,10 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
 
   Widget _buildAccountLoadingSkeleton() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final shimmerBase = isDark
-        ? Colors.white.withValues(alpha: 0.05)
-        : Colors.black.withValues(alpha: 0.05);
-    final shimmerHighlight = isDark
-        ? Colors.white.withValues(alpha: 0.1)
-        : Colors.black.withValues(alpha: 0.08);
+    final shimmerBase =
+        isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
+    final shimmerHighlight =
+        isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -322,9 +317,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
 
         // Apply filter if selected
         if (_selectedFilter != null) {
-          accounts = accounts
-              .where((a) => a.type == _selectedFilter)
-              .toList();
+          accounts = accounts.where((a) => a.type == _selectedFilter).toList();
         }
 
         if (accounts.isEmpty) {
@@ -402,18 +395,15 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
               Text(
                 title,
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 subtitle,
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

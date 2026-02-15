@@ -30,12 +30,10 @@ class DeviceManagementScreen extends ConsumerStatefulWidget {
   const DeviceManagementScreen({super.key});
 
   @override
-  ConsumerState<DeviceManagementScreen> createState() =>
-      _DeviceManagementScreenState();
+  ConsumerState<DeviceManagementScreen> createState() => _DeviceManagementScreenState();
 }
 
-class _DeviceManagementScreenState
-    extends ConsumerState<DeviceManagementScreen> {
+class _DeviceManagementScreenState extends ConsumerState<DeviceManagementScreen> {
   @override
   void initState() {
     super.initState();
@@ -55,8 +53,7 @@ class _DeviceManagementScreenState
       return;
     }
 
-    final success =
-        await ref.read(settingsStateProvider.notifier).revokeDeviceSession(deviceId);
+    final success = await ref.read(settingsStateProvider.notifier).revokeDeviceSession(deviceId);
 
     if (!mounted) {
       return;
@@ -84,12 +81,9 @@ class _DeviceManagementScreenState
 
   Future<bool?> _showRemoveDeviceDialog() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return showDialog<bool>(
       context: context,
@@ -138,8 +132,7 @@ class _DeviceManagementScreenState
       return;
     }
 
-    final success =
-        await ref.read(settingsStateProvider.notifier).revokeAllDeviceSessions();
+    final success = await ref.read(settingsStateProvider.notifier).revokeAllDeviceSessions();
 
     if (!mounted) {
       return;
@@ -167,12 +160,9 @@ class _DeviceManagementScreenState
 
   Future<bool?> _showLogoutAllDialog() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return showDialog<bool>(
       context: context,
@@ -269,11 +259,8 @@ class _DeviceManagementScreenState
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDark
-        ? SpendexColors.darkBackground
-        : SpendexColors.lightBackground;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final backgroundColor = isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     final deviceSessions = ref.watch(deviceSessionsProvider);
     final isLoading = ref.watch(settingsLoadingProvider);
@@ -322,8 +309,7 @@ class _DeviceManagementScreenState
       return ListView.separated(
         padding: const EdgeInsets.all(SpendexTheme.spacingLg),
         itemCount: 3,
-        separatorBuilder: (context, index) =>
-            const SizedBox(height: SpendexTheme.spacingMd),
+        separatorBuilder: (context, index) => const SizedBox(height: SpendexTheme.spacingMd),
         itemBuilder: (context, index) => _DeviceSessionSkeleton(isDark: isDark),
       );
     }
@@ -348,9 +334,8 @@ class _DeviceManagementScreenState
       (device) => device.isCurrent,
       orElse: () => deviceSessions.first,
     );
-    final otherDevices =
-        deviceSessions.where((device) => !device.isCurrent).toList()
-          ..sort((a, b) => b.lastActive.compareTo(a.lastActive));
+    final otherDevices = deviceSessions.where((device) => !device.isCurrent).toList()
+      ..sort((a, b) => b.lastActive.compareTo(a.lastActive));
 
     return ListView(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
@@ -359,8 +344,7 @@ class _DeviceManagementScreenState
           deviceType: _mapStringToDeviceType(currentDevice.deviceType),
           deviceName: currentDevice.deviceName,
           osInfo: currentDevice.os,
-          browserInfo:
-              (currentDevice.browser?.isNotEmpty ?? false) ? currentDevice.browser : null,
+          browserInfo: (currentDevice.browser?.isNotEmpty ?? false) ? currentDevice.browser : null,
           lastActive: currentDevice.lastActive,
           isCurrentDevice: true,
         ),
@@ -373,8 +357,7 @@ class _DeviceManagementScreenState
                 deviceType: _mapStringToDeviceType(device.deviceType),
                 deviceName: device.deviceName,
                 osInfo: device.os,
-                browserInfo:
-                    (device.browser?.isNotEmpty ?? false) ? device.browser : null,
+                browserInfo: (device.browser?.isNotEmpty ?? false) ? device.browser : null,
                 lastActive: device.lastActive,
                 onRemove: () => _removeDevice(device.id),
               ),
@@ -426,10 +409,8 @@ class _DeviceSessionSkeletonState extends State<_DeviceSessionSkeleton>
 
   @override
   Widget build(BuildContext context) {
-    final cardColor =
-        widget.isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final borderColor =
-        widget.isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = widget.isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final borderColor = widget.isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
     final shimmerBaseColor = widget.isDark
         ? SpendexColors.darkTextSecondary.withValues(alpha: 0.1)
         : SpendexColors.lightTextSecondary.withValues(alpha: 0.1);
@@ -470,8 +451,7 @@ class _DeviceSessionSkeletonState extends State<_DeviceSessionSkeleton>
                           color: shimmerBaseColor.withValues(
                             alpha: _animation.value,
                           ),
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusSm),
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         ),
                       ),
                       const SizedBox(height: SpendexTheme.spacingSm),
@@ -482,8 +462,7 @@ class _DeviceSessionSkeletonState extends State<_DeviceSessionSkeleton>
                           color: shimmerBaseColor.withValues(
                             alpha: _animation.value,
                           ),
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusSm),
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         ),
                       ),
                       const SizedBox(height: SpendexTheme.spacingSm),
@@ -494,8 +473,7 @@ class _DeviceSessionSkeletonState extends State<_DeviceSessionSkeleton>
                           color: shimmerBaseColor.withValues(
                             alpha: _animation.value,
                           ),
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusSm),
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         ),
                       ),
                     ],

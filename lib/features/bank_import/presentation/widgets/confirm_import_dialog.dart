@@ -25,8 +25,7 @@ class ConfirmImportDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
       ),
-      backgroundColor:
-          isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+      backgroundColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -64,9 +63,7 @@ class ConfirmImportDialog extends StatelessWidget {
             Text(
               'You are about to import the following transactions to your account:',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -198,9 +195,7 @@ class ConfirmImportDialog extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),

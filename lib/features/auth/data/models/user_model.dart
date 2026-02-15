@@ -42,16 +42,13 @@ class UserModel extends Equatable {
       emailVerifiedAt: json['emailVerifiedAt'] != null
           ? DateTime.parse(json['emailVerifiedAt'] as String)
           : null,
-      lastLoginAt: json['lastLoginAt'] != null
-          ? DateTime.parse(json['lastLoginAt'] as String)
-          : null,
+      lastLoginAt:
+          json['lastLoginAt'] != null ? DateTime.parse(json['lastLoginAt'] as String) : null,
       // API may not return these fields, use current time as default
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'] as String)
-          : DateTime.now(),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
-          : DateTime.now(),
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : DateTime.now(),
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt'] as String) : DateTime.now(),
     );
   }
 
@@ -285,7 +282,9 @@ class AuthResponse {
 
   /// Get token expiry time (handles both formats)
   DateTime get tokenExpiry {
-    if (expiresAt != null) return expiresAt!;
+    if (expiresAt != null) {
+      return expiresAt!;
+    }
     if (expiresIn != null) {
       return DateTime.now().add(Duration(seconds: expiresIn!));
     }

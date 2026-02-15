@@ -1,4 +1,4 @@
-import '../../../../core/utils/app_logger.dart';
+import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/app_logger.dart';
 import '../../data/models/transaction_model.dart';
 import '../../data/services/receipt_parser_service.dart';
 
@@ -47,14 +48,14 @@ class ExtractedReceiptData {
 /// Receipt Scanner Sheet for scanning receipts
 class ReceiptScannerSheet extends ConsumerStatefulWidget {
   const ReceiptScannerSheet({
-    required this.onReceiptScanned, super.key,
+    required this.onReceiptScanned,
+    super.key,
   });
 
   final ValueChanged<CreateTransactionRequest?> onReceiptScanned;
 
   @override
-  ConsumerState<ReceiptScannerSheet> createState() =>
-      _ReceiptScannerSheetState();
+  ConsumerState<ReceiptScannerSheet> createState() => _ReceiptScannerSheetState();
 }
 
 class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
@@ -191,7 +192,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       _errorMessage = null;
     });
 
-    _scanAnimationController.repeat();
+    unawaited(_scanAnimationController.repeat());
     TextRecognizer? textRecognizer;
 
     try {
@@ -202,8 +203,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       textRecognizer = TextRecognizer();
 
       // Perform OCR
-      final recognizedText =
-          await textRecognizer.processImage(inputImage);
+      final recognizedText = await textRecognizer.processImage(inputImage);
 
       // Check if any text was recognized
       if (recognizedText.text.isEmpty) {
@@ -221,13 +221,13 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
     } finally {
       // Clean up
       _scanAnimationController.stop();
-      textRecognizer?.close();
+      unawaited(textRecognizer?.close());
 
-      // Delete temporary image file to free up space
+      // Delete temporary image file to free up space (sync for better performance)
       try {
         final file = File(imagePath);
-        if (await file.exists()) {
-          await file.delete();
+        if (file.existsSync()) {
+          file.deleteSync();
         }
       } catch (_) {
         // Ignore cleanup errors
@@ -280,8 +280,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
 
       setState(() {
         _state = ReceiptScanState.error;
-        _errorMessage =
-            'Could not extract receipt data. Please enter manually.';
+        _errorMessage = 'Could not extract receipt data. Please enter manually.';
       });
     }
   }
@@ -333,8 +332,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
     if (data.date != null) {
       _selectedDate = data.date!;
     }
-    _descriptionController.text =
-        'Purchase at ${data.merchantName ?? 'store'}';
+    _descriptionController.text = 'Purchase at ${data.merchantName ?? 'store'}';
   }
 
   void _onConfirm() {
@@ -350,12 +348,8 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       type: TransactionType.expense,
       amount: (amount * 100).round(),
       accountId: '', // Will need to be set by the caller
-      description: _descriptionController.text.isNotEmpty
-          ? _descriptionController.text
-          : null,
-      payee: _merchantController.text.isNotEmpty
-          ? _merchantController.text
-          : null,
+      description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
+      payee: _merchantController.text.isNotEmpty ? _merchantController.text : null,
       date: _selectedDate,
     );
 
@@ -412,9 +406,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -471,12 +463,9 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
 
             // Content based on state
             if (_state == ReceiptScanState.idle) _buildIdleState(isDark),
-            if (_state == ReceiptScanState.capturing)
-              _buildCapturingState(isDark),
-            if (_state == ReceiptScanState.processing)
-              _buildProcessingState(isDark),
-            if (_state == ReceiptScanState.extracted)
-              _buildExtractedState(isDark),
+            if (_state == ReceiptScanState.capturing) _buildCapturingState(isDark),
+            if (_state == ReceiptScanState.processing) _buildProcessingState(isDark),
+            if (_state == ReceiptScanState.extracted) _buildExtractedState(isDark),
             if (_state == ReceiptScanState.error) _buildErrorState(isDark),
 
             const SizedBox(height: 20),
@@ -495,13 +484,10 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
           Container(
             height: 200,
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBackground
-                  : SpendexColors.lightBackground,
+              color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color:
-                    isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 width: 2,
               ),
             ),
@@ -534,22 +520,22 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                 Positioned(
                   top: 16,
                   left: 16,
-                  child: _buildCornerMarker(isDark, TopLeft: true),
+                  child: _buildCornerMarker(isDark, topLeft: true),
                 ),
                 Positioned(
                   top: 16,
                   right: 16,
-                  child: _buildCornerMarker(isDark, TopRight: true),
+                  child: _buildCornerMarker(isDark, topRight: true),
                 ),
                 Positioned(
                   bottom: 16,
                   left: 16,
-                  child: _buildCornerMarker(isDark, BottomLeft: true),
+                  child: _buildCornerMarker(isDark, bottomLeft: true),
                 ),
                 Positioned(
                   bottom: 16,
                   right: 16,
-                  child: _buildCornerMarker(isDark, BottomRight: true),
+                  child: _buildCornerMarker(isDark, bottomRight: true),
                 ),
               ],
             ),
@@ -615,10 +601,10 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
 
   Widget _buildCornerMarker(
     bool isDark, {
-    bool TopLeft = false,
-    bool TopRight = false,
-    bool BottomLeft = false,
-    bool BottomRight = false,
+    bool topLeft = false,
+    bool topRight = false,
+    bool bottomLeft = false,
+    bool bottomRight = false,
   }) {
     return SizedBox(
       width: 24,
@@ -626,10 +612,10 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
       child: CustomPaint(
         painter: _CornerMarkerPainter(
           color: SpendexColors.primary,
-          topLeft: TopLeft,
-          topRight: TopRight,
-          bottomLeft: BottomLeft,
-          bottomRight: BottomRight,
+          topLeft: topLeft,
+          topRight: topRight,
+          bottomLeft: bottomLeft,
+          bottomRight: bottomRight,
         ),
       ),
     );
@@ -657,9 +643,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
             border: isPrimary
                 ? null
                 : Border.all(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   ),
           ),
           child: Row(
@@ -670,9 +654,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                 size: 20,
                 color: isPrimary
                     ? Colors.white
-                    : (isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary),
+                    : (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
               ),
               const SizedBox(width: 8),
               Text(
@@ -680,9 +662,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                 style: SpendexTheme.titleMedium.copyWith(
                   color: isPrimary
                       ? Colors.white
-                      : (isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary),
+                      : (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
                 ),
               ),
             ],
@@ -714,9 +694,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
           Text(
             'Capturing...',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
         ],
@@ -733,9 +711,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
           Container(
             height: 180,
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBackground
-                  : SpendexColors.lightBackground,
+              color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Stack(
@@ -770,8 +746,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color:
-                                  SpendexColors.primary.withValues(alpha: 0.5),
+                              color: SpendexColors.primary.withValues(alpha: 0.5),
                               blurRadius: 8,
                               spreadRadius: 2,
                             ),
@@ -857,9 +832,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
           Text(
             'Verify & Edit Details',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -899,23 +872,18 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBackground
-                    : SpendexColors.lightBackground,
+                color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Iconsax.calendar,
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                     size: 20,
                   ),
                   const SizedBox(width: 12),
@@ -944,9 +912,8 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                   const Spacer(),
                   Icon(
                     Iconsax.arrow_right_3,
-                    color: isDark
-                        ? SpendexColors.darkTextTertiary
-                        : SpendexColors.lightTextTertiary,
+                    color:
+                        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     size: 20,
                   ),
                 ],
@@ -964,9 +931,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: BorderSide(
-                      color: isDark
-                          ? SpendexColors.darkBorder
-                          : SpendexColors.lightBorder,
+                      color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     ),
                   ),
                   child: const Text('Scan Again'),
@@ -1007,9 +972,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
   }) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
@@ -1019,9 +982,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
         controller: controller,
         keyboardType: keyboardType,
         style: SpendexTheme.bodyMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextPrimary
-              : SpendexColors.lightTextPrimary,
+          color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         ),
         decoration: InputDecoration(
           labelText: label,
@@ -1029,9 +990,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
           prefixIcon: Icon(
             icon,
             size: 20,
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
@@ -1072,9 +1031,7 @@ class _ReceiptScannerSheetState extends ConsumerState<ReceiptScannerSheet>
           Text(
             _errorMessage ?? 'Please try again with a clearer image',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -1116,21 +1073,25 @@ class _CornerMarkerPainter extends CustomPainter {
     final path = Path();
 
     if (topLeft) {
-      path.moveTo(0, size.height);
-      path.lineTo(0, 0);
-      path.lineTo(size.width, 0);
+      path
+        ..moveTo(0, size.height)
+        ..lineTo(0, 0)
+        ..lineTo(size.width, 0);
     } else if (topRight) {
-      path.moveTo(0, 0);
-      path.lineTo(size.width, 0);
-      path.lineTo(size.width, size.height);
+      path
+        ..moveTo(0, 0)
+        ..lineTo(size.width, 0)
+        ..lineTo(size.width, size.height);
     } else if (bottomLeft) {
-      path.moveTo(0, 0);
-      path.lineTo(0, size.height);
-      path.lineTo(size.width, size.height);
+      path
+        ..moveTo(0, 0)
+        ..lineTo(0, size.height)
+        ..lineTo(size.width, size.height);
     } else if (bottomRight) {
-      path.moveTo(size.width, 0);
-      path.lineTo(size.width, size.height);
-      path.lineTo(0, size.height);
+      path
+        ..moveTo(size.width, 0)
+        ..lineTo(size.width, size.height)
+        ..lineTo(0, size.height);
     }
 
     canvas.drawPath(path, paint);

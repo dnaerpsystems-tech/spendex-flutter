@@ -80,9 +80,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       },
       (_) {
         // Remove from local state
-        final updatedSessions = state.deviceSessions
-            .where((session) => session.id != sessionId)
-            .toList();
+        final updatedSessions =
+            state.deviceSessions.where((session) => session.id != sessionId).toList();
         state = state.copyWith(deviceSessions: updatedSessions);
         return true;
       },
@@ -100,9 +99,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       },
       (_) {
         // Keep only current session
-        final updatedSessions = state.deviceSessions
-            .where((session) => session.isCurrent)
-            .toList();
+        final updatedSessions = state.deviceSessions.where((session) => session.isCurrent).toList();
         state = state.copyWith(deviceSessions: updatedSessions);
         return true;
       },
@@ -241,8 +238,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
 }
 
 /// Provider for settings state
-final settingsStateProvider =
-    StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
+final settingsStateProvider = StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
   return SettingsNotifier(getIt<SettingsRepository>());
 });
 
@@ -263,10 +259,7 @@ final currentDeviceSessionProvider = Provider<DeviceSessionModel?>((ref) {
 
 /// Provider for other device sessions (excluding current)
 final otherDeviceSessionsProvider = Provider<List<DeviceSessionModel>>((ref) {
-  return ref
-      .watch(deviceSessionsProvider)
-      .where((session) => !session.isCurrent)
-      .toList();
+  return ref.watch(deviceSessionsProvider).where((session) => !session.isCurrent).toList();
 });
 
 /// Provider for security logs

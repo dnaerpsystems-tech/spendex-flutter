@@ -38,13 +38,20 @@ enum DateRangePreset { thisWeek, thisMonth, last3Months, last6Months, thisYear, 
 extension DateRangePresetExtension on DateRangePreset {
   String get label {
     switch (this) {
-      case DateRangePreset.thisWeek: return 'This Week';
-      case DateRangePreset.thisMonth: return 'This Month';
-      case DateRangePreset.last3Months: return 'Last 3 Months';
-      case DateRangePreset.last6Months: return 'Last 6 Months';
-      case DateRangePreset.thisYear: return 'This Year';
-      case DateRangePreset.lastYear: return 'Last Year';
-      case DateRangePreset.custom: return 'Custom';
+      case DateRangePreset.thisWeek:
+        return 'This Week';
+      case DateRangePreset.thisMonth:
+        return 'This Month';
+      case DateRangePreset.last3Months:
+        return 'Last 3 Months';
+      case DateRangePreset.last6Months:
+        return 'Last 6 Months';
+      case DateRangePreset.thisYear:
+        return 'This Year';
+      case DateRangePreset.lastYear:
+        return 'Last Year';
+      case DateRangePreset.custom:
+        return 'Custom';
     }
   }
 
@@ -73,7 +80,8 @@ extension DateRangePresetExtension on DateRangePreset {
 
 class AnalyticsState extends Equatable {
   const AnalyticsState({
-    required this.dateRange, this.isLoading = false,
+    required this.dateRange,
+    this.isLoading = false,
     this.isLoadingMore = false,
     this.error,
     this.currentTab = AnalyticsTab.overview,
@@ -91,7 +99,8 @@ class AnalyticsState extends Equatable {
   factory AnalyticsState.initial() {
     final now = DateTime.now();
     return AnalyticsState(
-      dateRange: DateTimeRange(start: DateTime(now.year, now.month), end: DateTime(now.year, now.month, now.day)),
+      dateRange: DateTimeRange(
+          start: DateTime(now.year, now.month), end: DateTime(now.year, now.month, now.day),),
     );
   }
 
@@ -113,12 +122,22 @@ class AnalyticsState extends Equatable {
   bool get hasData => summary != null;
 
   AnalyticsState copyWith({
-    bool? isLoading, bool? isLoadingMore, String? error, AnalyticsTab? currentTab,
-    DateRangePreset? dateRangePreset, DateTimeRange? dateRange, AnalyticsSummaryModel? summary,
-    CategoryBreakdownResponse? incomeBreakdown, CategoryBreakdownResponse? expenseBreakdown,
-    DailyStatsResponse? dailyStats, MonthlyStatsResponse? monthlyStats,
-    NetWorthResponse? netWorthHistory, bool? isExporting, String? exportUrl,
-    bool clearError = false, bool clearExportUrl = false,
+    bool? isLoading,
+    bool? isLoadingMore,
+    String? error,
+    AnalyticsTab? currentTab,
+    DateRangePreset? dateRangePreset,
+    DateTimeRange? dateRange,
+    AnalyticsSummaryModel? summary,
+    CategoryBreakdownResponse? incomeBreakdown,
+    CategoryBreakdownResponse? expenseBreakdown,
+    DailyStatsResponse? dailyStats,
+    MonthlyStatsResponse? monthlyStats,
+    NetWorthResponse? netWorthHistory,
+    bool? isExporting,
+    String? exportUrl,
+    bool clearError = false,
+    bool clearExportUrl = false,
   }) {
     return AnalyticsState(
       isLoading: isLoading ?? this.isLoading,
@@ -139,7 +158,22 @@ class AnalyticsState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [isLoading, isLoadingMore, error, currentTab, dateRangePreset, dateRange, summary, incomeBreakdown, expenseBreakdown, dailyStats, monthlyStats, netWorthHistory, isExporting, exportUrl];
+  List<Object?> get props => [
+        isLoading,
+        isLoadingMore,
+        error,
+        currentTab,
+        dateRangePreset,
+        dateRange,
+        summary,
+        incomeBreakdown,
+        expenseBreakdown,
+        dailyStats,
+        monthlyStats,
+        netWorthHistory,
+        isExporting,
+        exportUrl,
+      ];
 }
 
 class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
@@ -147,7 +181,9 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   final AnalyticsRepository _repository;
 
   Future<void> loadAnalytics() async {
-    if (state.isLoading) return;
+    if (state.isLoading) {
+      return;
+    }
     state = state.copyWith(isLoading: true, clearError: true);
 
     final summaryResult = await _repository.getAnalyticsSummary(
@@ -170,12 +206,14 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   }
 
   Future<void> _loadIncomeBreakdown() async {
-    final result = await _repository.getIncomeBreakdown(startDate: state.dateRange.start, endDate: state.dateRange.end);
+    final result = await _repository.getIncomeBreakdown(
+        startDate: state.dateRange.start, endDate: state.dateRange.end,);
     result.fold((failure) {}, (data) => state = state.copyWith(incomeBreakdown: data));
   }
 
   Future<void> _loadExpenseBreakdown() async {
-    final result = await _repository.getExpenseBreakdown(startDate: state.dateRange.start, endDate: state.dateRange.end);
+    final result = await _repository.getExpenseBreakdown(
+        startDate: state.dateRange.start, endDate: state.dateRange.end,);
     result.fold((failure) {}, (data) => state = state.copyWith(expenseBreakdown: data));
   }
 
@@ -185,9 +223,12 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   }
 
   Future<void> loadDailyStats() async {
-    if (state.dailyStats != null) return;
+    if (state.dailyStats != null) {
+      return;
+    }
     state = state.copyWith(isLoadingMore: true);
-    final result = await _repository.getDailyStats(startDate: state.dateRange.start, endDate: state.dateRange.end);
+    final result = await _repository.getDailyStats(
+        startDate: state.dateRange.start, endDate: state.dateRange.end,);
     result.fold(
       (failure) => state = state.copyWith(isLoadingMore: false, error: failure.message),
       (data) => state = state.copyWith(isLoadingMore: false, dailyStats: data),
@@ -195,7 +236,9 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   }
 
   Future<void> loadNetWorthHistory() async {
-    if (state.netWorthHistory != null) return;
+    if (state.netWorthHistory != null) {
+      return;
+    }
     state = state.copyWith(isLoadingMore: true);
     final result = await _repository.getNetWorthHistory(months: 12);
     result.fold(
@@ -205,10 +248,16 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   }
 
   void setTab(AnalyticsTab tab) {
-    if (state.currentTab == tab) return;
+    if (state.currentTab == tab) {
+      return;
+    }
     state = state.copyWith(currentTab: tab);
-    if (tab == AnalyticsTab.trends) loadDailyStats();
-    if (tab == AnalyticsTab.netWorth) loadNetWorthHistory();
+    if (tab == AnalyticsTab.trends) {
+      loadDailyStats();
+    }
+    if (tab == AnalyticsTab.netWorth) {
+      loadNetWorthHistory();
+    }
   }
 
   void setDateRangePreset(DateRangePreset preset) {
@@ -228,9 +277,12 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   }
 
   Future<void> exportAnalytics(String format) async {
-    if (state.isExporting) return;
+    if (state.isExporting) {
+      return;
+    }
     state = state.copyWith(isExporting: true, clearExportUrl: true);
-    final result = await _repository.exportAnalytics(startDate: state.dateRange.start, endDate: state.dateRange.end, format: format);
+    final result = await _repository.exportAnalytics(
+        startDate: state.dateRange.start, endDate: state.dateRange.end, format: format,);
     result.fold(
       (failure) => state = state.copyWith(isExporting: false, error: failure.message),
       (url) => state = state.copyWith(isExporting: false, exportUrl: url),
@@ -245,18 +297,29 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
   }
 }
 
-final analyticsStateProvider = StateNotifierProvider.autoDispose<AnalyticsNotifier, AnalyticsState>((ref) {
+final analyticsStateProvider =
+    StateNotifierProvider.autoDispose<AnalyticsNotifier, AnalyticsState>((ref) {
   return AnalyticsNotifier(getIt<AnalyticsRepository>());
 });
 
-final analyticsSummaryProvider = Provider<AnalyticsSummaryModel?>((ref) => ref.watch(analyticsStateProvider).summary);
-final incomeBreakdownProvider = Provider<CategoryBreakdownResponse?>((ref) => ref.watch(analyticsStateProvider).incomeBreakdown);
-final expenseBreakdownProvider = Provider<CategoryBreakdownResponse?>((ref) => ref.watch(analyticsStateProvider).expenseBreakdown);
-final monthlyStatsProvider = Provider<MonthlyStatsResponse?>((ref) => ref.watch(analyticsStateProvider).monthlyStats);
-final dailyStatsProvider = Provider<DailyStatsResponse?>((ref) => ref.watch(analyticsStateProvider).dailyStats);
-final netWorthProvider = Provider<NetWorthResponse?>((ref) => ref.watch(analyticsStateProvider).netWorthHistory);
-final analyticsCurrentTabProvider = Provider<AnalyticsTab>((ref) => ref.watch(analyticsStateProvider).currentTab);
-final analyticsLoadingProvider = Provider<bool>((ref) => ref.watch(analyticsStateProvider).isLoading);
+final analyticsSummaryProvider =
+    Provider<AnalyticsSummaryModel?>((ref) => ref.watch(analyticsStateProvider).summary);
+final incomeBreakdownProvider = Provider<CategoryBreakdownResponse?>(
+    (ref) => ref.watch(analyticsStateProvider).incomeBreakdown,);
+final expenseBreakdownProvider = Provider<CategoryBreakdownResponse?>(
+    (ref) => ref.watch(analyticsStateProvider).expenseBreakdown,);
+final monthlyStatsProvider =
+    Provider<MonthlyStatsResponse?>((ref) => ref.watch(analyticsStateProvider).monthlyStats);
+final dailyStatsProvider =
+    Provider<DailyStatsResponse?>((ref) => ref.watch(analyticsStateProvider).dailyStats);
+final netWorthProvider =
+    Provider<NetWorthResponse?>((ref) => ref.watch(analyticsStateProvider).netWorthHistory);
+final analyticsCurrentTabProvider =
+    Provider<AnalyticsTab>((ref) => ref.watch(analyticsStateProvider).currentTab);
+final analyticsLoadingProvider =
+    Provider<bool>((ref) => ref.watch(analyticsStateProvider).isLoading);
 final analyticsErrorProvider = Provider<String?>((ref) => ref.watch(analyticsStateProvider).error);
-final analyticsDateRangeProvider = Provider<DateTimeRange>((ref) => ref.watch(analyticsStateProvider).dateRange);
-final analyticsDateRangePresetProvider = Provider<DateRangePreset>((ref) => ref.watch(analyticsStateProvider).dateRangePreset);
+final analyticsDateRangeProvider =
+    Provider<DateTimeRange>((ref) => ref.watch(analyticsStateProvider).dateRange);
+final analyticsDateRangePresetProvider =
+    Provider<DateRangePreset>((ref) => ref.watch(analyticsStateProvider).dateRangePreset);

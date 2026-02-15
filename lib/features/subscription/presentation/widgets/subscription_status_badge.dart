@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme.dart';
-import '../../data/models/subscription_models.dart';
+import '../../../../core/constants/app_constants.dart';
 
 /// A badge widget that displays the subscription status with appropriate colors.
 ///
@@ -50,7 +50,7 @@ class SubscriptionStatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: config.backgroundColor,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
-        border: Border.all(color: config.borderColor, width: 1),
+        border: Border.all(color: config.borderColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -85,53 +85,50 @@ class SubscriptionStatusBadge extends StatelessWidget {
           label: 'Active',
           icon: Icons.check_circle_outline,
           textColor: SpendexColors.income,
-          backgroundColor: SpendexColors.income.withOpacity(0.1),
-          borderColor: SpendexColors.income.withOpacity(0.3),
+          backgroundColor: SpendexColors.income.withValues(alpha: 0.1),
+          borderColor: SpendexColors.income.withValues(alpha: 0.3),
         );
       case SubscriptionStatus.trialing:
         return _StatusConfig(
           label: 'Trial',
           icon: Icons.access_time,
           textColor: SpendexColors.transfer,
-          backgroundColor: SpendexColors.transfer.withOpacity(0.1),
-          borderColor: SpendexColors.transfer.withOpacity(0.3),
+          backgroundColor: SpendexColors.transfer.withValues(alpha: 0.1),
+          borderColor: SpendexColors.transfer.withValues(alpha: 0.3),
         );
       case SubscriptionStatus.pastDue:
         return _StatusConfig(
           label: 'Past Due',
           icon: Icons.warning_amber_outlined,
           textColor: SpendexColors.warning,
-          backgroundColor: SpendexColors.warning.withOpacity(0.1),
-          borderColor: SpendexColors.warning.withOpacity(0.3),
+          backgroundColor: SpendexColors.warning.withValues(alpha: 0.1),
+          borderColor: SpendexColors.warning.withValues(alpha: 0.3),
         );
       case SubscriptionStatus.cancelled:
         return _StatusConfig(
           label: 'Cancelled',
           icon: Icons.cancel_outlined,
           textColor: SpendexColors.expense,
-          backgroundColor: SpendexColors.expense.withOpacity(0.1),
-          borderColor: SpendexColors.expense.withOpacity(0.3),
+          backgroundColor: SpendexColors.expense.withValues(alpha: 0.1),
+          borderColor: SpendexColors.expense.withValues(alpha: 0.3),
         );
       case SubscriptionStatus.expired:
         return _StatusConfig(
           label: 'Expired',
           icon: Icons.event_busy_outlined,
           textColor: SpendexColors.expense,
-          backgroundColor: SpendexColors.expense.withOpacity(0.1),
-          borderColor: SpendexColors.expense.withOpacity(0.3),
+          backgroundColor: SpendexColors.expense.withValues(alpha: 0.1),
+          borderColor: SpendexColors.expense.withValues(alpha: 0.3),
         );
       case SubscriptionStatus.paused:
         return _StatusConfig(
           label: 'Paused',
           icon: Icons.pause_circle_outline,
-          textColor: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          textColor: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           backgroundColor: isDark
-              ? SpendexColors.darkBorder.withOpacity(0.5)
-              : SpendexColors.lightBorder.withOpacity(0.5),
-          borderColor:
-              isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+              ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+              : SpendexColors.lightBorder.withValues(alpha: 0.5),
+          borderColor: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
         );
     }
   }
@@ -177,8 +174,8 @@ class SubscriptionStatusBadgeSkeleton extends StatelessWidget {
       height: 28,
       decoration: BoxDecoration(
         color: isDark
-            ? SpendexColors.darkBorder.withOpacity(0.5)
-            : SpendexColors.lightBorder.withOpacity(0.5),
+            ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+            : SpendexColors.lightBorder.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
       ),
     );

@@ -51,18 +51,14 @@ class LoanTypePickerModal extends StatelessWidget {
                   'Select Loan Type',
                   style: SpendexTheme.titleMedium.copyWith(
                     fontSize: 20,
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   ),
                 ),
               ),
               IconButton(
                 icon: const Icon(Iconsax.close_circle),
                 onPressed: () => Navigator.of(context).pop(),
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ],
           ),
@@ -88,16 +84,12 @@ class LoanTypePickerModal extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? const Color(0xFF7C3AED).withValues(alpha: 0.12)
-                        : (isDark
-                            ? SpendexColors.darkBackground
-                            : SpendexColors.lightBackground),
+                        : (isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground),
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                     border: Border.all(
                       color: isSelected
                           ? const Color(0xFF7C3AED)
-                          : (isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder),
+                          : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
                       width: isSelected ? 2 : 1,
                     ),
                   ),
@@ -123,8 +115,7 @@ class LoanTypePickerModal extends StatelessWidget {
                               : (isDark
                                   ? SpendexColors.darkTextPrimary
                                   : SpendexColors.lightTextPrimary),
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.w500,
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,

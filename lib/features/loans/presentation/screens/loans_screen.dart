@@ -40,9 +40,7 @@ class _LoansScreenState extends ConsumerState<LoansScreen> {
     final error = ref.watch(loansErrorProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Loans & EMIs'),
         centerTitle: true,
@@ -69,7 +67,6 @@ class _LoansScreenState extends ConsumerState<LoansScreen> {
                   child: LoansSummaryCard(summary: summary),
                 ),
               ),
-
             if (isLoading && summary == null)
               SliverToBoxAdapter(
                 child: Padding(
@@ -77,9 +74,7 @@ class _LoansScreenState extends ConsumerState<LoansScreen> {
                   child: _LoansSummarySkeleton(isDark: isDark),
                 ),
               ),
-
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
-
             if (isLoading && loans.isEmpty)
               _buildLoadingSkeleton(isDark)
             else if (error != null && loans.isEmpty)
@@ -88,7 +83,6 @@ class _LoansScreenState extends ConsumerState<LoansScreen> {
               _buildEmptyState()
             else
               _buildLoansList(loans, isDark),
-
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
@@ -239,11 +233,8 @@ class _LoansSummarySkeleton extends StatelessWidget {
                       width: 80,
                       height: 12,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -251,11 +242,8 @@ class _LoansSummarySkeleton extends StatelessWidget {
                       width: 50,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],
@@ -269,11 +257,8 @@ class _LoansSummarySkeleton extends StatelessWidget {
                       width: 70,
                       height: 12,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -281,11 +266,8 @@ class _LoansSummarySkeleton extends StatelessWidget {
                       width: 50,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],
@@ -298,9 +280,7 @@ class _LoansSummarySkeleton extends StatelessWidget {
             width: double.infinity,
             height: 50,
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
             ),
           ),
@@ -325,8 +305,7 @@ class _LoanCardSkeleton extends StatelessWidget {
           color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
           borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
           border: Border.all(
-            color:
-                isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
           ),
         ),
         child: Column(
@@ -337,9 +316,7 @@ class _LoanCardSkeleton extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
@@ -352,11 +329,8 @@ class _LoanCardSkeleton extends StatelessWidget {
                         width: double.infinity,
                         height: 16,
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder,
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusSm),
+                          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -364,11 +338,8 @@ class _LoanCardSkeleton extends StatelessWidget {
                         width: 100,
                         height: 14,
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder,
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusSm),
+                          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         ),
                       ),
                     ],
@@ -381,9 +352,7 @@ class _LoanCardSkeleton extends StatelessWidget {
               width: double.infinity,
               height: 8,
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
               ),
             ),
@@ -395,9 +364,7 @@ class _LoanCardSkeleton extends StatelessWidget {
                   width: 80,
                   height: 14,
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                   ),
                 ),
@@ -405,9 +372,7 @@ class _LoanCardSkeleton extends StatelessWidget {
                   width: 80,
                   height: 14,
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                   ),
                 ),

@@ -47,9 +47,7 @@ class EmiBreakdownCard extends StatelessWidget {
           Text(
             'Monthly EMI',
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: 8),
@@ -92,9 +90,7 @@ class EmiBreakdownCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Divider(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
                 const SizedBox(height: 12),
                 BreakdownRow(
@@ -139,25 +135,18 @@ class BreakdownRow extends StatelessWidget {
         Text(
           label,
           style: isTotal
-                  ? SpendexTheme.titleMedium.copyWith(fontSize: 14)
-                  : SpendexTheme.bodyMedium
-              .copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
-            fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
-          ),
+              ? SpendexTheme.titleMedium.copyWith(fontSize: 14)
+              : SpendexTheme.bodyMedium.copyWith(
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
+                  fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
+                ),
         ),
         Text(
           value,
-          style: (isTotal
-                  ? SpendexTheme.titleMedium
-                  : SpendexTheme.bodyMedium)
-              .copyWith(
+          style: (isTotal ? SpendexTheme.titleMedium : SpendexTheme.bodyMedium).copyWith(
             color: valueColor ??
-                (isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary),
+                (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
             fontWeight: isTotal ? FontWeight.w600 : FontWeight.w500,
           ),
         ),

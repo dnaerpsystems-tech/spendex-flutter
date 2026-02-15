@@ -1,7 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'adapters/adapters.dart';
-import 'models/pending_mutation.g.dart';
-import 'models/cached_entity.g.dart';
 import 'services/cache_service.dart';
 import 'services/connectivity_service.dart';
 import 'services/sync_service.dart';
@@ -19,7 +18,9 @@ class OfflineModule {
   ///
   /// This should be called once during app startup, after Hive is initialized.
   static Future<void> initialize() async {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      return;
+    }
 
     // Register Hive adapters
     await _registerAdapters();
@@ -81,9 +82,6 @@ class OfflineModule {
     }
     if (!Hive.isAdapterRegistered(101)) {
       Hive.registerAdapter(SyncOperationAdapter());
-    }
-    if (!Hive.isAdapterRegistered(102)) {
-      Hive.registerAdapter(CachedEntityAdapter());
     }
     if (!Hive.isAdapterRegistered(103)) {
       Hive.registerAdapter(SyncStatusAdapter());

@@ -152,7 +152,9 @@ class VoiceParserService {
 
   /// Parse natural language to transaction request
   CreateTransactionRequest? parseVoiceInput(String text, {String? defaultAccountId}) {
-    if (text.trim().isEmpty) return null;
+    if (text.trim().isEmpty) {
+      return null;
+    }
 
     final normalizedText = text.toLowerCase().trim();
 
@@ -161,7 +163,9 @@ class VoiceParserService {
 
     // Extract amount
     final amount = extractAmount(normalizedText);
-    if (amount == null || amount <= 0) return null;
+    if (amount == null || amount <= 0) {
+      return null;
+    }
 
     // Extract category
     final _ = extractCategory(normalizedText);
@@ -274,11 +278,20 @@ class VoiceParserService {
 
     // Remove common filler words and keywords
     final wordsToRemove = [
-      'rupees', 'rs', 'inr', '₹',
+      'rupees',
+      'rs',
+      'inr',
+      '₹',
       ..._expenseKeywords,
       ..._incomeKeywords,
       ..._transferKeywords,
-      'on', 'for', 'from', 'to', 'the', 'a', 'an',
+      'on',
+      'for',
+      'from',
+      'to',
+      'the',
+      'a',
+      'an',
     ];
 
     for (final word in wordsToRemove) {
@@ -338,8 +351,12 @@ class VoiceParserService {
 
   /// Validate parsed transaction
   bool isValidTransaction(CreateTransactionRequest? request) {
-    if (request == null) return false;
-    if (request.amount <= 0) return false;
+    if (request == null) {
+      return false;
+    }
+    if (request.amount <= 0) {
+      return false;
+    }
     return true;
   }
 }

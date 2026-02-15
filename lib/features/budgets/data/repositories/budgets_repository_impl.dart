@@ -7,7 +7,6 @@ import '../models/budget_model.dart';
 
 /// Budgets Repository Implementation
 class BudgetsRepositoryImpl implements BudgetsRepository {
-
   BudgetsRepositoryImpl(this._remoteDataSource);
   final BudgetsRemoteDataSource _remoteDataSource;
 

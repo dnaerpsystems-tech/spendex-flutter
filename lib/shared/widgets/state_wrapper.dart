@@ -26,7 +26,6 @@ import 'loading_state_widget.dart';
 /// )
 /// ```
 class StateWrapper<T> extends StatelessWidget {
-
   const StateWrapper({
     required this.isLoading,
     required this.dataBuilder,
@@ -104,8 +103,7 @@ class StateWrapper<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading && data == null) {
-      return loadingWidget ??
-          LoadingStateWidget(message: loadingMessage);
+      return loadingWidget ?? LoadingStateWidget(message: loadingMessage);
     }
 
     if (error != null && data == null) {
@@ -151,7 +149,6 @@ class StateWrapper<T> extends StatelessWidget {
 /// Wraps each state in the appropriate sliver widget for use inside
 /// [CustomScrollView] or other sliver-based layouts.
 class SliverStateWrapper<T> extends StatelessWidget {
-
   const SliverStateWrapper({
     required this.isLoading,
     required this.dataBuilder,
@@ -228,8 +225,7 @@ class SliverStateWrapper<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading && data == null) {
-      return loadingWidget ??
-          SliverLoadingStateWidget(message: loadingMessage);
+      return loadingWidget ?? SliverLoadingStateWidget(message: loadingMessage);
     }
 
     if (error != null && data == null) {

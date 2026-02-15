@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Helper class for accessibility features
 class SemanticsHelper {
   SemanticsHelper._();
-  
+
   /// Wrap a widget with semantic label for screen readers
   static Widget label({
     required Widget child,
@@ -24,7 +24,7 @@ class SemanticsHelper {
       child: child,
     );
   }
-  
+
   /// Wrap a button with proper semantics
   static Widget button({
     required Widget child,
@@ -40,7 +40,7 @@ class SemanticsHelper {
       child: child,
     );
   }
-  
+
   /// Wrap an image with description
   static Widget image({
     required Widget child,
@@ -52,7 +52,7 @@ class SemanticsHelper {
       child: child,
     );
   }
-  
+
   /// Wrap a header/title
   static Widget header({
     required Widget child,
@@ -64,7 +64,7 @@ class SemanticsHelper {
       child: child,
     );
   }
-  
+
   /// Exclude decorative elements from semantics
   static Widget excludeDecorative({
     required Widget child,
@@ -73,19 +73,17 @@ class SemanticsHelper {
       child: child,
     );
   }
-  
+
   /// Merge semantics for complex widgets
   static Widget merge({
     required Widget child,
     String? label,
   }) {
     return MergeSemantics(
-      child: label != null
-          ? Semantics(label: label, child: child)
-          : child,
+      child: label != null ? Semantics(label: label, child: child) : child,
     );
   }
-  
+
   /// Add value semantics (for progress, sliders, etc.)
   static Widget value({
     required Widget child,

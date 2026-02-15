@@ -34,7 +34,7 @@ class LanguageSelectorTile extends ConsumerWidget {
 
   void _showLanguageDialog(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -108,14 +108,13 @@ class LanguageSelectionList extends ConsumerWidget {
 
 /// A compact language toggle button
 class LanguageToggleButton extends ConsumerWidget {
-  final bool showLabel;
-  final double iconSize;
-
   const LanguageToggleButton({
     super.key,
     this.showLabel = true,
     this.iconSize = 20,
   });
+  final bool showLabel;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

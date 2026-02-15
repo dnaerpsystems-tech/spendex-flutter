@@ -58,9 +58,8 @@ class _MarkEmiPaidSheetState extends ConsumerState<MarkEmiPaidSheet> {
       paidDate: _selectedDate,
     );
 
-    final result = await ref
-        .read(loansStateProvider.notifier)
-        .recordEmiPayment(widget.loanId, request);
+    final result =
+        await ref.read(loansStateProvider.notifier).recordEmiPayment(widget.loanId, request);
 
     if (mounted) {
       setState(() {
@@ -129,9 +128,8 @@ class _MarkEmiPaidSheetState extends ConsumerState<MarkEmiPaidSheet> {
                   child: Text(
                     'Mark EMI as Paid',
                     style: SpendexTheme.headlineMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ),
@@ -173,9 +171,7 @@ class _MarkEmiPaidSheetState extends ConsumerState<MarkEmiPaidSheet> {
             Text(
               'Payment Date',
               style: SpendexTheme.labelMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
             const SizedBox(height: 8),
@@ -203,9 +199,8 @@ class _MarkEmiPaidSheetState extends ConsumerState<MarkEmiPaidSheet> {
                     Text(
                       DateFormat('dd MMM yyyy').format(_selectedDate),
                       style: SpendexTheme.bodyMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                       ),
                     ),
                   ],

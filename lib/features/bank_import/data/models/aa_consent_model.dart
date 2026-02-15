@@ -9,7 +9,6 @@ enum ConsentStatus {
 }
 
 class AccountAggregatorConsentModel extends Equatable {
-
   const AccountAggregatorConsentModel({
     required this.consentId,
     required this.status,
@@ -27,9 +26,7 @@ class AccountAggregatorConsentModel extends Equatable {
         (e) => e.name == json['status'],
         orElse: () => ConsentStatus.pending,
       ),
-      accountIds: (json['accountIds'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      accountIds: (json['accountIds'] as List<dynamic>).map((e) => e as String).toList(),
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: DateTime.parse(json['endDate'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),

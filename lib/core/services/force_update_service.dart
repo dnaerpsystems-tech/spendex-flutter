@@ -8,7 +8,6 @@ class ForceUpdateService {
   ForceUpdateService._();
 
   static String? _currentVersion;
-  static String? _minRequiredVersion;
 
   /// Initialize the service
   static Future<void> initialize() async {
@@ -20,17 +19,21 @@ class ForceUpdateService {
   /// Check if update is required
   /// [minVersion] - Minimum required version from backend/remote config
   static bool isUpdateRequired(String minVersion) {
-    _minRequiredVersion = minVersion;
-
-    if (_currentVersion == null) return false;
+    if (_currentVersion == null) {
+      return false;
+    }
 
     final current = _parseVersion(_currentVersion!);
     final required = _parseVersion(minVersion);
 
     // Compare versions
-    for (int i = 0; i < 3; i++) {
-      if (current[i] < required[i]) return true;
-      if (current[i] > required[i]) return false;
+    for (var i = 0; i < 3; i++) {
+      if (current[i] < required[i]) {
+        return true;
+      }
+      if (current[i] > required[i]) {
+        return false;
+      }
     }
 
     return false;
@@ -63,9 +66,9 @@ class ForceUpdateService {
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Later'),
             ),
-          ElevatedButton(
-            onPressed: () => _openStore(),
-            child: const Text('Update Now'),
+          const ElevatedButton(
+            onPressed: _openStore,
+            child: Text('Update Now'),
           ),
         ],
       ),

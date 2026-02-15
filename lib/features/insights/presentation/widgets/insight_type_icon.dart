@@ -4,9 +4,9 @@ import '../../data/models/insight_model.dart';
 
 /// Widget that displays an appropriate icon for each InsightType with color coding
 class InsightTypeIcon extends StatelessWidget {
-
   const InsightTypeIcon({
-    required this.type, super.key,
+    required this.type,
+    super.key,
     this.size = 48.0,
     this.showGradient = true,
   });
@@ -130,8 +130,7 @@ class InsightTypeIcon extends StatelessWidget {
         color: showGradient ? null : _getSolidColor(),
         boxShadow: [
           BoxShadow(
-            color: (showGradient ? gradientColors[0] : _getSolidColor())
-                .withOpacity(0.3),
+            color: (showGradient ? gradientColors[0] : _getSolidColor()).withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

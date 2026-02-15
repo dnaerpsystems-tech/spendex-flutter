@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +35,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     symbol: '\u20B9',
     decimalDigits: 0,
   );
-  
+
   TransactionType? _selectedType;
   DateTimeRange? _selectedDateRange;
 
@@ -41,7 +43,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(transactionsStateProvider.notifier).loadTransactions();
     });
@@ -49,14 +51,14 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       final state = ref.read(transactionsStateProvider);
       if (!state.isLoading && state.hasMore) {
         ref.read(transactionsStateProvider.notifier).loadMore();
@@ -78,7 +80,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
       ),
     );
     if (result != null && mounted) {
-      context.push('/transactions/${result.id}');
+      unawaited(context.push('/transactions/${result.id}'));
     }
   }
 
@@ -98,8 +100,8 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
           Navigator.pop(context);
           if (type != null) {
             ref.read(transactionsStateProvider.notifier).applyFilter(
-              TransactionFilter(type: type),
-            );
+                  TransactionFilter(type: type),
+                );
           } else {
             ref.read(transactionsStateProvider.notifier).clearFilter();
           }
@@ -117,7 +119,8 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         onTransactionParsed: (request) {
           Navigator.pop(context);
           if (request != null) {
-            context.go('${AppRoutes.addTransaction}?amount=${request.amount}&type=${request.type.value}');
+            context.go(
+                '${AppRoutes.addTransaction}?amount=${request.amount}&type=${request.type.value}',);
           }
         },
       ),
@@ -146,9 +149,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     final transactionsState = ref.watch(transactionsStateProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Transactions'),
         centerTitle: true,
@@ -190,7 +191,8 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                         ),
                       if (_selectedDateRange != null)
                         _FilterChip(
-                          label: '${DateFormat('MMM d').format(_selectedDateRange!.start)} - ${DateFormat('MMM d').format(_selectedDateRange!.end)}',
+                          label:
+                              '${DateFormat('MMM d').format(_selectedDateRange!.start)} - ${DateFormat('MMM d').format(_selectedDateRange!.end)}',
                           onRemove: () => setState(() => _selectedDateRange = null),
                         ),
                     ],
@@ -320,7 +322,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 
   Widget _buildTransactionsList(TransactionsState state, bool isDark) {
     final grouped = _groupTransactionsByDate(state.transactions);
-    
+
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       sliver: SliverList(
@@ -331,10 +333,12 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DateGroupHeader(date: entry.key),
-                ...entry.value.map((t) => TransactionCard(
-                  transaction: t,
-                  onTap: () => context.push('/transactions/${t.id}'),
-                ),),
+                ...entry.value.map(
+                  (t) => TransactionCard(
+                    transaction: t,
+                    onTap: () => context.push('/transactions/${t.id}'),
+                  ),
+                ),
               ],
             );
           },
@@ -344,7 +348,8 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     );
   }
 
-  Map<DateTime, List<TransactionModel>> _groupTransactionsByDate(List<TransactionModel> transactions) {
+  Map<DateTime, List<TransactionModel>> _groupTransactionsByDate(
+      List<TransactionModel> transactions,) {
     final grouped = <DateTime, List<TransactionModel>>{};
     for (final t in transactions) {
       final key = DateTime(t.date.year, t.date.month, t.date.day);
@@ -355,9 +360,12 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 
   Color _getTypeColor(TransactionType type) {
     switch (type) {
-      case TransactionType.income: return SpendexColors.income;
-      case TransactionType.expense: return SpendexColors.expense;
-      case TransactionType.transfer: return SpendexColors.transfer;
+      case TransactionType.income:
+        return SpendexColors.income;
+      case TransactionType.expense:
+        return SpendexColors.expense;
+      case TransactionType.transfer:
+        return SpendexColors.transfer;
     }
   }
 }
@@ -397,7 +405,8 @@ class _TransactionSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final color = isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
+    final color =
+        isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(16),
@@ -407,19 +416,33 @@ class _TransactionSkeleton extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(width: 48, height: 48, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(14))),
+          Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(14)),),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(height: 16, width: 120, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
+                Container(
+                    height: 16,
+                    width: 120,
+                    decoration:
+                        BoxDecoration(color: color, borderRadius: BorderRadius.circular(4)),),
                 const SizedBox(height: 8),
-                Container(height: 12, width: 80, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
+                Container(
+                    height: 12,
+                    width: 80,
+                    decoration:
+                        BoxDecoration(color: color, borderRadius: BorderRadius.circular(4)),),
               ],
             ),
           ),
-          Container(height: 16, width: 60, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
+          Container(
+              height: 16,
+              width: 60,
+              decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4)),),
         ],
       ),
     );
@@ -427,7 +450,8 @@ class _TransactionSkeleton extends StatelessWidget {
 }
 
 class _FilterSheet extends StatefulWidget {
-  const _FilterSheet({required this.selectedType, required this.selectedDateRange, required this.onApply});
+  const _FilterSheet(
+      {required this.selectedType, required this.selectedDateRange, required this.onApply,});
   final TransactionType? selectedType;
   final DateTimeRange? selectedDateRange;
   final void Function(TransactionType?, DateTimeRange?) onApply;
@@ -465,7 +489,10 @@ class _FilterSheetState extends State<_FilterSheet> {
             children: [
               Text('Filter Transactions', style: SpendexTheme.headlineMedium),
               TextButton(
-                onPressed: () => setState(() { _type = null; _dateRange = null; }),
+                onPressed: () => setState(() {
+                  _type = null;
+                  _dateRange = null;
+                }),
                 child: const Text('Reset', style: TextStyle(color: SpendexColors.expense)),
               ),
             ],
@@ -475,12 +502,16 @@ class _FilterSheetState extends State<_FilterSheet> {
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
-            children: TransactionType.values.map((t) => ChoiceChip(
-              label: Text(t.label),
-              selected: _type == t,
-              selectedColor: _getColor(t).withValues(alpha: 0.2),
-              onSelected: (s) => setState(() => _type = s ? t : null),
-            ),).toList(),
+            children: TransactionType.values
+                .map(
+                  (t) => ChoiceChip(
+                    label: Text(t.label),
+                    selected: _type == t,
+                    selectedColor: _getColor(t).withValues(alpha: 0.2),
+                    onSelected: (s) => setState(() => _type = s ? t : null),
+                  ),
+                )
+                .toList(),
           ),
           const SizedBox(height: 24),
           Text('Date Range', style: SpendexTheme.titleMedium),
@@ -493,12 +524,16 @@ class _FilterSheetState extends State<_FilterSheet> {
                 lastDate: DateTime.now(),
                 initialDateRange: _dateRange,
               );
-              if (picked != null) setState(() => _dateRange = picked);
+              if (picked != null) {
+                setState(() => _dateRange = picked);
+              }
             },
             icon: const Icon(Iconsax.calendar),
-            label: Text(_dateRange != null
-                ? '${DateFormat('MMM d').format(_dateRange!.start)} - ${DateFormat('MMM d').format(_dateRange!.end)}'
-                : 'Select Date Range',),
+            label: Text(
+              _dateRange != null
+                  ? '${DateFormat('MMM d').format(_dateRange!.start)} - ${DateFormat('MMM d').format(_dateRange!.end)}'
+                  : 'Select Date Range',
+            ),
           ),
           const SizedBox(height: 32),
           SizedBox(
@@ -516,9 +551,12 @@ class _FilterSheetState extends State<_FilterSheet> {
 
   Color _getColor(TransactionType t) {
     switch (t) {
-      case TransactionType.income: return SpendexColors.income;
-      case TransactionType.expense: return SpendexColors.expense;
-      case TransactionType.transfer: return SpendexColors.transfer;
+      case TransactionType.income:
+        return SpendexColors.income;
+      case TransactionType.expense:
+        return SpendexColors.expense;
+      case TransactionType.transfer:
+        return SpendexColors.transfer;
     }
   }
 }

@@ -8,7 +8,6 @@ import '../../domain/repositories/loans_repository.dart';
 
 /// Loans State
 class LoansState extends Equatable {
-
   const LoansState({
     this.loans = const [],
     this.summary,
@@ -107,7 +106,6 @@ class LoansState extends Equatable {
 
 /// Loans State Notifier
 class LoansNotifier extends StateNotifier<LoansState> {
-
   LoansNotifier(this._repository) : super(const LoansState.initial());
   final LoansRepository _repository;
 
@@ -338,9 +336,8 @@ class LoansNotifier extends StateNotifier<LoansState> {
 
   /// Select a loan
   void selectLoan(LoanModel? loan) {
-    state = loan != null
-        ? state.copyWith(selectedLoan: loan)
-        : state.copyWith(clearSelectedLoan: true);
+    state =
+        loan != null ? state.copyWith(selectedLoan: loan) : state.copyWith(clearSelectedLoan: true);
   }
 
   /// Clear error
@@ -356,8 +353,7 @@ class LoansNotifier extends StateNotifier<LoansState> {
 }
 
 /// Loans State Provider
-final loansStateProvider =
-    StateNotifierProvider.autoDispose<LoansNotifier, LoansState>((ref) {
+final loansStateProvider = StateNotifierProvider.autoDispose<LoansNotifier, LoansState>((ref) {
   return LoansNotifier(getIt<LoansRepository>());
 });
 
@@ -387,14 +383,12 @@ final closedLoansProvider = Provider<List<LoanModel>>((ref) {
 });
 
 /// Loans By Status Provider
-final loansByStatusProvider =
-    Provider.family<List<LoanModel>, LoanStatus>((ref, status) {
+final loansByStatusProvider = Provider.family<List<LoanModel>, LoanStatus>((ref, status) {
   return ref.watch(loansStateProvider).getLoansByStatus(status);
 });
 
 /// Loans By Type Provider
-final loansByTypeProvider =
-    Provider.family<List<LoanModel>, LoanType>((ref, type) {
+final loansByTypeProvider = Provider.family<List<LoanModel>, LoanType>((ref, type) {
   return ref.watch(loansStateProvider).getLoansByType(type);
 });
 

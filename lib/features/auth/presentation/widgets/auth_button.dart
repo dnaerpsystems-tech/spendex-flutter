@@ -12,7 +12,6 @@ import '../../../../app/theme.dart';
 /// - Gradient background
 /// - Customizable text and icon
 class AuthPrimaryButton extends StatelessWidget {
-
   const AuthPrimaryButton({
     required this.text,
     super.key,
@@ -45,8 +44,8 @@ class AuthPrimaryButton extends StatelessWidget {
           gradient: isDisabled
               ? LinearGradient(
                   colors: [
-                    SpendexColors.primary.withValues(alpha:0.5),
-                    SpendexColors.primaryDark.withValues(alpha:0.5),
+                    SpendexColors.primary.withValues(alpha: 0.5),
+                    SpendexColors.primaryDark.withValues(alpha: 0.5),
                   ],
                 )
               : SpendexColors.primaryGradient,
@@ -55,7 +54,7 @@ class AuthPrimaryButton extends StatelessWidget {
               ? null
               : [
                   BoxShadow(
-                    color: SpendexColors.primary.withValues(alpha:0.3),
+                    color: SpendexColors.primary.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -72,12 +71,11 @@ class AuthPrimaryButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
             disabledBackgroundColor: Colors.transparent,
             foregroundColor: Colors.white,
-            disabledForegroundColor: Colors.white.withValues(alpha:0.7),
+            disabledForegroundColor: Colors.white.withValues(alpha: 0.7),
             shadowColor: Colors.transparent,
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius:
-                  borderRadius ?? BorderRadius.circular(SpendexTheme.radiusMd),
+              borderRadius: borderRadius ?? BorderRadius.circular(SpendexTheme.radiusMd),
             ),
           ),
           child: AnimatedSwitcher(
@@ -123,7 +121,6 @@ class AuthPrimaryButton extends StatelessWidget {
 /// - Icon support
 /// - Haptic feedback
 class AuthOutlinedButton extends StatelessWidget {
-
   const AuthOutlinedButton({
     required this.text,
     super.key,
@@ -150,9 +147,8 @@ class AuthOutlinedButton extends StatelessWidget {
     final isDisabled = !isEnabled || isLoading;
 
     final buttonColor = color ?? SpendexColors.primary;
-    final borderColor = isDisabled
-        ? (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder)
-        : buttonColor;
+    final borderColor =
+        isDisabled ? (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder) : buttonColor;
     final textColor = isDisabled
         ? (isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary)
         : buttonColor;
@@ -219,7 +215,6 @@ class AuthOutlinedButton extends StatelessWidget {
 /// - Customizable color
 /// - Underline option
 class AuthTextButton extends StatelessWidget {
-
   const AuthTextButton({
     required this.text,
     super.key,
@@ -275,7 +270,6 @@ class AuthTextButton extends StatelessWidget {
 
 /// Social Login Button (Google, Apple, etc.)
 class AuthSocialButton extends StatelessWidget {
-
   const AuthSocialButton({
     required this.text,
     super.key,
@@ -303,12 +297,11 @@ class AuthSocialButton extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isDisabled = !isEnabled || isLoading;
 
-    final bgColor = backgroundColor ??
-        (isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface);
+    final bgColor =
+        backgroundColor ?? (isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface);
     final fgColor = foregroundColor ??
         (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary);
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     return SizedBox(
       width: double.infinity,
@@ -371,7 +364,6 @@ class AuthSocialButton extends StatelessWidget {
 
 /// Icon Button for auth screens
 class AuthIconButton extends StatelessWidget {
-
   const AuthIconButton({
     required this.icon,
     super.key,
@@ -391,12 +383,8 @@ class AuthIconButton extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final iconColor = color ??
         (isEnabled
-            ? (isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary)
-            : (isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary));
+            ? (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary)
+            : (isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary));
 
     return IconButton(
       onPressed: isEnabled

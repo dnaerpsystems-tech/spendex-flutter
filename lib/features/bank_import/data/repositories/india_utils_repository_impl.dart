@@ -5,7 +5,6 @@ import '../datasources/india_utils_remote_datasource.dart';
 import '../models/ifsc_details_model.dart';
 
 class IndiaUtilsRepositoryImpl implements IndiaUtilsRepository {
-
   IndiaUtilsRepositoryImpl(this._remoteDataSource);
   final IndiaUtilsRemoteDataSource _remoteDataSource;
 

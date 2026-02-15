@@ -19,7 +19,8 @@ class TransactionCard extends StatelessWidget {
   /// The [transaction] parameter is required and specifies the transaction to display.
   /// The [onTap] callback is triggered when the card is tapped.
   const TransactionCard({
-    required this.transaction, super.key,
+    required this.transaction,
+    super.key,
     this.onTap,
     this.showDate = true,
     this.compact = false,
@@ -111,9 +112,7 @@ class TransactionCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    transaction.description ??
-                        transaction.category?.name ??
-                        transaction.type.label,
+                    transaction.description ?? transaction.category?.name ?? transaction.type.label,
                     style: SpendexTheme.titleMedium.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                       fontSize: compact ? 13 : 14,

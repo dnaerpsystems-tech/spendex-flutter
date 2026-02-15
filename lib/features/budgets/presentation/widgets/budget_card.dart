@@ -9,9 +9,9 @@ import 'budget_progress_bar.dart';
 /// Budget Card Widget
 /// Displays a budget with progress, amounts, and status
 class BudgetCard extends StatelessWidget {
-
   const BudgetCard({
-    required this.budget, super.key,
+    required this.budget,
+    super.key,
     this.onTap,
     this.compact = false,
     this.showCategory = true,
@@ -263,9 +263,8 @@ class BudgetCard extends StatelessWidget {
                     Text(
                       _formatCurrency(budget.amountInRupees),
                       style: SpendexTheme.titleMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                         fontSize: compact ? 13 : 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -290,9 +289,7 @@ class BudgetCard extends StatelessWidget {
                     Text(
                       _formatCurrency(budget.remainingInRupees.abs()),
                       style: SpendexTheme.titleMedium.copyWith(
-                        color: budget.isOverBudget
-                            ? SpendexColors.expense
-                            : SpendexColors.income,
+                        color: budget.isOverBudget ? SpendexColors.expense : SpendexColors.income,
                         fontSize: compact ? 13 : 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -309,7 +306,6 @@ class BudgetCard extends StatelessWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-
   const _StatusBadge({
     required this.daysRemaining,
     required this.percentage,
@@ -379,7 +375,6 @@ class _StatusBadge extends StatelessWidget {
 
 /// Budget Card Loading Skeleton
 class BudgetCardSkeleton extends StatelessWidget {
-
   const BudgetCardSkeleton({
     super.key,
     this.compact = false,
@@ -389,12 +384,10 @@ class BudgetCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final shimmerBase = isDark
-        ? Colors.white.withValues(alpha: 0.05)
-        : Colors.black.withValues(alpha: 0.05);
-    final shimmerHighlight = isDark
-        ? Colors.white.withValues(alpha: 0.1)
-        : Colors.black.withValues(alpha: 0.08);
+    final shimmerBase =
+        isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
+    final shimmerHighlight =
+        isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08);
 
     return Container(
       margin: EdgeInsets.only(bottom: compact ? 10 : 12),
@@ -512,9 +505,9 @@ class BudgetCardSkeleton extends StatelessWidget {
 
 /// Large Budget Card for details screen header
 class BudgetDetailCard extends StatelessWidget {
-
   const BudgetDetailCard({
-    required this.budget, super.key,
+    required this.budget,
+    super.key,
     this.onEdit,
   });
   final BudgetModel budget;
@@ -582,9 +575,8 @@ class BudgetDetailCard extends StatelessWidget {
                     Text(
                       budget.name,
                       style: SpendexTheme.headlineMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -629,9 +621,8 @@ class BudgetDetailCard extends StatelessWidget {
                   onPressed: onEdit,
                   icon: Icon(
                     Iconsax.edit_2,
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
             ],
@@ -684,9 +675,7 @@ class BudgetDetailCard extends StatelessWidget {
                 child: _DetailStatItem(
                   label: budget.isOverBudget ? 'Over' : 'Remaining',
                   value: _formatCurrency(budget.remainingInRupees.abs()),
-                  color: budget.isOverBudget
-                      ? SpendexColors.expense
-                      : SpendexColors.income,
+                  color: budget.isOverBudget ? SpendexColors.expense : SpendexColors.income,
                   isDark: isDark,
                 ),
               ),
@@ -759,7 +748,6 @@ class BudgetDetailCard extends StatelessWidget {
 }
 
 class _DetailStatItem extends StatelessWidget {
-
   const _DetailStatItem({
     required this.label,
     required this.value,
@@ -787,9 +775,7 @@ class _DetailStatItem extends StatelessWidget {
         Text(
           label,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary,
+            color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
           ),
         ),
       ],

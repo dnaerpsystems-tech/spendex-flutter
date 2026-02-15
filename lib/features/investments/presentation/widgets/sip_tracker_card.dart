@@ -49,8 +49,8 @@ class SipTrackerCard extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: isDark
               ? [
-                  Colors.purple.shade900.withOpacity(0.3),
-                  Colors.pink.shade900.withOpacity(0.3),
+                  Colors.purple.shade900.withValues(alpha: 0.3),
+                  Colors.pink.shade900.withValues(alpha: 0.3),
                 ]
               : [
                   Colors.purple.shade400,
@@ -59,9 +59,7 @@ class SipTrackerCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
         border: Border.all(
-          color: isDark
-              ? SpendexColors.darkBorder
-              : Colors.white.withOpacity(0.2),
+          color: isDark ? SpendexColors.darkBorder : Colors.white.withValues(alpha: 0.2),
         ),
       ),
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
@@ -76,7 +74,7 @@ class SipTrackerCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(SpendexTheme.spacingSm),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(
                         SpendexTheme.radiusSm,
                       ),
@@ -102,7 +100,7 @@ class SipTrackerCard extends StatelessWidget {
                       Text(
                         investmentName ?? 'Active SIP',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -116,13 +114,13 @@ class SipTrackerCard extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? Colors.green.withOpacity(0.3)
-                      : Colors.orange.withOpacity(0.3),
+                      ? Colors.green.withValues(alpha: 0.3)
+                      : Colors.orange.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                   border: Border.all(
                     color: isActive
-                        ? Colors.green.withOpacity(0.5)
-                        : Colors.orange.withOpacity(0.5),
+                        ? Colors.green.withValues(alpha: 0.5)
+                        : Colors.orange.withValues(alpha: 0.5),
                   ),
                 ),
                 child: Row(
@@ -151,7 +149,7 @@ class SipTrackerCard extends StatelessWidget {
           ),
           const SizedBox(height: SpendexTheme.spacingLg),
           Divider(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             height: 1,
           ),
           const SizedBox(height: SpendexTheme.spacingLg),
@@ -168,7 +166,7 @@ class SipTrackerCard extends StatelessWidget {
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
               Expanded(
                 child: _SipInfoItem(
@@ -183,7 +181,7 @@ class SipTrackerCard extends StatelessWidget {
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
               Expanded(
                 child: _SipInfoItem(
@@ -199,10 +197,10 @@ class SipTrackerCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(SpendexTheme.spacingMd),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.2),
+                color: Colors.orange.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 border: Border.all(
-                  color: Colors.orange.withOpacity(0.3),
+                  color: Colors.orange.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
@@ -217,7 +215,7 @@ class SipTrackerCard extends StatelessWidget {
                     child: Text(
                       'SIP is currently paused. Resume to continue investments.',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                   ),
@@ -250,14 +248,14 @@ class _SipInfoItem extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.white.withValues(alpha: 0.8),
           size: 20,
         ),
         const SizedBox(height: SpendexTheme.spacingSm),
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white.withValues(alpha: 0.8),
           ),
           textAlign: TextAlign.center,
         ),

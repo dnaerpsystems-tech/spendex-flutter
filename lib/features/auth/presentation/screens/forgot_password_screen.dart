@@ -32,8 +32,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  ConsumerState<ForgotPasswordScreen> createState() =>
-      _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
@@ -305,8 +304,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
     try {
       final email = _emailController.text.trim();
-      final success =
-          await ref.read(authStateProvider.notifier).forgotPassword(email);
+      final success = await ref.read(authStateProvider.notifier).forgotPassword(email);
 
       if (!mounted) {
         return;
@@ -395,8 +393,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
 
     try {
       final email = _emailController.text.trim();
-      final success =
-          await ref.read(authStateProvider.notifier).forgotPassword(email);
+      final success = await ref.read(authStateProvider.notifier).forgotPassword(email);
 
       if (!mounted) {
         return;
@@ -540,17 +537,14 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          backgroundColor:
-              isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
+          backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
               icon: Icon(
                 Iconsax.arrow_left,
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
               onPressed: _isLoading ? null : () => context.pop(),
             ),
@@ -576,9 +570,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                       ),
                     );
                   },
-                  child: _isSuccess
-                      ? _buildSuccessView(isDark)
-                      : _buildFormView(isDark),
+                  child: _isSuccess ? _buildSuccessView(isDark) : _buildFormView(isDark),
                 ),
               ),
             ),
@@ -618,9 +610,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
               Text(
                 'Forgot Password?',
                 style: SpendexTheme.displayLarge.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   fontSize: 28,
                 ),
                 textAlign: TextAlign.center,
@@ -634,9 +624,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                 child: Text(
                   "No worries! Enter your email and we'll send you a reset code.",
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,
@@ -697,9 +686,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
             child: Text(
               'Check Your Email',
               style: SpendexTheme.displayLarge.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 fontSize: 28,
               ),
               textAlign: TextAlign.center,
@@ -714,9 +701,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
             child: Text(
               "We've sent a 6-digit verification code to",
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -753,9 +738,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
               child: Text(
                 "Didn't receive it? Check your spam folder or try resending.",
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,
@@ -808,9 +791,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
     return AnimatedBuilder(
       animation: isSuccess ? _successScaleAnimation : _iconPulseAnimation,
       builder: (context, child) {
-        final scale = isSuccess
-            ? _successScaleAnimation.value
-            : _iconPulseAnimation.value;
+        final scale = isSuccess ? _successScaleAnimation.value : _iconPulseAnimation.value;
         return Transform.scale(
           scale: scale,
           child: child,
@@ -821,14 +802,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         width: 100,
         height: 100,
         decoration: BoxDecoration(
-          gradient: isSuccess
-              ? SpendexColors.incomeGradient
-              : SpendexColors.primaryGradient,
+          gradient: isSuccess ? SpendexColors.incomeGradient : SpendexColors.primaryGradient,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: (isSuccess ? SpendexColors.income : SpendexColors.primary)
-                  .withValues(alpha: 0.3),
+              color:
+                  (isSuccess ? SpendexColors.income : SpendexColors.primary).withValues(alpha: 0.3),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
@@ -926,9 +905,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
               child: Text(
                 _errorMessage!,
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isRateLimited
-                      ? SpendexColors.warning
-                      : SpendexColors.expense,
+                  color: isRateLimited ? SpendexColors.warning : SpendexColors.expense,
                 ),
               ),
             ),
@@ -940,9 +917,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
               },
               child: Icon(
                 Iconsax.close_circle,
-                color: (isRateLimited
-                        ? SpendexColors.warning
-                        : SpendexColors.expense)
+                color: (isRateLimited ? SpendexColors.warning : SpendexColors.expense)
                     .withValues(alpha: 0.7),
                 size: 18,
               ),
@@ -973,9 +948,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
           Text(
             "Didn't receive the code? ",
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           if (_isLoading)
@@ -1043,9 +1016,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         Text(
           'Remember your password? ',
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         AuthTextButton(

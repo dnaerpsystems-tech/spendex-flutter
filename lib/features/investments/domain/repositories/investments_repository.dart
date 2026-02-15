@@ -19,7 +19,8 @@ abstract class InvestmentsRepository {
   Future<Either<Failure, InvestmentModel>> createInvestment(CreateInvestmentRequest request);
 
   /// Update an existing investment
-  Future<Either<Failure, InvestmentModel>> updateInvestment(String id, CreateInvestmentRequest request);
+  Future<Either<Failure, InvestmentModel>> updateInvestment(
+      String id, CreateInvestmentRequest request,);
 
   /// Delete an investment
   Future<Either<Failure, void>> deleteInvestment(String id);

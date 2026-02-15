@@ -9,7 +9,6 @@ import '../../../../app/theme.dart';
 /// - Title and subtitle
 /// - Customizable for each screen
 class AuthHeader extends StatefulWidget {
-
   const AuthHeader({
     required this.title,
     required this.subtitle,
@@ -34,8 +33,7 @@ class AuthHeader extends StatefulWidget {
   State<AuthHeader> createState() => _AuthHeaderState();
 }
 
-class _AuthHeaderState extends State<AuthHeader>
-    with SingleTickerProviderStateMixin {
+class _AuthHeaderState extends State<AuthHeader> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -118,9 +116,7 @@ class _AuthHeaderState extends State<AuthHeader>
                 child: Text(
                   widget.title,
                   style: SpendexTheme.displayLarge.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     fontSize: 28,
                   ),
                   textAlign: widget.textAlign,
@@ -137,9 +133,8 @@ class _AuthHeaderState extends State<AuthHeader>
                 child: Text(
                   widget.subtitle,
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                   textAlign: widget.textAlign,
                 ),
@@ -160,7 +155,7 @@ class _AuthHeaderState extends State<AuthHeader>
         borderRadius: BorderRadius.circular(widget.logoSize * 0.25),
         boxShadow: [
           BoxShadow(
-            color: SpendexColors.primary.withValues(alpha:0.3),
+            color: SpendexColors.primary.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -182,7 +177,6 @@ class _AuthHeaderState extends State<AuthHeader>
 
 /// Compact Auth Header for smaller spaces
 class AuthHeaderCompact extends StatelessWidget {
-
   const AuthHeaderCompact({
     required this.title,
     super.key,
@@ -207,9 +201,7 @@ class AuthHeaderCompact extends StatelessWidget {
             onPressed: onBack,
             icon: Icon(
               leadingIcon ?? Icons.arrow_back_ios_new_rounded,
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
@@ -219,9 +211,7 @@ class AuthHeaderCompact extends StatelessWidget {
         Text(
           title,
           style: SpendexTheme.displayLarge.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             fontSize: 24,
           ),
         ),
@@ -230,9 +220,7 @@ class AuthHeaderCompact extends StatelessWidget {
           Text(
             subtitle!,
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ],
@@ -243,7 +231,6 @@ class AuthHeaderCompact extends StatelessWidget {
 
 /// Auth Divider with text in the middle
 class AuthDivider extends StatelessWidget {
-
   const AuthDivider({
     super.key,
     this.text = 'or continue with',
@@ -255,10 +242,8 @@ class AuthDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final dividerColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final textColor =
-        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
+    final dividerColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final textColor = isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: spacing),
@@ -281,7 +266,6 @@ class AuthDivider extends StatelessWidget {
 
 /// Auth Footer for links at the bottom
 class AuthFooter extends StatelessWidget {
-
   const AuthFooter({
     required this.text,
     required this.linkText,
@@ -302,9 +286,7 @@ class AuthFooter extends StatelessWidget {
         Text(
           text,
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         TextButton(

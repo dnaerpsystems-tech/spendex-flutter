@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -12,7 +11,8 @@ import '../providers/voice_input_provider.dart';
 /// Voice Input Sheet for speaking transactions
 class VoiceInputSheet extends ConsumerStatefulWidget {
   const VoiceInputSheet({
-    required this.onTransactionParsed, super.key,
+    required this.onTransactionParsed,
+    super.key,
   });
 
   final ValueChanged<CreateTransactionRequest?> onTransactionParsed;
@@ -21,8 +21,7 @@ class VoiceInputSheet extends ConsumerStatefulWidget {
   ConsumerState<VoiceInputSheet> createState() => _VoiceInputSheetState();
 }
 
-class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
-    with TickerProviderStateMixin {
+class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _waveController;
   late Animation<double> _pulseAnimation;
@@ -138,9 +137,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -205,25 +202,20 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
           _buildStatusText(isDark, voiceState),
 
           // Recognized Text Display
-          if (voiceState.recognizedText.isNotEmpty)
-            _buildRecognizedTextDisplay(isDark, voiceState),
+          if (voiceState.recognizedText.isNotEmpty) _buildRecognizedTextDisplay(isDark, voiceState),
 
           // Parsed Transaction Preview
-          if (voiceState.state == VoiceInputState.parsed &&
-              voiceState.parsedRequest != null)
+          if (voiceState.state == VoiceInputState.parsed && voiceState.parsedRequest != null)
             _buildParsedPreview(isDark, voiceState),
 
           // Error Message
-          if (voiceState.state == VoiceInputState.error)
-            _buildErrorMessage(isDark, voiceState),
+          if (voiceState.state == VoiceInputState.error) _buildErrorMessage(isDark, voiceState),
 
           // Example Commands
-          if (voiceState.state == VoiceInputState.idle)
-            _buildExampleCommands(isDark),
+          if (voiceState.state == VoiceInputState.idle) _buildExampleCommands(isDark),
 
           // Action Buttons
-          if (voiceState.state == VoiceInputState.parsed)
-            _buildActionButtons(isDark),
+          if (voiceState.state == VoiceInputState.parsed) _buildActionButtons(isDark),
 
           const SizedBox(height: 20),
         ],
@@ -256,8 +248,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: SpendexColors.primary
-                                .withValues(alpha: (1 - progress) * 0.3),
+                            color: SpendexColors.primary.withValues(alpha: (1 - progress) * 0.3),
                             width: 2,
                           ),
                         ),
@@ -273,14 +264,10 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    gradient: isListening
-                        ? SpendexColors.primaryGradient
-                        : null,
+                    gradient: isListening ? SpendexColors.primaryGradient : null,
                     color: isListening
                         ? null
-                        : (isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard),
+                        : (isDark ? SpendexColors.darkCard : SpendexColors.lightCard),
                     shape: BoxShape.circle,
                     border: isListening
                         ? null
@@ -291,8 +278,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
                     boxShadow: isListening
                         ? [
                             BoxShadow(
-                              color:
-                                  SpendexColors.primary.withValues(alpha: 0.4),
+                              color: SpendexColors.primary.withValues(alpha: 0.4),
                               blurRadius: 20,
                               spreadRadius: 5,
                             ),
@@ -312,9 +298,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
                         : Icon(
                             isListening ? Iconsax.microphone5 : Iconsax.microphone,
                             size: 40,
-                            color: isListening
-                                ? Colors.white
-                                : SpendexColors.primary,
+                            color: isListening ? Colors.white : SpendexColors.primary,
                           ),
                   ),
                 ),
@@ -333,9 +317,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
     switch (voiceState.state) {
       case VoiceInputState.idle:
         statusText = 'Tap the microphone to start';
-        statusColor = isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary;
+        statusColor = isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
         break;
       case VoiceInputState.listening:
         statusText = 'Listening... Tap to stop';
@@ -370,9 +352,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
@@ -390,15 +370,12 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
             child: Text(
               voiceState.recognizedText,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 fontStyle: FontStyle.italic,
               ),
             ),
           ),
-          if (voiceState.state == VoiceInputState.listening)
-            const _BlinkingCursor(),
+          if (voiceState.state == VoiceInputState.listening) const _BlinkingCursor(),
         ],
       ),
     );
@@ -426,8 +403,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: typeColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
@@ -470,8 +446,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
               'Category',
               voiceState.parsedCategory!,
             ),
-          if (voiceState.parsedDescription != null &&
-              voiceState.parsedDescription!.isNotEmpty)
+          if (voiceState.parsedDescription != null && voiceState.parsedDescription!.isNotEmpty)
             _buildDetailRow(
               isDark,
               Iconsax.document_text,
@@ -491,7 +466,11 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
   }
 
   Widget _buildDetailRow(
-      bool isDark, IconData icon, String label, String value,) {
+    bool isDark,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Row(
@@ -499,26 +478,20 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
           Icon(
             icon,
             size: 16,
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
           const SizedBox(width: 8),
           Text(
             '$label: ',
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           Expanded(
             child: Text(
               value,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
           ),
@@ -570,9 +543,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
           Text(
             'Try saying:',
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: 12),
@@ -584,25 +555,19 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
                 onTap: () => _onExampleTap(example),
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkBackground
-                        : SpendexColors.lightBackground,
+                    color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: isDark
-                          ? SpendexColors.darkBorder
-                          : SpendexColors.lightBorder,
+                      color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     ),
                   ),
                   child: Text(
                     '"$example"',
                     style: SpendexTheme.labelMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ),
@@ -627,9 +592,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet>
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 side: BorderSide(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
               ),
               child: const Text('Try Again'),
@@ -689,8 +652,7 @@ class _BlinkingCursor extends StatefulWidget {
   State<_BlinkingCursor> createState() => _BlinkingCursorState();
 }
 
-class _BlinkingCursorState extends State<_BlinkingCursor>
-    with SingleTickerProviderStateMixin {
+class _BlinkingCursorState extends State<_BlinkingCursor> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override

@@ -49,7 +49,7 @@ class EmailDetailsScreen extends ConsumerWidget {
         return Iconsax.receipt;
       case EmailType.other:
         return Iconsax.sms;
-  }
+    }
   }
 
   @override
@@ -64,9 +64,7 @@ class EmailDetailsScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Email Details'),
         centerTitle: true,
@@ -81,8 +79,7 @@ class EmailDetailsScreen extends ConsumerWidget {
               tooltip: 'Import Transaction',
               onPressed: () async {
                 final parsedTransaction = email.parsedTransaction!;
-                final duplicateNotifier =
-                    ref.read(duplicateDetectionProvider.notifier);
+                final duplicateNotifier = ref.read(duplicateDetectionProvider.notifier);
 
                 // Show loading indicator
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -99,7 +96,9 @@ class EmailDetailsScreen extends ConsumerWidget {
                   transactions: [parsedTransaction],
                 );
 
-                if (!context.mounted) return;
+                if (!context.mounted) {
+                  return;
+                }
 
                 final duplicateState = ref.read(duplicateDetectionProvider);
 
@@ -114,7 +113,9 @@ class EmailDetailsScreen extends ConsumerWidget {
                     },
                   );
 
-                  if (!context.mounted) return;
+                  if (!context.mounted) {
+                    return;
+                  }
 
                   // If user resolved duplicates successfully
                   if (result ?? false) {
@@ -139,7 +140,9 @@ class EmailDetailsScreen extends ConsumerWidget {
                   transaction: parsedTransaction,
                 );
 
-                if (!context.mounted) return;
+                if (!context.mounted) {
+                  return;
+                }
 
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -176,9 +179,7 @@ class EmailDetailsScreen extends ConsumerWidget {
               color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             child: Column(
@@ -283,9 +284,7 @@ class EmailDetailsScreen extends ConsumerWidget {
               color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             child: SelectableText(
@@ -307,78 +306,76 @@ class EmailDetailsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
-            ...email.attachments.map((attachment) => Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkCard
-                        : SpendexColors.lightCard,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isDark
-                          ? SpendexColors.darkBorder
-                          : SpendexColors.lightBorder,
+            ...email.attachments.map(
+              (attachment) => Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: SpendexColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          _getAttachmentIcon(attachment.mimeType),
+                          color: SpendexColors.primary,
+                          size: 20,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: SpendexColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            _getAttachmentIcon(attachment.mimeType),
-                            color: SpendexColors.primary,
-                            size: 20,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            attachment.fileName,
+                            style: SpendexTheme.titleMedium.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              attachment.fileName,
-                              style: SpendexTheme.titleMedium.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                          const SizedBox(height: 2),
+                          Text(
+                            _formatBytes(attachment.sizeInBytes),
+                            style: SpendexTheme.labelMedium.copyWith(
+                              color: isDark
+                                  ? SpendexColors.darkTextSecondary
+                                  : SpendexColors.lightTextSecondary,
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              _formatBytes(attachment.sizeInBytes),
-                              style: SpendexTheme.labelMedium.copyWith(
-                                color: isDark
-                                    ? SpendexColors.darkTextSecondary
-                                    : SpendexColors.lightTextSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        icon: const Icon(Iconsax.arrow_down_1),
-                        onPressed: () {
-                          // TODO: Implement download
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Download coming soon'),
-                              backgroundColor: SpendexColors.primary,
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),),
+                    ),
+                    IconButton(
+                      icon: const Icon(Iconsax.arrow_down_1),
+                      onPressed: () {
+                        // TODO(feature): Implement download
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Download coming soon'),
+                            backgroundColor: SpendexColors.primary,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ],
       ),
@@ -432,7 +429,9 @@ class EmailDetailsScreen extends ConsumerWidget {
       fileName: attachment.fileName,
     );
 
-    if (!context.mounted) return;
+    if (!context.mounted) {
+      return;
+    }
 
     if (file != null) {
       // Success - show success dialog with option to open
@@ -536,17 +535,13 @@ class _DetailRow extends StatelessWidget {
         Icon(
           icon,
           size: 16,
-          color: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         ),
         const SizedBox(width: 8),
         Text(
           '$label:',
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         const SizedBox(width: 8),

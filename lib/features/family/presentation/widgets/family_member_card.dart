@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../data/models/family_member_model.dart';
 import 'role_badge.dart';
 
@@ -157,9 +156,7 @@ class FamilyMemberCard extends StatelessWidget {
               child: Text(
                 member.name,
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   fontWeight: FontWeight.w600,
                 ),
                 maxLines: 1,
@@ -190,9 +187,7 @@ class FamilyMemberCard extends StatelessWidget {
         Text(
           member.email,
           style: SpendexTheme.bodySmall.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -205,17 +200,13 @@ class FamilyMemberCard extends StatelessWidget {
             Icon(
               Iconsax.calendar,
               size: 12,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             const SizedBox(width: 4),
             Text(
               _formatJoinedDate(member.joinedAt),
               style: SpendexTheme.labelSmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                 fontSize: 10,
               ),
             ),
@@ -248,9 +239,7 @@ class FamilyMemberCard extends StatelessWidget {
     return PopupMenuButton<String>(
       icon: Icon(
         Iconsax.more,
-        color: isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary,
+        color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
@@ -271,17 +260,13 @@ class FamilyMemberCard extends StatelessWidget {
               Icon(
                 Iconsax.user_edit,
                 size: 18,
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
               const SizedBox(width: 12),
               Text(
                 'Change Role',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
             ],
@@ -318,12 +303,10 @@ class FamilyMemberCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final shimmerBase = isDark
-        ? Colors.white.withValues(alpha: 0.05)
-        : Colors.black.withValues(alpha: 0.05);
-    final shimmerHighlight = isDark
-        ? Colors.white.withValues(alpha: 0.1)
-        : Colors.black.withValues(alpha: 0.08);
+    final shimmerBase =
+        isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
+    final shimmerHighlight =
+        isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),

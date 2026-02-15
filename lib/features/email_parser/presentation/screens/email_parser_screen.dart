@@ -74,11 +74,11 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
     );
 
     if (confirmed ?? false) {
-      final success = await ref
-          .read(emailParserProvider.notifier)
-          .disconnectAccount(account.id);
+      final success = await ref.read(emailParserProvider.notifier).disconnectAccount(account.id);
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -104,7 +104,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
   Future<void> _fetchEmails() async {
     await ref.read(emailParserProvider.notifier).fetchEmails();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final state = ref.read(emailParserProvider);
     if (state.error != null) {
@@ -129,7 +131,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
   Future<void> _parseEmails() async {
     await ref.read(emailParserProvider.notifier).parseEmails();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final parsedCount = ref.read(parsedEmailCountProvider);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -167,7 +171,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
       ),
     );
 
-    if (confirmed != true) return;
+    if (confirmed != true) {
+      return;
+    }
 
     final state = ref.read(emailParserProvider);
 
@@ -183,7 +189,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
           transactions: selectedTransactions,
         );
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final duplicateState = ref.read(duplicateDetectionProvider);
 
@@ -197,7 +205,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
         },
       );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       // If user resolved duplicates successfully
       if (result ?? false) {
@@ -215,10 +225,11 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
     }
 
     // Step 3: No duplicates, proceed with direct import
-    final success =
-        await ref.read(emailParserProvider.notifier).importTransactions();
+    final success = await ref.read(emailParserProvider.notifier).importTransactions();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -260,17 +271,15 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(emailParserProvider);
     final hasAccounts = ref.watch(hasConnectedAccountsProvider);
-    final _ = ref.watch(selectedAccountProvider);
+    ref.watch(selectedAccountProvider);
     final stats = ref.watch(emailStatsProvider);
-    final __ = ref.watch(selectedEmailCountProvider);
+    ref.watch(selectedEmailCountProvider);
     final allSelected = ref.watch(allEmailsSelectedProvider);
 
     // Show setup screen if no accounts
     if (!hasAccounts && !state.isLoadingAccounts) {
       return Scaffold(
-        backgroundColor: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         appBar: AppBar(
           title: const Text('Email Parser'),
           centerTitle: true,
@@ -312,9 +321,8 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                 Text(
                   'Connect your email account to automatically import bank transaction notifications.',
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -357,9 +365,7 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
     }
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Email Parser'),
         centerTitle: true,
@@ -425,9 +431,7 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                           account: account,
                           isSelected: account.id == state.selectedAccountId,
                           onSelect: () {
-                            ref
-                                .read(emailParserProvider.notifier)
-                                .selectAccount(account.id);
+                            ref.read(emailParserProvider.notifier).selectAccount(account.id);
                           },
                           onDisconnect: () => _disconnectAccount(account),
                         ),
@@ -451,11 +455,8 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                           label: '${state.filters!.selectedBanks.length} banks',
                           icon: Iconsax.bank,
                           onRemove: () {
-                            final updatedFilters =
-                                state.filters!.copyWith(selectedBanks: {});
-                            ref
-                                .read(emailParserProvider.notifier)
-                                .updateFilters(updatedFilters);
+                            final updatedFilters = state.filters!.copyWith(selectedBanks: {});
+                            ref.read(emailParserProvider.notifier).updateFilters(updatedFilters);
                           },
                         ),
                       if (state.filters!.dateRange != null)
@@ -463,11 +464,8 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                           label: 'Date range',
                           icon: Iconsax.calendar,
                           onRemove: () {
-                            final updatedFilters =
-                                state.filters!.copyWith();
-                            ref
-                                .read(emailParserProvider.notifier)
-                                .updateFilters(updatedFilters);
+                            final updatedFilters = state.filters!.copyWith();
+                            ref.read(emailParserProvider.notifier).updateFilters(updatedFilters);
                           },
                         ),
                       if (state.filters!.searchQuery != null &&
@@ -476,11 +474,8 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                           label: 'Search',
                           icon: Iconsax.search_normal,
                           onRemove: () {
-                            final updatedFilters =
-                                state.filters!.copyWith(searchQuery: '');
-                            ref
-                                .read(emailParserProvider.notifier)
-                                .updateFilters(updatedFilters);
+                            final updatedFilters = state.filters!.copyWith(searchQuery: '');
+                            ref.read(emailParserProvider.notifier).updateFilters(updatedFilters);
                           },
                         ),
                     ],
@@ -546,9 +541,7 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
                       email: email,
                       isSelected: isSelected,
                       onToggle: () {
-                        ref
-                            .read(emailParserProvider.notifier)
-                            .toggleEmailSelection(email.id);
+                        ref.read(emailParserProvider.notifier).toggleEmailSelection(email.id);
                       },
                     );
                   },
@@ -569,7 +562,9 @@ class _EmailParserScreenState extends ConsumerState<EmailParserScreen> {
 
   Widget? _buildFloatingActions(EmailParserState state, Map<String, int> stats) {
     // No account selected
-    if (state.selectedAccountId == null) return null;
+    if (state.selectedAccountId == null) {
+      return null;
+    }
 
     // Show fetch button if no emails
     if (state.emails.isEmpty && !state.isFetchingEmails) {

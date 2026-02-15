@@ -30,8 +30,7 @@ class RegisterScreen extends ConsumerStatefulWidget {
   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends ConsumerState<RegisterScreen>
-    with TickerProviderStateMixin {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProviderStateMixin {
   // Form Key
   final _formKey = GlobalKey<FormState>();
 
@@ -303,9 +302,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         maxChildSize: 0.95,
         builder: (context, scrollController) => DecoratedBox(
           decoration: BoxDecoration(
-            color: isDark
-                ? SpendexColors.darkSurface
-                : SpendexColors.lightSurface,
+            color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -316,9 +313,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -432,9 +427,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         Text(
           title,
           style: SpendexTheme.titleMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             fontSize: 16,
           ),
         ),
@@ -442,41 +435,40 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         Text(
           subtitle,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary,
+            color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
           ),
         ),
         const SizedBox(height: 12),
-        ...items.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 6),
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: SpendexColors.primary,
-                      shape: BoxShape.circle,
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 6),
+                  width: 6,
+                  height: 6,
+                  decoration: const BoxDecoration(
+                    color: SpendexColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    item,
+                    style: SpendexTheme.bodyMedium.copyWith(
+                      color: isDark
+                          ? SpendexColors.darkTextSecondary
+                          : SpendexColors.lightTextSecondary,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      item,
-                      style: SpendexTheme.bodyMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextSecondary
-                            : SpendexColors.lightTextSecondary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+        ),
       ],
     );
   }
@@ -523,9 +515,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           _emailController.text.trim(),
           _passwordController.text,
           _nameController.text.trim(),
-          _phoneController.text.trim().isNotEmpty
-              ? _phoneController.text.trim()
-              : null,
+          _phoneController.text.trim().isNotEmpty ? _phoneController.text.trim() : null,
         );
 
     if (success && mounted) {
@@ -555,18 +545,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         }
       },
       child: Scaffold(
-        backgroundColor: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             icon: Icon(
               Iconsax.arrow_left,
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
             onPressed: () async {
               if (_isFormDirty) {
@@ -592,9 +578,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                   return Transform.translate(
                     offset: Offset(
                       _shakeAnimation.value *
-                          ((_shakeController.value * 10).toInt().isEven
-                              ? 1
-                              : -1),
+                          ((_shakeController.value * 10).toInt().isEven ? 1 : -1),
                       0,
                     ),
                     child: child,
@@ -637,8 +621,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                           keyboardType: TextInputType.name,
                           validator: _validateName,
                           onFieldSubmitted: (_) {
-                            FocusScope.of(context)
-                                .requestFocus(_emailFocusNode);
+                            FocusScope.of(context).requestFocus(_emailFocusNode);
                           },
                         ),
                       ),
@@ -657,8 +640,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                           keyboardType: TextInputType.emailAddress,
                           validator: _validateEmail,
                           onFieldSubmitted: (_) {
-                            FocusScope.of(context)
-                                .requestFocus(_phoneFocusNode);
+                            FocusScope.of(context).requestFocus(_phoneFocusNode);
                           },
                         ),
                       ),
@@ -715,8 +697,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                       const SizedBox(height: 24),
 
                       // Error Message
-                      if (authState.error != null)
-                        _buildErrorMessage(authState.error!, isDark),
+                      if (authState.error != null) _buildErrorMessage(authState.error!, isDark),
 
                       // Register Button
                       _buildStaggeredChild(
@@ -803,9 +784,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                 child: Container(
                   height: 4,
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -825,9 +804,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         Text(
           'Phone (Optional)',
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -849,15 +826,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                 children: [
                   Icon(
                     Iconsax.call,
-                    color: isDark
-                        ? SpendexColors.darkTextTertiary
-                        : SpendexColors.lightTextTertiary,
+                    color:
+                        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     size: 20,
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: isDark
                           ? SpendexColors.darkBorder.withValues(alpha: 0.5)
@@ -878,9 +853,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                   Container(
                     width: 1,
                     height: 24,
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   ),
                 ],
               ),
@@ -904,9 +877,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         Text(
           'Password',
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -919,16 +890,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             hintText: 'Create a strong password',
             prefixIcon: Icon(
               Iconsax.lock,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscurePassword ? Iconsax.eye_slash : Iconsax.eye,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               onPressed: () {
                 setState(() {
@@ -955,9 +922,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         Text(
           'Confirm Password',
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -970,16 +935,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             hintText: 'Confirm your password',
             prefixIcon: Icon(
               Iconsax.lock,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscureConfirmPassword ? Iconsax.eye_slash : Iconsax.eye,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               onPressed: () {
                 setState(() {
@@ -1023,9 +984,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             TextSpan(
               text: 'I agree to the ',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               children: [
                 TextSpan(
@@ -1033,8 +992,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                   style: SpendexTheme.titleMedium.copyWith(
                     color: SpendexColors.primary,
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = _showTermsSheet,
+                  recognizer: TapGestureRecognizer()..onTap = _showTermsSheet,
                 ),
                 const TextSpan(text: ' and '),
                 TextSpan(
@@ -1042,8 +1000,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
                   style: SpendexTheme.titleMedium.copyWith(
                     color: SpendexColors.primary,
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = _showTermsSheet,
+                  recognizer: TapGestureRecognizer()..onTap = _showTermsSheet,
                 ),
               ],
             ),

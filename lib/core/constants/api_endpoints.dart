@@ -79,6 +79,7 @@ class ApiEndpoints {
   static String subscriptionInvoiceDownload(String id) => '/subscriptions/invoices/$id/download';
   static const String subscriptionUpiCreate = '/subscriptions/upi/create';
   static const String subscriptionUpiVerify = '/subscriptions/upi/verify';
+  static const String subscriptionPayments = '/subscriptions/payments';
 
   // Family Endpoints
   static const String family = '/family';

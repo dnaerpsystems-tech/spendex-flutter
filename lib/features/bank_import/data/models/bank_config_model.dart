@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class BankConfigModel extends Equatable {
-
   const BankConfigModel({
     required this.bankName,
     required this.smsPatterns,
@@ -12,15 +11,9 @@ class BankConfigModel extends Equatable {
   factory BankConfigModel.fromJson(Map<String, dynamic> json) {
     return BankConfigModel(
       bankName: json['bankName'] as String,
-      smsPatterns: (json['smsPatterns'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      keywords: (json['keywords'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      supportedTypes: (json['supportedTypes'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      smsPatterns: (json['smsPatterns'] as List<dynamic>).map((e) => e as String).toList(),
+      keywords: (json['keywords'] as List<dynamic>).map((e) => e as String).toList(),
+      supportedTypes: (json['supportedTypes'] as List<dynamic>).map((e) => e as String).toList(),
     );
   }
   final String bankName;

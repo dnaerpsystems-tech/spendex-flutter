@@ -6,7 +6,6 @@ import '../models/account_model.dart';
 
 /// Accounts Repository Implementation
 class AccountsRepositoryImpl implements AccountsRepository {
-
   AccountsRepositoryImpl(this._remoteDataSource);
   final AccountsRemoteDataSource _remoteDataSource;
 

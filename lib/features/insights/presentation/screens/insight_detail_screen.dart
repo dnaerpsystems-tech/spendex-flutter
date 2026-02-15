@@ -50,15 +50,14 @@ extension InsightActionTypeExtension on InsightActionType {
 }
 
 class InsightDetailScreen extends ConsumerStatefulWidget {
-
   const InsightDetailScreen({
-    required this.insightId, super.key,
+    required this.insightId,
+    super.key,
   });
   final String insightId;
 
   @override
-  ConsumerState<InsightDetailScreen> createState() =>
-      _InsightDetailScreenState();
+  ConsumerState<InsightDetailScreen> createState() => _InsightDetailScreenState();
 }
 
 class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
@@ -168,7 +167,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
               child: Text(
                 _getTimestampText(insight.createdAt),
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -253,8 +252,8 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
     }
 
     if (theme.brightness == Brightness.dark) {
-      backgroundColor = backgroundColor.withOpacity(0.2);
-      textColor = backgroundColor.withOpacity(1);
+      backgroundColor = backgroundColor.withValues(alpha: 0.2);
+      textColor = backgroundColor.withValues(alpha: 1);
     }
 
     return Chip(
@@ -298,8 +297,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
                         child: Text(
                           _formatMetadataKey(entry.key),
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color:
-                                theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ),
@@ -331,14 +329,12 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
 
     final backgroundColor = isExpiringSoon
         ? (theme.brightness == Brightness.dark
-            ? Colors.orange.shade900.withOpacity(0.2)
+            ? Colors.orange.shade900.withValues(alpha: 0.2)
             : Colors.orange.shade50)
         : null;
 
     final textColor = isExpiringSoon
-        ? (theme.brightness == Brightness.dark
-            ? Colors.orange.shade300
-            : Colors.orange.shade900)
+        ? (theme.brightness == Brightness.dark ? Colors.orange.shade300 : Colors.orange.shade900)
         : null;
 
     return Padding(
@@ -371,8 +367,8 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
                     Text(
                       'Valid until ${Jiffy.parseFromDateTime(validUntil).format(pattern: 'MMM dd, yyyy')}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: textColor?.withOpacity(0.8) ??
-                            theme.colorScheme.onSurface.withOpacity(0.6),
+                        color: textColor?.withValues(alpha: 0.8) ??
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -407,7 +403,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
         color: theme.scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -437,8 +433,7 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
                 label: const Text('Dismiss'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  backgroundColor:
-                      isDark ? Colors.red.shade900 : Colors.red.shade600,
+                  backgroundColor: isDark ? Colors.red.shade900 : Colors.red.shade600,
                   foregroundColor: Colors.white,
                 ),
               ),
@@ -528,13 +523,13 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
         .trim()
         .split(' ');
 
-    return words
-        .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
-        .join(' ');
+    return words.map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(' ');
   }
 
   String _formatMetadataValue(String key, value) {
-    if (value == null) return 'N/A';
+    if (value == null) {
+      return 'N/A';
+    }
 
     // Format currency values
     if (key.toLowerCase().contains('amount') ||

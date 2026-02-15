@@ -4,14 +4,16 @@ import '../utils/app_logger.dart';
 
 class FirebaseService {
   FirebaseService._();
-  
+
   static bool _initialized = false;
-  
+
   static bool get isInitialized => _initialized;
-  
+
   static Future<void> initialize() async {
-    if (_initialized) return;
-    
+    if (_initialized) {
+      return;
+    }
+
     try {
       await Firebase.initializeApp();
       _initialized = true;

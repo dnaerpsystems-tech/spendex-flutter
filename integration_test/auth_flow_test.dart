@@ -10,15 +10,14 @@ void main() {
     testWidgets('User can see login screen', (tester) async {
       app.main();
       await tester.pumpAndSettle(const Duration(seconds: 5));
-      
-      final loginRobot = LoginRobot(tester);
-      loginRobot.expectLoginScreen();
+
+      LoginRobot(tester).expectLoginScreen();
     });
-    
+
     testWidgets('Invalid login shows error', (tester) async {
       app.main();
       await tester.pumpAndSettle(const Duration(seconds: 5));
-      
+
       final loginRobot = LoginRobot(tester);
       await loginRobot.login(
         email: 'invalid@test.com',

@@ -88,7 +88,7 @@ void main() {
       });
 
       test('formats midnight correctly', () {
-        final date = DateTime(2023, 12, 25, 0, 0);
+        final date = DateTime(2023, 12, 25);
         expect(DateFormatter.formatWithTime(date), equals('25-12-2023 00:00'));
       });
     });
@@ -123,12 +123,12 @@ void main() {
       });
 
       test('formats noon correctly', () {
-        final date = DateTime(2023, 12, 25, 12, 0);
+        final date = DateTime(2023, 12, 25, 12);
         expect(DateFormatter.formatTime12Hour(date), equals('12:00 PM'));
       });
 
       test('formats midnight correctly', () {
-        final date = DateTime(2023, 12, 25, 0, 0);
+        final date = DateTime(2023, 12, 25);
         expect(DateFormatter.formatTime12Hour(date), equals('12:00 AM'));
       });
     });
@@ -170,8 +170,8 @@ void main() {
       test('parses DD-MM-YYYY format', () {
         final result = DateFormatter.parse('25-12-2023');
         expect(result, isNotNull);
-        expect(result.month, equals(12));
-        expect(result.year, equals(2023));
+        expect(result?.month, equals(12));
+        expect(result?.year, equals(2023));
       });
 
       test('returns null for invalid date string', () {
@@ -195,8 +195,8 @@ void main() {
       test('parses DD/MM/YYYY format', () {
         final result = DateFormatter.parseSlash('25/12/2023');
         expect(result, isNotNull);
-        expect(result.month, equals(12));
-        expect(result.year, equals(2023));
+        expect(result?.month, equals(12));
+        expect(result?.year, equals(2023));
       });
 
       test('returns null for invalid format', () {
@@ -211,14 +211,14 @@ void main() {
       test('parses ISO 8601 format', () {
         final result = DateFormatter.parseIso('2023-12-25');
         expect(result, isNotNull);
-        expect(result.month, equals(12));
-        expect(result.day, equals(25));
+        expect(result?.month, equals(12));
+        expect(result?.day, equals(25));
       });
 
       test('parses ISO 8601 with time', () {
         final result = DateFormatter.parseIso('2023-12-25T14:30:00');
         expect(result, isNotNull);
-        expect(result.minute, equals(30));
+        expect(result?.minute, equals(30));
       });
 
       test('returns null for invalid ISO string', () {
@@ -261,19 +261,19 @@ void main() {
     group('formatRelative()', () {
       test('returns Today for current date', () {
         final now = DateTime.now();
-        final today = DateTime(now.year, now.month, now.day, 12, 0);
+        final today = DateTime(now.year, now.month, now.day, 12);
         expect(DateFormatter.formatRelative(today, relativeTo: now), equals('Today'));
       });
 
       test('returns Yesterday for previous day', () {
         final now = DateTime.now();
-        final yesterday = DateTime(now.year, now.month, now.day - 1, 12, 0);
+        final yesterday = DateTime(now.year, now.month, now.day - 1, 12);
         expect(DateFormatter.formatRelative(yesterday, relativeTo: now), equals('Yesterday'));
       });
 
       test('returns Tomorrow for next day', () {
         final now = DateTime.now();
-        final tomorrow = DateTime(now.year, now.month, now.day + 1, 12, 0);
+        final tomorrow = DateTime(now.year, now.month, now.day + 1, 12);
         expect(DateFormatter.formatRelative(tomorrow, relativeTo: now), equals('Tomorrow'));
       });
 
@@ -327,7 +327,7 @@ void main() {
       });
 
       test('returns correct FY for first day of FY', () {
-        final date = DateTime(2024, 4, 1);
+        final date = DateTime(2024, 4);
         expect(DateFormatter.getFinancialYear(date), equals('FY 2024-25'));
       });
 
@@ -430,7 +430,7 @@ void main() {
 
       group('daysBetween()', () {
         test('returns correct days between dates', () {
-          final start = DateTime(2023, 12, 1);
+          final start = DateTime(2023, 12);
           final end = DateTime(2023, 12, 25);
           expect(DateFormatter.daysBetween(start, end), equals(24));
         });
@@ -442,7 +442,7 @@ void main() {
 
         test('returns negative for reversed dates', () {
           final start = DateTime(2023, 12, 25);
-          final end = DateTime(2023, 12, 1);
+          final end = DateTime(2023, 12);
           expect(DateFormatter.daysBetween(start, end), equals(-24));
         });
       });

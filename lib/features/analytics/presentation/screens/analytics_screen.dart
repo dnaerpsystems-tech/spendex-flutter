@@ -37,8 +37,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Analytics'),
         centerTitle: true,
@@ -142,9 +141,7 @@ class _DateRangeChip extends ConsumerWidget {
             Icon(
               Iconsax.arrow_down_1,
               size: 14,
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ],
         ),
@@ -158,9 +155,7 @@ class _DateRangeChip extends ConsumerWidget {
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: DateRangePreset.values
-              .where((p) => p != DateRangePreset.custom)
-              .map((preset) {
+          children: DateRangePreset.values.where((p) => p != DateRangePreset.custom).map((preset) {
             return ListTile(
               leading: const Icon(Iconsax.calendar_1),
               title: Text(preset.label),
@@ -195,8 +190,7 @@ class _TabBar extends ConsumerWidget {
             child: ChoiceChip(
               label: Text(_getTabLabel(tab)),
               selected: isSelected,
-              onSelected: (_) =>
-                  ref.read(analyticsStateProvider.notifier).setTab(tab),
+              onSelected: (_) => ref.read(analyticsStateProvider.notifier).setTab(tab),
               selectedColor: SpendexColors.primary,
               labelStyle: TextStyle(color: isSelected ? Colors.white : null),
             ),
@@ -231,7 +225,9 @@ class _OverviewContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final summary = state.summary;
-    if (summary == null) return const SizedBox.shrink();
+    if (summary == null) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       children: [
@@ -240,7 +236,6 @@ class _OverviewContent extends StatelessWidget {
         if (state.monthlyStats != null) ...[
           CashFlowChart(
             stats: state.monthlyStats!.stats,
-            showNetFlow: true,
           ),
           const SizedBox(height: 16),
           _BarChartCard(stats: state.monthlyStats!, isDark: isDark),
@@ -337,9 +332,7 @@ class _StatCard extends StatelessWidget {
           Text(
             title,
             style: SpendexTheme.labelSmall.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: 8),
@@ -388,9 +381,7 @@ class _RateCard extends StatelessWidget {
           Text(
             title,
             style: SpendexTheme.labelSmall.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: 8),
@@ -416,12 +407,18 @@ class _BarChartCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = stats.stats;
-    if (data.isEmpty) return const SizedBox.shrink();
+    if (data.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     double maxY = 0;
     for (final s in data) {
-      if (s.incomeInRupees > maxY) maxY = s.incomeInRupees;
-      if (s.expenseInRupees > maxY) maxY = s.expenseInRupees;
+      if (s.incomeInRupees > maxY) {
+        maxY = s.incomeInRupees;
+      }
+      if (s.expenseInRupees > maxY) {
+        maxY = s.expenseInRupees;
+      }
     }
     maxY *= 1.2;
 
@@ -532,17 +529,14 @@ class _CategoryContent extends StatelessWidget {
               Icon(
                 isExpense ? Iconsax.money_send : Iconsax.money_recive,
                 size: 48,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               const SizedBox(height: 16),
               Text(
                 'No ${isExpense ? "expense" : "income"} data available',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
               ),
             ],
@@ -555,7 +549,6 @@ class _CategoryContent extends StatelessWidget {
       children: [
         CategoryDonutChart(
           breakdown: breakdown,
-          maxCategories: 6,
         ),
         const SizedBox(height: 16),
         Container(
@@ -695,11 +688,15 @@ class _TrendsContent extends StatelessWidget {
               LineChartData(
                 lineBarsData: [
                   LineChartBarData(
-                    spots: dailyStats.stats.asMap().entries
-                        .map((e) => FlSpot(
-                              e.key.toDouble(),
-                              e.value.expenseInRupees,
-                            ))
+                    spots: dailyStats.stats
+                        .asMap()
+                        .entries
+                        .map(
+                          (e) => FlSpot(
+                            e.key.toDouble(),
+                            e.value.expenseInRupees,
+                          ),
+                        )
                         .toList(),
                     isCurved: true,
                     color: SpendexColors.expense,
@@ -842,11 +839,15 @@ class _NetWorthContent extends StatelessWidget {
                   LineChartData(
                     lineBarsData: [
                       LineChartBarData(
-                        spots: netWorthHistory.history.asMap().entries
-                            .map((e) => FlSpot(
-                                  e.key.toDouble(),
-                                  e.value.netWorthInRupees,
-                                ))
+                        spots: netWorthHistory.history
+                            .asMap()
+                            .entries
+                            .map(
+                              (e) => FlSpot(
+                                e.key.toDouble(),
+                                e.value.netWorthInRupees,
+                              ),
+                            )
                             .toList(),
                         isCurved: true,
                         color: SpendexColors.primary,
@@ -861,8 +862,7 @@ class _NetWorthContent extends StatelessWidget {
                       bottomTitles: AxisTitles(
                         sideTitles: SideTitles(
                           showTitles: true,
-                          interval:
-                              (netWorthHistory.history.length / 5).ceilToDouble(),
+                          interval: (netWorthHistory.history.length / 5).ceilToDouble(),
                           getTitlesWidget: (v, m) {
                             final i = v.toInt();
                             if (i < 0 || i >= netWorthHistory.history.length) {

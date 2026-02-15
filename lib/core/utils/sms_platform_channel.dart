@@ -61,12 +61,11 @@ class SmsPlatformChannel {
         },
       );
 
-      if (result == null) return [];
+      if (result == null) {
+        return [];
+      }
 
-      return result
-          .cast<Map<dynamic, dynamic>>()
-          .map(Map<String, dynamic>.from)
-          .toList();
+      return result.cast<Map<dynamic, dynamic>>().map(Map<String, dynamic>.from).toList();
     } on PlatformException catch (e) {
       throw SmsPlatformException(
         'Failed to read SMS messages: ${e.message}',

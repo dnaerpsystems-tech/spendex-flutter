@@ -12,7 +12,6 @@ import '../widgets/account_card.dart';
 /// Account Details Screen
 /// Shows detailed account information with edit and delete options
 class AccountDetailsScreen extends ConsumerStatefulWidget {
-
   const AccountDetailsScreen({
     required this.accountId,
     super.key,
@@ -20,8 +19,7 @@ class AccountDetailsScreen extends ConsumerStatefulWidget {
   final String accountId;
 
   @override
-  ConsumerState<AccountDetailsScreen> createState() =>
-      _AccountDetailsScreenState();
+  ConsumerState<AccountDetailsScreen> createState() => _AccountDetailsScreenState();
 }
 
 class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
@@ -66,9 +64,8 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
     );
 
     if ((confirmed ?? false) && mounted) {
-      final success = await ref
-          .read(accountsStateProvider.notifier)
-          .deleteAccount(widget.accountId);
+      final success =
+          await ref.read(accountsStateProvider.notifier).deleteAccount(widget.accountId);
 
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -108,9 +105,7 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
     final isDeleting = accountsState.isDeleting;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: Text(account?.name ?? 'Account Details'),
         centerTitle: true,
@@ -215,9 +210,7 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
     return Text(
       title,
       style: SpendexTheme.titleMedium.copyWith(
-        color: isDark
-            ? SpendexColors.darkTextPrimary
-            : SpendexColors.lightTextPrimary,
+        color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         fontWeight: FontWeight.w600,
       ),
     );
@@ -320,18 +313,14 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
           child: Text(
             label,
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ),
         Text(
           value,
           style: SpendexTheme.titleMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
         ),
       ],
@@ -609,9 +598,7 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
             Text(
               label,
               style: SpendexTheme.labelMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
               maxLines: 1,
@@ -652,18 +639,14 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
           Text(
             'No Transactions Yet',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Transactions for this account will appear here',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -707,18 +690,14 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
             Text(
               'Failed to load account',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               error,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -760,18 +739,14 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
             Text(
               'Account Not Found',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               "The account you're looking for doesn't exist or has been deleted.",
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),

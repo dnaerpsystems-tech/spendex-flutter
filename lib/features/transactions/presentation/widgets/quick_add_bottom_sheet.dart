@@ -28,8 +28,7 @@ class QuickAddFab extends ConsumerStatefulWidget {
   ConsumerState<QuickAddFab> createState() => _QuickAddFabState();
 }
 
-class _QuickAddFabState extends ConsumerState<QuickAddFab>
-    with SingleTickerProviderStateMixin {
+class _QuickAddFabState extends ConsumerState<QuickAddFab> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
   late Animation<double> _rotateAnimation;
@@ -287,9 +286,7 @@ class _QuickAddFabState extends ConsumerState<QuickAddFab>
               vertical: 8,
             ),
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkSurface
-                  : SpendexColors.lightSurface,
+              color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
@@ -302,9 +299,7 @@ class _QuickAddFabState extends ConsumerState<QuickAddFab>
             child: Text(
               label,
               style: SpendexTheme.labelMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -357,9 +352,7 @@ class _QuickAddFabState extends ConsumerState<QuickAddFab>
           builder: (context, child) {
             return AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
-              crossFadeState: _isExpanded
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
+              crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
               firstChild: const Icon(Iconsax.add, size: 28),
               secondChild: const Icon(Icons.close, size: 28),
             );
@@ -375,8 +368,7 @@ class QuickAddBottomSheet extends ConsumerStatefulWidget {
   const QuickAddBottomSheet({super.key});
 
   @override
-  ConsumerState<QuickAddBottomSheet> createState() =>
-      _QuickAddBottomSheetState();
+  ConsumerState<QuickAddBottomSheet> createState() => _QuickAddBottomSheetState();
 }
 
 class _QuickAddBottomSheetState extends ConsumerState<QuickAddBottomSheet> {
@@ -460,9 +452,7 @@ class _QuickAddBottomSheetState extends ConsumerState<QuickAddBottomSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -473,9 +463,7 @@ class _QuickAddBottomSheetState extends ConsumerState<QuickAddBottomSheet> {
             child: Text(
               'Add Transaction',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
           ),
@@ -568,18 +556,15 @@ class _QuickAddBottomSheetState extends ConsumerState<QuickAddBottomSheet> {
               Text(
                 label,
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 description,
                 style: SpendexTheme.labelMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

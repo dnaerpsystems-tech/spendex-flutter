@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 // ===========================================================================
 // Widget Test Helper Extension
@@ -117,7 +117,7 @@ extension PumpApp on WidgetTester {
     double delta = 100,
     int maxScrolls = 50,
   }) async {
-    int scrollCount = 0;
+    var scrollCount = 0;
     while (finder.evaluate().isEmpty && scrollCount < maxScrolls) {
       await drag(find.byType(Scrollable).first, Offset(0, -delta));
       await pump();
@@ -169,8 +169,11 @@ Finder findButtonWithText(String text) {
 Finder findTextFieldWithLabel(String label) {
   return find.byWidgetPredicate(
     (widget) {
-      if (widget is TextFormField) {
-        return widget.decoration?.labelText == label;
+      if (widget is TextField) {
+        final decoration = widget.decoration;
+        if (decoration is InputDecoration) {
+          return decoration.labelText == label;
+        }
       }
       return false;
     },

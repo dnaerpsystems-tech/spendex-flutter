@@ -192,9 +192,8 @@ class _BatchResolutionDialogState extends State<BatchResolutionDialog> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: isSelected
-                    ? color.withValues(alpha: 0.2)
-                    : colorScheme.surfaceContainerHighest,
+                color:
+                    isSelected ? color.withValues(alpha: 0.2) : colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
               ),
               child: Icon(

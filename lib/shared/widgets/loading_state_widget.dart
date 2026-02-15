@@ -141,12 +141,8 @@ class ShimmerLoadingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final baseColor = isDark
-        ? SpendexColors.darkBorder
-        : SpendexColors.lightBorder;
-    final highlightColor = isDark
-        ? SpendexColors.darkSurface
-        : SpendexColors.lightBackground;
+    final baseColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final highlightColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightBackground;
 
     return Semantics(
       label: semanticLabel ?? 'Loading content',
@@ -162,8 +158,8 @@ class ShimmerLoadingList extends StatelessWidget {
                 itemCount,
                 (index) => Padding(
                   padding: EdgeInsets.only(bottom: spacing),
-                  child: itemBuilder?.call(context, index) ??
-                      _DefaultSkeletonItem(height: itemHeight),
+                  child:
+                      itemBuilder?.call(context, index) ?? _DefaultSkeletonItem(height: itemHeight),
                 ),
               ),
             ),
@@ -206,12 +202,8 @@ class SliverShimmerLoadingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final baseColor = isDark
-        ? SpendexColors.darkBorder
-        : SpendexColors.lightBorder;
-    final highlightColor = isDark
-        ? SpendexColors.darkSurface
-        : SpendexColors.lightBackground;
+    final baseColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final highlightColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightBackground;
 
     return SliverPadding(
       padding: padding,
@@ -228,8 +220,8 @@ class SliverShimmerLoadingList extends StatelessWidget {
                 highlightColor: highlightColor,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: itemBuilder?.call(context, index) ??
-                      _DefaultSkeletonItem(height: itemHeight),
+                  child:
+                      itemBuilder?.call(context, index) ?? _DefaultSkeletonItem(height: itemHeight),
                 ),
               ),
             );

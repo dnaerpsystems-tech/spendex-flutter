@@ -64,9 +64,7 @@ class ImportHistoryCard extends StatelessWidget {
 
     return Dismissible(
       key: ValueKey(import.id),
-      direction: onDelete != null
-          ? DismissDirection.endToStart
-          : DismissDirection.none,
+      direction: onDelete != null ? DismissDirection.endToStart : DismissDirection.none,
       confirmDismiss: (direction) async {
         return showDialog<bool>(
           context: context,
@@ -120,9 +118,7 @@ class ImportHistoryCard extends StatelessWidget {
               color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             child: Row(
@@ -243,9 +239,8 @@ class ImportHistoryCard extends StatelessWidget {
                 // Arrow icon
                 Icon(
                   Iconsax.arrow_right_3,
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   size: 20,
                 ),
               ],

@@ -1,10 +1,6 @@
-import 'package:hive/hive.dart';
 import 'sync_status.dart';
 
-part 'cached_entity.g.dart';
-
 /// Wrapper for cached entities with sync metadata
-@HiveType(typeId: 102)
 class CachedEntity<T> {
   CachedEntity({
     required this.id,
@@ -26,9 +22,7 @@ class CachedEntity<T> {
       data: fromJsonT(json['data'] as Map<String, dynamic>),
       syncStatus: SyncStatusExtension.fromValue(json['syncStatus'] as String),
       cachedAt: DateTime.parse(json['cachedAt'] as String),
-      modifiedAt: json['modifiedAt'] != null
-          ? DateTime.parse(json['modifiedAt'] as String)
-          : null,
+      modifiedAt: json['modifiedAt'] != null ? DateTime.parse(json['modifiedAt'] as String) : null,
       serverUpdatedAt: json['serverUpdatedAt'] != null
           ? DateTime.parse(json['serverUpdatedAt'] as String)
           : null,
@@ -37,31 +31,24 @@ class CachedEntity<T> {
   }
 
   /// Entity ID
-  @HiveField(0)
   final String id;
 
   /// The actual entity data
-  @HiveField(1)
   final T data;
 
   /// Current sync status
-  @HiveField(2)
   SyncStatus syncStatus;
 
   /// When this entity was cached
-  @HiveField(3)
   final DateTime cachedAt;
 
   /// When this entity was last modified locally
-  @HiveField(4)
   DateTime? modifiedAt;
 
   /// When this entity was last updated on server
-  @HiveField(5)
   DateTime? serverUpdatedAt;
 
   /// Version number for optimistic locking
-  @HiveField(6)
   int version;
 
   /// Convert to JSON

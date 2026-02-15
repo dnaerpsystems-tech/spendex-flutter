@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +31,7 @@ class IndianNumberFormatter extends TextInputFormatter {
     // Remove all non-digits
     final digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
     if (digitsOnly.isEmpty) {
-      return const TextEditingValue();
+      return TextEditingValue.empty;
     }
 
     // Format with Indian number system
@@ -42,13 +44,15 @@ class IndianNumberFormatter extends TextInputFormatter {
   }
 
   String _formatIndianNumber(String value) {
-    if (value.length <= 3) return value;
+    if (value.length <= 3) {
+      return value;
+    }
 
     final reversed = value.split('').reversed.toList();
     final result = <String>[];
 
     for (var i = 0; i < reversed.length; i++) {
-      if (i == 3 || (i > 3 && (i - 3) % 2 == 0)) {
+      if (i == 3 || (i > 3 && (i - 3).isEven)) {
         result.add(',');
       }
       result.add(reversed[i]);
@@ -64,8 +68,7 @@ class AddTransactionScreen extends ConsumerStatefulWidget {
   final String? transactionId;
 
   @override
-  ConsumerState<AddTransactionScreen> createState() =>
-      _AddTransactionScreenState();
+  ConsumerState<AddTransactionScreen> createState() => _AddTransactionScreenState();
 }
 
 class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
@@ -130,8 +133,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
   Future<void> _loadExistingTransaction() async {
     final transactionsNotifier = ref.read(transactionsStateProvider.notifier);
-    final transaction =
-        await transactionsNotifier.getTransactionById(widget.transactionId!);
+    final transaction = await transactionsNotifier.getTransactionById(widget.transactionId!);
 
     if (transaction != null) {
       setState(() {
@@ -155,13 +157,15 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   }
 
   String _formatWithCommas(String value) {
-    if (value.length <= 3) return value;
+    if (value.length <= 3) {
+      return value;
+    }
 
     final reversed = value.split('').reversed.toList();
     final result = <String>[];
 
     for (var i = 0; i < reversed.length; i++) {
-      if (i == 3 || (i > 3 && (i - 3) % 2 == 0)) {
+      if (i == 3 || (i > 3 && (i - 3).isEven)) {
         result.add(',');
       }
       result.add(reversed[i]);
@@ -184,8 +188,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
   @override
   void dispose() {
-    _tabController.removeListener(_onTabChanged);
-    _tabController.dispose();
+    _tabController
+      ..removeListener(_onTabChanged)
+      ..dispose();
     _amountController.dispose();
     _descriptionController.dispose();
     _notesController.dispose();
@@ -205,7 +210,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
   int _parseAmount(String value) {
     final digitsOnly = value.replaceAll(RegExp(r'[^\d]'), '');
-    if (digitsOnly.isEmpty) return 0;
+    if (digitsOnly.isEmpty) {
+      return 0;
+    }
     return int.parse(digitsOnly) * 100; // Convert to paise
   }
 
@@ -255,7 +262,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     final toAccountError = _validateToAccount();
     final categoryError = _validateCategory();
 
-    if (!isFormValid) return false;
+    if (!isFormValid) {
+      return false;
+    }
 
     if (accountError != null) {
       _showErrorSnackBar(accountError);
@@ -304,15 +313,16 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   }
 
   Future<void> _handleSubmit() async {
-    if (!_validateForm()) return;
+    if (!_validateForm()) {
+      return;
+    }
 
     setState(() {
       _isLoading = true;
     });
 
     try {
-      final transactionsNotifier =
-          ref.read(transactionsStateProvider.notifier);
+      final transactionsNotifier = ref.read(transactionsStateProvider.notifier);
 
       final request = CreateTransactionRequest(
         type: _type,
@@ -320,9 +330,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
         accountId: _selectedAccountId!,
         categoryId: _type != TransactionType.transfer ? _selectedCategoryId : null,
         toAccountId: _type == TransactionType.transfer ? _toAccountId : null,
-        description: _descriptionController.text.isNotEmpty
-            ? _descriptionController.text
-            : null,
+        description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
         notes: _notesController.text.isNotEmpty ? _notesController.text : null,
         date: _selectedDate,
       );
@@ -340,13 +348,11 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
       if (result != null) {
         _showSuccessSnackBar(
-          isEditMode
-              ? 'Transaction updated successfully'
-              : 'Transaction added successfully',
+          isEditMode ? 'Transaction updated successfully' : 'Transaction added successfully',
         );
 
         // Refresh accounts to update balances
-        ref.read(accountsStateProvider.notifier).loadAll();
+        unawaited(ref.read(accountsStateProvider.notifier).loadAll());
 
         if (mounted) {
           context.go(AppRoutes.transactions);
@@ -417,18 +423,15 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     final categoriesState = ref.watch(categoriesStateProvider);
     final transactionsState = ref.watch(transactionsStateProvider);
 
-    final isOperationInProgress = _isLoading ||
-        transactionsState.isCreating ||
-        transactionsState.isUpdating;
+    final isOperationInProgress =
+        _isLoading || transactionsState.isCreating || transactionsState.isUpdating;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditMode ? 'Edit Transaction' : 'Add Transaction'),
         leading: IconButton(
           icon: const Icon(Iconsax.close_square),
-          onPressed: isOperationInProgress
-              ? null
-              : () => context.go(AppRoutes.dashboard),
+          onPressed: isOperationInProgress ? null : () => context.go(AppRoutes.dashboard),
         ),
       ),
       body: !_isInitialized
@@ -455,18 +458,14 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
                           // Account Selector
                           _buildLabel(
-                            _type == TransactionType.transfer
-                                ? 'From Account'
-                                : 'Account',
+                            _type == TransactionType.transfer ? 'From Account' : 'Account',
                             isRequired: true,
                           ),
                           const SizedBox(height: 8),
                           _AccountSelector(
                             accounts: accountsState.accounts,
                             selectedId: _selectedAccountId,
-                            excludeId: _type == TransactionType.transfer
-                                ? _toAccountId
-                                : null,
+                            excludeId: _type == TransactionType.transfer ? _toAccountId : null,
                             isDark: isDark,
                             isLoading: accountsState.isLoading,
                             typeColor: _getTypeColor(),
@@ -604,9 +603,8 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
           indicatorSize: TabBarIndicatorSize.tab,
           dividerColor: Colors.transparent,
           labelColor: Colors.white,
-          unselectedLabelColor: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          unselectedLabelColor:
+              isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           labelStyle: SpendexTheme.titleMedium,
           unselectedLabelStyle: SpendexTheme.titleMedium,
           tabs: const [
@@ -700,9 +698,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
             Icon(
               Iconsax.arrow_down_1,
               size: 16,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
           ],
         ),
@@ -731,9 +727,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
                   ),
                 )
               : Text(
-                  isEditMode
-                      ? 'Update ${_type.label}'
-                      : 'Add ${_type.label}',
+                  isEditMode ? 'Update ${_type.label}' : 'Add ${_type.label}',
                 ),
         ),
       ),
@@ -793,9 +787,8 @@ class _AccountSelector extends StatelessWidget {
       );
     }
 
-    final filteredAccounts = excludeId != null
-        ? accounts.where((a) => a.id != excludeId).toList()
-        : accounts;
+    final filteredAccounts =
+        excludeId != null ? accounts.where((a) => a.id != excludeId).toList() : accounts;
 
     if (filteredAccounts.isEmpty) {
       return Container(
@@ -812,9 +805,7 @@ class _AccountSelector extends StatelessWidget {
           child: Text(
             'No accounts available',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ),
@@ -858,18 +849,15 @@ class _AccountSelector extends StatelessWidget {
                 children: [
                   Icon(
                     _getAccountIcon(account.type),
-                    color: isSelected
-                        ? typeColor
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    color: isSelected ? typeColor : Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 24,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     account.name,
                     style: SpendexTheme.labelMedium.copyWith(
-                      color: isSelected
-                          ? typeColor
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                      color:
+                          isSelected ? typeColor : Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
@@ -880,9 +868,8 @@ class _AccountSelector extends StatelessWidget {
                     '₹${NumberFormat('#,##,###').format(account.balanceInRupees)}',
                     style: SpendexTheme.labelMedium.copyWith(
                       fontSize: 10,
-                      color: isDark
-                          ? SpendexColors.darkTextTertiary
-                          : SpendexColors.lightTextTertiary,
+                      color:
+                          isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -972,9 +959,7 @@ class _CategorySelector extends StatelessWidget {
           child: Text(
             'No categories available',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ),
@@ -1013,18 +998,14 @@ class _CategorySelector extends StatelessWidget {
               children: [
                 Icon(
                   _getCategoryIcon(category.icon),
-                  color: isSelected
-                      ? typeColor
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  color: isSelected ? typeColor : Theme.of(context).colorScheme.onSurfaceVariant,
                   size: 20,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   category.name,
                   style: SpendexTheme.labelMedium.copyWith(
-                    color: isSelected
-                        ? typeColor
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    color: isSelected ? typeColor : Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],

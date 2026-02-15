@@ -83,9 +83,8 @@ class TransactionsState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       isStatsLoading: isStatsLoading ?? this.isStatsLoading,
       error: clearError ? null : (error ?? this.error),
-      selectedTransaction: clearSelectedTransaction
-          ? null
-          : (selectedTransaction ?? this.selectedTransaction),
+      selectedTransaction:
+          clearSelectedTransaction ? null : (selectedTransaction ?? this.selectedTransaction),
       isCreating: isCreating ?? this.isCreating,
       isUpdating: isUpdating ?? this.isUpdating,
       isDeleting: isDeleting ?? this.isDeleting,
@@ -159,7 +158,9 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
     TransactionFilter? filter,
     bool refresh = false,
   }) async {
-    if (state.isLoading) return;
+    if (state.isLoading) {
+      return;
+    }
 
     final page = refresh ? 1 : state.currentPage;
     state = state.copyWith(
@@ -182,9 +183,8 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
         );
       },
       (paginatedResponse) {
-        final newTransactions = refresh
-            ? paginatedResponse.data
-            : [...state.transactions, ...paginatedResponse.data];
+        final newTransactions =
+            refresh ? paginatedResponse.data : [...state.transactions, ...paginatedResponse.data];
 
         state = state.copyWith(
           isLoading: false,
@@ -199,7 +199,9 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
 
   /// Load more transactions (pagination)
   Future<void> loadMore() async {
-    if (state.isLoading || !state.hasMore) return;
+    if (state.isLoading || !state.hasMore) {
+      return;
+    }
 
     state = state.copyWith(currentPage: state.currentPage + 1);
     await loadTransactions();
@@ -207,7 +209,9 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
 
   /// Load transaction stats
   Future<void> loadStats({DateTime? startDate, DateTime? endDate}) async {
-    if (state.isStatsLoading) return;
+    if (state.isStatsLoading) {
+      return;
+    }
 
     state = state.copyWith(isStatsLoading: true);
 
@@ -297,7 +301,9 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
 
   /// Create a new transaction
   Future<TransactionModel?> createTransaction(CreateTransactionRequest request) async {
-    if (state.isCreating) return null;
+    if (state.isCreating) {
+      return null;
+    }
 
     state = state.copyWith(isCreating: true, clearError: true);
 
@@ -329,7 +335,9 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
     String id,
     CreateTransactionRequest request,
   ) async {
-    if (state.isUpdating) return null;
+    if (state.isUpdating) {
+      return null;
+    }
 
     state = state.copyWith(isUpdating: true, clearError: true);
 
@@ -362,7 +370,9 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
 
   /// Delete a transaction
   Future<bool> deleteTransaction(String id) async {
-    if (state.isDeleting) return false;
+    if (state.isDeleting) {
+      return false;
+    }
 
     state = state.copyWith(isDeleting: true, clearError: true);
 
@@ -377,8 +387,7 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
         return false;
       },
       (_) {
-        final updatedTransactions =
-            state.transactions.where((t) => t.id != id).toList();
+        final updatedTransactions = state.transactions.where((t) => t.id != id).toList();
 
         state = state.copyWith(
           isDeleting: false,

@@ -7,7 +7,6 @@ import '../models/investment_model.dart';
 
 /// Investments Repository Implementation
 class InvestmentsRepositoryImpl implements InvestmentsRepository {
-
   InvestmentsRepositoryImpl(this._remoteDataSource);
   final InvestmentsRemoteDataSource _remoteDataSource;
 
@@ -32,7 +31,8 @@ class InvestmentsRepositoryImpl implements InvestmentsRepository {
   }
 
   @override
-  Future<Either<Failure, InvestmentModel>> updateInvestment(String id, CreateInvestmentRequest request) {
+  Future<Either<Failure, InvestmentModel>> updateInvestment(
+      String id, CreateInvestmentRequest request,) {
     return _remoteDataSource.updateInvestment(id, request);
   }
 

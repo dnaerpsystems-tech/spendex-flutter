@@ -21,16 +21,16 @@ import '../widgets/category_card.dart';
 /// - Subcategories (if parent category)
 /// - Quick action buttons for common operations
 class CategoryDetailsScreen extends ConsumerStatefulWidget {
-
   const CategoryDetailsScreen({
-    required this.categoryId, super.key,
+    required this.categoryId,
+    super.key,
   });
+
   /// The ID of the category to display
   final String categoryId;
 
   @override
-  ConsumerState<CategoryDetailsScreen> createState() =>
-      _CategoryDetailsScreenState();
+  ConsumerState<CategoryDetailsScreen> createState() => _CategoryDetailsScreenState();
 }
 
 class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
@@ -50,17 +50,32 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
   /// Initializes mock data for demonstration
   void _initializeMockData() {
     final now = DateTime.now();
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     // Generate last 6 months of mock data
     for (var i = 5; i >= 0; i--) {
       final date = DateTime(now.year, now.month - i);
       final monthIndex = date.month - 1;
-      _monthlyTrend.add(_MonthlyData(
-        month: months[monthIndex],
-        amount: (5000 + (i * 1500) + (i % 3) * 800).toDouble(),
-        isCurrentMonth: i == 0,
-      ),);
+      _monthlyTrend.add(
+        _MonthlyData(
+          month: months[monthIndex],
+          amount: (5000 + (i * 1500) + (i % 3) * 800).toDouble(),
+          isCurrentMonth: i == 0,
+        ),
+      );
     }
 
     // Mock recent transactions
@@ -151,9 +166,8 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
     );
 
     if ((confirmed ?? false) && mounted) {
-      final success = await ref
-          .read(categoriesStateProvider.notifier)
-          .deleteCategory(widget.categoryId);
+      final success =
+          await ref.read(categoriesStateProvider.notifier).deleteCategory(widget.categoryId);
 
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -193,9 +207,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
     final isDeleting = categoriesState.isDeleting;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: Text(category?.name ?? 'Category Details'),
         centerTitle: true,
@@ -295,7 +307,8 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
   /// Builds the header section with icon, name, and badges
   Widget _buildHeaderSection(bool isDark, CategoryModel category) {
     final categoryColor = _getCategoryColor(category);
-    final categoryIcon = getCategoryIconByName(category.icon) ?? getDefaultCategoryIcon(category.name);
+    final categoryIcon =
+        getCategoryIconByName(category.icon) ?? getDefaultCategoryIcon(category.name);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -350,9 +363,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
             category.name,
             style: SpendexTheme.displayLarge.copyWith(
               fontSize: 24,
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -511,9 +522,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
             value,
             style: SpendexTheme.titleMedium.copyWith(
               fontSize: 16,
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -522,9 +531,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
           Text(
             label,
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
           ),
         ],
@@ -595,9 +602,8 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                                     ],
                                   )
                                 : null,
-                            color: data.isCurrentMonth
-                                ? null
-                                : categoryColor.withValues(alpha: 0.3),
+                            color:
+                                data.isCurrentMonth ? null : categoryColor.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
@@ -612,8 +618,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                                 : isDark
                                     ? SpendexColors.darkTextTertiary
                                     : SpendexColors.lightTextTertiary,
-                            fontWeight:
-                                data.isCurrentMonth ? FontWeight.w600 : FontWeight.w400,
+                            fontWeight: data.isCurrentMonth ? FontWeight.w600 : FontWeight.w400,
                           ),
                         ),
                       ],
@@ -644,17 +649,13 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
           Icon(
             Iconsax.chart,
             size: 40,
-            color: isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary,
+            color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
           ),
           const SizedBox(height: 12),
           Text(
             'No trend data available',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ],
@@ -771,9 +772,8 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                   Text(
                     transaction.description,
                     style: SpendexTheme.titleMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -782,9 +782,8 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                   Text(
                     dateFormat.format(transaction.date),
                     style: SpendexTheme.labelMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextTertiary
-                          : SpendexColors.lightTextTertiary,
+                      color:
+                          isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     ),
                   ),
                 ],
@@ -834,18 +833,14 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
           Text(
             'No Transactions Yet',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Transactions in this category will appear here',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -934,17 +929,13 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
               child: Text(
                 subcategory.name,
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
             ),
             Icon(
               Iconsax.arrow_right_3,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               size: 18,
             ),
           ],
@@ -1041,9 +1032,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
             Text(
               label,
               style: SpendexTheme.labelMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
               maxLines: 1,
@@ -1090,9 +1079,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
             Text(
               label,
               style: SpendexTheme.titleMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
           ],
@@ -1106,9 +1093,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
     return Text(
       title,
       style: SpendexTheme.titleMedium.copyWith(
-        color: isDark
-            ? SpendexColors.darkTextPrimary
-            : SpendexColors.lightTextPrimary,
+        color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         fontWeight: FontWeight.w600,
       ),
     );
@@ -1211,18 +1196,14 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
             Text(
               'Failed to load category',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               error,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -1265,18 +1246,14 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
             Text(
               'Category Not Found',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               "The category you're looking for doesn't exist or has been deleted.",
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -1305,9 +1282,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
         // Fall through to default
       }
     }
-    return category.type == CategoryType.income
-        ? SpendexColors.income
-        : SpendexColors.primary;
+    return category.type == CategoryType.income ? SpendexColors.income : SpendexColors.primary;
   }
 
   /// Formats currency in Indian Rupee format
@@ -1336,7 +1311,6 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
 
 /// Helper class for monthly trend data
 class _MonthlyData {
-
   const _MonthlyData({
     required this.month,
     required this.amount,
@@ -1349,7 +1323,6 @@ class _MonthlyData {
 
 /// Helper class for mock transaction data
 class _MockTransaction {
-
   const _MockTransaction({
     required this.id,
     required this.description,

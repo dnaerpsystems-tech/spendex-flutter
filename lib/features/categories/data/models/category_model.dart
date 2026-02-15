@@ -3,7 +3,6 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Category Model
 class CategoryModel extends Equatable {
-
   const CategoryModel({
     required this.id,
     required this.name,
@@ -107,7 +106,6 @@ class CategoryModel extends Equatable {
 
 /// Category with spending info
 class CategoryWithSpending extends Equatable {
-
   const CategoryWithSpending({
     required this.category,
     required this.totalSpent,
@@ -136,7 +134,6 @@ class CategoryWithSpending extends Equatable {
 
 /// Create Category Request
 class CreateCategoryRequest {
-
   const CreateCategoryRequest({
     required this.name,
     required this.type,
@@ -163,7 +160,6 @@ class CreateCategoryRequest {
 
 /// Category Suggestion Request
 class CategorySuggestionRequest {
-
   const CategorySuggestionRequest({
     required this.description,
     this.amount,

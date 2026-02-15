@@ -39,8 +39,8 @@ class TaxSavingsCard extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: isDark
               ? [
-                  Colors.teal.shade800.withOpacity(0.3),
-                  Colors.blue.shade900.withOpacity(0.3),
+                  Colors.teal.shade800.withValues(alpha: 0.3),
+                  Colors.blue.shade900.withValues(alpha: 0.3),
                 ]
               : [
                   Colors.teal.shade400,
@@ -49,9 +49,7 @@ class TaxSavingsCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
         border: Border.all(
-          color: isDark
-              ? SpendexColors.darkBorder
-              : Colors.white.withOpacity(0.2),
+          color: isDark ? SpendexColors.darkBorder : Colors.white.withValues(alpha: 0.2),
         ),
       ),
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
@@ -63,7 +61,7 @@ class TaxSavingsCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(SpendexTheme.spacingSm),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 ),
                 child: const Icon(
@@ -88,7 +86,7 @@ class TaxSavingsCard extends StatelessWidget {
                     Text(
                       'Total: ${CurrencyFormatter.formatPaise(summary.totalTaxSavings, decimalDigits: 0)}',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -173,7 +171,7 @@ class _TaxSectionProgress extends StatelessWidget {
                 Text(
                   description,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                   ),
                 ),
               ],
@@ -182,7 +180,7 @@ class _TaxSectionProgress extends StatelessWidget {
               Text(
                 'Limit: ${CurrencyFormatter.formatPaiseCompact(maxLimit!)}',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
               ),
           ],
@@ -193,7 +191,7 @@ class _TaxSectionProgress extends StatelessWidget {
             borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
             child: LinearProgressIndicator(
               value: progress,
-              backgroundColor: Colors.white.withOpacity(0.2),
+              backgroundColor: Colors.white.withValues(alpha: 0.2),
               valueColor: AlwaysStoppedAnimation<Color>(progressColor),
               minHeight: 8,
             ),
@@ -218,7 +216,7 @@ class _TaxSectionProgress extends StatelessWidget {
                   vertical: 2,
                 ),
                 decoration: BoxDecoration(
-                  color: progressColor.withOpacity(0.3),
+                  color: progressColor.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 ),
                 child: Text(
@@ -235,7 +233,7 @@ class _TaxSectionProgress extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(SpendexTheme.spacingSm),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
             ),
             child: Row(
@@ -257,7 +255,7 @@ class _TaxSectionProgress extends StatelessWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.3),
+                    color: Colors.blue.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                   ),
                   child: Row(

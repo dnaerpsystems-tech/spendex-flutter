@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/di/injection.dart';
@@ -73,16 +75,14 @@ class NotificationsState extends Equatable {
       notifications.where((n) => n.isRead == false).toList();
 
   /// Get read notifications
-  List<NotificationModel> get readNotifications =>
-      notifications.where((n) => n.isRead).toList();
+  List<NotificationModel> get readNotifications => notifications.where((n) => n.isRead).toList();
 
   /// Get high priority notifications
   List<NotificationModel> get highPriorityNotifications =>
       notifications.where((n) => n.isHighPriority).toList();
 
   /// Check if any operation is in progress
-  bool get isOperationInProgress =>
-      isMarkingRead || isMarkingAllRead || isDeleting;
+  bool get isOperationInProgress => isMarkingRead || isMarkingAllRead || isDeleting;
 
   NotificationsState copyWith({
     List<NotificationModel>? notifications,
@@ -113,8 +113,7 @@ class NotificationsState extends Equatable {
       hasMore: hasMore ?? this.hasMore,
       filterType: clearFilterType ? null : (filterType ?? this.filterType),
       error: clearError ? null : (error ?? this.error),
-      successMessage:
-          clearSuccessMessage ? null : (successMessage ?? this.successMessage),
+      successMessage: clearSuccessMessage ? null : (successMessage ?? this.successMessage),
     );
   }
 
@@ -144,7 +143,9 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
 
   /// Load notifications (initial load or with new filter)
   Future<void> loadNotifications({bool refresh = false}) async {
-    if (state.isLoading && refresh == false) return;
+    if (state.isLoading && refresh == false) {
+      return;
+    }
 
     state = state.copyWith(
       isLoading: true,
@@ -155,7 +156,6 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
     );
 
     final result = await _repository.getNotifications(
-      page: 1,
       type: state.filterType,
     );
 
@@ -177,12 +177,14 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
     );
 
     // Also refresh unread count
-    _loadUnreadCount();
+    unawaited(_loadUnreadCount());
   }
 
   /// Load more notifications (pagination)
   Future<void> loadMore() async {
-    if (state.isLoadingMore || state.hasMore == false || state.isLoading) return;
+    if (state.isLoadingMore || state.hasMore == false || state.isLoading) {
+      return;
+    }
 
     state = state.copyWith(isLoadingMore: true);
 
@@ -236,15 +238,20 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
 
   /// Mark a notification as read
   Future<bool> markAsRead(String notificationId) async {
-    if (state.isMarkingRead) return false;
+    if (state.isMarkingRead) {
+      return false;
+    }
 
     // Find the notification
-    final notificationIndex =
-        state.notifications.indexWhere((n) => n.id == notificationId);
-    if (notificationIndex == -1) return false;
+    final notificationIndex = state.notifications.indexWhere((n) => n.id == notificationId);
+    if (notificationIndex == -1) {
+      return false;
+    }
 
     final notification = state.notifications[notificationIndex];
-    if (notification.isRead) return true; // Already read
+    if (notification.isRead) {
+      return true; // Already read
+    }
 
     state = state.copyWith(isMarkingRead: true, clearError: true);
 
@@ -274,7 +281,9 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
 
   /// Mark all notifications as read
   Future<bool> markAllAsRead() async {
-    if (state.isMarkingAllRead || state.unreadCount == 0) return false;
+    if (state.isMarkingAllRead || state.unreadCount == 0) {
+      return false;
+    }
 
     state = state.copyWith(isMarkingAllRead: true, clearError: true);
 
@@ -306,7 +315,9 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
 
   /// Delete a notification
   Future<bool> deleteNotification(String notificationId) async {
-    if (state.isDeleting) return false;
+    if (state.isDeleting) {
+      return false;
+    }
 
     state = state.copyWith(isDeleting: true, clearError: true);
 
@@ -321,14 +332,12 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
         return false;
       },
       (_) {
-        final notification =
-            state.notifications.firstWhere((n) => n.id == notificationId);
+        final notification = state.notifications.firstWhere((n) => n.id == notificationId);
         final updatedNotifications =
             state.notifications.where((n) => n.id != notificationId).toList();
-        final newUnreadCount =
-            notification.isRead == false && state.unreadCount > 0
-                ? state.unreadCount - 1
-                : state.unreadCount;
+        final newUnreadCount = notification.isRead == false && state.unreadCount > 0
+            ? state.unreadCount - 1
+            : state.unreadCount;
 
         state = state.copyWith(
           isDeleting: false,
@@ -343,7 +352,9 @@ class NotificationsNotifier extends StateNotifier<NotificationsState> {
 
   /// Set filter type
   void setFilter(NotificationType? type) {
-    if (state.filterType == type) return;
+    if (state.filterType == type) {
+      return;
+    }
 
     state = state.copyWith(
       filterType: type,

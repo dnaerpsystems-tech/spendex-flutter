@@ -41,8 +41,8 @@ class InvestmentSummaryCard extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: isDark
               ? [
-                  Colors.purple.shade900.withOpacity(0.3),
-                  Colors.pink.shade900.withOpacity(0.3),
+                  Colors.purple.shade900.withValues(alpha: 0.3),
+                  Colors.pink.shade900.withValues(alpha: 0.3),
                 ]
               : [
                   Colors.purple.shade400,
@@ -51,9 +51,7 @@ class InvestmentSummaryCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
         border: Border.all(
-          color: isDark
-              ? SpendexColors.darkBorder
-              : Colors.white.withOpacity(0.2),
+          color: isDark ? SpendexColors.darkBorder : Colors.white.withValues(alpha: 0.2),
         ),
       ),
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
@@ -65,7 +63,7 @@ class InvestmentSummaryCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(SpendexTheme.spacingSm),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 ),
                 child: const Icon(
@@ -90,7 +88,7 @@ class InvestmentSummaryCard extends StatelessWidget {
                     Text(
                       '${summary.investmentCount} ${summary.investmentCount == 1 ? 'Investment' : 'Investments'}',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -130,8 +128,7 @@ class InvestmentSummaryCard extends StatelessWidget {
               ),
               _SummaryStatItem(
                 label: 'Returns %',
-                value:
-                    '${isProfit ? '+' : ''}${summary.overallReturnsPercent.toStringAsFixed(2)}%',
+                value: '${isProfit ? '+' : ''}${summary.overallReturnsPercent.toStringAsFixed(2)}%',
                 icon: isProfit ? Iconsax.trend_up : Iconsax.trend_down,
                 valueColor: isProfit ? Colors.green.shade300 : Colors.red.shade300,
               ),
@@ -163,10 +160,10 @@ class _SummaryStatItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -177,7 +174,7 @@ class _SummaryStatItem extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 size: 18,
               ),
               const SizedBox(width: SpendexTheme.spacingSm),
@@ -185,7 +182,7 @@ class _SummaryStatItem extends StatelessWidget {
                 child: Text(
                   label,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

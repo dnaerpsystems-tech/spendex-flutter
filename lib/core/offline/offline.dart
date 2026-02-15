@@ -28,24 +28,19 @@
 /// ```
 library offline;
 
-// Models
-export 'models/models.dart';
-
 // Adapters
 export 'adapters/adapters.dart';
-
+// Mixins
+export 'mixins/offline_repository_mixin.dart';
+// Models
+export 'models/models.dart';
+// Providers
+export 'providers/offline_provider.dart';
 // Services
 export 'services/cache_service.dart';
 export 'services/connectivity_service.dart';
 export 'services/sync_service.dart';
-
-// Providers
-export 'providers/offline_provider.dart';
-
 // Widgets
 export 'widgets/conflict_resolution_dialog.dart';
 export 'widgets/offline_banner.dart';
 export 'widgets/sync_status_indicator.dart';
-
-// Mixins
-export 'mixins/offline_repository_mixin.dart';

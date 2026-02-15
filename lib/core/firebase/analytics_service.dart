@@ -46,9 +46,16 @@ class AnalyticsService {
       return;
     }
 
+    // Filter out null values to match Firebase Analytics requirements
+    final filteredParameters = parameters
+        ?.map(
+          (key, value) => MapEntry(key, value ?? ''),
+        )
+        .cast<String, Object>();
+
     await instance.logEvent(
       name: name,
-      parameters: parameters,
+      parameters: filteredParameters,
     );
   }
 

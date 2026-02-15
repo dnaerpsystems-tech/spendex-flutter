@@ -20,9 +20,7 @@ class SmsPermissionDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
       ),
-      backgroundColor: isDark
-          ? SpendexColors.darkCard
-          : SpendexColors.lightCard,
+      backgroundColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -60,9 +58,7 @@ class SmsPermissionDialog extends StatelessWidget {
             Text(
               'To automatically import transactions from bank SMS, we need permission to read your SMS messages.',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -129,9 +125,7 @@ class SmsPermissionDialog extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -203,9 +197,7 @@ class _FeatureItem extends StatelessWidget {
           child: Text(
             text,
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ),

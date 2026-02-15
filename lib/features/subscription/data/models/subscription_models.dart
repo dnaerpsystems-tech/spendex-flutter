@@ -7,18 +7,15 @@
 /// ```dart
 /// import 'package:spendex/features/subscription/data/models/subscription_models.dart';
 /// ```
-
-// Plan models
-export 'plan_model.dart';
-
-// Subscription models
-export 'subscription_model.dart';
+library;
 
 // Invoice models
 export 'invoice_model.dart';
-
-// Usage models
-export 'usage_model.dart';
-
 // Payment models
 export 'payment_model.dart';
+// Plan models
+export 'plan_model.dart';
+// Subscription models
+export 'subscription_model.dart';
+// Usage models
+export 'usage_model.dart';

@@ -1,11 +1,11 @@
-import '../core/firebase/analytics_service.dart';
-import '../core/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../core/firebase/analytics_service.dart';
+import '../core/utils/app_logger.dart';
 import '../features/accounts/presentation/screens/account_details_screen.dart';
 import '../features/accounts/presentation/screens/accounts_screen.dart';
 import '../features/accounts/presentation/screens/add_account_screen.dart';
@@ -35,14 +35,12 @@ import '../features/email_parser/presentation/screens/email_details_screen.dart'
 import '../features/email_parser/presentation/screens/email_filters_screen.dart';
 import '../features/email_parser/presentation/screens/email_parser_screen.dart';
 import '../features/email_parser/presentation/screens/email_setup_screen.dart';
+import '../features/family/presentation/screens/family_screen.dart';
 import '../features/goals/presentation/screens/add_goal_screen.dart';
 import '../features/goals/presentation/screens/goal_details_screen.dart';
 import '../features/goals/presentation/screens/goals_screen.dart';
 import '../features/insights/presentation/screens/insight_detail_screen.dart';
 import '../features/insights/presentation/screens/insights_screen.dart';
-import '../features/family/presentation/screens/family_screen.dart';
-import '../features/notifications/presentation/screens/notifications_screen.dart';
-import '../features/subscription/presentation/screens/screens.dart';
 import '../features/investments/presentation/screens/add_investment_screen.dart';
 import '../features/investments/presentation/screens/holdings_screen.dart';
 import '../features/investments/presentation/screens/investment_details_screen.dart';
@@ -51,6 +49,7 @@ import '../features/investments/presentation/screens/tax_savings_screen.dart';
 import '../features/loans/presentation/screens/add_loan_screen.dart';
 import '../features/loans/presentation/screens/loan_details_screen.dart';
 import '../features/loans/presentation/screens/loans_screen.dart';
+import '../features/notifications/presentation/screens/notifications_screen.dart';
 import '../features/settings/presentation/screens/change_password_screen.dart';
 import '../features/settings/presentation/screens/device_management_screen.dart';
 import '../features/settings/presentation/screens/edit_profile_screen.dart';
@@ -60,6 +59,7 @@ import '../features/settings/presentation/screens/profile_screen.dart';
 import '../features/settings/presentation/screens/security_settings_screen.dart';
 import '../features/settings/presentation/screens/set_pin_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
+import '../features/subscription/presentation/screens/screens.dart';
 import '../features/transactions/presentation/screens/add_transaction_screen.dart';
 import '../features/transactions/presentation/screens/transaction_details_screen.dart';
 import '../features/transactions/presentation/screens/transactions_screen.dart';
@@ -67,108 +67,6 @@ import '../shared/widgets/main_scaffold.dart';
 import '../shared/widgets/onboarding_screen.dart';
 import '../shared/widgets/splash_screen.dart';
 import 'theme.dart';
-
-/// Placeholder screen for features not yet implemented
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen({
-    required this.title,
-    required this.icon,
-    required this.description,
-  });
-
-  final String title;
-  final IconData icon;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: SpendexColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(60),
-                ),
-                child: Icon(
-                  icon,
-                  size: 56,
-                  color: SpendexColors.primary,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextSecondary
-                          : SpendexColors.lightTextSecondary,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: SpendexColors.warning.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: SpendexColors.warning.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Iconsax.code,
-                      size: 16,
-                      color: SpendexColors.warning,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Coming Soon',
-                      style: TextStyle(
-                        color: SpendexColors.warning,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 /// Route names
 class AppRoutes {
@@ -291,7 +189,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isOnOnboarding = state.matchedLocation == AppRoutes.onboarding;
 
       if (kDebugMode) {
-        AppLogger.d('Router: isOnSplash=$isOnSplash, isOnOnboarding=$isOnOnboarding, isAuth=$isAuthenticated');
+        AppLogger.d(
+            'Router: isOnSplash=$isOnSplash, isOnOnboarding=$isOnOnboarding, isAuth=$isAuthenticated',);
       }
 
       // Allow splash and onboarding without redirection
@@ -337,8 +236,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.otpVerification,
         builder: (context, state) {
           final email = state.uri.queryParameters['email'] ?? '';
-          final purpose =
-              state.uri.queryParameters['purpose'] ?? 'verification';
+          final purpose = state.uri.queryParameters['purpose'] ?? 'verification';
           return OtpVerificationScreen(email: email, purpose: purpose);
         },
       ),
@@ -570,17 +468,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.subscriptionCheckout,
         builder: (context, state) {
-          final planId = state.uri.queryParameters['planId'] ?? '';
-          final billingCycle = state.uri.queryParameters['billingCycle'] ?? 'monthly';
-          return CheckoutScreen(planId: planId, billingCycle: billingCycle);
+          return const CheckoutScreen();
         },
       ),
       GoRoute(
         path: AppRoutes.subscriptionUpi,
         builder: (context, state) {
-          final orderId = state.uri.queryParameters['orderId'] ?? '';
-          final amount = double.tryParse(state.uri.queryParameters['amount'] ?? '0') ?? 0.0;
-          return UpiPaymentScreen(orderId: orderId, amount: amount);
+          return const UpiPaymentScreen();
         },
       ),
       GoRoute(
@@ -668,8 +562,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           }
           return DuplicateResolutionScreen(
             importId: extra['importId'] as String,
-            transactions: (extra['transactions'] as List<dynamic>)
-                .cast<ParsedTransactionModel>(),
+            transactions: (extra['transactions'] as List<dynamic>).cast<ParsedTransactionModel>(),
           );
         },
       ),

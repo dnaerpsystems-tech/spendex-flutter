@@ -3,7 +3,6 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Investment Model
 class InvestmentModel extends Equatable {
-
   const InvestmentModel({
     required this.id,
     required this.name,
@@ -49,12 +48,10 @@ class InvestmentModel extends Equatable {
       returns: json['returns'] as int,
       returnsPercent: (json['returnsPercent'] as num).toDouble(),
       interestRate: (json['interestRate'] as num?)?.toDouble(),
-      purchaseDate: json['purchaseDate'] != null
-          ? DateTime.parse(json['purchaseDate'] as String)
-          : null,
-      maturityDate: json['maturityDate'] != null
-          ? DateTime.parse(json['maturityDate'] as String)
-          : null,
+      purchaseDate:
+          json['purchaseDate'] != null ? DateTime.parse(json['purchaseDate'] as String) : null,
+      maturityDate:
+          json['maturityDate'] != null ? DateTime.parse(json['maturityDate'] as String) : null,
       maturityAmount: json['maturityAmount'] as int?,
       taxSaving: json['taxSaving'] as bool? ?? false,
       taxSection: json['taxSection'] != null
@@ -124,12 +121,9 @@ class InvestmentModel extends Equatable {
   double get investedAmountInRupees => investedAmount / 100;
   double get currentValueInRupees => currentValue / 100;
   double get returnsInRupees => returns / 100;
-  double? get purchasePriceInRupees =>
-      purchasePrice != null ? purchasePrice! / 100 : null;
-  double? get currentPriceInRupees =>
-      currentPrice != null ? currentPrice! / 100 : null;
-  double? get maturityAmountInRupees =>
-      maturityAmount != null ? maturityAmount! / 100 : null;
+  double? get purchasePriceInRupees => purchasePrice != null ? purchasePrice! / 100 : null;
+  double? get currentPriceInRupees => currentPrice != null ? currentPrice! / 100 : null;
+  double? get maturityAmountInRupees => maturityAmount != null ? maturityAmount! / 100 : null;
 
   bool get isProfit => returns > 0;
   bool get isLoss => returns < 0;
@@ -176,7 +170,6 @@ class InvestmentModel extends Equatable {
 
 /// Investment Summary
 class InvestmentSummary extends Equatable {
-
   const InvestmentSummary({
     required this.totalInvested,
     required this.currentValue,
@@ -222,7 +215,6 @@ class InvestmentSummary extends Equatable {
 
 /// Tax Savings Summary
 class TaxSavingsSummary extends Equatable {
-
   const TaxSavingsSummary({
     required this.year,
     required this.savingsBySection,
@@ -232,8 +224,8 @@ class TaxSavingsSummary extends Equatable {
   factory TaxSavingsSummary.fromJson(Map<String, dynamic> json) {
     return TaxSavingsSummary(
       year: json['year'] as int,
-      savingsBySection: (json['savingsBySection'] as Map<String, dynamic>)
-          .map((k, v) => MapEntry(k, v as int)),
+      savingsBySection:
+          (json['savingsBySection'] as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)),
       totalTaxSavings: json['totalTaxSavings'] as int,
     );
   }
@@ -249,7 +241,6 @@ class TaxSavingsSummary extends Equatable {
 
 /// Create Investment Request
 class CreateInvestmentRequest {
-
   const CreateInvestmentRequest({
     required this.name,
     required this.type,

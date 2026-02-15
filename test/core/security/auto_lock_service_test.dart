@@ -61,7 +61,7 @@ void main() {
 
       test('returns false when disabled', () async {
         autoLockService.recordActivity();
-        await autoLockService.setEnabled(false);
+        await autoLockService.setEnabled(enabled: false);
         
         expect(autoLockService.shouldLock(), isFalse);
       });
@@ -86,7 +86,7 @@ void main() {
         verify(() => mockPrefs.setInt(
           'spendex_auto_lock_timeout_seconds',
           600,
-        )).called(1);
+        ),).called(1);
       });
 
       test('persists timeout to SharedPreferences', () async {
@@ -97,7 +97,7 @@ void main() {
         verify(() => mockPrefs.setInt(
           'spendex_auto_lock_timeout_seconds',
           30,
-        )).called(1);
+        ),).called(1);
       });
 
       test('accepts various timeout durations', () async {
@@ -141,9 +141,10 @@ void main() {
       });
 
       test('causes shouldLock to return false after reset', () {
-        autoLockService.recordActivity();
-        autoLockService.reset();
-        
+        autoLockService
+          ..recordActivity()
+          ..reset();
+
         expect(autoLockService.shouldLock(), isFalse);
       });
     });
@@ -202,35 +203,35 @@ void main() {
     // =========================================================================
     group('setEnabled()', () {
       test('enables auto-lock and records activity', () async {
-        await autoLockService.setEnabled(true);
+        await autoLockService.setEnabled(enabled: true);
         
         expect(autoLockService.isEnabled, isTrue);
         verify(() => mockPrefs.setBool(
           'spendex_auto_lock_enabled',
           true,
-        )).called(1);
+        ),).called(1);
       });
 
       test('disables auto-lock and resets activity', () async {
         autoLockService.recordActivity();
         
-        await autoLockService.setEnabled(false);
+        await autoLockService.setEnabled(enabled: false);
         
         expect(autoLockService.isEnabled, isFalse);
         expect(autoLockService.timeUntilLock, isNull);
         verify(() => mockPrefs.setBool(
           'spendex_auto_lock_enabled',
           false,
-        )).called(1);
+        ),).called(1);
       });
 
       test('persists enabled state to SharedPreferences', () async {
-        await autoLockService.setEnabled(true);
+        await autoLockService.setEnabled(enabled: true);
         
         verify(() => mockPrefs.setBool(
           'spendex_auto_lock_enabled',
           true,
-        )).called(1);
+        ),).called(1);
       });
     });
 

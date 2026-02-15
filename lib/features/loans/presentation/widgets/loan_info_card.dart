@@ -31,9 +31,7 @@ class InfoCard extends StatelessWidget {
           Text(
             title,
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -69,18 +67,14 @@ class InfoRow extends StatelessWidget {
         Text(
           label,
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         Text(
           value,
           style: SpendexTheme.bodyMedium.copyWith(
             color: valueColor ??
-                (isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary),
+                (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
           ),
         ),

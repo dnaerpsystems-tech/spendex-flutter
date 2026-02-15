@@ -15,18 +15,17 @@ import '../providers/transactions_provider.dart';
 /// Displays detailed transaction information with edit and delete functionality
 class TransactionDetailsScreen extends ConsumerStatefulWidget {
   const TransactionDetailsScreen({
-    required this.transactionId, super.key,
+    required this.transactionId,
+    super.key,
   });
 
   final String transactionId;
 
   @override
-  ConsumerState<TransactionDetailsScreen> createState() =>
-      _TransactionDetailsScreenState();
+  ConsumerState<TransactionDetailsScreen> createState() => _TransactionDetailsScreenState();
 }
 
-class _TransactionDetailsScreenState
-    extends ConsumerState<TransactionDetailsScreen> {
+class _TransactionDetailsScreenState extends ConsumerState<TransactionDetailsScreen> {
   final _currencyFormat = NumberFormat.currency(
     locale: 'en_IN',
     symbol: '₹',
@@ -42,9 +41,7 @@ class _TransactionDetailsScreenState
   }
 
   Future<void> _loadTransaction() async {
-    await ref
-        .read(transactionsStateProvider.notifier)
-        .getTransactionById(widget.transactionId);
+    await ref.read(transactionsStateProvider.notifier).getTransactionById(widget.transactionId);
   }
 
   Future<void> _refresh() async {
@@ -97,8 +94,7 @@ class _TransactionDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor:
-            isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+        backgroundColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
         ),
@@ -128,23 +124,17 @@ class _TransactionDetailsScreenState
             Text(
               'Are you sure you want to delete this transaction?',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBackground
-                    : SpendexColors.lightBackground,
+                color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                 border: Border.all(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
               ),
               child: Row(
@@ -206,9 +196,7 @@ class _TransactionDetailsScreenState
             child: Text(
               'Cancel',
               style: TextStyle(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
           ),
@@ -228,9 +216,8 @@ class _TransactionDetailsScreenState
   Future<void> _handleDelete(String transactionId) async {
     Navigator.pop(context); // Close dialog
 
-    final success = await ref
-        .read(transactionsStateProvider.notifier)
-        .deleteTransaction(transactionId);
+    final success =
+        await ref.read(transactionsStateProvider.notifier).deleteTransaction(transactionId);
 
     if (mounted) {
       if (success) {
@@ -263,8 +250,7 @@ class _TransactionDetailsScreenState
     final isDeleting = transactionsState.isDeleting;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Transaction Details'),
         centerTitle: true,
@@ -298,9 +284,8 @@ class _TransactionDetailsScreenState
                       Icon(
                         Iconsax.edit_2,
                         size: 20,
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                       ),
                       const SizedBox(width: 12),
                       Text(
@@ -394,8 +379,7 @@ class _TransactionDetailsScreenState
                 _buildAccountCard(transaction, isDark),
 
                 // Notes Card (if available)
-                if (transaction.notes != null &&
-                    transaction.notes!.isNotEmpty) ...[
+                if (transaction.notes != null && transaction.notes!.isNotEmpty) ...[
                   const SizedBox(height: 16),
                   _buildNotesCard(transaction, isDark),
                 ],
@@ -476,9 +460,7 @@ class _TransactionDetailsScreenState
       child: Center(
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
         ),
       ),
     );
@@ -508,18 +490,14 @@ class _TransactionDetailsScreenState
             Text(
               'Error Loading Transaction',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               error,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -559,18 +537,14 @@ class _TransactionDetailsScreenState
             Text(
               'Transaction Not Found',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'The transaction you are looking for does not exist or has been deleted.',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -688,9 +662,7 @@ class _TransactionDetailsScreenState
           Text(
             'Details',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -789,9 +761,7 @@ class _TransactionDetailsScreenState
           Text(
             transaction.isTransfer ? 'Transfer Details' : 'Account',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -882,26 +852,21 @@ class _TransactionDetailsScreenState
               Text(
                 label,
                 style: SpendexTheme.labelMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                 ),
               ),
               Text(
                 accountName,
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               if (accountType.isNotEmpty)
                 Text(
                   accountType,
                   style: SpendexTheme.labelMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
             ],
@@ -930,17 +895,13 @@ class _TransactionDetailsScreenState
               Icon(
                 Iconsax.note_text,
                 size: 20,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               const SizedBox(width: 8),
               Text(
                 'Notes',
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
             ],
@@ -949,9 +910,7 @@ class _TransactionDetailsScreenState
           Text(
             transaction.notes!,
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ],
@@ -978,17 +937,13 @@ class _TransactionDetailsScreenState
               Icon(
                 Iconsax.tag,
                 size: 20,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               const SizedBox(width: 8),
               Text(
                 'Tags',
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
             ],
@@ -999,8 +954,7 @@ class _TransactionDetailsScreenState
             runSpacing: 8,
             children: transaction.tags.map((tag) {
               return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: SpendexColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -1036,9 +990,7 @@ class _TransactionDetailsScreenState
           Text(
             'Additional Info',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -1063,15 +1015,13 @@ class _TransactionDetailsScreenState
           _buildMetadataRow(
             isDark: isDark,
             label: 'Created',
-            value: DateFormat('MMM d, yyyy - hh:mm a')
-                .format(transaction.createdAt),
+            value: DateFormat('MMM d, yyyy - hh:mm a').format(transaction.createdAt),
           ),
           const SizedBox(height: 12),
           _buildMetadataRow(
             isDark: isDark,
             label: 'Last Updated',
-            value: DateFormat('MMM d, yyyy - hh:mm a')
-                .format(transaction.updatedAt),
+            value: DateFormat('MMM d, yyyy - hh:mm a').format(transaction.updatedAt),
           ),
         ],
       ),
@@ -1108,17 +1058,13 @@ class _TransactionDetailsScreenState
               Text(
                 label,
                 style: SpendexTheme.labelMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                 ),
               ),
               Text(
                 value,
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -1146,9 +1092,7 @@ class _TransactionDetailsScreenState
             Text(
               label,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
             Row(
@@ -1156,9 +1100,7 @@ class _TransactionDetailsScreenState
                 Text(
                   value,
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -1167,9 +1109,8 @@ class _TransactionDetailsScreenState
                   Icon(
                     Iconsax.copy,
                     size: 14,
-                    color: isDark
-                        ? SpendexColors.darkTextTertiary
-                        : SpendexColors.lightTextTertiary,
+                    color:
+                        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   ),
                 ],
               ],

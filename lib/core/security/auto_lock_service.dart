@@ -39,7 +39,7 @@ abstract class AutoLockService {
   bool get isEnabled;
 
   /// Enable or disable auto-lock.
-  Future<void> setEnabled(bool enabled);
+  Future<void> setEnabled({required bool enabled});
 }
 
 /// Implementation of [AutoLockService] using SharedPreferences.
@@ -133,7 +133,7 @@ class AutoLockServiceImpl implements AutoLockService {
   bool get isEnabled => _enabled;
 
   @override
-  Future<void> setEnabled(bool enabled) async {
+  Future<void> setEnabled({required bool enabled}) async {
     _enabled = enabled;
     await _prefs.setBool(_enabledKey, enabled);
 

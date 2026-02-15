@@ -48,8 +48,7 @@ class ImportProgressIndicator extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: value,
                       strokeWidth: 6,
-                      backgroundColor:
-                          SpendexColors.primary.withValues(alpha: 0.1),
+                      backgroundColor: SpendexColors.primary.withValues(alpha: 0.1),
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         SpendexColors.primary,
                       ),
@@ -143,9 +142,7 @@ class SimpleLoadingIndicator extends StatelessWidget {
           Text(
             message,
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
             textAlign: TextAlign.center,
           ),

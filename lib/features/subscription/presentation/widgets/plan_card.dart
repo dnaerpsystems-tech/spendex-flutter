@@ -42,17 +42,13 @@ class PlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final price = billingCycle == BillingCycle.monthly
-        ? plan.monthlyPrice
-        : plan.annualPrice;
-    final monthlyEquivalent = billingCycle == BillingCycle.yearly
-        ? (plan.annualPrice / 12).round()
-        : plan.monthlyPrice;
-    final savings = billingCycle == BillingCycle.yearly
-        ? (plan.monthlyPrice * 12) - plan.annualPrice
-        : 0;
+    final price = billingCycle == BillingCycle.monthly ? plan.monthlyPrice : plan.annualPrice;
+    final monthlyEquivalent =
+        billingCycle == BillingCycle.yearly ? (plan.annualPrice / 12).round() : plan.monthlyPrice;
+    final savings =
+        billingCycle == BillingCycle.yearly ? (plan.monthlyPrice * 12) - plan.annualPrice : 0;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
@@ -60,7 +56,7 @@ class PlanCard extends StatelessWidget {
           color: isCurrentPlan
               ? SpendexColors.primary
               : isPopular
-                  ? SpendexColors.primary.withOpacity(0.5)
+                  ? SpendexColors.primary.withValues(alpha: 0.5)
                   : isDark
                       ? SpendexColors.darkBorder
                       : SpendexColors.lightBorder,
@@ -69,7 +65,7 @@ class PlanCard extends StatelessWidget {
         boxShadow: isPopular
             ? [
                 BoxShadow(
-                  color: SpendexColors.primary.withOpacity(0.15),
+                  color: SpendexColors.primary.withValues(alpha: 0.15),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -106,9 +102,7 @@ class PlanCard extends StatelessWidget {
                 child: Text(
                   plan.name,
                   style: SpendexTheme.headlineMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   ),
                 ),
               ),
@@ -120,8 +114,7 @@ class PlanCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     gradient: SpendexColors.primaryGradient,
-                    borderRadius:
-                        BorderRadius.circular(SpendexTheme.radiusFull),
+                    borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -145,11 +138,10 @@ class PlanCard extends StatelessWidget {
                     vertical: SpendexTheme.spacingXs,
                   ),
                   decoration: BoxDecoration(
-                    color: SpendexColors.primary.withOpacity(0.1),
-                    borderRadius:
-                        BorderRadius.circular(SpendexTheme.radiusFull),
+                    color: SpendexColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                     border: Border.all(
-                      color: SpendexColors.primary.withOpacity(0.3),
+                      color: SpendexColors.primary.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Row(
@@ -178,9 +170,7 @@ class PlanCard extends StatelessWidget {
             Text(
               plan.description,
               style: SpendexTheme.bodySmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
           ],
@@ -207,9 +197,7 @@ class PlanCard extends StatelessWidget {
               Text(
                 '₹',
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               Text(
@@ -217,18 +205,15 @@ class PlanCard extends StatelessWidget {
                     ? monthlyEquivalent.toString()
                     : price.toString(),
                 style: SpendexTheme.displayLarge.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   fontSize: 40,
                 ),
               ),
               Text(
                 '/month',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
               ),
             ],
@@ -238,9 +223,7 @@ class PlanCard extends StatelessWidget {
             Text(
               'Billed ₹$price annually',
               style: SpendexTheme.bodySmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
             ),
           ],
@@ -263,7 +246,7 @@ class PlanCard extends StatelessWidget {
               vertical: SpendexTheme.spacingXs,
             ),
             decoration: BoxDecoration(
-              color: SpendexColors.income.withOpacity(0.1),
+              color: SpendexColors.income.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
             ),
             child: Row(
@@ -299,9 +282,7 @@ class PlanCard extends StatelessWidget {
           Text(
             'Features',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: SpendexTheme.spacingMd),
@@ -314,7 +295,7 @@ class PlanCard extends StatelessWidget {
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: SpendexColors.primary.withOpacity(0.1),
+                      color: SpendexColors.primary.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -352,20 +333,38 @@ class PlanCard extends StatelessWidget {
           Text(
             'Limits',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: SpendexTheme.spacingMd),
-          _buildLimitRow(context, isDark, Iconsax.wallet_2, 'Accounts',
-              plan.limits.maxAccounts),
-          _buildLimitRow(context, isDark, Iconsax.receipt, 'Transactions/month',
-              plan.limits.maxTransactionsPerMonth),
-          _buildLimitRow(context, isDark, Iconsax.money_recive, 'Budgets',
-              plan.limits.maxBudgets),
           _buildLimitRow(
-              context, isDark, Iconsax.flag, 'Goals', plan.limits.maxGoals),
+            context,
+            isDark,
+            Iconsax.wallet_2,
+            'Accounts',
+            plan.limits.maxAccounts,
+          ),
+          _buildLimitRow(
+            context,
+            isDark,
+            Iconsax.receipt,
+            'Transactions/month',
+            plan.limits.maxTransactionsPerMonth,
+          ),
+          _buildLimitRow(
+            context,
+            isDark,
+            Iconsax.money_recive,
+            'Budgets',
+            plan.limits.maxBudgets,
+          ),
+          _buildLimitRow(
+            context,
+            isDark,
+            Iconsax.flag,
+            'Goals',
+            plan.limits.maxGoals,
+          ),
         ],
       ),
     );
@@ -386,18 +385,14 @@ class PlanCard extends StatelessWidget {
           Icon(
             icon,
             size: 16,
-            color: isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary,
+            color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
           ),
           const SizedBox(width: SpendexTheme.spacingSm),
           Expanded(
             child: Text(
               label,
               style: SpendexTheme.bodySmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
           ),
@@ -423,12 +418,9 @@ class PlanCard extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isCurrentPlan || isLoading ? null : onSelect,
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              isCurrentPlan ? Colors.transparent : SpendexColors.primary,
+          backgroundColor: isCurrentPlan ? Colors.transparent : SpendexColors.primary,
           foregroundColor: isCurrentPlan ? SpendexColors.primary : Colors.white,
-          side: isCurrentPlan
-              ? const BorderSide(color: SpendexColors.primary)
-              : null,
+          side: isCurrentPlan ? const BorderSide(color: SpendexColors.primary) : null,
           minimumSize: const Size(double.infinity, 48),
         ),
         child: isLoading
@@ -459,8 +451,8 @@ class PlanCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final skeletonColor = isDark
-        ? SpendexColors.darkBorder.withOpacity(0.5)
-        : SpendexColors.lightBorder.withOpacity(0.5);
+        ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+        : SpendexColors.lightBorder.withValues(alpha: 0.5);
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),

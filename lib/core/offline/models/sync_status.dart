@@ -2,16 +2,16 @@
 enum SyncStatus {
   /// Entity is synced with server
   synced,
-  
+
   /// Entity has local changes waiting to upload
   pendingUpload,
-  
+
   /// Entity has server changes waiting to download
   pendingDownload,
-  
+
   /// Entity has conflicting changes
   conflict,
-  
+
   /// Sync failed with error
   error,
 }
@@ -20,10 +20,10 @@ enum SyncStatus {
 enum SyncOperation {
   /// Create new entity
   create,
-  
+
   /// Update existing entity
   update,
-  
+
   /// Delete entity
   delete,
 }

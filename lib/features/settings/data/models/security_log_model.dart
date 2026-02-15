@@ -7,7 +7,8 @@ class SecurityLogModel extends Equatable {
     required this.action,
     required this.description,
     required this.timestamp,
-    required this.status, this.deviceName,
+    required this.status,
+    this.deviceName,
     this.ipAddress,
     this.location,
   });

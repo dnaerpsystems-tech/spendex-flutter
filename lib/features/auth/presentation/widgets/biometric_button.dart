@@ -13,7 +13,6 @@ import '../../../../app/theme.dart';
 /// - Loading state
 /// - Disabled state when biometric not available
 class BiometricButton extends StatefulWidget {
-
   const BiometricButton({
     super.key,
     this.onPressed,
@@ -44,8 +43,7 @@ enum BiometricType {
   iris,
 }
 
-class _BiometricButtonState extends State<BiometricButton>
-    with SingleTickerProviderStateMixin {
+class _BiometricButtonState extends State<BiometricButton> with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -114,15 +112,15 @@ class _BiometricButtonState extends State<BiometricButton>
 
     final backgroundColor = isDisabled
         ? (isDark
-            ? SpendexColors.darkSurface.withValues(alpha:0.5)
-            : SpendexColors.lightSurface.withValues(alpha:0.5))
+            ? SpendexColors.darkSurface.withValues(alpha: 0.5)
+            : SpendexColors.lightSurface.withValues(alpha: 0.5))
         : (isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface);
 
     final borderColor = isDisabled
         ? (isDark
-            ? SpendexColors.darkBorder.withValues(alpha:0.5)
-            : SpendexColors.lightBorder.withValues(alpha:0.5))
-        : SpendexColors.primary.withValues(alpha:0.3);
+            ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+            : SpendexColors.lightBorder.withValues(alpha: 0.5))
+        : SpendexColors.primary.withValues(alpha: 0.3);
 
     final iconColor = isDisabled
         ? (isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary)
@@ -164,7 +162,7 @@ class _BiometricButtonState extends State<BiometricButton>
                     ? null
                     : [
                         BoxShadow(
-                          color: SpendexColors.primary.withValues(alpha:0.2),
+                          color: SpendexColors.primary.withValues(alpha: 0.2),
                           blurRadius: 16,
                           offset: const Offset(0, 4),
                         ),
@@ -198,12 +196,8 @@ class _BiometricButtonState extends State<BiometricButton>
             widget.label ?? _getDefaultLabel(),
             style: SpendexTheme.labelMedium.copyWith(
               color: isDisabled
-                  ? (isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary)
-                  : (isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary),
+                  ? (isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary)
+                  : (isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary),
             ),
           ),
         ],
@@ -228,7 +222,6 @@ class _BiometricButtonState extends State<BiometricButton>
 ///
 /// A full-width button for biometric login with icon and text
 class BiometricLoginButton extends StatefulWidget {
-
   const BiometricLoginButton({
     super.key,
     this.onPressed,
@@ -305,11 +298,10 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isDisabled = !widget.isEnabled || !widget.isAvailable || widget.isLoading;
 
-    final backgroundColor =
-        isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
+    final backgroundColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
     final borderColor = isDisabled
         ? (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder)
-        : SpendexColors.primary.withValues(alpha:0.5);
+        : SpendexColors.primary.withValues(alpha: 0.5);
     final iconColor = isDisabled
         ? (isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary)
         : SpendexColors.primary;
@@ -375,7 +367,6 @@ class _BiometricLoginButtonState extends State<BiometricLoginButton>
 
 /// Small biometric icon button for inline use
 class BiometricIconButton extends StatelessWidget {
-
   const BiometricIconButton({
     super.key,
     this.onPressed,
@@ -413,7 +404,7 @@ class BiometricIconButton extends StatelessWidget {
           border: Border.all(
             color: isDisabled
                 ? (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder)
-                : SpendexColors.primary.withValues(alpha:0.3),
+                : SpendexColors.primary.withValues(alpha: 0.3),
           ),
         ),
         child: AnimatedSwitcher(

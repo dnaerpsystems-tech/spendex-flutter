@@ -10,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/theme.dart';
 import '../../../../shared/widgets/error_state_widget.dart';
 import '../../../../shared/widgets/loading_state_widget.dart';
-import '../../data/models/subscription_models.dart';
 import '../providers/subscription_provider.dart';
 
 /// UPI Payment Screen
@@ -68,7 +67,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
 
   /// Check if there's an existing UPI session
   void _checkExistingSession() {
-    final state = ref.read(subscriptionProvider);
+    final state = ref.read(subscriptionStateProvider);
     if (state.upiSession != null) {
       setState(() {
         _upiSessionCreated = true;
@@ -91,9 +90,11 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
 
   /// Create UPI payment session
   Future<void> _createUpiSession() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
-    final state = ref.read(subscriptionProvider);
+    final state = ref.read(subscriptionStateProvider);
     if (state.checkoutSession == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -105,12 +106,11 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
     }
 
     try {
-      await ref.read(subscriptionProvider.notifier).createUpiPayment(
-            orderId: state.checkoutSession?.orderId ?? '',
-            vpa: _upiIdController.text.trim(),
+      await ref.read(subscriptionStateProvider.notifier).createUpiPayment(
+            _upiIdController.text.trim(),
           );
 
-      final newState = ref.read(subscriptionProvider);
+      final newState = ref.read(subscriptionStateProvider);
       if (newState.upiSession != null) {
         setState(() {
           _upiSessionCreated = true;
@@ -168,17 +168,19 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
 
   /// Check payment status
   Future<void> _checkPaymentStatus() async {
-    final state = ref.read(subscriptionProvider);
-    if (state.checkoutSession == null) return;
+    final state = ref.read(subscriptionStateProvider);
+    if (state.checkoutSession == null) {
+      return;
+    }
 
     try {
       final status = await ref
-          .read(subscriptionProvider.notifier)
+          .read(subscriptionStateProvider.notifier)
           .checkPaymentStatus(state.checkoutSession?.orderId ?? '');
 
-      if (status == 'SUCCESS' || status == 'CAPTURED') {
+      if (status) {
         _handlePaymentSuccess();
-      } else if (status == 'FAILED') {
+      } else {
         _handlePaymentFailure('Payment failed');
       }
     } catch (e) {
@@ -251,7 +253,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
 
   /// Open UPI app with intent
   Future<void> _openUpiApp() async {
-    final state = ref.read(subscriptionProvider);
+    final state = ref.read(subscriptionStateProvider);
     final intentUrl = state.upiSession?.intentUrl;
 
     if (intentUrl == null) {
@@ -282,7 +284,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: ${e.toString()}'),
+            content: Text('Error: $e'),
             backgroundColor: SpendexColors.expense,
           ),
         );
@@ -304,7 +306,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(subscriptionProvider);
+    final state = ref.watch(subscriptionStateProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -361,15 +363,11 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
   /// Build UPI ID form
   Widget _buildUpiIdForm(SubscriptionState state, bool isDark) {
     final checkout = state.checkoutSession;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
@@ -455,7 +453,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
                 prefixIcon: const Icon(Iconsax.scan_barcode),
                 suffixIcon: IconButton(
                   icon: const Icon(Iconsax.close_circle),
-                  onPressed: () => _upiIdController.clear(),
+                  onPressed: _upiIdController.clear,
                 ),
               ),
               onFieldSubmitted: (_) => _createUpiSession(),
@@ -517,7 +515,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
   /// Build UPI apps grid
   Widget _buildUpiAppsGrid(Color textColor) {
     final apps = [
-      {'name': 'Google Pay', 'icon': Iconsax.google},
+      {'name': 'Google Pay', 'icon': Iconsax.wallet},
       {'name': 'PhonePe', 'icon': Iconsax.mobile},
       {'name': 'Paytm', 'icon': Iconsax.wallet_3},
       {'name': 'BHIM', 'icon': Iconsax.bank},
@@ -544,14 +542,14 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                   ),
                   child: Icon(
-                    app['icon'] as IconData,
+                    app['icon']! as IconData,
                     color: textColor,
                     size: 24,
                   ),
                 ),
                 const SizedBox(height: SpendexTheme.spacingXs),
                 Text(
-                  app['name'] as String,
+                  app['name']! as String,
                   style: SpendexTheme.labelSmall.copyWith(
                     color: textColor,
                   ),
@@ -567,15 +565,11 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
   /// Build waiting state with QR code
   Widget _buildWaitingState(SubscriptionState state, bool isDark) {
     final upiSession = state.upiSession;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     final minutes = _remainingSeconds ~/ 60;
     final seconds = _remainingSeconds % 60;
@@ -725,7 +719,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
                     ),
                   )
                 : const Icon(Iconsax.refresh),
-            label: Text(_isPolling ? 'Checking...' : 'I\'ve Made the Payment'),
+            label: Text(_isPolling ? 'Checking...' : "I've Made the Payment"),
           ),
 
           const SizedBox(height: SpendexTheme.spacingMd),
@@ -750,7 +744,7 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
               ),
               const SizedBox(width: SpendexTheme.spacingXs),
               Text(
-                'We\'re checking for your payment automatically',
+                "We're checking for your payment automatically",
                 style: SpendexTheme.bodySmall.copyWith(
                   color: textSecondary,
                 ),
@@ -764,11 +758,9 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
 
   /// Build success state
   Widget _buildSuccessState(bool isDark) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Center(
       child: Padding(
@@ -823,11 +815,9 @@ class _UpiPaymentScreenState extends ConsumerState<UpiPaymentScreen> {
 
   /// Build failure state
   Widget _buildFailureState(bool isDark) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Center(
       child: Padding(

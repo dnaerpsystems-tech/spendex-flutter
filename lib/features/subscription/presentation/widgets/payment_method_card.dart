@@ -68,9 +68,8 @@ class PaymentMethodCard extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: SpendexColors.primary.withOpacity(0.1),
-                              borderRadius:
-                                  BorderRadius.circular(SpendexTheme.radiusSm),
+                              color: SpendexColors.primary.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                             ),
                             child: Text(
                               'Default',
@@ -107,9 +106,8 @@ class PaymentMethodCard extends StatelessWidget {
                   icon: Icon(
                     Iconsax.trash,
                     size: 20,
-                    color: isDark
-                        ? SpendexColors.darkTextTertiary
-                        : SpendexColors.lightTextTertiary,
+                    color:
+                        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   ),
                   visualDensity: VisualDensity.compact,
                 ),
@@ -143,7 +141,7 @@ class PaymentMethodCard extends StatelessWidget {
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color: iconColor.withOpacity(0.1),
+        color: iconColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
       ),
       child: Icon(iconData, size: 24, color: iconColor),
@@ -166,8 +164,7 @@ class PaymentMethodCard extends StatelessWidget {
   String _getSubtitle() {
     switch (paymentMethod.type) {
       case PaymentMethodType.card:
-        if (paymentMethod.expiryMonth != null &&
-            paymentMethod.expiryYear != null) {
+        if (paymentMethod.expiryMonth != null && paymentMethod.expiryYear != null) {
           return 'Expires ${paymentMethod.expiryMonth}/${paymentMethod.expiryYear}';
         }
         return 'Credit/Debit Card';
@@ -187,8 +184,8 @@ class PaymentMethodCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final skeletonColor = isDark
-        ? SpendexColors.darkBorder.withOpacity(0.5)
-        : SpendexColors.lightBorder.withOpacity(0.5);
+        ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+        : SpendexColors.lightBorder.withValues(alpha: 0.5);
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),

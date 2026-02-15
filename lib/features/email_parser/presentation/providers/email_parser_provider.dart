@@ -89,8 +89,7 @@ class EmailParserState extends Equatable {
       isParsing: isParsing ?? this.isParsing,
       isImporting: isImporting ?? this.isImporting,
       isImportingSingle: isImportingSingle ?? this.isImportingSingle,
-      isDownloadingAttachment:
-          isDownloadingAttachment ?? this.isDownloadingAttachment,
+      isDownloadingAttachment: isDownloadingAttachment ?? this.isDownloadingAttachment,
       downloadingAttachmentId: downloadingAttachmentId ?? this.downloadingAttachmentId,
       downloadProgress: downloadProgress ?? this.downloadProgress,
       accounts: accounts ?? this.accounts,
@@ -153,8 +152,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       ),
       (accounts) {
         // Auto-select first account if available
-        final selectedId =
-            accounts.isNotEmpty ? accounts.first.id : null;
+        final selectedId = accounts.isNotEmpty ? accounts.first.id : null;
 
         state = state.copyWith(
           isLoadingAccounts: false,
@@ -234,8 +232,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
         return false;
       },
       (success) {
-        final updatedAccounts =
-            state.accounts.where((a) => a.id != accountId).toList();
+        final updatedAccounts = state.accounts.where((a) => a.id != accountId).toList();
 
         // Clear selected account if it was disconnected
         final newSelectedId = state.selectedAccountId == accountId
@@ -310,10 +307,8 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
       ),
       (parsedEmails) {
         // Auto-select successfully parsed emails
-        final selectedIds = parsedEmails
-            .where((e) => e.parseStatus == ParseStatus.parsed)
-            .map((e) => e.id)
-            .toSet();
+        final selectedIds =
+            parsedEmails.where((e) => e.parseStatus == ParseStatus.parsed).map((e) => e.id).toSet();
 
         state = state.copyWith(
           isParsing: false,
@@ -339,10 +334,8 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
 
   /// Select all emails
   void selectAllEmails() {
-    final allIds = state.emails
-        .where((e) => e.parseStatus == ParseStatus.parsed)
-        .map((e) => e.id)
-        .toSet();
+    final allIds =
+        state.emails.where((e) => e.parseStatus == ParseStatus.parsed).map((e) => e.id).toSet();
     state = state.copyWith(selectedEmailIds: allIds);
   }
 
@@ -374,9 +367,9 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
 
     // Get parsed transactions from selected emails
     final transactions = state.emails
-        .where((e) =>
-            state.selectedEmailIds.contains(e.id) &&
-            e.parsedTransaction != null,)
+        .where(
+          (e) => state.selectedEmailIds.contains(e.id) && e.parsedTransaction != null,
+        )
         .map((e) => e.parsedTransaction!)
         .toList();
 
@@ -522,7 +515,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
   }
 
   /// Toggle email tracking
-  Future<void> toggleEmailTracking(String accountId, bool enabled) async {
+  Future<void> toggleEmailTracking(String accountId, {required bool enabled}) async {
     final result = await _repository.toggleEmailTracking(
       accountId: accountId,
       enabled: enabled,
@@ -554,8 +547,7 @@ class EmailParserNotifier extends StateNotifier<EmailParserState> {
 }
 
 /// Provider for Email Parser state
-final emailParserProvider =
-    StateNotifierProvider<EmailParserNotifier, EmailParserState>((ref) {
+final emailParserProvider = StateNotifierProvider<EmailParserNotifier, EmailParserState>((ref) {
   final repository = ref.watch(emailParserRepositoryProvider);
   return EmailParserNotifier(repository);
 });
@@ -565,17 +557,15 @@ final emailParserProvider =
 /// Selected account
 final selectedAccountProvider = Provider<EmailAccountModel?>((ref) {
   final state = ref.watch(emailParserProvider);
-  if (state.selectedAccountId == null) return null;
+  if (state.selectedAccountId == null) {
+    return null;
+  }
   final account = state.accounts.where((a) => a.id == state.selectedAccountId);
-  if (account.isNotEmpty) return account.first;
+  if (account.isNotEmpty) {
+    return account.first;
+  }
   return state.accounts.isNotEmpty ? state.accounts.first : null;
 });
-
-
-
-
-
-
 
 /// Selected email count
 final selectedEmailCountProvider = Provider<int>((ref) {
@@ -586,17 +576,13 @@ final selectedEmailCountProvider = Provider<int>((ref) {
 /// Parsed email count
 final parsedEmailCountProvider = Provider<int>((ref) {
   final state = ref.watch(emailParserProvider);
-  return state.emails
-      .where((e) => e.parseStatus == ParseStatus.parsed)
-      .length;
+  return state.emails.where((e) => e.parseStatus == ParseStatus.parsed).length;
 });
 
 /// Failed email count
 final failedEmailCountProvider = Provider<int>((ref) {
   final state = ref.watch(emailParserProvider);
-  return state.emails
-      .where((e) => e.parseStatus == ParseStatus.failed)
-      .length;
+  return state.emails.where((e) => e.parseStatus == ParseStatus.failed).length;
 });
 
 /// Total amount of selected transactions
@@ -615,11 +601,11 @@ final selectedEmailsTotalProvider = Provider<double>((ref) {
 /// Whether all parsed emails are selected
 final allEmailsSelectedProvider = Provider<bool>((ref) {
   final state = ref.watch(emailParserProvider);
-  final parsedCount = state.emails
-      .where((e) => e.parseStatus == ParseStatus.parsed)
-      .length;
+  final parsedCount = state.emails.where((e) => e.parseStatus == ParseStatus.parsed).length;
 
-  if (parsedCount == 0) return false;
+  if (parsedCount == 0) {
+    return false;
+  }
 
   return state.selectedEmailIds.length == parsedCount;
 });

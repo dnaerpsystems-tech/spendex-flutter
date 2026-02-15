@@ -136,14 +136,16 @@ mixin OfflineRepositoryMixin<T> {
       await _cacheEntity(entity);
       await cacheService.setSyncStatus(boxName, entityId, SyncStatus.pendingUpload);
 
-      await syncService.queueMutation(PendingMutation(
-        id: _uuid.v4(),
-        entityType: entityType,
-        entityId: entityId,
-        operation: SyncOperation.create,
-        data: toJson(entity),
-        createdAt: DateTime.now(),
-      ));
+      await syncService.queueMutation(
+        PendingMutation(
+          id: _uuid.v4(),
+          entityType: entityType,
+          entityId: entityId,
+          operation: SyncOperation.create,
+          data: toJson(entity),
+          createdAt: DateTime.now(),
+        ),
+      );
 
       return Right(entity);
     }
@@ -157,14 +159,16 @@ mixin OfflineRepositoryMixin<T> {
         await _cacheEntity(entity);
         await cacheService.setSyncStatus(boxName, entityId, SyncStatus.pendingUpload);
 
-        await syncService.queueMutation(PendingMutation(
-          id: _uuid.v4(),
-          entityType: entityType,
-          entityId: entityId,
-          operation: SyncOperation.create,
-          data: toJson(entity),
-          createdAt: DateTime.now(),
-        ));
+        await syncService.queueMutation(
+          PendingMutation(
+            id: _uuid.v4(),
+            entityType: entityType,
+            entityId: entityId,
+            operation: SyncOperation.create,
+            data: toJson(entity),
+            createdAt: DateTime.now(),
+          ),
+        );
 
         // Return the local entity as if it succeeded
         return Right(entity);
@@ -185,9 +189,6 @@ mixin OfflineRepositoryMixin<T> {
   ) async {
     final entityId = getId(entity);
 
-    // Get current cached version for conflict detection
-    final currentCached = await cacheService.getJson(boxName, entityId);
-
     // Check if we're online
     final isOnline = await connectivityService.isOnline;
 
@@ -196,14 +197,16 @@ mixin OfflineRepositoryMixin<T> {
       await _cacheEntity(entity);
       await cacheService.setSyncStatus(boxName, entityId, SyncStatus.pendingUpload);
 
-      await syncService.queueMutation(PendingMutation(
-        id: _uuid.v4(),
-        entityType: entityType,
-        entityId: entityId,
-        operation: SyncOperation.update,
-        data: toJson(entity),
-        createdAt: DateTime.now(),
-      ));
+      await syncService.queueMutation(
+        PendingMutation(
+          id: _uuid.v4(),
+          entityType: entityType,
+          entityId: entityId,
+          operation: SyncOperation.update,
+          data: toJson(entity),
+          createdAt: DateTime.now(),
+        ),
+      );
 
       return Right(entity);
     }
@@ -223,14 +226,16 @@ mixin OfflineRepositoryMixin<T> {
         await _cacheEntity(entity);
         await cacheService.setSyncStatus(boxName, entityId, SyncStatus.pendingUpload);
 
-        await syncService.queueMutation(PendingMutation(
-          id: _uuid.v4(),
-          entityType: entityType,
-          entityId: entityId,
-          operation: SyncOperation.update,
-          data: toJson(entity),
-          createdAt: DateTime.now(),
-        ));
+        await syncService.queueMutation(
+          PendingMutation(
+            id: _uuid.v4(),
+            entityType: entityType,
+            entityId: entityId,
+            operation: SyncOperation.update,
+            data: toJson(entity),
+            createdAt: DateTime.now(),
+          ),
+        );
 
         return Right(entity);
       },
@@ -258,14 +263,16 @@ mixin OfflineRepositoryMixin<T> {
       // Mark as deleted locally and queue for sync
       await cacheService.delete(boxName, id);
 
-      await syncService.queueMutation(PendingMutation(
-        id: _uuid.v4(),
-        entityType: entityType,
-        entityId: id,
-        operation: SyncOperation.delete,
-        data: cachedEntity ?? {},
-        createdAt: DateTime.now(),
-      ));
+      await syncService.queueMutation(
+        PendingMutation(
+          id: _uuid.v4(),
+          entityType: entityType,
+          entityId: id,
+          operation: SyncOperation.delete,
+          data: cachedEntity ?? {},
+          createdAt: DateTime.now(),
+        ),
+      );
 
       return const Right(null);
     }
@@ -276,14 +283,16 @@ mixin OfflineRepositoryMixin<T> {
     return result.fold(
       (failure) async {
         // API failed, keep locally but queue for sync
-        await syncService.queueMutation(PendingMutation(
-          id: _uuid.v4(),
-          entityType: entityType,
-          entityId: id,
-          operation: SyncOperation.delete,
-          data: cachedEntity ?? {},
-          createdAt: DateTime.now(),
-        ));
+        await syncService.queueMutation(
+          PendingMutation(
+            id: _uuid.v4(),
+            entityType: entityType,
+            entityId: id,
+            operation: SyncOperation.delete,
+            data: cachedEntity ?? {},
+            createdAt: DateTime.now(),
+          ),
+        );
 
         // Still delete locally
         await cacheService.delete(boxName, id);

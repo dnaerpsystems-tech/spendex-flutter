@@ -20,15 +20,11 @@ class ApiResponse<T> {
   ) {
     return ApiResponse(
       success: json['success'] as bool? ?? false,
-      data: json['data'] != null && fromJsonT != null
-          ? fromJsonT(json['data'])
-          : json['data'] as T?,
-      meta: json['meta'] != null
-          ? Meta.fromJson(json['meta']! as Map<String, Object?>)
-          : null,
-      error: json['error'] != null
-          ? ApiError.fromJson(json['error']! as Map<String, Object?>)
-          : null,
+      data:
+          json['data'] != null && fromJsonT != null ? fromJsonT(json['data']) : json['data'] as T?,
+      meta: json['meta'] != null ? Meta.fromJson(json['meta']! as Map<String, Object?>) : null,
+      error:
+          json['error'] != null ? ApiError.fromJson(json['error']! as Map<String, Object?>) : null,
     );
   }
 
@@ -281,9 +277,7 @@ class ApiClient {
     Response<Object?> response,
     T Function(Object?)? fromJson,
   ) {
-    if (response.statusCode != null &&
-        response.statusCode! >= 200 &&
-        response.statusCode! < 300) {
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       if (fromJson != null && response.data != null) {
         final responseData = response.data;
         if (responseData is Map<String, Object?>) {

@@ -63,13 +63,10 @@ class ProfileInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
-    final dividerColor =
-        isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
+    final dividerColor = isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider;
     final hoverColor =
         isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.03);
 

@@ -42,9 +42,7 @@ class DateRangeSelector extends ConsumerWidget {
             Icon(
               Icons.keyboard_arrow_down,
               size: 16,
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ],
         ),
@@ -85,7 +83,9 @@ class DateRangeSelector extends ConsumerWidget {
 /// Bottom sheet for date range presets
 class DateRangeBottomSheet extends StatelessWidget {
   const DateRangeBottomSheet({
-    required this.onPresetSelected, required this.onCustomSelected, super.key,
+    required this.onPresetSelected,
+    required this.onCustomSelected,
+    super.key,
   });
 
   final void Function(DateRangePreset) onPresetSelected;
@@ -104,9 +104,7 @@ class DateRangeBottomSheet extends StatelessWidget {
             style: SpendexTheme.titleMedium,
           ),
           const SizedBox(height: 16),
-          ...DateRangePreset.values
-              .where((p) => p != DateRangePreset.custom)
-              .map(
+          ...DateRangePreset.values.where((p) => p != DateRangePreset.custom).map(
                 (preset) => ListTile(
                   title: Text(preset.label),
                   onTap: () => onPresetSelected(preset),

@@ -192,7 +192,6 @@ class SyncServiceImpl implements SyncService {
       );
 
       _emitProgress(SyncPhase.complete, result.totalSynced, result.totalSynced);
-
     } catch (e) {
       result = SyncResult.failed(e.toString());
       _emitProgress(SyncPhase.failed, 0, 0, message: e.toString());
@@ -245,9 +244,7 @@ class SyncServiceImpl implements SyncService {
 
   @override
   Future<SyncResult> syncEntityType(String entityType) async {
-    final mutations = _pendingMutations
-        .where((m) => m.entityType == entityType)
-        .toList();
+    final mutations = _pendingMutations.where((m) => m.entityType == entityType).toList();
 
     if (mutations.isEmpty) {
       return SyncResult.empty();
@@ -264,7 +261,7 @@ class SyncServiceImpl implements SyncService {
     // Try to sync immediately if online
     final isOnline = await connectivityService.isOnline;
     if (isOnline) {
-      syncAll();
+      unawaited(syncAll());
     }
   }
 
@@ -286,7 +283,9 @@ class SyncServiceImpl implements SyncService {
   Future<void> resolveConflict(String entityId, ConflictResolution resolution) async {
     // Find the mutation with conflict
     final index = _pendingMutations.indexWhere((m) => m.entityId == entityId);
-    if (index == -1) return;
+    if (index == -1) {
+      return;
+    }
 
     final mutation = _pendingMutations[index];
 
@@ -295,7 +294,6 @@ class SyncServiceImpl implements SyncService {
         // Force push local version
         final updatedMutation = mutation.copyWith(
           retryCount: 0,
-          errorMessage: null,
         );
         await _saveMutation(updatedMutation);
         _pendingMutations[index] = updatedMutation;
@@ -342,13 +340,15 @@ class SyncServiceImpl implements SyncService {
     String? entityType,
     String? message,
   }) {
-    _syncProgressController.add(SyncProgress(
-      phase: phase,
-      current: current,
-      total: total,
-      entityType: entityType,
-      message: message,
-    ));
+    _syncProgressController.add(
+      SyncProgress(
+        phase: phase,
+        current: current,
+        total: total,
+        entityType: entityType,
+        message: message,
+      ),
+    );
   }
 
   /// Register a sync handler for an entity type

@@ -32,13 +32,14 @@ class SearchHistoryNotifier extends StateNotifier<List<String>> {
   /// Empty or whitespace-only queries are ignored.
   Future<void> addSearch(String query) async {
     final trimmedQuery = query.trim();
-    if (trimmedQuery.isEmpty) return;
+    if (trimmedQuery.isEmpty) {
+      return;
+    }
 
     // Remove if already exists (to move to top)
-    final newHistory = state.where((q) => q != trimmedQuery).toList();
-
-    // Add to beginning
-    newHistory.insert(0, trimmedQuery);
+    final newHistory = state.where((q) => q != trimmedQuery).toList()
+      // Add to beginning
+      ..insert(0, trimmedQuery);
 
     // Cap at max items
     if (newHistory.length > _maxHistoryItems) {
@@ -91,16 +92,14 @@ class SearchHistoryNotifier extends StateNotifier<List<String>> {
 /// final history = ref.watch(searchHistoryProvider);
 /// ref.read(searchHistoryProvider.notifier).addSearch('groceries');
 /// ```
-final searchHistoryProvider =
-    StateNotifierProvider<SearchHistoryNotifier, List<String>>((ref) {
+final searchHistoryProvider = StateNotifierProvider<SearchHistoryNotifier, List<String>>((ref) {
   return SearchHistoryNotifier();
 });
 
 /// Provider that returns filtered search history based on a query.
 ///
 /// This is useful for showing relevant suggestions while typing.
-final filteredSearchHistoryProvider =
-    Provider.family<List<String>, String>((ref, query) {
+final filteredSearchHistoryProvider = Provider.family<List<String>, String>((ref, query) {
   final history = ref.watch(searchHistoryProvider);
 
   if (query.isEmpty) {
@@ -108,7 +107,5 @@ final filteredSearchHistoryProvider =
   }
 
   final lowerQuery = query.toLowerCase();
-  return history
-      .where((item) => item.toLowerCase().contains(lowerQuery))
-      .toList();
+  return history.where((item) => item.toLowerCase().contains(lowerQuery)).toList();
 });

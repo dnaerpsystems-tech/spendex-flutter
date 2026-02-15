@@ -61,8 +61,7 @@ class PinInput extends StatefulWidget {
   State<PinInput> createState() => PinInputState();
 }
 
-class PinInputState extends State<PinInput>
-    with SingleTickerProviderStateMixin {
+class PinInputState extends State<PinInput> with SingleTickerProviderStateMixin {
   late List<TextEditingController> _controllers;
   late List<FocusNode> _focusNodes;
   late AnimationController _shakeController;
@@ -136,8 +135,7 @@ class PinInputState extends State<PinInput>
   }
 
   void _onKeyEvent(int index, KeyEvent event) {
-    if (event is KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.backspace) {
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
       if (_controllers[index].text.isEmpty && index > 0) {
         _focusNodes[index - 1].requestFocus();
       }
@@ -208,16 +206,11 @@ class PinInputState extends State<PinInput>
             ? SpendexColors.darkBorder
             : SpendexColors.lightBorder;
 
-    final focusedBorderColor = _hasError
-        ? SpendexColors.expense
-        : SpendexColors.primary;
+    final focusedBorderColor = _hasError ? SpendexColors.expense : SpendexColors.primary;
 
-    final backgroundColor = isDark
-        ? SpendexColors.darkSurface
-        : SpendexColors.lightSurface;
+    final backgroundColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
 
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return Container(
       width: widget.boxSize,
@@ -229,9 +222,7 @@ class PinInputState extends State<PinInput>
           color: _controllers[index].text.isNotEmpty || _focusNodes[index].hasFocus
               ? focusedBorderColor
               : borderColor,
-          width: _controllers[index].text.isNotEmpty || _focusNodes[index].hasFocus
-              ? 2
-              : 1,
+          width: _controllers[index].text.isNotEmpty || _focusNodes[index].hasFocus ? 2 : 1,
         ),
         boxShadow: _focusNodes[index].hasFocus
             ? [

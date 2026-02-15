@@ -8,9 +8,10 @@ import '../../data/models/budget_model.dart';
 /// Budget Period Selector Widget
 /// Displays selectable chips for budget periods
 class BudgetPeriodSelector extends StatelessWidget {
-
   const BudgetPeriodSelector({
-    required this.selectedPeriod, required this.onPeriodChanged, super.key,
+    required this.selectedPeriod,
+    required this.onPeriodChanged,
+    super.key,
     this.showAllOption = true,
     this.compact = false,
   });
@@ -72,7 +73,6 @@ class BudgetPeriodSelector extends StatelessWidget {
 }
 
 class _PeriodChip extends StatelessWidget {
-
   const _PeriodChip({
     required this.label,
     required this.icon,
@@ -157,9 +157,10 @@ class _PeriodChip extends StatelessWidget {
 /// Budget Status Filter Widget
 /// Displays selectable chips for budget status filtering
 class BudgetStatusFilter extends StatelessWidget {
-
   const BudgetStatusFilter({
-    required this.selectedStatus, required this.onStatusChanged, super.key,
+    required this.selectedStatus,
+    required this.onStatusChanged,
+    super.key,
     this.onTrackCount,
     this.warningCount,
     this.exceededCount,
@@ -220,10 +221,13 @@ class BudgetStatusFilter extends StatelessWidget {
 }
 
 class _StatusChip extends StatelessWidget {
-
   const _StatusChip({
     required this.label,
-    required this.color, required this.isSelected, required this.onTap, required this.isDark, this.count,
+    required this.color,
+    required this.isSelected,
+    required this.onTap,
+    required this.isDark,
+    this.count,
   });
   final String label;
   final int? count;

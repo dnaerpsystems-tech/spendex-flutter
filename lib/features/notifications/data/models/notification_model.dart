@@ -91,14 +91,11 @@ class NotificationModel extends Equatable {
       priority: NotificationPriority.fromString(json['priority'] as String? ?? 'normal'),
       isRead: json['isRead'] as bool? ?? false,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      action: json['action'] != null
-          ? NotificationAction.fromString(json['action'] as String)
-          : null,
+      action:
+          json['action'] != null ? NotificationAction.fromString(json['action'] as String) : null,
       actionData: json['actionData'] as Map<String, dynamic>?,
       imageUrl: json['imageUrl'] as String?,
-      readAt: json['readAt'] != null
-          ? DateTime.parse(json['readAt'] as String)
-          : null,
+      readAt: json['readAt'] != null ? DateTime.parse(json['readAt'] as String) : null,
     );
   }
 
@@ -165,8 +162,7 @@ class NotificationModel extends Equatable {
 
   /// Check if notification is high priority
   bool get isHighPriority =>
-      priority == NotificationPriority.high ||
-      priority == NotificationPriority.urgent;
+      priority == NotificationPriority.high || priority == NotificationPriority.urgent;
 
   Map<String, dynamic> toJson() {
     return {

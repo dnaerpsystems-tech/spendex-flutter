@@ -5,7 +5,6 @@ import '../datasources/insights_remote_datasource.dart';
 import '../models/insight_model.dart';
 
 class InsightsRepositoryImpl implements InsightsRepository {
-
   InsightsRepositoryImpl(this._dataSource);
   final InsightsRemoteDataSource _dataSource;
 
@@ -26,7 +25,8 @@ class InsightsRepositoryImpl implements InsightsRepository {
 
   @override
   Future<Either<Failure, List<InsightModel>>> generateInsights(
-      CreateInsightRequest request,) {
+    CreateInsightRequest request,
+  ) {
     return _dataSource.generateInsights(request.toJson());
   }
 

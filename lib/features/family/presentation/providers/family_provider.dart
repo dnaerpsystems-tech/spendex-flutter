@@ -93,7 +93,9 @@ class FamilyState extends Equatable {
 
   /// Get members excluding current user
   List<FamilyMemberModel> get otherMembers {
-    if (currentUserMember == null) return members;
+    if (currentUserMember == null) {
+      return members;
+    }
     return members.where((m) => m.id != currentUserMember!.id).toList();
   }
 
@@ -143,9 +145,8 @@ class FamilyState extends Equatable {
       family: clearFamily ? null : (family ?? this.family),
       members: members ?? this.members,
       pendingInvites: pendingInvites ?? this.pendingInvites,
-      currentUserMember: clearCurrentUserMember
-          ? null
-          : (currentUserMember ?? this.currentUserMember),
+      currentUserMember:
+          clearCurrentUserMember ? null : (currentUserMember ?? this.currentUserMember),
       isLoading: isLoading ?? this.isLoading,
       isMembersLoading: isMembersLoading ?? this.isMembersLoading,
       isInvitesLoading: isInvitesLoading ?? this.isInvitesLoading,
@@ -155,11 +156,9 @@ class FamilyState extends Equatable {
       isAcceptingInvite: isAcceptingInvite ?? this.isAcceptingInvite,
       isRemovingMember: isRemovingMember ?? this.isRemovingMember,
       isLeavingFamily: isLeavingFamily ?? this.isLeavingFamily,
-      isTransferringOwnership:
-          isTransferringOwnership ?? this.isTransferringOwnership,
+      isTransferringOwnership: isTransferringOwnership ?? this.isTransferringOwnership,
       error: clearError ? null : (error ?? this.error),
-      successMessage:
-          clearSuccessMessage ? null : (successMessage ?? this.successMessage),
+      successMessage: clearSuccessMessage ? null : (successMessage ?? this.successMessage),
     );
   }
 
@@ -193,7 +192,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Load family data (family info, members, and invites)
   Future<void> loadFamily() async {
-    if (state.isLoading) return;
+    if (state.isLoading) {
+      return;
+    }
 
     state = state.copyWith(isLoading: true, clearError: true);
 
@@ -237,7 +238,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Load family members
   Future<void> loadMembers() async {
-    if (state.isMembersLoading || state.family == null) return;
+    if (state.isMembersLoading || state.family == null) {
+      return;
+    }
 
     state = state.copyWith(isMembersLoading: true);
 
@@ -262,7 +265,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Load pending invites
   Future<void> loadPendingInvites() async {
-    if (state.isInvitesLoading || state.family == null) return;
+    if (state.isInvitesLoading || state.family == null) {
+      return;
+    }
 
     state = state.copyWith(isInvitesLoading: true);
 
@@ -286,7 +291,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Create a new family
   Future<FamilyModel?> createFamily(CreateFamilyRequest request) async {
-    if (state.isCreating) return null;
+    if (state.isCreating) {
+      return null;
+    }
 
     if (request.name.trim().isEmpty) {
       state = state.copyWith(error: 'Family name is required');
@@ -329,7 +336,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Update family info
   Future<FamilyModel?> updateFamily(UpdateFamilyRequest request) async {
-    if (state.isUpdating || state.family == null) return null;
+    if (state.isUpdating || state.family == null) {
+      return null;
+    }
 
     if (request.name != null) {
       if (request.name!.trim().isEmpty) {
@@ -371,7 +380,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Send invite to join family
   Future<FamilyInviteModel?> sendInvite(SendInviteRequest request) async {
-    if (state.isSendingInvite || state.family == null) return null;
+    if (state.isSendingInvite || state.family == null) {
+      return null;
+    }
 
     if (request.email.trim().isEmpty) {
       state = state.copyWith(error: 'Email address is required');
@@ -393,8 +404,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
     }
 
     final existingInvite = state.pendingInvites
-        .where((i) =>
-            i.email.toLowerCase() == request.email.toLowerCase() && i.isPending)
+        .where(
+          (i) => i.email.toLowerCase() == request.email.toLowerCase() && i.isPending,
+        )
         .firstOrNull;
     if (existingInvite != null) {
       state = state.copyWith(error: 'An invite has already been sent to this email');
@@ -426,7 +438,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Cancel a pending invite
   Future<bool> cancelInvite(String inviteId) async {
-    if (state.family == null) return false;
+    if (state.family == null) {
+      return false;
+    }
 
     state = state.copyWith(clearError: true);
 
@@ -438,8 +452,7 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
         return false;
       },
       (_) {
-        final updatedInvites =
-            state.pendingInvites.where((i) => i.id != inviteId).toList();
+        final updatedInvites = state.pendingInvites.where((i) => i.id != inviteId).toList();
         state = state.copyWith(
           pendingInvites: updatedInvites,
           successMessage: 'Invite cancelled',
@@ -451,7 +464,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Accept an invite to join a family
   Future<FamilyModel?> acceptInvite(String token) async {
-    if (state.isAcceptingInvite) return null;
+    if (state.isAcceptingInvite) {
+      return null;
+    }
 
     if (token.trim().isEmpty) {
       state = state.copyWith(error: 'Invalid invite token');
@@ -487,7 +502,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
     String memberId,
     UserRole role,
   ) async {
-    if (state.family == null || state.canManageMembers == false) return null;
+    if (state.family == null || state.canManageMembers == false) {
+      return null;
+    }
 
     final member = state.members.where((m) => m.id == memberId).firstOrNull;
     if (member == null) {
@@ -567,8 +584,7 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
         return false;
       },
       (_) {
-        final updatedMembers =
-            state.members.where((m) => m.id != memberId).toList();
+        final updatedMembers = state.members.where((m) => m.id != memberId).toList();
         final updatedFamily = state.family?.copyWith(
           memberCount: updatedMembers.length,
         );
@@ -586,7 +602,9 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 
   /// Leave the current family
   Future<bool> leaveFamily() async {
-    if (state.isLeavingFamily || state.family == null) return false;
+    if (state.isLeavingFamily || state.family == null) {
+      return false;
+    }
 
     if (state.isOwner) {
       state = state.copyWith(
@@ -680,8 +698,7 @@ class FamilyNotifier extends StateNotifier<FamilyState> {
 }
 
 /// Family State Provider
-final familyStateProvider =
-    StateNotifierProvider.autoDispose<FamilyNotifier, FamilyState>((ref) {
+final familyStateProvider = StateNotifierProvider.autoDispose<FamilyNotifier, FamilyState>((ref) {
   return FamilyNotifier(getIt<FamilyRepository>());
 });
 

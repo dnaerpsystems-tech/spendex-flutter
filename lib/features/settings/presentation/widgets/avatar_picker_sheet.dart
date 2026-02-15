@@ -54,13 +54,10 @@ class AvatarPickerSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
-    final backgroundColor =
-        isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
+    final backgroundColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -138,9 +135,7 @@ class AvatarPickerSheet extends StatelessWidget {
   }
 
   Widget _buildHandle(bool isDark) {
-    final handleColor = isDark
-        ? SpendexColors.darkTextTertiary
-        : SpendexColors.lightTextTertiary;
+    final handleColor = isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary;
 
     return Container(
       width: 40,

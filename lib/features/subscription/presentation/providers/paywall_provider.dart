@@ -1,8 +1,9 @@
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "../../../../core/di/injection.dart";
-import "../../../../core/services/paywall_service.dart";
-import "../../domain/repositories/subscription_repository.dart";
-import "../../data/models/subscription_models.dart";
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/di/injection.dart';
+import '../../../../core/services/paywall_service.dart';
+import '../../data/models/subscription_models.dart';
+import '../../domain/repositories/subscription_repository.dart';
 
 /// Provider for the PaywallService
 final paywallServiceProvider = Provider<PaywallService>((ref) {
@@ -11,6 +12,15 @@ final paywallServiceProvider = Provider<PaywallService>((ref) {
 
 /// State for paywall checks
 class PaywallState {
+  const PaywallState({
+    this.isLoading = true,
+    this.currentPlan = 'free',
+    this.usage,
+    this.subscription,
+    this.isOnTrial = false,
+    this.trialDaysRemaining = 0,
+    this.error,
+  });
   final bool isLoading;
   final SubscriptionPlan currentPlan;
   final UsageModel? usage;
@@ -18,16 +28,6 @@ class PaywallState {
   final bool isOnTrial;
   final int trialDaysRemaining;
   final String? error;
-
-  const PaywallState({
-    this.isLoading = true,
-    this.currentPlan = SubscriptionPlan.free,
-    this.usage,
-    this.subscription,
-    this.isOnTrial = false,
-    this.trialDaysRemaining = 0,
-    this.error,
-  });
 
   PaywallState copyWith({
     bool? isLoading,
@@ -64,7 +64,7 @@ class PaywallNotifier extends StateNotifier<PaywallState> {
 
   /// Refreshes the paywall state
   Future<void> refresh() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true);
 
     try {
       await _service.refreshCache();
@@ -115,7 +115,8 @@ final paywallProvider = StateNotifierProvider<PaywallNotifier, PaywallState>((re
 });
 
 /// Provider to check a specific feature
-final featureGateProvider = FutureProvider.family<FeatureGateResult, GatedFeature>((ref, feature) async {
+final featureGateProvider =
+    FutureProvider.family<FeatureGateResult, GatedFeature>((ref, feature) async {
   final service = ref.watch(paywallServiceProvider);
   return service.checkFeature(feature);
 });

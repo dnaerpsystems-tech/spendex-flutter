@@ -48,8 +48,7 @@ class SslPinning {
   /// Whether SSL pinning is enabled.
   ///
   /// Disabled in development mode for easier debugging.
-  static bool get isEnabled =>
-      EnvironmentConfig.current == Environment.production;
+  static bool get isEnabled => EnvironmentConfig.current == Environment.production;
 
   /// Configure Dio instance with SSL certificate pinning.
   ///
@@ -69,26 +68,25 @@ class SslPinning {
       final adapter = dio.httpClientAdapter;
       if (adapter is IOHttpClientAdapter) {
         adapter.createHttpClient = () {
-          final client = HttpClient();
-
-          // Configure certificate validation
-          client.badCertificateCallback = (
-            X509Certificate cert,
-            String host,
-            int port,
-          ) {
-            // Allow localhost and non-production hosts in development
-            if (_trustedHosts.contains(host) == false) {
-              if (kDebugMode) {
-                AppLogger.d('SslPinning: Skipping validation for host: $host');
+          final client = HttpClient()
+            // Configure certificate validation
+            ..badCertificateCallback = (
+              cert,
+              host,
+              port,
+            ) {
+              // Allow localhost and non-production hosts in development
+              if (_trustedHosts.contains(host) == false) {
+                if (kDebugMode) {
+                  AppLogger.d('SslPinning: Skipping validation for host: $host');
+                }
+                return true;
               }
-              return true;
-            }
 
-            // In production, always reject bad certificates
-            AppLogger.e('SslPinning: Certificate validation failed for $host');
-            return false;
-          };
+              // In production, always reject bad certificates
+              AppLogger.e('SslPinning: Certificate validation failed for $host');
+              return false;
+            };
 
           return client;
         };
@@ -113,8 +111,7 @@ class SslPinning {
   /// Get the list of trusted fingerprints.
   ///
   /// Useful for debugging and certificate management.
-  static List<String> get trustedFingerprints =>
-      List.unmodifiable(_productionFingerprints);
+  static List<String> get trustedFingerprints => List.unmodifiable(_productionFingerprints);
 
   /// Check if a host should have SSL pinning applied.
   ///

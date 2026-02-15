@@ -115,7 +115,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
         });
 
         if (success) {
-          if (!mounted) return;
+          if (!mounted) {
+            return;
+          }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Text('Preferences updated successfully'),
@@ -135,7 +137,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             });
           }
 
-          if (!mounted) return;
+          if (!mounted) {
+            return;
+          }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Text('Failed to update preferences'),
@@ -204,21 +208,23 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   Text(
                     'Select Theme',
                     style: SpendexTheme.headlineMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ],
               ),
             ),
             const Divider(height: 1),
+            // ignore: deprecated_member_use
             RadioListTile<String>(
               title: const Text('System'),
               subtitle: const Text('Follow system settings'),
               value: 'system',
+              // ignore: deprecated_member_use
               groupValue: _theme,
               activeColor: SpendexColors.primary,
+              // ignore: deprecated_member_use
               onChanged: (value) {
                 Navigator.pop(context);
                 if (value != null) {
@@ -226,12 +232,15 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                 }
               },
             ),
+            // ignore: deprecated_member_use
             RadioListTile<String>(
               title: const Text('Light'),
               subtitle: const Text('Light mode'),
               value: 'light',
+              // ignore: deprecated_member_use
               groupValue: _theme,
               activeColor: SpendexColors.primary,
+              // ignore: deprecated_member_use
               onChanged: (value) {
                 Navigator.pop(context);
                 if (value != null) {
@@ -239,12 +248,15 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                 }
               },
             ),
+            // ignore: deprecated_member_use
             RadioListTile<String>(
               title: const Text('Dark'),
               subtitle: const Text('Dark mode'),
               value: 'dark',
+              // ignore: deprecated_member_use
               groupValue: _theme,
               activeColor: SpendexColors.primary,
+              // ignore: deprecated_member_use
               onChanged: (value) {
                 Navigator.pop(context);
                 if (value != null) {
@@ -297,9 +309,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   Text(
                     'Select Currency',
                     style: SpendexTheme.headlineMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ],
@@ -310,8 +321,10 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               (currency) => RadioListTile<String>(
                 title: Text('$currency (${currencySymbols[currency]})'),
                 value: currency,
+                // ignore: deprecated_member_use
                 groupValue: _currency,
                 activeColor: SpendexColors.primary,
+                // ignore: deprecated_member_use
                 onChanged: (value) {
                   Navigator.pop(context);
                   if (value != null) {
@@ -359,9 +372,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   Text(
                     'Select Language',
                     style: SpendexTheme.headlineMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ],
@@ -372,8 +384,10 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               (entry) => RadioListTile<String>(
                 title: Text(entry.value),
                 value: entry.key,
+                // ignore: deprecated_member_use
                 groupValue: _locale,
                 activeColor: SpendexColors.primary,
+                // ignore: deprecated_member_use
                 onChanged: (value) {
                   Navigator.pop(context);
                   if (value != null) {
@@ -422,9 +436,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   Text(
                     'Select Date Format',
                     style: SpendexTheme.headlineMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ],
@@ -435,8 +448,10 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               (entry) => RadioListTile<String>(
                 title: Text(entry.value),
                 value: entry.key,
+                // ignore: deprecated_member_use
                 groupValue: _dateFormat,
                 activeColor: SpendexColors.primary,
+                // ignore: deprecated_member_use
                 onChanged: (value) {
                   Navigator.pop(context);
                   if (value != null) {
@@ -454,7 +469,6 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Preferences'),
@@ -522,9 +536,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               subtitle: 'Receive push notifications',
               showSwitch: true,
               switchValue: _notifications,
-              onChanged: _isSaving
-                  ? null
-                  : (value) => _updatePreference('notifications', value),
+              onChanged: _isSaving ? null : (value) => _updatePreference('notifications', value),
             ),
             const SizedBox(height: SpendexTheme.spacingSm),
             PreferenceTile(
@@ -579,9 +591,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               subtitle: 'Display balance as app badge',
               showSwitch: true,
               switchValue: _showBalanceBadge,
-              onChanged: _isSaving
-                  ? null
-                  : (value) => _updatePreference('showBalanceBadge', value),
+              onChanged: _isSaving ? null : (value) => _updatePreference('showBalanceBadge', value),
             ),
             const SizedBox(height: SpendexTheme.spacingSm),
             PreferenceTile(
@@ -590,9 +600,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
               subtitle: 'Ask for PIN/biometric for reports',
               showSwitch: true,
               switchValue: _requireAuth,
-              onChanged: _isSaving
-                  ? null
-                  : (value) => _updatePreference('requireAuth', value),
+              onChanged: _isSaving ? null : (value) => _updatePreference('requireAuth', value),
             ),
             const SizedBox(height: SpendexTheme.spacingXl),
           ],
@@ -616,9 +624,7 @@ class _SectionTitle extends StatelessWidget {
       child: Text(
         title.toUpperCase(),
         style: SpendexTheme.labelMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.5,
         ),

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../data/models/family_models.dart';
 import '../providers/family_provider.dart';
 import '../widgets/family_member_card.dart';
@@ -21,8 +20,7 @@ class FamilyScreen extends ConsumerStatefulWidget {
   ConsumerState<FamilyScreen> createState() => _FamilyScreenState();
 }
 
-class _FamilyScreenState extends ConsumerState<FamilyScreen>
-    with SingleTickerProviderStateMixin {
+class _FamilyScreenState extends ConsumerState<FamilyScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -87,9 +85,7 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
     });
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Family'),
         centerTitle: true,
@@ -209,7 +205,9 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
 
   Widget _buildFamilyHeader(FamilyState state, bool isDark) {
     final family = state.family;
-    if (family == null) return const SizedBox.shrink();
+    if (family == null) {
+      return const SizedBox.shrink();
+    }
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -328,9 +326,8 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
         indicatorPadding: const EdgeInsets.all(4),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary,
+        unselectedLabelColor:
+            isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         labelStyle: SpendexTheme.titleMedium,
         unselectedLabelStyle: SpendexTheme.titleMedium,
         tabs: [
@@ -432,7 +429,8 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
               Text(
                 'No pending invites',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
               ),
               if (state.canManageMembers) ...[
@@ -496,13 +494,19 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
                     ? null
                     : () async {
                         final name = nameController.text.trim();
-                        if (name.isEmpty) return;
+                        if (name.isEmpty) {
+                          return;
+                        }
                         final request = CreateFamilyRequest(name: name);
-                        final result = await ref.read(familyStateProvider.notifier).createFamily(request);
-                        if (result != null && ctx.mounted) Navigator.pop(ctx);
+                        final result =
+                            await ref.read(familyStateProvider.notifier).createFamily(request);
+                        if (result != null && ctx.mounted) {
+                          Navigator.pop(ctx);
+                        }
                       },
                 child: isCreating
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    ? const SizedBox(
+                        width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2),)
                     : const Text('Create'),
               );
             },
@@ -540,12 +544,18 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
                     ? null
                     : () async {
                         final token = tokenController.text.trim();
-                        if (token.isEmpty) return;
-                        final result = await ref.read(familyStateProvider.notifier).acceptInvite(token);
-                        if (result != null && ctx.mounted) Navigator.pop(ctx);
+                        if (token.isEmpty) {
+                          return;
+                        }
+                        final result =
+                            await ref.read(familyStateProvider.notifier).acceptInvite(token);
+                        if (result != null && ctx.mounted) {
+                          Navigator.pop(ctx);
+                        }
                       },
                 child: isAccepting
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    ? const SizedBox(
+                        width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2),)
                     : const Text('Join'),
               );
             },
@@ -602,12 +612,18 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
                 onPressed: isRemoving
                     ? null
                     : () async {
-                        final success = await ref.read(familyStateProvider.notifier).removeMember(member.id);
-                        if (success && ctx.mounted) Navigator.pop(ctx);
+                        final success =
+                            await ref.read(familyStateProvider.notifier).removeMember(member.id);
+                        if (success && ctx.mounted) {
+                          Navigator.pop(ctx);
+                        }
                       },
                 style: ElevatedButton.styleFrom(backgroundColor: SpendexColors.expense),
                 child: isRemoving
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),)
                     : const Text('Remove'),
               );
             },
@@ -647,8 +663,8 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
               },
             ),
             ListTile(
-              leading: Icon(Iconsax.logout, color: SpendexColors.expense),
-              title: Text('Leave Family', style: TextStyle(color: SpendexColors.expense)),
+              leading: const Icon(Iconsax.logout, color: SpendexColors.expense),
+              title: const Text('Leave Family', style: TextStyle(color: SpendexColors.expense)),
               onTap: () {
                 Navigator.pop(ctx);
                 _showLeaveFamilyDialog(context, isDark);
@@ -684,7 +700,8 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
               (member) => ListTile(
                 leading: CircleAvatar(
                   backgroundColor: SpendexColors.primary,
-                  child: Text(member.name[0].toUpperCase(), style: const TextStyle(color: Colors.white)),
+                  child: Text(member.name[0].toUpperCase(),
+                      style: const TextStyle(color: Colors.white),),
                 ),
                 title: Text(member.name),
                 subtitle: Text(member.email),
@@ -718,7 +735,8 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Leave Family'),
-        content: const Text('Are you sure you want to leave this family? You will lose access to shared data.'),
+        content: const Text(
+            'Are you sure you want to leave this family? You will lose access to shared data.',),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -732,11 +750,16 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen>
                     ? null
                     : () async {
                         final success = await ref.read(familyStateProvider.notifier).leaveFamily();
-                        if (success && ctx.mounted) Navigator.pop(ctx);
+                        if (success && ctx.mounted) {
+                          Navigator.pop(ctx);
+                        }
                       },
                 style: ElevatedButton.styleFrom(backgroundColor: SpendexColors.expense),
                 child: isLeaving
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),)
                     : const Text('Leave'),
               );
             },

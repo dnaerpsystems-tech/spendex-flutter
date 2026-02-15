@@ -8,7 +8,6 @@ import '../../domain/repositories/goals_repository.dart';
 
 /// Goals State
 class GoalsState extends Equatable {
-
   const GoalsState({
     this.goals = const [],
     this.summary,
@@ -102,7 +101,6 @@ class GoalsState extends Equatable {
 
 /// Goals State Notifier
 class GoalsNotifier extends StateNotifier<GoalsState> {
-
   GoalsNotifier(this._repository) : super(const GoalsState.initial());
   final GoalsRepository _repository;
 
@@ -333,9 +331,8 @@ class GoalsNotifier extends StateNotifier<GoalsState> {
 
   /// Select a goal
   void selectGoal(GoalModel? goal) {
-    state = goal != null
-        ? state.copyWith(selectedGoal: goal)
-        : state.copyWith(clearSelectedGoal: true);
+    state =
+        goal != null ? state.copyWith(selectedGoal: goal) : state.copyWith(clearSelectedGoal: true);
   }
 
   /// Clear error
@@ -351,8 +348,7 @@ class GoalsNotifier extends StateNotifier<GoalsState> {
 }
 
 /// Goals State Provider
-final goalsStateProvider =
-    StateNotifierProvider.autoDispose<GoalsNotifier, GoalsState>((ref) {
+final goalsStateProvider = StateNotifierProvider.autoDispose<GoalsNotifier, GoalsState>((ref) {
   return GoalsNotifier(getIt<GoalsRepository>());
 });
 
@@ -382,8 +378,7 @@ final completedGoalsProvider = Provider<List<GoalModel>>((ref) {
 });
 
 /// Goals By Status Provider
-final goalsByStatusProvider =
-    Provider.family<List<GoalModel>, GoalStatus>((ref, status) {
+final goalsByStatusProvider = Provider.family<List<GoalModel>, GoalStatus>((ref, status) {
   return ref.watch(goalsStateProvider).getGoalsByStatus(status);
 });
 

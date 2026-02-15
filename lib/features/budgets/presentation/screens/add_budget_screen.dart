@@ -16,7 +16,6 @@ import '../widgets/budget_period_selector.dart';
 
 /// Add/Edit Budget Screen
 class AddBudgetScreen extends ConsumerStatefulWidget {
-
   const AddBudgetScreen({super.key, this.budgetId});
   final String? budgetId;
 
@@ -59,9 +58,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
   Future<void> _loadBudget() async {
     setState(() => _isLoading = true);
 
-    final budget = await ref
-        .read(budgetsStateProvider.notifier)
-        .getBudgetById(widget.budgetId!);
+    final budget = await ref.read(budgetsStateProvider.notifier).getBudgetById(widget.budgetId!);
 
     if (budget != null && mounted) {
       setState(() {
@@ -214,9 +211,8 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
     BudgetModel? result;
 
     if (_isEditMode) {
-      result = await ref
-          .read(budgetsStateProvider.notifier)
-          .updateBudget(widget.budgetId!, request);
+      result =
+          await ref.read(budgetsStateProvider.notifier).updateBudget(widget.budgetId!, request);
     } else {
       result = await ref.read(budgetsStateProvider.notifier).createBudget(request);
     }
@@ -252,9 +248,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
     final categoriesState = ref.watch(categoriesStateProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: Text(_isEditMode ? 'Edit Budget' : 'Add Budget'),
         centerTitle: true,
@@ -304,9 +298,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                         hintText: 'e.g., Groceries, Entertainment',
                         prefixIcon: const Icon(Iconsax.text),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       textCapitalization: TextCapitalization.words,
                       validator: _validateName,
@@ -332,13 +324,9 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                             ),
                           ),
                         ),
-                        prefixIconConstraints: const BoxConstraints(
-                          
-                        ),
+                        prefixIconConstraints: const BoxConstraints(),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -377,14 +365,10 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                           vertical: 14,
                         ),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkCard
-                              : SpendexColors.lightCard,
+                          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                           border: Border.all(
-                            color: isDark
-                                ? SpendexColors.darkBorder
-                                : SpendexColors.lightBorder,
+                            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                           ),
                         ),
                         child: Row(
@@ -457,14 +441,10 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                         border: Border.all(
-                          color: isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder,
+                          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                         ),
                       ),
                       child: Column(
@@ -502,8 +482,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                           SliderTheme(
                             data: SliderTheme.of(context).copyWith(
                               activeTrackColor: SpendexColors.warning,
-                              inactiveTrackColor:
-                                  SpendexColors.warning.withValues(alpha: 0.2),
+                              inactiveTrackColor: SpendexColors.warning.withValues(alpha: 0.2),
                               thumbColor: SpendexColors.warning,
                               overlayColor: SpendexColors.warning.withValues(alpha: 0.1),
                             ),
@@ -527,14 +506,10 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                         border: Border.all(
-                          color: isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder,
+                          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                         ),
                       ),
                       child: Row(
@@ -597,8 +572,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
                           backgroundColor: SpendexColors.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(SpendexTheme.radiusMd),
+                            borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                           ),
                         ),
                         child: _isLoading
@@ -659,9 +633,7 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
         content: Text(
           'Are you sure you want to delete "${_existingBudget?.name}"? This action cannot be undone.',
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         actions: [
@@ -674,9 +646,8 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
               Navigator.pop(context);
               setState(() => _isLoading = true);
 
-              final success = await ref
-                  .read(budgetsStateProvider.notifier)
-                  .deleteBudget(widget.budgetId!);
+              final success =
+                  await ref.read(budgetsStateProvider.notifier).deleteBudget(widget.budgetId!);
 
               if (context.mounted) {
                 setState(() => _isLoading = false);
@@ -714,10 +685,10 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
 }
 
 class _SectionTitle extends StatelessWidget {
-
   const _SectionTitle({
     required this.title,
-    required this.isDark, this.subtitle,
+    required this.isDark,
+    this.subtitle,
   });
   final String title;
   final String? subtitle;
@@ -731,9 +702,7 @@ class _SectionTitle extends StatelessWidget {
         Text(
           title,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -742,9 +711,7 @@ class _SectionTitle extends StatelessWidget {
           Text(
             subtitle!,
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               fontSize: 11,
             ),
           ),
@@ -755,7 +722,6 @@ class _SectionTitle extends StatelessWidget {
 }
 
 class _CategorySelector extends StatelessWidget {
-
   const _CategorySelector({
     required this.categories,
     required this.selectedCategory,
@@ -848,9 +814,7 @@ class _CategorySelector extends StatelessWidget {
                         : isDark
                             ? SpendexColors.darkTextPrimary
                             : SpendexColors.lightTextPrimary,
-                    fontWeight: selectedCategory == null
-                        ? FontWeight.w600
-                        : FontWeight.w500,
+                    fontWeight: selectedCategory == null ? FontWeight.w600 : FontWeight.w500,
                   ),
                 ),
               ],
@@ -887,9 +851,7 @@ class _CategorySelector extends StatelessWidget {
                   Icon(
                     _parseIcon(category.icon),
                     size: 16,
-                    color: isSelected
-                        ? Colors.white
-                        : color,
+                    color: isSelected ? Colors.white : color,
                   ),
                   const SizedBox(width: 6),
                   Text(

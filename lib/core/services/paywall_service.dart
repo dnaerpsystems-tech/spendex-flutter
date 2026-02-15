@@ -1,8 +1,35 @@
-import "package:dartz/dartz.dart";
-import "../constants/app_constants.dart";
-import "../errors/failures.dart";
-import "../../features/subscription/data/models/subscription_models.dart";
-import "../../features/subscription/domain/repositories/subscription_repository.dart";
+import '../../features/subscription/data/models/subscription_models.dart';
+import '../../features/subscription/domain/repositories/subscription_repository.dart';
+import '../constants/app_constants.dart';
+
+/// Type alias for subscription plan identifiers
+typedef SubscriptionPlan = String;
+
+/// Extension to provide enum-like properties for SubscriptionPlan
+extension SubscriptionPlanExtension on SubscriptionPlan {
+  /// Get the display name for the plan
+  String get name {
+    switch (this) {
+      case PaywallService.planFree:
+        return 'Free';
+      case PaywallService.planPro:
+        return 'Pro';
+      case PaywallService.planPremium:
+        return 'Premium';
+      default:
+        return 'Free';
+    }
+  }
+
+  /// Check if this is the free plan
+  bool get isFree => this == PaywallService.planFree;
+
+  /// Check if this is the pro plan
+  bool get isPro => this == PaywallService.planPro;
+
+  /// Check if this is the premium plan
+  bool get isPremium => this == PaywallService.planPremium;
+}
 
 /// Feature types that can be gated behind a subscription.
 enum GatedFeature {
@@ -54,6 +81,14 @@ enum GatedFeature {
 
 /// Result of checking a feature gate.
 class FeatureGateResult {
+  const FeatureGateResult({
+    required this.isAllowed,
+    this.currentCount,
+    this.limit,
+    this.requiredPlan,
+    this.message,
+  });
+
   /// Whether the feature is allowed.
   final bool isAllowed;
 
@@ -63,19 +98,11 @@ class FeatureGateResult {
   /// The limit for this feature.
   final int? limit;
 
-  /// The required plan to access this feature.
-  final SubscriptionPlan? requiredPlan;
+  /// The required plan to access this feature (plan ID like 'plan_pro').
+  final String? requiredPlan;
 
   /// Message to show if blocked.
   final String? message;
-
-  const FeatureGateResult({
-    required this.isAllowed,
-    this.currentCount,
-    this.limit,
-    this.requiredPlan,
-    this.message,
-  });
 
   /// Returns true if the user has reached their limit.
   bool get isAtLimit => limit != null && currentCount != null && currentCount! >= limit!;
@@ -101,32 +128,37 @@ class PaywallService {
 
   static const Duration _cacheExpiry = Duration(minutes: 5);
 
+  /// Plan ID constants
+  static const String planFree = 'plan_free';
+  static const String planPro = 'plan_pro';
+  static const String planPremium = 'plan_premium';
+
   /// Gets the limits for each plan.
-  static const Map<SubscriptionPlan, Map<String, int>> planLimits = {
-    SubscriptionPlan.free: {
-      "accounts": 2,
-      "budgets": 3,
-      "goals": 2,
-      "transactions_per_month": 100,
+  static const Map<String, Map<String, int>> planLimits = {
+    planFree: {
+      'accounts': 2,
+      'budgets': 3,
+      'goals': 2,
+      'transactions_per_month': 100,
     },
-    SubscriptionPlan.pro: {
-      "accounts": 10,
-      "budgets": 10,
-      "goals": 5,
-      "transactions_per_month": 1000,
+    planPro: {
+      'accounts': 10,
+      'budgets': 10,
+      'goals': 5,
+      'transactions_per_month': 1000,
     },
-    SubscriptionPlan.premium: {
-      "accounts": -1, // Unlimited
-      "budgets": -1,
-      "goals": -1,
-      "transactions_per_month": -1,
+    planPremium: {
+      'accounts': -1, // Unlimited
+      'budgets': -1,
+      'goals': -1,
+      'transactions_per_month': -1,
     },
   };
 
   /// Features available for each plan.
-  static const Map<SubscriptionPlan, Set<GatedFeature>> planFeatures = {
-    SubscriptionPlan.free: {},
-    SubscriptionPlan.pro: {
+  static const Map<String, Set<GatedFeature>> planFeatures = {
+    planFree: {},
+    planPro: {
       GatedFeature.advancedAnalytics,
       GatedFeature.aiInsights,
       GatedFeature.receiptScanning,
@@ -137,7 +169,7 @@ class PaywallService {
       GatedFeature.loanTracking,
       GatedFeature.exportReports,
     },
-    SubscriptionPlan.premium: {
+    planPremium: {
       GatedFeature.advancedAnalytics,
       GatedFeature.aiInsights,
       GatedFeature.receiptScanning,
@@ -187,14 +219,16 @@ class PaywallService {
   }
 
   bool _shouldRefreshCache() {
-    if (_cacheTime == null) return true;
+    if (_cacheTime == null) {
+      return true;
+    }
     return DateTime.now().difference(_cacheTime!) > _cacheExpiry;
   }
 
-  /// Gets the current subscription plan.
-  Future<SubscriptionPlan> getCurrentPlan() async {
+  /// Gets the current subscription plan ID.
+  Future<String> getCurrentPlan() async {
     final subscription = await _getSubscription();
-    return subscription?.plan ?? SubscriptionPlan.free;
+    return subscription?.planId ?? planFree;
   }
 
   /// Checks if a feature is available for the current subscription.
@@ -211,20 +245,20 @@ class PaywallService {
       case GatedFeature.unlimitedAccounts:
         return _checkCountFeature(
           plan: plan,
-          key: "accounts",
-          currentCount: usage?.accountsCount ?? 0,
+          key: 'accounts',
+          currentCount: usage?.accountsUsed ?? 0,
         );
       case GatedFeature.unlimitedBudgets:
         return _checkCountFeature(
           plan: plan,
-          key: "budgets",
-          currentCount: usage?.budgetsCount ?? 0,
+          key: 'budgets',
+          currentCount: usage?.budgetsUsed ?? 0,
         );
       case GatedFeature.unlimitedGoals:
         return _checkCountFeature(
           plan: plan,
-          key: "goals",
-          currentCount: usage?.goalsCount ?? 0,
+          key: 'goals',
+          currentCount: usage?.goalsUsed ?? 0,
         );
       default:
         return FeatureGateResult(
@@ -232,13 +266,13 @@ class PaywallService {
           requiredPlan: _getRequiredPlan(feature),
           message: isFeatureAllowed
               ? null
-              : "Upgrade to ${_getRequiredPlan(feature)?.name ?? "Pro"} to access this feature",
+              : "Upgrade to ${_getRequiredPlan(feature) ?? "Pro"} to access this feature",
         );
     }
   }
 
   FeatureGateResult _checkCountFeature({
-    required SubscriptionPlan plan,
+    required String plan,
     required String key,
     required int currentCount,
   }) {
@@ -250,7 +284,6 @@ class PaywallService {
       return FeatureGateResult(
         isAllowed: true,
         currentCount: currentCount,
-        limit: null,
       );
     }
 
@@ -260,9 +293,8 @@ class PaywallService {
       currentCount: currentCount,
       limit: limit,
       requiredPlan: isAtLimit ? _getNextPlan(plan) : null,
-      message: isAtLimit
-          ? "You have reached your limit of $limit ${key}. Upgrade to add more."
-          : null,
+      message:
+          isAtLimit ? 'You have reached your limit of $limit $key. Upgrade to add more.' : null,
     );
   }
 
@@ -272,25 +304,27 @@ class PaywallService {
   }
 
   /// Gets the required plan for a feature.
-  SubscriptionPlan? _getRequiredPlan(GatedFeature feature) {
-    if (planFeatures[SubscriptionPlan.pro]?.contains(feature) ?? false) {
-      return SubscriptionPlan.pro;
+  String? _getRequiredPlan(GatedFeature feature) {
+    if (planFeatures[planPro]?.contains(feature) ?? false) {
+      return planPro;
     }
-    if (planFeatures[SubscriptionPlan.premium]?.contains(feature) ?? false) {
-      return SubscriptionPlan.premium;
+    if (planFeatures[planPremium]?.contains(feature) ?? false) {
+      return planPremium;
     }
     return null;
   }
 
   /// Gets the next higher plan.
-  SubscriptionPlan _getNextPlan(SubscriptionPlan current) {
+  String _getNextPlan(String current) {
     switch (current) {
-      case SubscriptionPlan.free:
-        return SubscriptionPlan.pro;
-      case SubscriptionPlan.pro:
-        return SubscriptionPlan.premium;
-      case SubscriptionPlan.premium:
-        return SubscriptionPlan.premium;
+      case planFree:
+        return planPro;
+      case planPro:
+        return planPremium;
+      case planPremium:
+        return planPremium;
+      default:
+        return planPro;
     }
   }
 
@@ -303,8 +337,12 @@ class PaywallService {
   /// Gets the trial days remaining.
   Future<int> getTrialDaysRemaining() async {
     final subscription = await _getSubscription();
-    if (subscription?.status != SubscriptionStatus.trialing) return 0;
-    if (subscription?.trialEnd == null) return 0;
+    if (subscription?.status != SubscriptionStatus.trialing) {
+      return 0;
+    }
+    if (subscription?.trialEnd == null) {
+      return 0;
+    }
 
     final remaining = subscription!.trialEnd!.difference(DateTime.now());
     return remaining.inDays;

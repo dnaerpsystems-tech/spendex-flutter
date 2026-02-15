@@ -21,10 +21,8 @@ class SyncConflict extends Equatable {
       serverData: Map<String, dynamic>.from(json['serverData'] as Map),
       localModifiedAt: DateTime.parse(json['localModifiedAt'] as String),
       serverModifiedAt: DateTime.parse(json['serverModifiedAt'] as String),
-      conflictingFields: (json['conflictingFields'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+      conflictingFields:
+          (json['conflictingFields'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
     );
   }
 

@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 enum PaymentMethodType {
   card('CARD', 'Card'),
   upi('UPI', 'UPI'),
-  netbanking('NETBANKING', 'Net Banking');
+  netBanking('NETBANKING', 'Net Banking');
 
   const PaymentMethodType(this.value, this.label);
   final String value;
@@ -56,9 +56,8 @@ class PaymentMethodModel extends Equatable {
         orElse: () => PaymentMethodType.card,
       ),
       isDefault: json['isDefault'] as bool? ?? false,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'] as String)
-          : DateTime.now(),
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : DateTime.now(),
       last4: json['last4'] as String?,
       brand: json['brand'] != null
           ? CardBrand.values.firstWhere(
@@ -156,11 +155,13 @@ class PaymentMethodModel extends Equatable {
   bool get isUpi => type == PaymentMethodType.upi;
 
   /// Check if this is a net banking payment method
-  bool get isNetbanking => type == PaymentMethodType.netbanking;
+  bool get isNetbanking => type == PaymentMethodType.netBanking;
 
   /// Check if card is expired
   bool get isExpired {
-    if (!isCard || expiryMonth == null || expiryYear == null) return false;
+    if (!isCard || expiryMonth == null || expiryYear == null) {
+      return false;
+    }
     final now = DateTime.now();
     final expiry = DateTime(expiryYear!, expiryMonth! + 1, 0);
     return now.isAfter(expiry);
@@ -173,14 +174,22 @@ class PaymentMethodModel extends Equatable {
         return '${brand?.label ?? 'Card'} •••• ${last4 ?? '****'}';
       case PaymentMethodType.upi:
         return vpa ?? 'UPI';
-      case PaymentMethodType.netbanking:
+      case PaymentMethodType.netBanking:
         return bankName ?? 'Net Banking';
     }
   }
 
+  /// Get card brand (alias for brand field)
+  CardBrand? get cardBrand => brand;
+
+  /// Get UPI VPA (alias for vpa field)
+  String? get upiVpa => vpa;
+
   /// Get expiry string for cards (MM/YY)
   String? get expiryString {
-    if (expiryMonth == null || expiryYear == null) return null;
+    if (expiryMonth == null || expiryYear == null) {
+      return null;
+    }
     final month = expiryMonth.toString().padLeft(2, '0');
     final year = (expiryYear! % 100).toString().padLeft(2, '0');
     return '$month/$year';
@@ -290,6 +299,12 @@ class CheckoutResponse extends Equatable {
   /// Get amount in rupees
   double get amountInRupees => amount / 100;
 
+  /// Get amount in paise (same as amount field)
+  int get amountInPaise => amount;
+
+  /// Get description from notes or default
+  String? get description => notes?['description'] as String?;
+
   Map<String, dynamic> toJson() {
     return {
       'checkoutUrl': checkoutUrl,
@@ -382,9 +397,7 @@ class UpiCreateResponse extends Equatable {
       transactionId: json['transactionId'] as String,
       qrCode: json['qrCode'] as String?,
       intentUrl: json['intentUrl'] as String?,
-      expiresAt: json['expiresAt'] != null
-          ? DateTime.parse(json['expiresAt'] as String)
-          : null,
+      expiresAt: json['expiresAt'] != null ? DateTime.parse(json['expiresAt'] as String) : null,
     );
   }
 
@@ -429,8 +442,9 @@ class PaymentMethodsResponse extends Equatable {
   factory PaymentMethodsResponse.fromJson(Map<String, dynamic> json) {
     return PaymentMethodsResponse(
       paymentMethods: (json['paymentMethods'] as List<dynamic>?)
-              ?.map((e) =>
-                  PaymentMethodModel.fromJson(e as Map<String, dynamic>))
+              ?.map(
+                (e) => PaymentMethodModel.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
     );

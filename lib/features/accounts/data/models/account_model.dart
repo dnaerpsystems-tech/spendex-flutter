@@ -3,7 +3,6 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Account Model
 class AccountModel extends Equatable {
-
   const AccountModel({
     required this.id,
     required this.name,
@@ -114,23 +113,19 @@ class AccountModel extends Equatable {
   double get balanceInRupees => balance / 100;
 
   /// Get credit limit in rupees
-  double? get creditLimitInRupees =>
-      creditLimit != null ? creditLimit! / 100 : null;
+  double? get creditLimitInRupees => creditLimit != null ? creditLimit! / 100 : null;
 
   /// Check if credit card
   bool get isCreditCard => type == AccountType.creditCard;
 
   /// Get available credit (for credit cards)
   double? get availableCredit =>
-      isCreditCard && creditLimit != null
-          ? (creditLimit! - balance) / 100
-          : null;
+      isCreditCard && creditLimit != null ? (creditLimit! - balance) / 100 : null;
 
   /// Get utilized percentage (for credit cards)
-  double? get utilizedPercentage =>
-      isCreditCard && creditLimit != null && creditLimit! > 0
-          ? (balance / creditLimit!) * 100
-          : null;
+  double? get utilizedPercentage => isCreditCard && creditLimit != null && creditLimit! > 0
+      ? (balance / creditLimit!) * 100
+      : null;
 
   @override
   List<Object?> get props => [
@@ -153,7 +148,6 @@ class AccountModel extends Equatable {
 
 /// Accounts Summary
 class AccountsSummary extends Equatable {
-
   const AccountsSummary({
     required this.totalBalance,
     required this.totalAssets,
@@ -194,7 +188,6 @@ class AccountsSummary extends Equatable {
 
 /// Create Account Request
 class CreateAccountRequest {
-
   const CreateAccountRequest({
     required this.name,
     required this.type,
@@ -233,7 +226,6 @@ class CreateAccountRequest {
 
 /// Transfer Request
 class TransferRequest {
-
   const TransferRequest({
     required this.fromAccountId,
     required this.toAccountId,

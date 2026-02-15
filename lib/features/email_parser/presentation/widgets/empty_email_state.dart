@@ -49,9 +49,7 @@ class EmptyEmailState extends StatelessWidget {
             Text(
               'Fetch emails from your connected account to get started with automatic transaction imports.',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),

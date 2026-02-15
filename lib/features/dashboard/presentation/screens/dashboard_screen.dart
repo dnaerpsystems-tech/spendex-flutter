@@ -60,8 +60,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       // Avatar
                       CircleAvatar(
                         radius: 24,
-                        backgroundColor:
-                            SpendexColors.primary.withValues(alpha: 0.1),
+                        backgroundColor: SpendexColors.primary.withValues(alpha: 0.1),
                         child: Text(
                           user?.name.substring(0, 1).toUpperCase() ?? 'U',
                           style: SpendexTheme.headlineMedium.copyWith(
@@ -77,9 +76,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             Text(
                               'Good ${_getGreeting()}',
                               style: SpendexTheme.bodyMedium.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                             ),
                             Text(
@@ -113,22 +110,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: MaterialBanner(
                       content: Text(error),
-                      backgroundColor:
-                          SpendexColors.expense.withValues(alpha: 0.1),
+                      backgroundColor: SpendexColors.expense.withValues(alpha: 0.1),
                       actions: [
                         TextButton(
                           onPressed: () {
-                            ref
-                                .read(dashboardStateProvider.notifier)
-                                .clearError();
+                            ref.read(dashboardStateProvider.notifier).clearError();
                           },
                           child: const Text('Dismiss'),
                         ),
                         TextButton(
                           onPressed: () {
-                            ref
-                                .read(dashboardStateProvider.notifier)
-                                .refresh();
+                            ref.read(dashboardStateProvider.notifier).refresh();
                           },
                           child: const Text('Retry'),
                         ),
@@ -141,8 +133,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: dashboardState.isSummaryLoading &&
-                          accountsSummary == null
+                  child: dashboardState.isSummaryLoading && accountsSummary == null
                       ? const ShimmerLoadingList(
                           itemCount: 1,
                           itemHeight: 180,
@@ -151,8 +142,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       : _NetWorthCard(
                           netWorth: accountsSummary?.netWorth ?? 0,
                           totalAssets: accountsSummary?.totalAssets ?? 0,
-                          totalLiabilities:
-                              accountsSummary?.totalLiabilities ?? 0,
+                          totalLiabilities: accountsSummary?.totalLiabilities ?? 0,
                         ),
                 ),
               ),
@@ -282,8 +272,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
 
               // Recent Transactions List
-              if (dashboardState.isTransactionsLoading &&
-                  recentTransactions.isEmpty)
+              if (dashboardState.isTransactionsLoading && recentTransactions.isEmpty)
                 const SliverToBoxAdapter(
                   child: ShimmerLoadingList(
                     itemCount: 3,
@@ -313,9 +302,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           Text(
                             'No transactions yet',
                             style: SpendexTheme.bodyMedium.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -363,10 +350,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     (context, index) {
                       final budget = budgetAlerts[index];
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20)
-                            .copyWith(
-                          bottom:
-                              index < budgetAlerts.length - 1 ? 12 : 0,
+                        padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
+                          bottom: index < budgetAlerts.length - 1 ? 12 : 0,
                         ),
                         child: _BudgetAlertCard(budget: budget),
                       );
@@ -618,16 +603,13 @@ class _MonthlySummaryCard extends StatelessWidget {
                       decimalDigits: 0,
                     ),
                     style: SpendexTheme.titleMedium.copyWith(
-                      color: savings >= 0
-                          ? SpendexColors.income
-                          : SpendexColors.expense,
+                      color: savings >= 0 ? SpendexColors.income : SpendexColors.expense,
                     ),
                   ),
                 ],
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: SpendexColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -805,8 +787,7 @@ class _BudgetAlertCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isExceeded = budget.percentage >= 100;
-    final alertColor =
-        isExceeded ? SpendexColors.expense : SpendexColors.warning;
+    final alertColor = isExceeded ? SpendexColors.expense : SpendexColors.warning;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -849,9 +830,8 @@ class _BudgetAlertCard extends StatelessWidget {
                 Text(
                   "You've used ${budget.percentage.toStringAsFixed(0)}% of your ${budget.name} budget",
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ],

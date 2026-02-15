@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
-import 'role_badge.dart';
 
 /// Bottom sheet for selecting a member role with descriptions
 class MemberRoleSelector extends StatelessWidget {
@@ -20,7 +19,8 @@ class MemberRoleSelector extends StatelessWidget {
   /// Get role descriptions
   static String getRoleDescription(UserRole role) {
     return switch (role) {
-      UserRole.owner => 'Full control over the family. Can delete the family and transfer ownership.',
+      UserRole.owner =>
+        'Full control over the family. Can delete the family and transfer ownership.',
       UserRole.admin => 'Can manage members, categories, and all financial data.',
       UserRole.member => 'Can add and edit transactions and view reports.',
       UserRole.viewer => 'Can only view data, cannot make changes.',
@@ -66,17 +66,13 @@ class MemberRoleSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor =
-        isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final backgroundColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: const BorderRadius.vertical(
@@ -100,8 +96,7 @@ class MemberRoleSelector extends StatelessWidget {
             const SizedBox(height: SpendexTheme.spacingLg),
             // Header
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
+              padding: const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
               child: Row(
                 children: [
                   const Icon(
@@ -121,8 +116,7 @@ class MemberRoleSelector extends StatelessWidget {
             ),
             const SizedBox(height: SpendexTheme.spacingXs),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
+              padding: const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
               child: Text(
                 'Choose the permissions level for this member',
                 style: SpendexTheme.bodySmall.copyWith(
@@ -132,12 +126,14 @@ class MemberRoleSelector extends StatelessWidget {
             ),
             const SizedBox(height: SpendexTheme.spacingLg),
             // Role options
-            ..._availableRoles.map((role) => _RoleOption(
-                  role: role,
-                  isSelected: role == currentRole,
-                  onTap: () => onRoleSelected(role),
-                  isDark: isDark,
-                )),
+            ..._availableRoles.map(
+              (role) => _RoleOption(
+                role: role,
+                isSelected: role == currentRole,
+                onTap: () => onRoleSelected(role),
+                isDark: isDark,
+              ),
+            ),
             const SizedBox(height: SpendexTheme.spacingLg),
           ],
         ),
@@ -168,13 +164,10 @@ class _RoleOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
     final selectedBgColor = _roleColor.withValues(alpha: 0.1);
 
     return InkWell(
@@ -221,8 +214,7 @@ class _RoleOption extends StatelessWidget {
                         role.label,
                         style: SpendexTheme.titleMedium.copyWith(
                           color: textPrimary,
-                          fontWeight:
-                              isSelected ? FontWeight.w700 : FontWeight.w600,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
                         ),
                       ),
                       if (isSelected) ...[
@@ -234,8 +226,7 @@ class _RoleOption extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: _roleColor,
-                            borderRadius:
-                                BorderRadius.circular(SpendexTheme.radiusXs),
+                            borderRadius: BorderRadius.circular(SpendexTheme.radiusXs),
                           ),
                           child: Text(
                             'Current',

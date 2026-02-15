@@ -118,43 +118,67 @@ class UsageModel extends Equatable {
 
   /// Get transactions usage percentage (0-100)
   double get transactionsPercentageUsed {
-    if (limits.hasUnlimitedTransactions) return 0;
-    if (limits.transactions <= 0) return 100;
+    if (limits.hasUnlimitedTransactions) {
+      return 0;
+    }
+    if (limits.transactions <= 0) {
+      return 100;
+    }
     return (transactionsUsed / limits.transactions * 100).clamp(0, 100);
   }
 
   /// Get accounts usage percentage (0-100)
   double get accountsPercentageUsed {
-    if (limits.hasUnlimitedAccounts) return 0;
-    if (limits.accounts <= 0) return 100;
+    if (limits.hasUnlimitedAccounts) {
+      return 0;
+    }
+    if (limits.accounts <= 0) {
+      return 100;
+    }
     return (accountsUsed / limits.accounts * 100).clamp(0, 100);
   }
 
   /// Get budgets usage percentage (0-100)
   double get budgetsPercentageUsed {
-    if (limits.hasUnlimitedBudgets) return 0;
-    if (limits.budgets <= 0) return 100;
+    if (limits.hasUnlimitedBudgets) {
+      return 0;
+    }
+    if (limits.budgets <= 0) {
+      return 100;
+    }
     return (budgetsUsed / limits.budgets * 100).clamp(0, 100);
   }
 
   /// Get goals usage percentage (0-100)
   double get goalsPercentageUsed {
-    if (limits.hasUnlimitedGoals) return 0;
-    if (limits.goals <= 0) return 100;
+    if (limits.hasUnlimitedGoals) {
+      return 0;
+    }
+    if (limits.goals <= 0) {
+      return 100;
+    }
     return (goalsUsed / limits.goals * 100).clamp(0, 100);
   }
 
   /// Get family members usage percentage (0-100)
   double get familyMembersPercentageUsed {
-    if (limits.hasUnlimitedFamilyMembers) return 0;
-    if (limits.familyMembers <= 0) return 100;
+    if (limits.hasUnlimitedFamilyMembers) {
+      return 0;
+    }
+    if (limits.familyMembers <= 0) {
+      return 100;
+    }
     return (familyMembersUsed / limits.familyMembers * 100).clamp(0, 100);
   }
 
   /// Get AI insights usage percentage (0-100)
   double get aiInsightsPercentageUsed {
-    if (limits.hasUnlimitedAiInsights) return 0;
-    if (limits.aiInsights <= 0) return 100;
+    if (limits.hasUnlimitedAiInsights) {
+      return 0;
+    }
+    if (limits.aiInsights <= 0) {
+      return 100;
+    }
     return (aiInsightsUsed / limits.aiInsights * 100).clamp(0, 100);
   }
 
@@ -191,37 +215,49 @@ class UsageModel extends Equatable {
 
   /// Check if transactions are at limit
   bool get isTransactionsAtLimit {
-    if (limits.hasUnlimitedTransactions) return false;
+    if (limits.hasUnlimitedTransactions) {
+      return false;
+    }
     return transactionsUsed >= limits.transactions;
   }
 
   /// Check if accounts are at limit
   bool get isAccountsAtLimit {
-    if (limits.hasUnlimitedAccounts) return false;
+    if (limits.hasUnlimitedAccounts) {
+      return false;
+    }
     return accountsUsed >= limits.accounts;
   }
 
   /// Check if budgets are at limit
   bool get isBudgetsAtLimit {
-    if (limits.hasUnlimitedBudgets) return false;
+    if (limits.hasUnlimitedBudgets) {
+      return false;
+    }
     return budgetsUsed >= limits.budgets;
   }
 
   /// Check if goals are at limit
   bool get isGoalsAtLimit {
-    if (limits.hasUnlimitedGoals) return false;
+    if (limits.hasUnlimitedGoals) {
+      return false;
+    }
     return goalsUsed >= limits.goals;
   }
 
   /// Check if family members are at limit
   bool get isFamilyMembersAtLimit {
-    if (limits.hasUnlimitedFamilyMembers) return false;
+    if (limits.hasUnlimitedFamilyMembers) {
+      return false;
+    }
     return familyMembersUsed >= limits.familyMembers;
   }
 
   /// Check if AI insights are at limit
   bool get isAiInsightsAtLimit {
-    if (limits.hasUnlimitedAiInsights) return false;
+    if (limits.hasUnlimitedAiInsights) {
+      return false;
+    }
     return aiInsightsUsed >= limits.aiInsights;
   }
 
@@ -238,44 +274,58 @@ class UsageModel extends Equatable {
 
   /// Get remaining transactions
   int get transactionsRemaining {
-    if (limits.hasUnlimitedTransactions) return -1;
+    if (limits.hasUnlimitedTransactions) {
+      return -1;
+    }
     return (limits.transactions - transactionsUsed).clamp(0, limits.transactions);
   }
 
   /// Get remaining accounts
   int get accountsRemaining {
-    if (limits.hasUnlimitedAccounts) return -1;
+    if (limits.hasUnlimitedAccounts) {
+      return -1;
+    }
     return (limits.accounts - accountsUsed).clamp(0, limits.accounts);
   }
 
   /// Get remaining budgets
   int get budgetsRemaining {
-    if (limits.hasUnlimitedBudgets) return -1;
+    if (limits.hasUnlimitedBudgets) {
+      return -1;
+    }
     return (limits.budgets - budgetsUsed).clamp(0, limits.budgets);
   }
 
   /// Get remaining goals
   int get goalsRemaining {
-    if (limits.hasUnlimitedGoals) return -1;
+    if (limits.hasUnlimitedGoals) {
+      return -1;
+    }
     return (limits.goals - goalsUsed).clamp(0, limits.goals);
   }
 
   /// Get remaining family members
   int get familyMembersRemaining {
-    if (limits.hasUnlimitedFamilyMembers) return -1;
+    if (limits.hasUnlimitedFamilyMembers) {
+      return -1;
+    }
     return (limits.familyMembers - familyMembersUsed).clamp(0, limits.familyMembers);
   }
 
   /// Get remaining AI insights
   int get aiInsightsRemaining {
-    if (limits.hasUnlimitedAiInsights) return -1;
+    if (limits.hasUnlimitedAiInsights) {
+      return -1;
+    }
     return (limits.aiInsights - aiInsightsUsed).clamp(0, limits.aiInsights);
   }
 
   /// Get days remaining in current period
   int get daysRemainingInPeriod {
     final now = DateTime.now();
-    if (now.isAfter(periodEnd)) return 0;
+    if (now.isAfter(periodEnd)) {
+      return 0;
+    }
     return periodEnd.difference(now).inDays;
   }
 

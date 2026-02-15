@@ -34,7 +34,6 @@ abstract class CategoriesRemoteDataSource {
 
 /// Categories Remote Data Source Implementation
 class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
-
   CategoriesRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -47,9 +46,8 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     return result.fold(
       Left.new,
       (data) {
-        final categories = data
-            .map((json) => CategoryModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final categories =
+            data.map((json) => CategoryModel.fromJson(json as Map<String, dynamic>)).toList();
         return Right(categories);
       },
     );
@@ -64,9 +62,8 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     return result.fold(
       Left.new,
       (data) {
-        final categories = data
-            .map((json) => CategoryModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final categories =
+            data.map((json) => CategoryModel.fromJson(json as Map<String, dynamic>)).toList();
         return Right(categories);
       },
     );
@@ -81,9 +78,8 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
     return result.fold(
       Left.new,
       (data) {
-        final categories = data
-            .map((json) => CategoryModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final categories =
+            data.map((json) => CategoryModel.fromJson(json as Map<String, dynamic>)).toList();
         return Right(categories);
       },
     );
@@ -121,7 +117,8 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, CategoryModel>> updateCategory(String id, CreateCategoryRequest request) async {
+  Future<Either<Failure, CategoryModel>> updateCategory(
+      String id, CreateCategoryRequest request,) async {
     final result = await _apiClient.put<Map<String, dynamic>>(
       ApiEndpoints.categoryById(id),
       data: request.toJson(),

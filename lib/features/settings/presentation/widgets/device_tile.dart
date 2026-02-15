@@ -74,14 +74,11 @@ class DeviceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
     final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     return Card(
       elevation: 2,
@@ -249,12 +246,9 @@ class DeviceTile extends StatelessWidget {
       context: context,
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
-        final textColor = isDark
-            ? SpendexColors.darkTextPrimary
-            : SpendexColors.lightTextPrimary;
-        final secondaryTextColor = isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary;
+        final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+        final secondaryTextColor =
+            isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
         return AlertDialog(
           shape: RoundedRectangleBorder(

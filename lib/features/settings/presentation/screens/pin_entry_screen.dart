@@ -132,7 +132,8 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
           setState(() {
             final minutes = difference.inMinutes;
             final seconds = difference.inSeconds % 60;
-            _remainingTime = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+            _remainingTime =
+                '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
           });
         }
       }
@@ -175,7 +176,9 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   Future<void> _verifyPin(String pin) async {
-    if (_isLocked) return;
+    if (_isLocked) {
+      return;
+    }
 
     try {
       final isValid = await _pinService.verifyPin(pin);
@@ -183,7 +186,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
       if (isValid) {
         _enteredPin = '';
         // Refresh the PIN auth state provider
-        ref.read(pinAuthStateProvider.notifier).refresh();
+        unawaited(ref.read(pinAuthStateProvider.notifier).refresh());
         if (mounted) {
           context.go('/home');
         }
@@ -208,7 +211,8 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
           if (mounted) {
             setState(() {
               _failedAttempts = failedAttempts;
-              _errorMessage = 'Incorrect PIN. $remainingAttempts ${remainingAttempts == 1 ? 'attempt' : 'attempts'} remaining.';
+              _errorMessage =
+                  'Incorrect PIN. $remainingAttempts ${remainingAttempts == 1 ? 'attempt' : 'attempts'} remaining.';
             });
             _pinInputKey.currentState?.showError();
             _pinInputKey.currentState?.clear();
@@ -229,7 +233,9 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   Future<void> _authenticateWithBiometric() async {
-    if (_isLocked) return;
+    if (_isLocked) {
+      return;
+    }
 
     setState(() {
       _isBiometricLoading = true;
@@ -244,7 +250,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
       if (authenticated) {
         // Reset failed attempts on successful biometric auth
         await _pinService.resetFailedAttempts();
-        ref.read(pinAuthStateProvider.notifier).resetFailedAttempts();
+        unawaited(ref.read(pinAuthStateProvider.notifier).resetFailedAttempts());
 
         if (mounted) {
           context.go('/home');
@@ -399,7 +405,9 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
 
   Widget _buildUserInfo(AuthState authState, bool isDark) {
     final user = authState.user;
-    if (user == null) return const SizedBox.shrink();
+    if (user == null) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       children: [
@@ -489,7 +497,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Iconsax.warning_2,
             color: SpendexColors.expense,
             size: 20,
@@ -537,9 +545,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
       child: Container(
         padding: const EdgeInsets.all(SpendexTheme.spacingLg),
         decoration: BoxDecoration(
-          color: isDark
-              ? SpendexColors.darkSurface
-              : SpendexColors.lightSurface,
+          color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
           shape: BoxShape.circle,
           border: Border.all(
             color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
@@ -547,7 +553,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
           ),
         ),
         child: _isBiometricLoading
-            ? SizedBox(
+            ? const SizedBox(
                 width: 32,
                 height: 32,
                 child: CircularProgressIndicator(
@@ -555,7 +561,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
                   color: SpendexColors.primary,
                 ),
               )
-            : Icon(
+            : const Icon(
                 Iconsax.finger_scan,
                 size: 32,
                 color: SpendexColors.primary,
@@ -593,7 +599,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
                 color: SpendexColors.expense.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
+              child: const Icon(
                 Iconsax.lock,
                 size: 60,
                 color: SpendexColors.expense,
@@ -629,7 +635,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.timer_1,
                     color: SpendexColors.expense,
                     size: 24,

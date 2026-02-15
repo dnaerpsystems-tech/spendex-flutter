@@ -41,8 +41,8 @@ int levenshteinDistance(String s1, String s2) {
       final cost = s1[i - 1] == s2[j - 1] ? 0 : 1;
 
       currentRow[j] = _min3(
-        previousRow[j] + 1,      // Deletion
-        currentRow[j - 1] + 1,   // Insertion
+        previousRow[j] + 1, // Deletion
+        currentRow[j - 1] + 1, // Insertion
         previousRow[j - 1] + cost, // Substitution
       );
     }
@@ -158,7 +158,8 @@ double tokenBasedSimilarity(String s1, String s2) {
   for (final token1 in tokens1) {
     for (final token2 in tokens2) {
       final similarity = stringSimilarity(token1, token2);
-      if (similarity > 0.7) { // Only count strong matches
+      if (similarity > 0.7) {
+        // Only count strong matches
         totalSimilarity += similarity;
         comparisons++;
       }
@@ -179,7 +180,7 @@ String _normalizeString(String s) {
   return s
       .toLowerCase()
       .replaceAll(RegExp(r'[^\w\s]'), ' ') // Replace special chars with space
-      .replaceAll(RegExp(r'\s+'), ' ')      // Normalize whitespace
+      .replaceAll(RegExp(r'\s+'), ' ') // Normalize whitespace
       .trim();
 }
 
@@ -189,9 +190,35 @@ List<String> _tokenize(String s) {
 
   // Remove common stop words that don't add meaning
   const stopWords = {
-    'to', 'from', 'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at',
-    'by', 'for', 'with', 'is', 'was', 'are', 'were', 'been', 'be', 'has',
-    'have', 'had', 'payment', 'transaction', 'transfer', 'upi', 'imps', 'neft',
+    'to',
+    'from',
+    'the',
+    'a',
+    'an',
+    'and',
+    'or',
+    'but',
+    'in',
+    'on',
+    'at',
+    'by',
+    'for',
+    'with',
+    'is',
+    'was',
+    'are',
+    'were',
+    'been',
+    'be',
+    'has',
+    'have',
+    'had',
+    'payment',
+    'transaction',
+    'transfer',
+    'upi',
+    'imps',
+    'neft',
   };
 
   return words.where((w) => !stopWords.contains(w) && w.length > 1).toList();

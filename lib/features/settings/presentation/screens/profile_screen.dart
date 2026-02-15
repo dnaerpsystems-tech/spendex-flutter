@@ -54,8 +54,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor =
-        isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground;
+    final backgroundColor = isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -214,9 +213,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         child: const Text('Verify'),
                       ),
                 showIconBackground: true,
-                iconColor: user.isEmailVerified
-                    ? SpendexColors.income
-                    : SpendexColors.expense,
+                iconColor: user.isEmailVerified ? SpendexColors.income : SpendexColors.expense,
               ),
               ProfileInfoTile(
                 icon: Iconsax.user_tag,
@@ -235,11 +232,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget _buildSubscriptionSection() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
     final planTier = _getPlanTier();
     final isPremium = planTier == PlanTier.premium;
 
@@ -274,8 +269,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     height: 48,
                     decoration: BoxDecoration(
                       color: planTier.color.withValues(alpha: 0.1),
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusMd),
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                     ),
                     child: Icon(
                       planTier == PlanTier.premium
@@ -325,8 +319,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         vertical: SpendexTheme.spacingMd,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusMd),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                       ),
                     ),
                     child: const Text('Upgrade Plan'),
@@ -469,7 +462,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   String _formatLastLogin(DateTime? date) {
-    if (date == null) return 'Never';
+    if (date == null) {
+      return 'Never';
+    }
 
     final now = DateTime.now();
     final difference = now.difference(date);
@@ -626,8 +621,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   void _showLogoutConfirmation() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor =
-        isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
+    final backgroundColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
 
     showDialog<void>(
       context: context,
@@ -688,8 +682,7 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return Padding(
       padding: const EdgeInsets.symmetric(

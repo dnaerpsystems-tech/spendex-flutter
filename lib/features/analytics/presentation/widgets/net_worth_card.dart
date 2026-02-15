@@ -6,7 +6,8 @@ import '../../data/models/net_worth_model.dart';
 /// Card showing current net worth with assets and liabilities
 class NetWorthCard extends StatelessWidget {
   const NetWorthCard({
-    required this.netWorth, super.key,
+    required this.netWorth,
+    super.key,
   });
 
   final NetWorthResponse netWorth;

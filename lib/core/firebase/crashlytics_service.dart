@@ -32,7 +32,7 @@ class CrashlyticsService {
 
   static void setupErrorHandlers() {
     // Flutter framework errors
-    FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.onError = (details) {
       if (kDebugMode) {
         FlutterError.presentError(details);
         AppLogger.e('FlutterError', details.exception, details.stack);
@@ -52,18 +52,20 @@ class CrashlyticsService {
     };
 
     // Isolate errors
-    Isolate.current.addErrorListener(RawReceivePort((pair) async {
-      final List<dynamic> errorAndStacktrace = pair;
-      final error = errorAndStacktrace.first;
-      final stack = StackTrace.fromString(errorAndStacktrace.last.toString());
-      if (!kDebugMode) {
-        await instance.recordError(error, stack, fatal: true);
-      }
-    }).sendPort);
+    Isolate.current.addErrorListener(
+      RawReceivePort((pair) async {
+        final errorAndStacktrace = pair as List<dynamic>;
+        final error = errorAndStacktrace.first;
+        final stack = StackTrace.fromString(errorAndStacktrace.last.toString());
+        if (!kDebugMode) {
+          await instance.recordError(error, stack, fatal: true);
+        }
+      }).sendPort,
+    );
   }
 
   static Future<void> recordError(
-    dynamic exception,
+    Object exception,
     StackTrace? stack, {
     bool fatal = false,
     String? reason,
@@ -93,7 +95,7 @@ class CrashlyticsService {
     }
   }
 
-  static Future<void> setCustomKey(String key, dynamic value) async {
+  static Future<void> setCustomKey(String key, Object value) async {
     if (!kDebugMode) {
       await instance.setCustomKey(key, value);
     }

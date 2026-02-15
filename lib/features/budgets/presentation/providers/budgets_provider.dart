@@ -8,7 +8,6 @@ import '../../domain/repositories/budgets_repository.dart';
 
 /// Budgets State
 class BudgetsState extends Equatable {
-
   const BudgetsState({
     this.budgets = const [],
     this.summary,
@@ -81,16 +80,15 @@ class BudgetsState extends Equatable {
   /// Get budgets over alert threshold but under 100%
   List<BudgetModel> get warningBudgets {
     return budgets
-        .where((budget) =>
-            budget.percentage >= budget.alertThreshold && budget.percentage < 100,)
+        .where(
+          (budget) => budget.percentage >= budget.alertThreshold && budget.percentage < 100,
+        )
         .toList();
   }
 
   /// Get budgets on track (under alert threshold)
   List<BudgetModel> get onTrackBudgets {
-    return budgets
-        .where((budget) => budget.percentage < budget.alertThreshold)
-        .toList();
+    return budgets.where((budget) => budget.percentage < budget.alertThreshold).toList();
   }
 
   /// Get budgets filtered by period
@@ -122,7 +120,6 @@ class BudgetsState extends Equatable {
 
 /// Budgets State Notifier
 class BudgetsNotifier extends StateNotifier<BudgetsState> {
-
   BudgetsNotifier(this._repository) : super(const BudgetsState.initial());
   final BudgetsRepository _repository;
 
@@ -377,14 +374,12 @@ final onTrackBudgetsProvider = Provider<List<BudgetModel>>((ref) {
 });
 
 /// Budgets By Period Provider
-final budgetsByPeriodProvider =
-    Provider.family<List<BudgetModel>, BudgetPeriod>((ref, period) {
+final budgetsByPeriodProvider = Provider.family<List<BudgetModel>, BudgetPeriod>((ref, period) {
   return ref.watch(budgetsStateProvider).getBudgetsByPeriod(period);
 });
 
 /// Budgets By Status Provider
-final budgetsByStatusProvider =
-    Provider.family<List<BudgetModel>, BudgetStatus>((ref, status) {
+final budgetsByStatusProvider = Provider.family<List<BudgetModel>, BudgetStatus>((ref, status) {
   return ref.watch(budgetsStateProvider).getBudgetsByStatus(status);
 });
 

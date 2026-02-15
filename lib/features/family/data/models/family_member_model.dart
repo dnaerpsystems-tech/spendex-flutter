@@ -27,9 +27,8 @@ class FamilyMemberModel extends Equatable {
       ),
       avatarUrl: json['avatarUrl'] as String?,
       joinedAt: DateTime.parse(json['joinedAt'] as String),
-      lastActiveAt: json['lastActiveAt'] != null
-          ? DateTime.parse(json['lastActiveAt'] as String)
-          : null,
+      lastActiveAt:
+          json['lastActiveAt'] != null ? DateTime.parse(json['lastActiveAt'] as String) : null,
     );
   }
 

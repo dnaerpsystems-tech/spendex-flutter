@@ -8,7 +8,6 @@ import '../models/parsed_transaction_model.dart';
 import '../models/sms_message_model.dart';
 
 class SmsParserRepositoryImpl implements SmsParserRepository {
-
   SmsParserRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
@@ -96,15 +95,15 @@ class SmsParserRepositoryImpl implements SmsParserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> toggleSmsTracking(bool enabled) async {
+  Future<Either<Failure, bool>> toggleSmsTracking({required bool enabled}) async {
     try {
-      final localResult = await _localDataSource.setTrackingStatus(enabled);
+      final localResult = await _localDataSource.setTrackingStatus(enabled: enabled);
 
       return localResult.fold(
         Left.new,
         (success) async {
           final remoteResult = await _remoteDataSource.toggleSmsTracking(
-            enabled,
+            enabled: enabled,
           );
           return remoteResult.fold(
             (failure) => Right(success),

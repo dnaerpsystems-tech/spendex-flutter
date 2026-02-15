@@ -72,9 +72,7 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
           Text(
             'Order Summary',
             style: SpendexTheme.headlineSmall.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: SpendexTheme.spacingLg),
@@ -87,9 +85,8 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
                     Text(
                       widget.plan.name,
                       style: SpendexTheme.titleMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -109,9 +106,7 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
               Text(
                 '₹$basePrice',
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
             ],
@@ -124,7 +119,7 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
                 vertical: SpendexTheme.spacingXs,
               ),
               decoration: BoxDecoration(
-                color: SpendexColors.income.withOpacity(0.1),
+                color: SpendexColors.income.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
               ),
               child: Row(
@@ -149,8 +144,7 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
           ],
           const SizedBox(height: SpendexTheme.spacingLg),
           Divider(
-            color:
-                isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
+            color: isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
           ),
           const SizedBox(height: SpendexTheme.spacingLg),
           if (widget.showPromoCode) ...[
@@ -171,11 +165,13 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
               valueColor: SpendexColors.income,
             ),
           _buildPriceRow(
-              isDark, 'GST (${widget.taxPercentage.toInt()}%)', '₹$tax'),
+            isDark,
+            'GST (${widget.taxPercentage.toInt()}%)',
+            '₹$tax',
+          ),
           const SizedBox(height: SpendexTheme.spacingMd),
           Divider(
-            color:
-                isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
+            color: isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
           ),
           const SizedBox(height: SpendexTheme.spacingMd),
           Row(
@@ -184,9 +180,7 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
               Text(
                 'Total',
                 style: SpendexTheme.headlineSmall.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               Text(
@@ -202,8 +196,12 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
     );
   }
 
-  Widget _buildPriceRow(bool isDark, String label, String value,
-      {Color? valueColor}) {
+  Widget _buildPriceRow(
+    bool isDark,
+    String label,
+    String value, {
+    Color? valueColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: SpendexTheme.spacingSm),
       child: Row(
@@ -212,18 +210,14 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
           Text(
             label,
             style: SpendexTheme.bodySmall.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           Text(
             value,
             style: SpendexTheme.bodyMedium.copyWith(
               color: valueColor ??
-                  (isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary),
+                  (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
             ),
           ),
         ],
@@ -252,9 +246,7 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
             decoration: InputDecoration(
               hintText: 'Enter promo code',
               hintStyle: SpendexTheme.bodySmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: SpendexTheme.spacingMd,
@@ -298,9 +290,9 @@ class _CheckoutSummaryCardState extends State<CheckoutSummaryCard> {
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
       decoration: BoxDecoration(
-        color: SpendexColors.income.withOpacity(0.1),
+        color: SpendexColors.income.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
-        border: Border.all(color: SpendexColors.income.withOpacity(0.3)),
+        border: Border.all(color: SpendexColors.income.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -337,8 +329,8 @@ class CheckoutSummaryCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final skeletonColor = isDark
-        ? SpendexColors.darkBorder.withOpacity(0.5)
-        : SpendexColors.lightBorder.withOpacity(0.5);
+        ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+        : SpendexColors.lightBorder.withValues(alpha: 0.5);
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),

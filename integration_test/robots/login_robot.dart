@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// Robot pattern for login screen testing
 class LoginRobot {
-  final WidgetTester tester;
   
   LoginRobot(this.tester);
+  final WidgetTester tester;
   
   Future<void> enterEmail(String email) async {
     final emailField = find.byKey(const Key('login_email_field'));

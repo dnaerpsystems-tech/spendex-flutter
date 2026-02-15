@@ -29,8 +29,7 @@ abstract class DuplicateDetectionRemoteDataSource {
 }
 
 /// Implementation of duplicate detection remote data source
-class DuplicateDetectionRemoteDataSourceImpl
-    implements DuplicateDetectionRemoteDataSource {
+class DuplicateDetectionRemoteDataSourceImpl implements DuplicateDetectionRemoteDataSource {
   DuplicateDetectionRemoteDataSourceImpl(this._apiClient);
 
   final ApiClient _apiClient;

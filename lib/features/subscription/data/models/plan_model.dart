@@ -95,6 +95,18 @@ class PlanLimits extends Equatable {
   /// Check if AI insights are unlimited
   bool get hasUnlimitedAiInsights => aiInsights == -1;
 
+  /// Get max accounts (alias for accounts field)
+  int get maxAccounts => accounts;
+
+  /// Get max transactions per month (alias for transactions field)
+  int get maxTransactionsPerMonth => transactions;
+
+  /// Get max budgets (alias for budgets field)
+  int get maxBudgets => budgets;
+
+  /// Get max goals (alias for goals field)
+  int get maxGoals => goals;
+
   @override
   List<Object?> get props => [
         transactions,
@@ -138,10 +150,7 @@ class PlanModel extends Equatable {
         (e) => e.value == json['billingCycle'],
         orElse: () => BillingCycle.monthly,
       ),
-      features: (json['features'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+      features: (json['features'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
       limits: json['limits'] != null
           ? PlanLimits.fromJson(json['limits'] as Map<String, dynamic>)
           : const PlanLimits(
@@ -255,8 +264,7 @@ class PlanModel extends Equatable {
   double get priceInRupees => price / 100;
 
   /// Get original price in rupees
-  double? get originalPriceInRupees =>
-      originalPrice != null ? originalPrice! / 100 : null;
+  double? get originalPriceInRupees => originalPrice != null ? originalPrice! / 100 : null;
 
   /// Get savings amount in paise
   int get savingsAmount => originalPrice != null ? originalPrice! - price : 0;
@@ -285,6 +293,26 @@ class PlanModel extends Equatable {
       case BillingCycle.yearly:
         return priceInRupees / 12;
     }
+  }
+
+  /// Get monthly price (price in paise for monthly billing)
+  /// For non-monthly plans, this represents the equivalent monthly price
+  int get monthlyPrice {
+    if (billingCycle == BillingCycle.monthly) {
+      return price;
+    }
+    // For annual/quarterly plans, calculate monthly equivalent
+    return (monthlyEquivalentPrice * 100).round();
+  }
+
+  /// Get annual price (price in paise for annual billing)
+  /// For non-annual plans, this represents the equivalent annual price
+  int get annualPrice {
+    if (billingCycle == BillingCycle.yearly) {
+      return price;
+    }
+    // For monthly/quarterly plans, calculate annual equivalent
+    return (monthlyEquivalentPrice * 12 * 100).round();
   }
 
   @override

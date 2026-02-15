@@ -99,9 +99,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
         content: Text(
           'Are you sure you want to delete this loan? This action cannot be undone.',
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         actions: [
@@ -113,9 +111,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
             onPressed: () async {
               Navigator.pop(context);
 
-              final success = await ref
-                  .read(loansStateProvider.notifier)
-                  .deleteLoan(widget.loanId);
+              final success = await ref.read(loansStateProvider.notifier).deleteLoan(widget.loanId);
 
               if (context.mounted) {
                 if (success) {
@@ -168,9 +164,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
     final loan = loansState.selectedLoan;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Loan Details'),
         centerTitle: true,
@@ -250,7 +244,8 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
                                 ),
                                 isBold: true,
                               ),
-                              if (loan.type == LoanType.home || loan.type == LoanType.education) ...[
+                              if (loan.type == LoanType.home ||
+                                  loan.type == LoanType.education) ...[
                                 const SizedBox(height: 16),
                                 _TaxBadge(loanType: loan.type),
                               ],
@@ -400,9 +395,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
                 Text(
                   CurrencyFormatter.formatPaise(loan.totalPaid),
                   style: SpendexTheme.headlineMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -410,9 +403,8 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
                 Text(
                   'of ${CurrencyFormatter.formatPaise(totalPayable)}',
                   style: SpendexTheme.labelMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ],
@@ -422,9 +414,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
           Text(
             '${progressPercentage.toStringAsFixed(1)}% Paid',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -457,9 +447,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
               ),
               child: Icon(
                 Iconsax.calendar,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                 size: 32,
               ),
             ),
@@ -467,9 +455,7 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
             Text(
               'No EMI Schedule Available',
               style: SpendexTheme.titleMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
           ],
@@ -486,25 +472,20 @@ class _LoanDetailsScreenState extends ConsumerState<LoanDetailsScreen> {
             Text(
               'EMI Schedule',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
               ),
               child: Text(
                 '${loan.emiSchedule.length}',
                 style: SpendexTheme.labelMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -584,9 +565,7 @@ class _LoanHeader extends StatelessWidget {
           Text(
             loan.name,
             style: SpendexTheme.headlineMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
@@ -596,9 +575,7 @@ class _LoanHeader extends StatelessWidget {
             loan.type.label,
             style: SpendexTheme.bodyMedium.copyWith(
               fontSize: 13,
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: 12),
@@ -624,17 +601,15 @@ class _LoanHeader extends StatelessWidget {
                 Icon(
                   Iconsax.building,
                   size: 16,
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   loan.lender!,
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ],
@@ -648,17 +623,15 @@ class _LoanHeader extends StatelessWidget {
                 Icon(
                   Iconsax.card,
                   size: 16,
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   loan.accountNumber!,
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ],
@@ -677,7 +650,6 @@ class _TaxBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     String text;
     if (loanType == LoanType.home) {
       text = '80C Eligible (Principal)';

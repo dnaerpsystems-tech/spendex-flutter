@@ -63,9 +63,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -78,9 +76,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -176,16 +172,12 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: isSelected
                               ? SpendexColors.primary
-                              : (isDark
-                                  ? SpendexColors.darkBorder
-                                  : SpendexColors.lightBorder),
+                              : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
                           width: isSelected ? 2 : 1,
                         ),
                       ),
@@ -206,8 +198,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: SpendexColors.primary
-                                  .withValues(alpha: 0.1),
+                              color: SpendexColors.primary.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Center(
@@ -228,8 +219,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
                                 Text(
                                   bank.bankName,
                                   style: SpendexTheme.titleMedium.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                                 const SizedBox(height: 2),
@@ -274,8 +264,7 @@ class _BankSelectorSheetState extends State<BankSelectorSheet> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: SpendexColors.primary,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor:
-                      SpendexColors.primary.withValues(alpha: 0.5),
+                  disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),

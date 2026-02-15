@@ -1,8 +1,8 @@
-import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "../../../../core/services/paywall_service.dart";
-import "../providers/paywall_provider.dart";
-import "paywall_dialog.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/services/paywall_service.dart';
+import '../providers/paywall_provider.dart';
+import 'paywall_dialog.dart';
 
 /// A mixin that provides paywall checking functionality to screens.
 ///
@@ -87,6 +87,9 @@ Future<bool> checkPaywall({
   final result = await service.checkFeature(feature);
 
   if (!result.isAllowed) {
+    if (!context.mounted) {
+      return false;
+    }
     await context.showPaywallDialog(
       feature: feature,
       gateResult: result,

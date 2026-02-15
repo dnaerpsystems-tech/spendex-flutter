@@ -1,22 +1,24 @@
 import 'dart:async';
-import 'core/config/environment.dart';
-import 'core/firebase/firebase_service.dart';
-import 'core/firebase/crashlytics_service.dart';
-import 'core/firebase/analytics_service.dart';
-import 'core/security/device_security.dart';
-import 'core/security/screen_security.dart';
-import 'core/services/push_notification_service.dart';
-import 'core/services/remote_config_service.dart';
-import 'core/utils/app_logger.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'app/app.dart';
+import 'core/config/environment.dart';
 import 'core/di/injection.dart';
-Future<void> main() async {
+import 'core/firebase/crashlytics_service.dart';
+import 'core/firebase/firebase_service.dart';
+import 'core/security/device_security.dart';
+import 'core/security/screen_security.dart';
+import 'core/services/push_notification_service.dart';
+import 'core/services/remote_config_service.dart';
+import 'core/utils/app_logger.dart';
+
+void main() {
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
     if (kDebugMode) {
@@ -118,7 +120,8 @@ Future<void> main() async {
     if (kDebugMode) {
       AppLogger.e('Main: Uncaught error in runZonedGuarded', error, stack);
     } else {
-      CrashlyticsService.recordError(error, stack, fatal: true, reason: 'Uncaught error in runZonedGuarded');
+      CrashlyticsService.recordError(error, stack,
+          fatal: true, reason: 'Uncaught error in runZonedGuarded',);
     }
   });
 }

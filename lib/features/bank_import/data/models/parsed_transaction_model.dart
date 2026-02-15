@@ -12,14 +12,15 @@ enum TransactionSource {
 }
 
 class ParsedTransactionModel extends Equatable {
-
   const ParsedTransactionModel({
     required this.id,
     required this.date,
     required this.amount,
     required this.type,
     required this.description,
-    required this.confidence, required this.source, this.merchant,
+    required this.confidence,
+    required this.source,
+    this.merchant,
     this.category,
     this.account,
     this.rawData,

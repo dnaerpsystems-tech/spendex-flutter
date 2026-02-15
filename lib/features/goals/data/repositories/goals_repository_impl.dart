@@ -7,7 +7,6 @@ import '../models/goal_model.dart';
 
 /// Goals Repository Implementation
 class GoalsRepositoryImpl implements GoalsRepository {
-
   GoalsRepositoryImpl(this._remoteDataSource);
   final GoalsRemoteDataSource _remoteDataSource;
 

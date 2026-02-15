@@ -34,8 +34,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
     OnboardingPage(
       title: 'Achieve Your Goals',
-      description:
-          'Set savings goals and track your progress. Watch your dreams become reality.',
+      description: 'Set savings goals and track your progress. Watch your dreams become reality.',
       icon: Icons.flag_outlined,
       color: SpendexColors.income,
     ),

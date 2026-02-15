@@ -50,7 +50,9 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
 
     if (permissionStatus == SmsPermissionStatus.denied) {
       // Show permission dialog
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showPermissionDialog().ignore();
     }
   }
@@ -63,11 +65,12 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
 
     if (result == null || !result) {
       // User declined permission, show info
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content:
-              Text('SMS permission is required to read bank messages'),
+          content: Text('SMS permission is required to read bank messages'),
           backgroundColor: SpendexColors.warning,
           behavior: SnackBarBehavior.floating,
         ),
@@ -125,22 +128,12 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
             // Update selected banks in provider
             for (final bank in banks) {
               if (selected.contains(bank.bankName)) {
-                if (!ref
-                    .read(smsParserProvider)
-                    .selectedBanks
-                    .contains(bank.bankName)) {
-                  ref
-                      .read(smsParserProvider.notifier)
-                      .toggleBankSelection(bank.bankName);
+                if (!ref.read(smsParserProvider).selectedBanks.contains(bank.bankName)) {
+                  ref.read(smsParserProvider.notifier).toggleBankSelection(bank.bankName);
                 }
               } else {
-                if (ref
-                    .read(smsParserProvider)
-                    .selectedBanks
-                    .contains(bank.bankName)) {
-                  ref
-                      .read(smsParserProvider.notifier)
-                      .toggleBankSelection(bank.bankName);
+                if (ref.read(smsParserProvider).selectedBanks.contains(bank.bankName)) {
+                  ref.read(smsParserProvider.notifier).toggleBankSelection(bank.bankName);
                 }
               }
             }
@@ -166,7 +159,9 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
 
     await ref.read(smsParserProvider.notifier).readSmsMessages();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final error = ref.read(smsParserProvider).error;
     if (error != null) {
@@ -231,7 +226,9 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
           transactions: selectedTransactions,
         );
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final duplicateState = ref.read(duplicateDetectionProvider);
 
@@ -245,7 +242,9 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
         },
       );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       // If user resolved duplicates successfully
       if (result ?? false) {
@@ -265,10 +264,11 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
     }
 
     // Step 3: No duplicates, proceed with direct import
-    final success =
-        await ref.read(smsParserProvider.notifier).bulkImportTransactions();
+    final success = await ref.read(smsParserProvider.notifier).bulkImportTransactions();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -294,7 +294,9 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
   }
 
   String _formatDateRange(DateTimeRange? range) {
-    if (range == null) return 'Select date range';
+    if (range == null) {
+      return 'Select date range';
+    }
 
     final formatter = DateFormat('dd MMM yyyy');
     return '${formatter.format(range.start)} - ${formatter.format(range.end)}';
@@ -313,9 +315,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
     if (smsState.permissionStatus == SmsPermissionStatus.denied ||
         smsState.permissionStatus == SmsPermissionStatus.permanentlyDenied) {
       return Scaffold(
-        backgroundColor: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         appBar: AppBar(
           title: const Text('SMS Parser'),
           centerTitle: true,
@@ -357,9 +357,8 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                 Text(
                   'To read and parse bank SMS messages, we need permission to access your SMS inbox.',
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -392,9 +391,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
     }
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('SMS Parser'),
         centerTitle: true,
@@ -440,9 +437,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -483,9 +478,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -523,16 +516,14 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: smsState.isLoadingSms ||
-                            smsState.isParsing ||
-                            smsState.dateRange == null
-                        ? null
-                        : _readSmsMessages,
+                    onPressed:
+                        smsState.isLoadingSms || smsState.isParsing || smsState.dateRange == null
+                            ? null
+                            : _readSmsMessages,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: SpendexColors.primary,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor:
-                          SpendexColors.primary.withValues(alpha: 0.5),
+                      disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -546,17 +537,14 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
                                     Colors.white,
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Text(
-                                smsState.isParsing
-                                    ? 'Parsing SMS...'
-                                    : 'Reading SMS...',
+                                smsState.isParsing ? 'Parsing SMS...' : 'Reading SMS...',
                                 style: SpendexTheme.titleMedium.copyWith(
                                   color: Colors.white,
                                 ),
@@ -600,8 +588,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                             color: SpendexColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color:
-                                  SpendexColors.primary.withValues(alpha: 0.3),
+                              color: SpendexColors.primary.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Row(
@@ -633,10 +620,8 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                           itemCount: smsState.smsMessages.length,
                           itemBuilder: (context, index) {
                             final sms = smsState.smsMessages[index];
-                            final isSelected = smsState.selectedSms
-                                .contains(sms.id);
-                            final isParsed =
-                                sms.parseStatus == ParseStatus.parsed;
+                            final isSelected = smsState.selectedSms.contains(sms.id);
+                            final isParsed = sms.parseStatus == ParseStatus.parsed;
 
                             return _SmsMessageTile(
                               sms: sms,
@@ -644,9 +629,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                               isParsed: isParsed,
                               onToggle: () {
                                 if (isParsed) {
-                                  ref
-                                      .read(smsParserProvider.notifier)
-                                      .toggleSmsSelection(sms.id);
+                                  ref.read(smsParserProvider.notifier).toggleSmsSelection(sms.id);
                                 }
                               },
                             );
@@ -662,8 +645,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
           ? Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color:
-                    isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -680,8 +662,7 @@ class _SmsParserScreenState extends ConsumerState<SmsParserScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: SpendexColors.primary,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor:
-                          SpendexColors.primary.withValues(alpha: 0.5),
+                      disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -816,15 +797,13 @@ class _SmsMessageTile extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: isParsed
                                   ? SpendexColors.income.withValues(alpha: 0.1)
-                                  : SpendexColors.expense
-                                      .withValues(alpha: 0.1),
+                                  : SpendexColors.expense.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               isParsed ? 'Parsed' : 'Failed',
                               style: SpendexTheme.labelMedium.copyWith(
-                                color:
-                                    isParsed ? SpendexColors.income : SpendexColors.expense,
+                                color: isParsed ? SpendexColors.income : SpendexColors.expense,
                                 fontSize: 10,
                               ),
                             ),
@@ -853,9 +832,7 @@ class _SmsMessageTile extends StatelessWidget {
                       ] else ...[
                         const SizedBox(height: 4),
                         Text(
-                          sms.body.length > 100
-                              ? '${sms.body.substring(0, 100)}...'
-                              : sms.body,
+                          sms.body.length > 100 ? '${sms.body.substring(0, 100)}...' : sms.body,
                           style: SpendexTheme.labelMedium.copyWith(
                             color: isDark
                                 ? SpendexColors.darkTextSecondary

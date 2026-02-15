@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 
 /// Bank email configuration for parsing transaction emails
 class BankEmailConfigModel extends Equatable {
-
   const BankEmailConfigModel({
     required this.bankName,
     required this.bankCode,
@@ -31,7 +30,6 @@ class BankEmailConfigModel extends Equatable {
 
 /// Email parsing rules for extracting transaction details
 class EmailParsingRules extends Equatable {
-
   const EmailParsingRules({
     required this.amountPatterns,
     required this.datePatterns,
@@ -84,10 +82,14 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
-        RegExp(r'amount[:\s]+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
+        RegExp(
+          r'amount[:\s]+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -99,8 +101,10 @@ class BankEmailConfigs {
       ],
       accountPatterns: [
         RegExp(r'a/c\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})', caseSensitive: false),
-        RegExp(r'account\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})',
-            caseSensitive: false,),
+        RegExp(
+          r'account\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})',
+          caseSensitive: false,
+        ),
       ],
       debitKeywords: const ['debited', 'debit', 'withdrawn', 'withdrawal', 'paid'],
       creditKeywords: const ['credited', 'credit', 'received', 'deposit'],
@@ -126,10 +130,14 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
-        RegExp(r'for\s+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
+        RegExp(
+          r'for\s+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -141,8 +149,10 @@ class BankEmailConfigs {
       ],
       accountPatterns: [
         RegExp(r'xx(\d{4})', caseSensitive: false),
-        RegExp(r'account\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})',
-            caseSensitive: false,),
+        RegExp(
+          r'account\s+(?:no[.:]?)?\s*[xX*]*(\d{4,6})',
+          caseSensitive: false,
+        ),
       ],
       debitKeywords: const ['debited', 'debit', 'spent', 'paid'],
       creditKeywords: const ['credited', 'credit', 'received', 'deposit'],
@@ -168,10 +178,14 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
-        RegExp(r'amt[:\s]+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
+        RegExp(
+          r'amt[:\s]+(?:rs|inr|₹)?[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -206,8 +220,10 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -241,8 +257,10 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -275,8 +293,10 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -308,8 +328,10 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),
@@ -341,8 +363,10 @@ class BankEmailConfigs {
     ],
     parsingRules: EmailParsingRules(
       amountPatterns: [
-        RegExp(r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-            caseSensitive: false,),
+        RegExp(
+          r'(?:rs|inr|₹)[\s.]?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false,
+        ),
       ],
       datePatterns: [
         RegExp(r'(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})'),

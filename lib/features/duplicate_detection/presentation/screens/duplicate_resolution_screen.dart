@@ -25,12 +25,10 @@ class DuplicateResolutionScreen extends ConsumerStatefulWidget {
   final List<ParsedTransactionModel> transactions;
 
   @override
-  ConsumerState<DuplicateResolutionScreen> createState() =>
-      _DuplicateResolutionScreenState();
+  ConsumerState<DuplicateResolutionScreen> createState() => _DuplicateResolutionScreenState();
 }
 
-class _DuplicateResolutionScreenState
-    extends ConsumerState<DuplicateResolutionScreen>
+class _DuplicateResolutionScreenState extends ConsumerState<DuplicateResolutionScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final Map<String, bool> _expandedCards = {};
@@ -93,9 +91,8 @@ class _DuplicateResolutionScreenState
         ],
       ),
       body: _buildBody(state, colorScheme),
-      bottomNavigationBar: state.result != null && state.hasDuplicates
-          ? _buildBottomBar(state, colorScheme)
-          : null,
+      bottomNavigationBar:
+          state.result != null && state.hasDuplicates ? _buildBottomBar(state, colorScheme) : null,
     );
   }
 
@@ -136,8 +133,7 @@ class _DuplicateResolutionScreenState
       return EmptyStateWidget(
         icon: Icons.check_circle_outline,
         title: 'No Duplicates Found',
-        subtitle:
-            'All ${state.result!.totalChecked} transactions are unique and ready to import.',
+        subtitle: 'All ${state.result!.totalChecked} transactions are unique and ready to import.',
         iconColor: SpendexColors.primary,
         actionLabel: 'Continue Import',
         actionIcon: Icons.arrow_forward,
@@ -167,8 +163,7 @@ class _DuplicateResolutionScreenState
                 text: 'High (${state.result!.highConfidenceDuplicates.length})',
               ),
               Tab(
-                text:
-                    'Medium (${state.result!.mediumConfidenceDuplicates.length})',
+                text: 'Medium (${state.result!.mediumConfidenceDuplicates.length})',
               ),
               Tab(
                 text: 'Low (${state.result!.lowConfidenceDuplicates.length})',
@@ -274,9 +269,7 @@ class _DuplicateResolutionScreenState
         return DuplicateMatchCard(
           match: match.copyWith(resolution: resolution),
           onResolutionChanged: (action) {
-            ref
-                .read(duplicateDetectionProvider.notifier)
-                .setResolution(match.id, action);
+            ref.read(duplicateDetectionProvider.notifier).setResolution(match.id, action);
           },
           isExpanded: _expandedCards[match.id] ?? false,
           onExpandToggle: () {
@@ -322,16 +315,13 @@ class _DuplicateResolutionScreenState
             const SizedBox(width: SpendexTheme.spacingMd),
             Expanded(
               child: FilledButton(
-                onPressed: state.allResolved
-                    ? _confirmImport
-                    : null,
+                onPressed: state.allResolved ? _confirmImport : null,
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     vertical: SpendexTheme.spacingLg,
                   ),
                   backgroundColor: SpendexColors.primary,
-                  disabledBackgroundColor:
-                      colorScheme.surfaceContainerHighest,
+                  disabledBackgroundColor: colorScheme.surfaceContainerHighest,
                 ),
                 child: state.isResolving
                     ? const SizedBox(
@@ -365,9 +355,7 @@ class _DuplicateResolutionScreenState
         );
 
         if (selectedAction != null) {
-          ref
-              .read(duplicateDetectionProvider.notifier)
-              .applyToAll(selectedAction);
+          ref.read(duplicateDetectionProvider.notifier).applyToAll(selectedAction);
         }
         break;
 
@@ -380,14 +368,14 @@ class _DuplicateResolutionScreenState
   Future<void> _confirmImport() async {
     final state = ref.read(duplicateDetectionProvider);
 
-    final success = await ref
-        .read(duplicateDetectionProvider.notifier)
-        .submitResolutions(
+    final success = await ref.read(duplicateDetectionProvider.notifier).submitResolutions(
           importId: widget.importId,
           uniqueTransactions: state.result!.uniqueTransactions,
         );
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -69,9 +69,7 @@ class TransactionPreviewTile extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: showCheckbox
-              ? () => onSelectionChanged(!isSelected)
-              : null,
+          onTap: showCheckbox ? () => onSelectionChanged(!isSelected) : null,
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -115,8 +113,10 @@ class TransactionPreviewTile extends StatelessWidget {
                     children: [
                       // Merchant/Description
                       Text(
-                        transaction.merchant ?? (
-                            transaction.description.isNotEmpty ? transaction.description : 'Transaction'),
+                        transaction.merchant ??
+                            (transaction.description.isNotEmpty
+                                ? transaction.description
+                                : 'Transaction'),
                         style: SpendexTheme.titleMedium.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
@@ -175,8 +175,8 @@ class TransactionPreviewTile extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: _getConfidenceColor(transaction.confidence)
-                                .withValues(alpha: 0.1),
+                            color:
+                                _getConfidenceColor(transaction.confidence).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -185,8 +185,7 @@ class TransactionPreviewTile extends StatelessWidget {
                               Icon(
                                 Iconsax.info_circle,
                                 size: 12,
-                                color:
-                                    _getConfidenceColor(transaction.confidence),
+                                color: _getConfidenceColor(transaction.confidence),
                               ),
                               const SizedBox(width: 4),
                               Text(
@@ -227,8 +226,7 @@ class TransactionPreviewTile extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color:
-                                SpendexColors.primary.withValues(alpha: 0.1),
+                            color: SpendexColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(

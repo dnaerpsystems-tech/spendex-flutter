@@ -7,9 +7,9 @@ import '../providers/notifications_provider.dart';
 /// Notification badge widget showing unread count
 class NotificationBadge extends ConsumerWidget {
   const NotificationBadge({
-    super.key,
     required this.child,
-    this.offset = const Offset(0, 0),
+    super.key,
+    this.offset = Offset.zero,
     this.showZero = false,
   });
 
@@ -46,7 +46,7 @@ class NotificationBadge extends ConsumerWidget {
               borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
               boxShadow: [
                 BoxShadow(
-                  color: SpendexColors.expense.withOpacity(0.3),
+                  color: SpendexColors.expense.withValues(alpha: 0.3),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -94,10 +94,8 @@ class NotificationIconButton extends ConsumerWidget {
           onPressed: onPressed,
           icon: Icon(
             hasUnread ? Iconsax.notification5 : Iconsax.notification,
-            color: color ??
-                (isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary),
+            color:
+                color ?? (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
           ),
           tooltip: 'Notifications',
         ),
@@ -118,9 +116,7 @@ class NotificationIconButton extends ConsumerWidget {
                 color: SpendexColors.expense,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                 border: Border.all(
-                  color: isDark
-                      ? SpendexColors.darkSurface
-                      : SpendexColors.lightSurface,
+                  color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
                   width: 1.5,
                 ),
               ),
@@ -171,7 +167,7 @@ class NotificationDot extends ConsumerWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: (color ?? SpendexColors.expense).withOpacity(0.4),
+            color: (color ?? SpendexColors.expense).withValues(alpha: 0.4),
             blurRadius: 4,
             spreadRadius: 1,
           ),
@@ -193,12 +189,10 @@ class AnimatedNotificationDot extends ConsumerStatefulWidget {
   final Color? color;
 
   @override
-  ConsumerState<AnimatedNotificationDot> createState() =>
-      _AnimatedNotificationDotState();
+  ConsumerState<AnimatedNotificationDot> createState() => _AnimatedNotificationDotState();
 }
 
-class _AnimatedNotificationDotState
-    extends ConsumerState<AnimatedNotificationDot>
+class _AnimatedNotificationDotState extends ConsumerState<AnimatedNotificationDot>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -210,7 +204,7 @@ class _AnimatedNotificationDotState
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 1.0, end: 1.5).animate(
+    _animation = Tween<double>(begin: 1, end: 1.5).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Curves.easeInOut,
@@ -240,8 +234,7 @@ class _AnimatedNotificationDotState
           width: widget.size * _animation.value,
           height: widget.size * _animation.value,
           decoration: BoxDecoration(
-            color: (widget.color ?? SpendexColors.expense)
-                .withOpacity(2 - _animation.value),
+            color: (widget.color ?? SpendexColors.expense).withValues(alpha: 2 - _animation.value),
             shape: BoxShape.circle,
           ),
           child: Center(

@@ -40,9 +40,7 @@ class ImportMethodCard extends StatelessWidget {
               color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             child: Row(
@@ -92,9 +90,8 @@ class ImportMethodCard extends StatelessWidget {
                 // Arrow icon
                 Icon(
                   Iconsax.arrow_right_3,
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   size: 20,
                 ),
               ],

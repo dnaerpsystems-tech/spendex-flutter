@@ -22,12 +22,10 @@ class AccountAggregatorScreen extends ConsumerStatefulWidget {
   const AccountAggregatorScreen({super.key});
 
   @override
-  ConsumerState<AccountAggregatorScreen> createState() =>
-      _AccountAggregatorScreenState();
+  ConsumerState<AccountAggregatorScreen> createState() => _AccountAggregatorScreenState();
 }
 
-class _AccountAggregatorScreenState
-    extends ConsumerState<AccountAggregatorScreen> {
+class _AccountAggregatorScreenState extends ConsumerState<AccountAggregatorScreen> {
   @override
   void initState() {
     super.initState();
@@ -99,10 +97,11 @@ class _AccountAggregatorScreenState
       return;
     }
 
-    final success =
-        await ref.read(accountAggregatorProvider.notifier).initiateConsent();
+    final success = await ref.read(accountAggregatorProvider.notifier).initiateConsent();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -138,17 +137,15 @@ class _AccountAggregatorScreenState
       return;
     }
 
-    final success = await ref
-        .read(accountAggregatorProvider.notifier)
-        .fetchAccountData(consent.consentId);
+    final success =
+        await ref.read(accountAggregatorProvider.notifier).fetchAccountData(consent.consentId);
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
-      final txnCount = ref
-          .read(accountAggregatorProvider)
-          .fetchedTransactions
-          .length;
+      final txnCount = ref.read(accountAggregatorProvider).fetchedTransactions.length;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Fetched $txnCount transaction${txnCount != 1 ? 's' : ''}'),
@@ -171,7 +168,9 @@ class _AccountAggregatorScreenState
   Future<void> _revokeConsent() async {
     final consent = ref.read(accountAggregatorProvider).consent;
 
-    if (consent == null) return;
+    if (consent == null) {
+      return;
+    }
 
     // Show confirmation dialog
     final confirmed = await showDialog<bool>(
@@ -197,13 +196,16 @@ class _AccountAggregatorScreenState
       ),
     );
 
-    if (confirmed != true) return;
+    if (confirmed != true) {
+      return;
+    }
 
-    final success = await ref
-        .read(accountAggregatorProvider.notifier)
-        .revokeConsent(consent.consentId);
+    final success =
+        await ref.read(accountAggregatorProvider.notifier).revokeConsent(consent.consentId);
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -244,16 +246,17 @@ class _AccountAggregatorScreenState
 
   Future<void> _performImport() async {
     final state = ref.read(accountAggregatorProvider);
-    final selectedTransactions = state.fetchedTransactions
-        .where((t) => state.selectedTransactions.contains(t.id))
-        .toList();
+    final selectedTransactions =
+        state.fetchedTransactions.where((t) => state.selectedTransactions.contains(t.id)).toList();
 
     // Step 1: Check for duplicates
     await ref.read(duplicateDetectionProvider.notifier).detectDuplicates(
           transactions: selectedTransactions,
         );
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final duplicateState = ref.read(duplicateDetectionProvider);
 
@@ -267,7 +270,9 @@ class _AccountAggregatorScreenState
         },
       );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       // If user resolved duplicates successfully
       if (result ?? false) {
@@ -288,10 +293,11 @@ class _AccountAggregatorScreenState
 
     // Step 3: No duplicates, proceed with direct import
     // Note: You'll need to implement the actual import in account_aggregator_provider
-    final success =
-        await ref.read(accountAggregatorProvider.notifier).importTransactions();
+    final success = await ref.read(accountAggregatorProvider.notifier).importTransactions();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -327,7 +333,9 @@ class _AccountAggregatorScreenState
   }
 
   String _formatDateRange(DateTimeRange? range) {
-    if (range == null) return 'Select date range';
+    if (range == null) {
+      return 'Select date range';
+    }
 
     final formatter = DateFormat('dd MMM yyyy');
     return '${formatter.format(range.start)} - ${formatter.format(range.end)}';
@@ -346,9 +354,7 @@ class _AccountAggregatorScreenState
     // Show fetched transactions if available
     if (aaState.fetchedTransactions.isNotEmpty) {
       return Scaffold(
-        backgroundColor: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         appBar: AppBar(
           title: const Text('Review Transactions'),
           centerTitle: true,
@@ -443,8 +449,7 @@ class _AccountAggregatorScreenState
                 itemCount: aaState.fetchedTransactions.length,
                 itemBuilder: (context, index) {
                   final transaction = aaState.fetchedTransactions[index];
-                  final isSelected =
-                      aaState.selectedTransactions.contains(transaction.id);
+                  final isSelected = aaState.selectedTransactions.contains(transaction.id);
 
                   return TransactionPreviewTile(
                     transaction: transaction,
@@ -481,8 +486,7 @@ class _AccountAggregatorScreenState
                 style: ElevatedButton.styleFrom(
                   backgroundColor: SpendexColors.primary,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor:
-                      SpendexColors.primary.withValues(alpha: 0.5),
+                  disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -512,9 +516,7 @@ class _AccountAggregatorScreenState
 
     // Main consent flow screen
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Account Aggregator'),
         centerTitle: true,
@@ -555,12 +557,11 @@ class _AccountAggregatorScreenState
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: _getConsentStatusColor(aaState.consent!)
-                                .withValues(alpha: 0.1),
+                            color: _getConsentStatusColor(aaState.consent!).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: _getConsentStatusColor(aaState.consent!)
-                                  .withValues(alpha: 0.3),
+                              color:
+                                  _getConsentStatusColor(aaState.consent!).withValues(alpha: 0.3),
                             ),
                           ),
                           child: Column(
@@ -620,9 +621,7 @@ class _AccountAggregatorScreenState
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: isDark
-                                  ? SpendexColors.darkBorder
-                                  : SpendexColors.lightBorder,
+                              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -638,8 +637,7 @@ class _AccountAggregatorScreenState
                                 child: Text(
                                   _formatDateRange(aaState.dateRange),
                                   style: SpendexTheme.bodyMedium.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                               ),
@@ -668,12 +666,10 @@ class _AccountAggregatorScreenState
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: aaState.linkedAccounts.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 8),
+                        separatorBuilder: (context, index) => const SizedBox(height: 8),
                         itemBuilder: (context, index) {
                           final accountId = aaState.linkedAccounts[index];
-                          final isSelected =
-                              aaState.selectedAccounts.contains(accountId);
+                          final isSelected = aaState.selectedAccounts.contains(accountId);
 
                           return _AccountTile(
                             accountId: accountId,
@@ -694,14 +690,11 @@ class _AccountAggregatorScreenState
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton(
-                            onPressed: aaState.isInitiatingConsent
-                                ? null
-                                : _initiateConsent,
+                            onPressed: aaState.isInitiatingConsent ? null : _initiateConsent,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: SpendexColors.primary,
                               foregroundColor: Colors.white,
-                              disabledBackgroundColor:
-                                  SpendexColors.primary.withValues(alpha: 0.5),
+                              disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -715,8 +708,7 @@ class _AccountAggregatorScreenState
                                         height: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
+                                          valueColor: AlwaysStoppedAnimation<Color>(
                                             Colors.white,
                                           ),
                                         ),
@@ -724,8 +716,7 @@ class _AccountAggregatorScreenState
                                       const SizedBox(width: 12),
                                       Text(
                                         'Initiating Consent...',
-                                        style:
-                                            SpendexTheme.titleMedium.copyWith(
+                                        style: SpendexTheme.titleMedium.copyWith(
                                           color: Colors.white,
                                         ),
                                       ),
@@ -741,8 +732,7 @@ class _AccountAggregatorScreenState
                                       const SizedBox(width: 12),
                                       Text(
                                         'Initiate Consent',
-                                        style:
-                                            SpendexTheme.titleMedium.copyWith(
+                                        style: SpendexTheme.titleMedium.copyWith(
                                           color: Colors.white,
                                         ),
                                       ),
@@ -755,14 +745,11 @@ class _AccountAggregatorScreenState
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton(
-                            onPressed: aaState.isFetchingData
-                                ? null
-                                : _fetchAccountData,
+                            onPressed: aaState.isFetchingData ? null : _fetchAccountData,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: SpendexColors.primary,
                               foregroundColor: Colors.white,
-                              disabledBackgroundColor:
-                                  SpendexColors.primary.withValues(alpha: 0.5),
+                              disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -776,8 +763,7 @@ class _AccountAggregatorScreenState
                                         height: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
+                                          valueColor: AlwaysStoppedAnimation<Color>(
                                             Colors.white,
                                           ),
                                         ),
@@ -785,8 +771,7 @@ class _AccountAggregatorScreenState
                                       const SizedBox(width: 12),
                                       Text(
                                         'Fetching Data...',
-                                        style:
-                                            SpendexTheme.titleMedium.copyWith(
+                                        style: SpendexTheme.titleMedium.copyWith(
                                           color: Colors.white,
                                         ),
                                       ),
@@ -802,8 +787,7 @@ class _AccountAggregatorScreenState
                                       const SizedBox(width: 12),
                                       Text(
                                         'Fetch Account Data',
-                                        style:
-                                            SpendexTheme.titleMedium.copyWith(
+                                        style: SpendexTheme.titleMedium.copyWith(
                                           color: Colors.white,
                                         ),
                                       ),
@@ -816,9 +800,7 @@ class _AccountAggregatorScreenState
                           width: double.infinity,
                           height: 56,
                           child: OutlinedButton(
-                            onPressed: aaState.isRevokingConsent
-                                ? null
-                                : _revokeConsent,
+                            onPressed: aaState.isRevokingConsent ? null : _revokeConsent,
                             style: OutlinedButton.styleFrom(
                               foregroundColor: SpendexColors.expense,
                               side: const BorderSide(
@@ -910,9 +892,7 @@ class _AccountTile extends StatelessWidget {
             border: Border.all(
               color: isSelected
                   ? SpendexColors.primary
-                  : (isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder),
+                  : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
               width: isSelected ? 2 : 1,
             ),
           ),

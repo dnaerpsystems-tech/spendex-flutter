@@ -28,9 +28,7 @@ abstract class AccountAggregatorRemoteDataSource {
   );
 }
 
-class AccountAggregatorRemoteDataSourceImpl
-    implements AccountAggregatorRemoteDataSource {
-
+class AccountAggregatorRemoteDataSourceImpl implements AccountAggregatorRemoteDataSource {
   AccountAggregatorRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -74,9 +72,11 @@ class AccountAggregatorRemoteDataSourceImpl
       fromJson: (json) {
         final list = json! as List<dynamic>;
         return list
-            .map((e) => ParsedTransactionModel.fromJson(
-                  e as Map<String, dynamic>,
-                ),)
+            .map(
+              (e) => ParsedTransactionModel.fromJson(
+                e as Map<String, dynamic>,
+              ),
+            )
             .toList();
       },
     );
@@ -87,7 +87,9 @@ class AccountAggregatorRemoteDataSourceImpl
     return _apiClient.post<bool>(
       '/aa/consent/$consentId/revoke',
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['success'] as bool? ?? false;
         }

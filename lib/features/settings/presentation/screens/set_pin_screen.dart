@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,8 +29,7 @@ class SetPinScreen extends ConsumerStatefulWidget {
   ConsumerState<SetPinScreen> createState() => _SetPinScreenState();
 }
 
-class _SetPinScreenState extends ConsumerState<SetPinScreen>
-    with SingleTickerProviderStateMixin {
+class _SetPinScreenState extends ConsumerState<SetPinScreen> with SingleTickerProviderStateMixin {
   // Get PinService from DI
   late final PinService _pinService;
 
@@ -198,7 +199,7 @@ class _SetPinScreenState extends ConsumerState<SetPinScreen>
       _confirmPin = '';
 
       // Refresh the PIN auth state provider
-      ref.read(pinAuthStateProvider.notifier).refresh();
+      unawaited(ref.read(pinAuthStateProvider.notifier).refresh());
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -344,9 +345,7 @@ class _StepIndicator extends StatelessWidget {
               Expanded(
                 child: LinearProgressIndicator(
                   value: (currentStep + 1) / totalSteps,
-                  backgroundColor: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  backgroundColor: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   valueColor: const AlwaysStoppedAnimation<Color>(
                     SpendexColors.primary,
                   ),
@@ -360,9 +359,7 @@ class _StepIndicator extends StatelessWidget {
           Text(
             'Step ${currentStep + 1} of $totalSteps',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ],
@@ -402,8 +399,7 @@ class _PinStepView extends StatefulWidget {
   State<_PinStepView> createState() => _PinStepViewState();
 }
 
-class _PinStepViewState extends State<_PinStepView>
-    with SingleTickerProviderStateMixin {
+class _PinStepViewState extends State<_PinStepView> with SingleTickerProviderStateMixin {
   late AnimationController _iconController;
   late Animation<double> _iconAnimation;
   final GlobalKey<State<StatefulWidget>> _pinInputKey = GlobalKey();
@@ -487,9 +483,7 @@ class _PinStepViewState extends State<_PinStepView>
             widget.title,
             style: SpendexTheme.headlineMedium.copyWith(
               fontSize: 24,
-              color: widget.isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: widget.isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -537,7 +531,6 @@ class _PinStepViewState extends State<_PinStepView>
               key: _pinInputKey,
               length: widget.pinLength,
               onCompleted: widget.onCompleted,
-              autoFocus: true,
             ),
 
           // Error message
@@ -555,7 +548,7 @@ class _PinStepViewState extends State<_PinStepView>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.warning_2,
                     color: SpendexColors.expense,
                     size: 20,
@@ -589,14 +582,10 @@ class _PinStepViewState extends State<_PinStepView>
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
       decoration: BoxDecoration(
-        color: widget.isDark
-            ? SpendexColors.darkSurface
-            : SpendexColors.lightSurface,
+        color: widget.isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
         border: Border.all(
-          color: widget.isDark
-              ? SpendexColors.darkBorder
-              : SpendexColors.lightBorder,
+          color: widget.isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
         ),
       ),
       child: Column(
@@ -605,9 +594,7 @@ class _PinStepViewState extends State<_PinStepView>
           Text(
             'PIN Requirements:',
             style: SpendexTheme.titleMedium.copyWith(
-              color: widget.isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: widget.isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: SpendexTheme.spacingSm),
@@ -628,9 +615,8 @@ class _PinStepViewState extends State<_PinStepView>
           Icon(
             Iconsax.tick_circle,
             size: 16,
-            color: widget.isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color:
+                widget.isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
           const SizedBox(width: SpendexTheme.spacingSm),
           Text(

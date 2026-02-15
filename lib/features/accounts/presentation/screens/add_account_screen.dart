@@ -14,7 +14,6 @@ import '../widgets/account_type_selector.dart';
 /// Add/Edit Account Screen
 /// Full form with validation for creating or editing accounts
 class AddAccountScreen extends ConsumerStatefulWidget {
-
   const AddAccountScreen({
     super.key,
     this.accountId,
@@ -71,9 +70,8 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
       _isLoadingAccount = true;
     });
 
-    final account = await ref
-        .read(accountsStateProvider.notifier)
-        .getAccountById(widget.accountId!);
+    final account =
+        await ref.read(accountsStateProvider.notifier).getAccountById(widget.accountId!);
 
     if (account != null && mounted) {
       setState(() {
@@ -168,8 +166,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
 
     // Parse credit limit (convert rupees to paise)
     int? creditLimitInPaise;
-    if (_selectedType == AccountType.creditCard &&
-        _creditLimitController.text.isNotEmpty) {
+    if (_selectedType == AccountType.creditCard && _creditLimitController.text.isNotEmpty) {
       final creditLimit = double.tryParse(_creditLimitController.text);
       if (creditLimit != null) {
         creditLimitInPaise = (creditLimit * 100).round();
@@ -180,12 +177,9 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
       name: _nameController.text.trim(),
       type: _selectedType!,
       balance: balanceInPaise,
-      bankName: _bankNameController.text.isNotEmpty
-          ? _bankNameController.text.trim()
-          : null,
-      accountNumber: _accountNumberController.text.isNotEmpty
-          ? _accountNumberController.text.trim()
-          : null,
+      bankName: _bankNameController.text.isNotEmpty ? _bankNameController.text.trim() : null,
+      accountNumber:
+          _accountNumberController.text.isNotEmpty ? _accountNumberController.text.trim() : null,
       creditLimit: creditLimitInPaise,
       isDefault: _isDefault,
     );
@@ -193,13 +187,10 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
     AccountModel? result;
 
     if (isEditing) {
-      result = await ref
-          .read(accountsStateProvider.notifier)
-          .updateAccount(widget.accountId!, request);
+      result =
+          await ref.read(accountsStateProvider.notifier).updateAccount(widget.accountId!, request);
     } else {
-      result = await ref
-          .read(accountsStateProvider.notifier)
-          .createAccount(request);
+      result = await ref.read(accountsStateProvider.notifier).createAccount(request);
     }
 
     if (result != null && mounted) {
@@ -250,9 +241,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         appBar: AppBar(
           title: Text(isEditing ? 'Edit Account' : 'Add Account'),
           centerTitle: true,
@@ -474,14 +463,10 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkCard
-                              : SpendexColors.lightCard,
+                          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: isDark
-                                ? SpendexColors.darkBorder
-                                : SpendexColors.lightBorder,
+                            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                           ),
                         ),
                         child: Row(
@@ -583,9 +568,7 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
         Text(
           label,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -626,12 +609,9 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
       name: _nameController.text.isEmpty ? 'Account Name' : _nameController.text,
       type: _selectedType ?? AccountType.savings,
       balance: balanceInPaise ?? 0,
-      bankName: _bankNameController.text.isNotEmpty
-          ? _bankNameController.text
-          : null,
-      accountNumber: _accountNumberController.text.isNotEmpty
-          ? _accountNumberController.text
-          : null,
+      bankName: _bankNameController.text.isNotEmpty ? _bankNameController.text : null,
+      accountNumber:
+          _accountNumberController.text.isNotEmpty ? _accountNumberController.text : null,
       creditLimit: creditLimitInPaise,
       isDefault: _isDefault,
       createdAt: DateTime.now(),

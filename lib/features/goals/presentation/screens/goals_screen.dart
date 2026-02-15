@@ -41,9 +41,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
     final error = ref.watch(goalsErrorProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Goals'),
         centerTitle: true,
@@ -70,7 +68,6 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
                   child: GoalsSummaryCard(summary: summary),
                 ),
               ),
-
             if (isLoading && summary == null)
               SliverToBoxAdapter(
                 child: Padding(
@@ -78,9 +75,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
                   child: _SummaryCardSkeleton(isDark: isDark),
                 ),
               ),
-
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
-
             if (isLoading && goals.isEmpty)
               _buildLoadingSkeleton(isDark)
             else if (error != null && goals.isEmpty)
@@ -89,7 +84,6 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
               _buildEmptyState()
             else
               _buildGoalsList(goals, isDark),
-
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
@@ -238,11 +232,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 60,
                       height: 12,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -250,11 +241,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 40,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],
@@ -268,11 +256,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 60,
                       height: 12,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -280,11 +265,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 40,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],
@@ -303,11 +285,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 70,
                       height: 12,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -315,11 +294,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 80,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],
@@ -333,11 +309,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 70,
                       height: 12,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -345,11 +318,8 @@ class _SummaryCardSkeleton extends StatelessWidget {
                       width: 80,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],
@@ -362,7 +332,6 @@ class _SummaryCardSkeleton extends StatelessWidget {
     );
   }
 }
-
 
 class _GoalCardSkeleton extends StatelessWidget {
   const _GoalCardSkeleton({required this.isDark});
@@ -379,8 +348,7 @@ class _GoalCardSkeleton extends StatelessWidget {
           color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
           borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
           border: Border.all(
-            color:
-                isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
           ),
         ),
         child: Row(
@@ -389,9 +357,7 @@ class _GoalCardSkeleton extends StatelessWidget {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 shape: BoxShape.circle,
               ),
             ),
@@ -404,11 +370,8 @@ class _GoalCardSkeleton extends StatelessWidget {
                     width: double.infinity,
                     height: 16,
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? SpendexColors.darkBorder
-                          : SpendexColors.lightBorder,
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusSm),
+                      color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -416,11 +379,8 @@ class _GoalCardSkeleton extends StatelessWidget {
                     width: 120,
                     height: 14,
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? SpendexColors.darkBorder
-                          : SpendexColors.lightBorder,
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusSm),
+                      color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -428,11 +388,8 @@ class _GoalCardSkeleton extends StatelessWidget {
                     width: 100,
                     height: 12,
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? SpendexColors.darkBorder
-                          : SpendexColors.lightBorder,
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusSm),
+                      color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                     ),
                   ),
                 ],

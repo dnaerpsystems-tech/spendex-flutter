@@ -117,7 +117,6 @@ class _DuplicateMatchCardState extends State<DuplicateMatchCard> {
                     ),
                   ],
                 ),
-
                 if (widget.isExpanded) ...[
                   const SizedBox(height: SpendexTheme.spacingMd),
                   _buildMatchReasons(),
@@ -164,9 +163,7 @@ class _DuplicateMatchCardState extends State<DuplicateMatchCard> {
                     ),
                     const SizedBox(width: 4),
                     Icon(
-                      widget.isExpanded
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
+                      widget.isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                       size: 16,
                       color: SpendexColors.primary,
                     ),
@@ -274,7 +271,9 @@ class _DuplicateMatchCardState extends State<DuplicateMatchCard> {
     required double amount,
     required DateTime date,
     required String description,
-    required bool isImported, required ColorScheme colorScheme, String? merchant,
+    required bool isImported,
+    required ColorScheme colorScheme,
+    String? merchant,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

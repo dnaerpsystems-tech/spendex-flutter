@@ -5,7 +5,6 @@ import '../../../categories/data/models/category_model.dart';
 
 /// Transaction Model
 class TransactionModel extends Equatable {
-
   const TransactionModel({
     required this.id,
     required this.type,
@@ -41,10 +40,7 @@ class TransactionModel extends Equatable {
       categoryId: json['categoryId'] as String?,
       toAccountId: json['toAccountId'] as String?,
       date: DateTime.parse(json['date'] as String),
-      tags: (json['tags'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+      tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
       payee: json['payee'] as String?,
       receiptUrl: json['receiptUrl'] as String?,
       isRecurring: json['isRecurring'] as bool? ?? false,
@@ -176,7 +172,6 @@ class TransactionModel extends Equatable {
 
 /// Transaction Stats
 class TransactionStats extends Equatable {
-
   const TransactionStats({
     required this.totalIncome,
     required this.totalExpense,
@@ -216,7 +211,6 @@ class TransactionStats extends Equatable {
 
 /// Daily Transaction Total
 class DailyTotal extends Equatable {
-
   const DailyTotal({
     required this.date,
     required this.income,
@@ -247,7 +241,6 @@ class DailyTotal extends Equatable {
 
 /// Create Transaction Request
 class CreateTransactionRequest {
-
   const CreateTransactionRequest({
     required this.type,
     required this.amount,
@@ -289,7 +282,6 @@ class CreateTransactionRequest {
 
 /// Transaction Filter
 class TransactionFilter {
-
   const TransactionFilter({
     this.type,
     this.accountId,

@@ -56,9 +56,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen>
     final categoriesState = ref.watch(categoriesStateProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Categories'),
         centerTitle: true,
@@ -134,9 +132,8 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen>
         indicatorPadding: const EdgeInsets.all(4),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary,
+        unselectedLabelColor:
+            isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         labelStyle: SpendexTheme.titleMedium,
         unselectedLabelStyle: SpendexTheme.titleMedium,
         tabs: const [
@@ -318,18 +315,15 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen>
               Text(
                 title,
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 subtitle,
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

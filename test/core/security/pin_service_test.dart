@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:spendex/core/security/pin_service.dart';
 
@@ -63,11 +63,11 @@ void main() {
         verify(() => mockStorage.write(
           key: 'spendex_pin_hash',
           value: any(named: 'value'),
-        )).called(1);
+        ),).called(1);
         verify(() => mockStorage.write(
           key: 'spendex_pin_salt',
           value: any(named: 'value'),
-        )).called(1);
+        ),).called(1);
       });
 
       test('throws ArgumentError for PIN shorter than 4 digits', () async {
@@ -127,7 +127,6 @@ void main() {
     // =========================================================================
     group('verifyPin()', () {
       const testHash = 'test_hash_value';
-      const testSalt = 'test_salt_value';
 
       test('returns false when locked out', () async {
         final futureTime = DateTime.now().add(const Duration(minutes: 15));
@@ -181,7 +180,7 @@ void main() {
         verify(() => mockStorage.write(
           key: 'spendex_pin_failed_attempts',
           value: '1',
-        )).called(1);
+        ),).called(1);
       });
 
       test('increments existing counter', () async {
@@ -195,7 +194,7 @@ void main() {
         verify(() => mockStorage.write(
           key: 'spendex_pin_failed_attempts',
           value: '4',
-        )).called(1);
+        ),).called(1);
       });
 
       test('triggers lockout after 5 failed attempts', () async {
@@ -209,7 +208,7 @@ void main() {
         verify(() => mockStorage.write(
           key: 'spendex_pin_lock_until',
           value: any(named: 'value'),
-        )).called(1);
+        ),).called(1);
       });
     });
 

@@ -13,7 +13,6 @@ abstract class IndiaUtilsRemoteDataSource {
 }
 
 class IndiaUtilsRemoteDataSourceImpl implements IndiaUtilsRemoteDataSource {
-
   IndiaUtilsRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -33,7 +32,9 @@ class IndiaUtilsRemoteDataSourceImpl implements IndiaUtilsRemoteDataSource {
       '/utils/upi/validate',
       data: {'upiId': upiId},
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['valid'] as bool? ?? false;
         }
@@ -48,15 +49,13 @@ class IndiaUtilsRemoteDataSourceImpl implements IndiaUtilsRemoteDataSource {
       '/utils/payment-methods',
       fromJson: (json) {
         if (json is List<dynamic>) {
-          return json
-              .map((e) {
-                final name = e.toString();
-                return PaymentMethod.values.firstWhere(
-                  (method) => method.name == name,
-                  orElse: () => PaymentMethod.cash,
-                );
-              })
-              .toList();
+          return json.map((e) {
+            final name = e.toString();
+            return PaymentMethod.values.firstWhere(
+              (method) => method.name == name,
+              orElse: () => PaymentMethod.cash,
+            );
+          }).toList();
         }
         return PaymentMethod.values;
       },

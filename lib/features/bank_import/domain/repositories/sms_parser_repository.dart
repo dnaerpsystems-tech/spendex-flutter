@@ -24,5 +24,5 @@ abstract class SmsParserRepository {
 
   Future<Either<Failure, List<BankConfigModel>>> getBankConfigs();
 
-  Future<Either<Failure, bool>> toggleSmsTracking(bool enabled);
+  Future<Either<Failure, bool>> toggleSmsTracking({required bool enabled});
 }

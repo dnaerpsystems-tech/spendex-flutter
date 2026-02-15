@@ -7,7 +7,8 @@ import '../../data/models/monthly_stats_model.dart';
 /// Bar chart showing income vs expense comparison
 class IncomeExpenseBarChart extends StatelessWidget {
   const IncomeExpenseBarChart({
-    required this.stats, super.key,
+    required this.stats,
+    super.key,
     this.height = 200,
   });
 
@@ -17,12 +18,18 @@ class IncomeExpenseBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    if (stats.isEmpty) return const SizedBox.shrink();
+    if (stats.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     double maxY = 0;
     for (final s in stats) {
-      if (s.incomeInRupees > maxY) maxY = s.incomeInRupees;
-      if (s.expenseInRupees > maxY) maxY = s.expenseInRupees;
+      if (s.incomeInRupees > maxY) {
+        maxY = s.incomeInRupees;
+      }
+      if (s.expenseInRupees > maxY) {
+        maxY = s.expenseInRupees;
+      }
     }
     maxY *= 1.2;
 
@@ -86,7 +93,9 @@ class IncomeExpenseBarChart extends StatelessWidget {
           showTitles: true,
           getTitlesWidget: (v, m) {
             final i = v.toInt();
-            if (i < 0 || i >= stats.length) return const SizedBox.shrink();
+            if (i < 0 || i >= stats.length) {
+              return const SizedBox.shrink();
+            }
             return Text(stats[i].shortLabel, style: SpendexTheme.labelSmall);
           },
         ),

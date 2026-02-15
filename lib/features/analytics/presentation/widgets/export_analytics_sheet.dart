@@ -11,8 +11,7 @@ class ExportAnalyticsSheet extends ConsumerStatefulWidget {
   const ExportAnalyticsSheet({super.key});
 
   @override
-  ConsumerState<ExportAnalyticsSheet> createState() =>
-      _ExportAnalyticsSheetState();
+  ConsumerState<ExportAnalyticsSheet> createState() => _ExportAnalyticsSheetState();
 }
 
 class _ExportAnalyticsSheetState extends ConsumerState<ExportAnalyticsSheet> {
@@ -24,7 +23,7 @@ class _ExportAnalyticsSheetState extends ConsumerState<ExportAnalyticsSheet> {
     final state = ref.watch(analyticsStateProvider);
 
     ref.listen<AnalyticsState>(analyticsStateProvider, (previous, next) {
-      if (previous?.isExporting == true && !next.isExporting) {
+      if ((previous?.isExporting ?? false) && !next.isExporting) {
         if (next.exportUrl != null) {
           _shareExport(next.exportUrl!);
         } else if (next.error != null) {
@@ -36,7 +35,7 @@ class _ExportAnalyticsSheetState extends ConsumerState<ExportAnalyticsSheet> {
       }
     });
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: const BorderRadius.only(
@@ -53,16 +52,13 @@ class _ExportAnalyticsSheetState extends ConsumerState<ExportAnalyticsSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             const SizedBox(height: SpendexTheme.spacingLg),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
+              padding: const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
               child: Row(
                 children: [
                   const Icon(
@@ -124,18 +120,14 @@ class _ExportAnalyticsSheetState extends ConsumerState<ExportAnalyticsSheet> {
             ),
             const SizedBox(height: SpendexTheme.spacingLg),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
+              padding: const EdgeInsets.symmetric(horizontal: SpendexTheme.spacingLg),
               child: Container(
                 padding: const EdgeInsets.all(SpendexTheme.spacingMd),
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? SpendexColors.darkBackground
-                      : SpendexColors.lightBackground,
+                  color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                   border: Border.all(
-                    color:
-                        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   ),
                 ),
                 child: Row(
@@ -170,7 +162,9 @@ class _ExportAnalyticsSheetState extends ConsumerState<ExportAnalyticsSheet> {
   }
 
   void _startExport(String format) {
-    if (_exportingFormat != null) return;
+    if (_exportingFormat != null) {
+      return;
+    }
 
     setState(() {
       _exportingFormat = format;
@@ -204,7 +198,9 @@ class _ExportAnalyticsSheetState extends ConsumerState<ExportAnalyticsSheet> {
   }
 
   void _showError(String message) {
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -283,26 +279,20 @@ class _ExportOption extends StatelessWidget {
       title: Text(
         title,
         style: SpendexTheme.titleMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextPrimary
-              : SpendexColors.lightTextPrimary,
+          color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         ),
       ),
       subtitle: Text(
         subtitle,
         style: SpendexTheme.bodySmall.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         ),
       ),
       trailing: isExporting
           ? null
           : Icon(
               Iconsax.arrow_right_3,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               size: 20,
             ),
       onTap: isExporting ? null : onTap,

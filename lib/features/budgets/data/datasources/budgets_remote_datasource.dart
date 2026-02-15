@@ -28,7 +28,6 @@ abstract class BudgetsRemoteDataSource {
 
 /// Budgets Remote Data Source Implementation
 class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
-
   BudgetsRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -41,9 +40,8 @@ class BudgetsRemoteDataSourceImpl implements BudgetsRemoteDataSource {
     return result.fold(
       Left.new,
       (data) {
-        final budgets = data
-            .map((json) => BudgetModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final budgets =
+            data.map((json) => BudgetModel.fromJson(json as Map<String, dynamic>)).toList();
         return Right(budgets);
       },
     );

@@ -69,14 +69,11 @@ class SecurityOptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
     final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     final effectiveIconColor = iconColor ?? SpendexColors.primary;
     final opacity = isEnabled ? 1.0 : 0.5;
@@ -91,9 +88,7 @@ class SecurityOptionCard extends StatelessWidget {
       color: cardColor,
       child: InkWell(
         onTap: isEnabled
-            ? (showSwitch && onToggle != null
-                ? () => onToggle!(!isEnabled)
-                : onTap)
+            ? (showSwitch && onToggle != null ? () => onToggle!(!isEnabled) : onTap)
             : null,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
         child: Padding(

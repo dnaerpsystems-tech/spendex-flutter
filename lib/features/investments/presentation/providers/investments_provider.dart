@@ -8,7 +8,6 @@ import '../../domain/repositories/investments_repository.dart';
 
 /// Investments State
 class InvestmentsState extends Equatable {
-
   const InvestmentsState({
     this.investments = const [],
     this.summary,
@@ -71,7 +70,8 @@ class InvestmentsState extends Equatable {
     return InvestmentsState(
       investments: investments ?? this.investments,
       summary: clearSummary ? null : (summary ?? this.summary),
-      selectedInvestment: clearSelectedInvestment ? null : (selectedInvestment ?? this.selectedInvestment),
+      selectedInvestment:
+          clearSelectedInvestment ? null : (selectedInvestment ?? this.selectedInvestment),
       taxSavings: clearTaxSavings ? null : (taxSavings ?? this.taxSavings),
       isLoading: isLoading ?? this.isLoading,
       isSummaryLoading: isSummaryLoading ?? this.isSummaryLoading,
@@ -131,7 +131,6 @@ class InvestmentsState extends Equatable {
 
 /// Investments State Notifier
 class InvestmentsNotifier extends StateNotifier<InvestmentsState> {
-
   InvestmentsNotifier(this._repository) : super(const InvestmentsState.initial());
   final InvestmentsRepository _repository;
 

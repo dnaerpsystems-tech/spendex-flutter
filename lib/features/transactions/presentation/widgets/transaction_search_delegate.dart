@@ -61,21 +61,16 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
     return theme.copyWith(
       appBarTheme: AppBarTheme(
-        backgroundColor:
-            isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
-        foregroundColor:
-            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
+        backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
+        foregroundColor: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         elevation: 0,
         iconTheme: IconThemeData(
-          color:
-              isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
+          color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: SpendexTheme.bodyMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
         ),
         border: InputBorder.none,
         focusedBorder: InputBorder.none,
@@ -83,8 +78,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
       ),
       textTheme: theme.textTheme.copyWith(
         titleLarge: SpendexTheme.bodyMedium.copyWith(
-          color:
-              isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
+          color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         ),
       ),
     );
@@ -210,14 +204,12 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
       }
 
       // Search in payee
-      if (transaction.payee != null &&
-          transaction.payee!.toLowerCase().contains(lowerQuery)) {
+      if (transaction.payee != null && transaction.payee!.toLowerCase().contains(lowerQuery)) {
         return true;
       }
 
       // Search in notes
-      if (transaction.notes != null &&
-          transaction.notes!.toLowerCase().contains(lowerQuery)) {
+      if (transaction.notes != null && transaction.notes!.toLowerCase().contains(lowerQuery)) {
         return true;
       }
 
@@ -258,26 +250,20 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
             Icon(
               Iconsax.search_normal,
               size: 64,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             const SizedBox(height: 16),
             Text(
               'Search your transactions',
               style: SpendexTheme.titleMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Search by description, category, payee, or amount',
               style: SpendexTheme.labelMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -296,9 +282,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
             Text(
               'Recent Searches',
               style: SpendexTheme.titleMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             TextButton(
@@ -316,11 +300,13 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
         ),
         const SizedBox(height: 8),
         // History items
-        ...history.map((historyItem) => _buildHistoryItem(
-              context,
-              historyItem,
-              isDark,
-            ),),
+        ...history.map(
+          (historyItem) => _buildHistoryItem(
+            context,
+            historyItem,
+            isDark,
+          ),
+        ),
       ],
     );
   }
@@ -331,25 +317,19 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
       contentPadding: EdgeInsets.zero,
       leading: Icon(
         Iconsax.clock,
-        color: isDark
-            ? SpendexColors.darkTextTertiary
-            : SpendexColors.lightTextTertiary,
+        color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
         size: 20,
       ),
       title: Text(
         historyItem,
         style: SpendexTheme.bodyMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextPrimary
-              : SpendexColors.lightTextPrimary,
+          color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
         ),
       ),
       trailing: IconButton(
         icon: Icon(
           Iconsax.close_circle,
-          color: isDark
-              ? SpendexColors.darkTextTertiary
-              : SpendexColors.lightTextTertiary,
+          color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
           size: 20,
         ),
         onPressed: () {
@@ -365,7 +345,9 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Builds the search results view with transactions grouped by date.
   Widget _buildSearchResults(
-      BuildContext context, List<TransactionModel> results,) {
+    BuildContext context,
+    List<TransactionModel> results,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Group transactions by date
@@ -380,9 +362,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
           child: Text(
             '${results.length} result${results.length == 1 ? '' : 's'} found',
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ),
@@ -404,20 +384,20 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
                     date: date,
                   ),
                   // Transactions for this date
-                  ...dayTransactions.map((transaction) => TransactionCard(
-                        transaction: transaction,
-                        onTap: () {
-                          // Save to history and close with result
-                          if (query.trim().isNotEmpty) {
-                            ref
-                                .read(searchHistoryProvider.notifier)
-                                .addSearch(query.trim());
-                          }
-                          close(context, transaction);
-                        },
-                        showDate: false,
-                        compact: true,
-                      ),),
+                  ...dayTransactions.map(
+                    (transaction) => TransactionCard(
+                      transaction: transaction,
+                      onTap: () {
+                        // Save to history and close with result
+                        if (query.trim().isNotEmpty) {
+                          ref.read(searchHistoryProvider.notifier).addSearch(query.trim());
+                        }
+                        close(context, transaction);
+                      },
+                      showDate: false,
+                      compact: true,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                 ],
               );
@@ -430,7 +410,8 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Groups transactions by date.
   Map<DateTime, List<TransactionModel>> _groupByDate(
-      List<TransactionModel> transactions,) {
+    List<TransactionModel> transactions,
+  ) {
     final grouped = <DateTime, List<TransactionModel>>{};
 
     for (final transaction in transactions) {
@@ -447,8 +428,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
     }
 
     // Sort dates in descending order
-    final sortedKeys = grouped.keys.toList()
-      ..sort((a, b) => b.compareTo(a));
+    final sortedKeys = grouped.keys.toList()..sort((a, b) => b.compareTo(a));
 
     return Map.fromEntries(
       sortedKeys.map((key) => MapEntry(key, grouped[key]!)),
@@ -468,26 +448,20 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
             Icon(
               Iconsax.search_status,
               size: 80,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             const SizedBox(height: 24),
             Text(
               'No transactions found',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               "We couldn't find any transactions matching '$searchQuery'",
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -495,9 +469,7 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
             Text(
               'Try searching for:',
               style: SpendexTheme.labelMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
             ),
             const SizedBox(height: 8),
@@ -520,7 +492,10 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Builds a suggestion chip for the empty state.
   Widget _buildSuggestionChip(
-      BuildContext context, String suggestion, bool isDark,) {
+    BuildContext context,
+    String suggestion,
+    bool isDark,
+  ) {
     return ActionChip(
       label: Text(
         suggestion,
@@ -553,6 +528,9 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
       );
 
       if (!_speechInitialized) {
+        if (!context.mounted) {
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Speech recognition not available on this device'),
@@ -566,6 +544,9 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
     // Check permission
     final hasPermission = await _speech.hasPermission;
     if (!hasPermission) {
+      if (!context.mounted) {
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -578,18 +559,23 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
     }
 
     // Show listening dialog
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => _VoiceSearchDialog(
-        onResult: (recognizedText) {
-          Navigator.pop(dialogContext);
-          if (recognizedText.isNotEmpty) {
-            query = recognizedText;
-            showResults(context);
-          }
-        },
-        speech: _speech,
+    if (!context.mounted) {
+      return;
+    }
+    unawaited(
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => _VoiceSearchDialog(
+          onResult: (recognizedText) {
+            Navigator.pop(dialogContext);
+            if (recognizedText.isNotEmpty) {
+              query = recognizedText;
+              showResults(context);
+            }
+          },
+          speech: _speech,
+        ),
       ),
     );
   }
@@ -683,9 +669,7 @@ class _VoiceSearchDialogState extends State<_VoiceSearchDialog> {
           Text(
             'Voice Search',
             style: SpendexTheme.headlineMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
         ],
@@ -703,26 +687,20 @@ class _VoiceSearchDialogState extends State<_VoiceSearchDialog> {
           Text(
             _isListening ? 'Listening...' : 'Processing...',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBackground
-                  : SpendexColors.lightBackground,
+              color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               _recognizedText.isEmpty ? 'Say something...' : _recognizedText,
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -738,9 +716,7 @@ class _VoiceSearchDialogState extends State<_VoiceSearchDialog> {
           child: Text(
             'Cancel',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
         ),

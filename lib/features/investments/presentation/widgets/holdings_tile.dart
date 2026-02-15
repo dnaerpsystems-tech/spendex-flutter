@@ -41,14 +41,10 @@ class _HoldingsTileState extends State<HoldingsTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     return Card(
       margin: const EdgeInsets.only(bottom: SpendexTheme.spacingMd),
@@ -70,8 +66,7 @@ class _HoldingsTileState extends State<HoldingsTile> {
                     height: 48,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: _getInvestmentTypeColor(widget.investment.type)
-                          .withOpacity(0.1),
+                      color: _getInvestmentTypeColor(widget.investment.type).withValues(alpha: 0.1),
                     ),
                     child: Icon(
                       _getInvestmentTypeIcon(widget.investment.type),
@@ -151,7 +146,7 @@ class _HoldingsTileState extends State<HoldingsTile> {
                           color: (widget.investment.returns >= 0
                                   ? SpendexColors.income
                                   : SpendexColors.expense)
-                              .withOpacity(0.1),
+                              .withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(
                             SpendexTheme.radiusSm,
                           ),
@@ -248,9 +243,7 @@ class _HoldingsTileState extends State<HoldingsTile> {
                 ],
               ),
             ),
-            crossFadeState: _isExpanded
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
+            crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
             duration: const Duration(milliseconds: 200),
           ),
         ],

@@ -1,18 +1,18 @@
-import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:go_router/go_router.dart";
-import "package:iconsax/iconsax.dart";
-import "../../../../app/routes.dart";
-import "../../../../core/services/paywall_service.dart";
-import "../providers/paywall_provider.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import '../../../../app/routes.dart';
+import '../../../../core/services/paywall_service.dart';
+import '../providers/paywall_provider.dart';
 
 /// A banner that shows when a premium feature is being used by free users.
 ///
 /// Displays a subtle upgrade prompt while still allowing limited access.
 class FeatureGateBanner extends ConsumerWidget {
   const FeatureGateBanner({
-    super.key,
     required this.feature,
+    super.key,
     this.title,
     this.description,
     this.showWhenAllowed = false,
@@ -43,7 +43,7 @@ class FeatureGateBanner extends ConsumerWidget {
         }
 
         final paywallState = ref.watch(paywallProvider);
-        
+
         // Show trial reminder for allowed features
         if (gateResult.isAllowed && paywallState.isOnTrial) {
           return _buildTrialBanner(context, paywallState);
@@ -98,14 +98,14 @@ class FeatureGateBanner extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Trial ends in ${state.trialDaysRemaining} days",
+                  'Trial ends in ${state.trialDaysRemaining} days',
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  "Subscribe to keep access to premium features",
+                  'Subscribe to keep access to premium features',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -115,7 +115,7 @@ class FeatureGateBanner extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () => context.push(AppRoutes.subscriptionPlans),
-            child: const Text("Subscribe"),
+            child: const Text('Subscribe'),
           ),
         ],
       ),
@@ -125,7 +125,7 @@ class FeatureGateBanner extends ConsumerWidget {
   Widget _buildUpgradeBanner(BuildContext context, FeatureGateResult gateResult) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final planName = gateResult.requiredPlan?.name ?? "Pro";
+    final planName = gateResult.requiredPlan?.name ?? 'Pro';
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -162,14 +162,14 @@ class FeatureGateBanner extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title ?? "$planName Feature",
+                  title ?? '$planName Feature',
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  description ?? "Upgrade to $planName to unlock this feature",
+                  description ?? 'Upgrade to $planName to unlock this feature',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -184,7 +184,7 @@ class FeatureGateBanner extends ConsumerWidget {
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
-            child: const Text("Upgrade"),
+            child: const Text('Upgrade'),
           ),
         ],
       ),
@@ -195,8 +195,8 @@ class FeatureGateBanner extends ConsumerWidget {
 /// A sliver version of the feature gate banner for use in CustomScrollView.
 class SliverFeatureGateBanner extends StatelessWidget {
   const SliverFeatureGateBanner({
-    super.key,
     required this.feature,
+    super.key,
     this.title,
     this.description,
   });
@@ -220,9 +220,9 @@ class SliverFeatureGateBanner extends StatelessWidget {
 /// A locked feature overlay that shows when a feature is completely blocked.
 class LockedFeatureOverlay extends ConsumerWidget {
   const LockedFeatureOverlay({
-    super.key,
     required this.feature,
     required this.child,
+    super.key,
     this.blurAmount = 3.0,
   });
 
@@ -254,7 +254,7 @@ class LockedFeatureOverlay extends ConsumerWidget {
             ),
             // Lock overlay
             Positioned.fill(
-              child: Container(
+              child: ColoredBox(
                 color: Colors.black.withValues(alpha: 0.3),
                 child: Center(
                   child: _buildLockCard(context, gateResult),
@@ -269,7 +269,7 @@ class LockedFeatureOverlay extends ConsumerWidget {
 
   Widget _buildLockCard(BuildContext context, FeatureGateResult gateResult) {
     final theme = Theme.of(context);
-    final planName = gateResult.requiredPlan?.name ?? "Pro";
+    final planName = gateResult.requiredPlan?.name ?? 'Pro';
 
     return Card(
       margin: const EdgeInsets.all(32),
@@ -292,14 +292,14 @@ class LockedFeatureOverlay extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              "$planName Feature",
+              '$planName Feature',
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              "Upgrade to $planName to access this feature",
+              'Upgrade to $planName to access this feature',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -309,7 +309,7 @@ class LockedFeatureOverlay extends ConsumerWidget {
             FilledButton.icon(
               onPressed: () => context.push(AppRoutes.subscriptionPlans),
               icon: const Icon(Iconsax.crown),
-              label: Text("Upgrade to $planName"),
+              label: Text('Upgrade to $planName'),
             ),
           ],
         ),

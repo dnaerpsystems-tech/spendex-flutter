@@ -31,11 +31,8 @@ class InvestmentInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final dividerColor =
-        isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final dividerColor = isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider;
 
     return Card(
       child: Padding(
@@ -112,9 +109,8 @@ class _InfoRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

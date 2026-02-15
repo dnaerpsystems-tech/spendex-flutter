@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:spendex/core/constants/app_constants.dart';
 import 'package:spendex/core/errors/failures.dart';
 import 'package:spendex/core/storage/secure_storage.dart';
-import 'package:spendex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:spendex/features/auth/data/models/user_model.dart';
-import 'package:spendex/features/auth/data/models/auth_response_model.dart';
+import 'package:spendex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:spendex/features/auth/presentation/providers/auth_provider.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -16,14 +16,20 @@ void main() {
   late MockSecureStorageService mockSecureStorage;
   late AuthNotifier authNotifier;
 
+  final now = DateTime.now();
   final testUser = UserModel(
     id: 'user_123',
     email: 'test@example.com',
     name: 'Test User',
-    createdAt: DateTime.now(),
+    role: UserRole.member,
+    status: UserStatus.active,
+    preferences: const UserPreferences(),
+    tenantId: 'tenant_123',
+    createdAt: now,
+    updatedAt: now,
   );
 
-  final testAuthResponse = AuthResponseModel(
+  final testAuthResponse = AuthResponse(
     accessToken: 'test_access_token',
     refreshToken: 'test_refresh_token',
     user: testUser,
@@ -159,7 +165,7 @@ void main() {
           'password123',
           'Test User',
           null,
-        )).thenAnswer((_) async => const Right(null));
+        ),).thenAnswer((_) async => const Right(true));
 
         final result = await authNotifier.register(
           'test@example.com',
@@ -178,7 +184,7 @@ void main() {
           'password123',
           'Test User',
           null,
-        )).thenAnswer((_) async => const Left(ValidationFailure('Email already exists')));
+        ),).thenAnswer((_) async => const Left(ValidationFailure('Email already exists')));
 
         final result = await authNotifier.register(
           'existing@example.com',
@@ -223,7 +229,7 @@ void main() {
     group('forgotPassword()', () {
       test('returns true on success', () async {
         when(() => mockAuthRepository.forgotPassword('test@example.com'))
-            .thenAnswer((_) async => const Right(null));
+            .thenAnswer((_) async => const Right(true));
 
         final result = await authNotifier.forgotPassword('test@example.com');
 
@@ -247,7 +253,7 @@ void main() {
     group('resetPassword()', () {
       test('returns true on success', () async {
         when(() => mockAuthRepository.resetPassword('valid_token', 'newpassword123'))
-            .thenAnswer((_) async => const Right(null));
+            .thenAnswer((_) async => const Right(true));
 
         final result = await authNotifier.resetPassword('valid_token', 'newpassword123');
 

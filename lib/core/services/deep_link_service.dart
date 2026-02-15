@@ -9,7 +9,7 @@ class DeepLinkService {
   DeepLinkService._();
 
   static const _channel = MethodChannel('spendex/deep_link');
-  static StreamSubscription? _subscription;
+  static StreamSubscription<dynamic>? _subscription;
   static GoRouter? _router;
 
   /// Initialize deep link handling
@@ -44,7 +44,9 @@ class DeepLinkService {
     }
 
     final uri = Uri.tryParse(link);
-    if (uri == null) return;
+    if (uri == null) {
+      return;
+    }
 
     // Handle different paths
     final path = uri.path;

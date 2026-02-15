@@ -105,8 +105,7 @@ class AuthState extends Equatable {
 
 /// Auth State Notifier
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier(this._authRepository, this._secureStorage)
-      : super(const AuthState.initial());
+  AuthNotifier(this._authRepository, this._secureStorage) : super(const AuthState.initial());
 
   final AuthRepository _authRepository;
   final SecureStorageService _secureStorage;
@@ -140,9 +139,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         onTimeout: () => false,
       );
       final isDeviceSupported = await _localAuth.isDeviceSupported().timeout(
-        const Duration(seconds: 2),
-        onTimeout: () => false,
-      );
+            const Duration(seconds: 2),
+            onTimeout: () => false,
+          );
       final isAvailable = canCheck && isDeviceSupported;
 
       // Check if biometric is enabled in storage
@@ -385,8 +384,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   ) async {
     state = state.copyWith(isLoading: true);
 
-    final result =
-        await _authRepository.register(email, password, name, phone);
+    final result = await _authRepository.register(email, password, name, phone);
 
     return result.fold(
       (failure) {
@@ -466,8 +464,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   ) async {
     state = state.copyWith(isLoading: true);
 
-    final result =
-        await _authRepository.changePassword(currentPassword, newPassword);
+    final result = await _authRepository.changePassword(currentPassword, newPassword);
 
     return result.fold(
       (failure) {
@@ -501,7 +498,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Update user preferences
   Future<bool> updatePreferences(UserPreferences preferences) async {
-    if (state.user == null) return false;
+    if (state.user == null) {
+      return false;
+    }
 
     final result = await _authRepository.updatePreferences(preferences);
 
@@ -519,8 +518,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 }
 
 /// Auth State Provider
-final authStateProvider =
-    StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
     getIt<AuthRepository>(),
     getIt<SecureStorageService>(),

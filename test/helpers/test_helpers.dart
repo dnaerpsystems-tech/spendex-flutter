@@ -1,12 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dio/dio.dart';
+import 'package:spendex/core/errors/failures.dart';
 import 'package:spendex/core/network/api_client.dart';
 import 'package:spendex/core/storage/secure_storage.dart';
-import 'package:dartz/dartz.dart';
-import 'package:spendex/core/errors/failures.dart';
 
 // ===========================================================================
 // Mock Classes
@@ -66,7 +65,7 @@ class TestFixtures {
   static DateTime get lastYear => DateTime.now().subtract(const Duration(days: 365));
 
   // Financial year dates
-  static DateTime get aprilFirst2024 => DateTime(2024, 4, 1);
+  static DateTime get aprilFirst2024 => DateTime(2024, 4);
   static DateTime get marchEnd2024 => DateTime(2024, 3, 31);
   static DateTime get may2024 => DateTime(2024, 5, 15);
   static DateTime get feb2024 => DateTime(2024, 2, 15);
@@ -177,7 +176,7 @@ void setupMockApiClientSuccess<T>(MockApiClient mock, String path, T data) {
         queryParameters: any(named: 'queryParameters'),
         fromJson: any(named: 'fromJson'),
         options: any(named: 'options'),
-      )).thenAnswer((_) async => Right(data));
+      ),).thenAnswer((_) async => Right(data));
 }
 
 /// Setup mock API client for failure responses
@@ -187,7 +186,7 @@ void setupMockApiClientFailure(MockApiClient mock, String path, Failure failure)
         queryParameters: any(named: 'queryParameters'),
         fromJson: any(named: 'fromJson'),
         options: any(named: 'options'),
-      )).thenAnswer((_) async => Left(failure));
+      ),).thenAnswer((_) async => Left(failure));
 }
 
 // ===========================================================================

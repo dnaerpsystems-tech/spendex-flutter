@@ -13,7 +13,8 @@ class DateGroupHeader extends StatelessWidget {
   /// The [date] parameter is required and specifies the date to display.
   /// If [showTotals] is true, [totalIncome] and [totalExpense] will be displayed.
   const DateGroupHeader({
-    required this.date, super.key,
+    required this.date,
+    super.key,
     this.totalIncome,
     this.totalExpense,
     this.showTotals = false,
@@ -42,8 +43,8 @@ class DateGroupHeader extends StatelessWidget {
         vertical: SpendexTheme.spacingMd,
       ),
       color: isDark
-          ? SpendexColors.darkBackground.withOpacity(0.95)
-          : SpendexColors.lightBackground.withOpacity(0.95),
+          ? SpendexColors.darkBackground.withValues(alpha: 0.95)
+          : SpendexColors.lightBackground.withValues(alpha: 0.95),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -51,9 +52,7 @@ class DateGroupHeader extends StatelessWidget {
           Text(
             _formatDate(date),
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               fontSize: 15,
             ),
           ),
@@ -108,10 +107,7 @@ class DateGroupHeader extends StatelessWidget {
         ],
 
         // Separator
-        if (totalIncome != null &&
-            totalIncome! > 0 &&
-            totalExpense != null &&
-            totalExpense! > 0)
+        if (totalIncome != null && totalIncome! > 0 && totalExpense != null && totalExpense! > 0)
           const SizedBox(width: SpendexTheme.spacingSm),
 
         // Expense total
@@ -150,7 +146,8 @@ class DateGroupHeader extends StatelessWidget {
 class SliverDateGroupHeader extends StatelessWidget {
   /// Creates a sliver date group header.
   const SliverDateGroupHeader({
-    required this.date, super.key,
+    required this.date,
+    super.key,
     this.totalIncome,
     this.totalExpense,
     this.showTotals = false,

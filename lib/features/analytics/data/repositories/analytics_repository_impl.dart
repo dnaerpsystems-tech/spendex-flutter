@@ -18,25 +18,29 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
   Future<Either<Failure, AnalyticsSummaryModel>> getAnalyticsSummary({
     required DateTime startDate,
     required DateTime endDate,
-  }) => _remoteDataSource.getAnalyticsSummary(startDate: startDate, endDate: endDate);
+  }) =>
+      _remoteDataSource.getAnalyticsSummary(startDate: startDate, endDate: endDate);
 
   @override
   Future<Either<Failure, CategoryBreakdownResponse>> getIncomeBreakdown({
     required DateTime startDate,
     required DateTime endDate,
-  }) => _remoteDataSource.getIncomeBreakdown(startDate: startDate, endDate: endDate);
+  }) =>
+      _remoteDataSource.getIncomeBreakdown(startDate: startDate, endDate: endDate);
 
   @override
   Future<Either<Failure, CategoryBreakdownResponse>> getExpenseBreakdown({
     required DateTime startDate,
     required DateTime endDate,
-  }) => _remoteDataSource.getExpenseBreakdown(startDate: startDate, endDate: endDate);
+  }) =>
+      _remoteDataSource.getExpenseBreakdown(startDate: startDate, endDate: endDate);
 
   @override
   Future<Either<Failure, DailyStatsResponse>> getDailyStats({
     required DateTime startDate,
     required DateTime endDate,
-  }) => _remoteDataSource.getDailyStats(startDate: startDate, endDate: endDate);
+  }) =>
+      _remoteDataSource.getDailyStats(startDate: startDate, endDate: endDate);
 
   @override
   Future<Either<Failure, MonthlyStatsResponse>> getMonthlyStats({int? months}) =>
@@ -51,5 +55,6 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
     required DateTime startDate,
     required DateTime endDate,
     required String format,
-  }) => _remoteDataSource.exportAnalytics(startDate: startDate, endDate: endDate, format: format);
+  }) =>
+      _remoteDataSource.exportAnalytics(startDate: startDate, endDate: endDate, format: format);
 }

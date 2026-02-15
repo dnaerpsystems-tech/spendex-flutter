@@ -6,7 +6,6 @@ import '../../../../app/theme.dart';
 
 /// Auth Email Field with validation and styling
 class AuthEmailField extends StatelessWidget {
-
   const AuthEmailField({
     required this.controller,
     super.key,
@@ -40,9 +39,7 @@ class AuthEmailField extends StatelessWidget {
           Text(
             labelText!,
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -58,42 +55,30 @@ class AuthEmailField extends StatelessWidget {
           autocorrect: false,
           enableSuggestions: false,
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
           decoration: InputDecoration(
             hintText: hintText ?? 'Enter your email',
             hintStyle: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             prefixIcon: Icon(
               Iconsax.sms,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               size: 20,
             ),
             filled: true,
-            fillColor: isDark
-                ? SpendexColors.darkSurface
-                : SpendexColors.lightSurface,
+            fillColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
               borderSide: BorderSide(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
               borderSide: BorderSide(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -135,7 +120,6 @@ class AuthEmailField extends StatelessWidget {
 
 /// Auth Password Field with visibility toggle and styling
 class AuthPasswordField extends StatefulWidget {
-
   const AuthPasswordField({
     required this.controller,
     super.key,
@@ -187,9 +171,7 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
           Text(
             widget.labelText!,
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -207,53 +189,39 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
           enableSuggestions: false,
           enableInteractiveSelection: widget.enableInteractiveSelection,
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
           decoration: InputDecoration(
             hintText: widget.hintText ?? 'Enter your password',
             hintStyle: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             prefixIcon: Icon(
               Iconsax.lock,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               size: 20,
             ),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscureText ? Iconsax.eye_slash : Iconsax.eye,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                 size: 20,
               ),
               onPressed: _toggleVisibility,
               splashRadius: 20,
             ),
             filled: true,
-            fillColor: isDark
-                ? SpendexColors.darkSurface
-                : SpendexColors.lightSurface,
+            fillColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
               borderSide: BorderSide(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
               borderSide: BorderSide(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -295,7 +263,6 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
 
 /// Styled Text Form Field for auth screens
 class AuthTextField extends StatelessWidget {
-
   const AuthTextField({
     required this.controller,
     super.key,
@@ -345,9 +312,7 @@ class AuthTextField extends StatelessWidget {
           Text(
             labelText!,
             style: SpendexTheme.labelMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -365,45 +330,34 @@ class AuthTextField extends StatelessWidget {
           maxLines: maxLines,
           inputFormatters: inputFormatters,
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           ),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             prefixIcon: prefixIcon != null
                 ? Icon(
                     prefixIcon,
-                    color: isDark
-                        ? SpendexColors.darkTextTertiary
-                        : SpendexColors.lightTextTertiary,
+                    color:
+                        isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     size: 20,
                   )
                 : null,
             suffixIcon: suffixIcon,
             filled: true,
-            fillColor: isDark
-                ? SpendexColors.darkSurface
-                : SpendexColors.lightSurface,
+            fillColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
               borderSide: BorderSide(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
               borderSide: BorderSide(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             focusedBorder: OutlineInputBorder(

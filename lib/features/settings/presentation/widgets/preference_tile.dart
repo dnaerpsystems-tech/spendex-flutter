@@ -72,11 +72,9 @@ class PreferenceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
     final hoverColor =
         isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.03);
 
@@ -87,9 +85,7 @@ class PreferenceTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: showSwitch && onChanged != null
-            ? () => onChanged!(!switchValue)
-            : onTap,
+        onTap: showSwitch && onChanged != null ? () => onChanged!(!switchValue) : onTap,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
         hoverColor: hoverColor,
         splashColor: SpendexColors.primary.withValues(alpha: 0.05),

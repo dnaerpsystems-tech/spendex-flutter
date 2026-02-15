@@ -8,8 +8,7 @@ import '../../data/models/parsed_transaction_model.dart';
 import '../../domain/repositories/account_aggregator_repository.dart';
 
 /// Provider for Account Aggregator repository
-final accountAggregatorRepositoryProvider =
-    Provider<AccountAggregatorRepository>((ref) {
+final accountAggregatorRepositoryProvider = Provider<AccountAggregatorRepository>((ref) {
   return getIt<AccountAggregatorRepository>();
 });
 
@@ -62,8 +61,7 @@ class AccountAggregatorState extends Equatable {
   }) {
     return AccountAggregatorState(
       isInitiatingConsent: isInitiatingConsent ?? this.isInitiatingConsent,
-      isFetchingConsentStatus:
-          isFetchingConsentStatus ?? this.isFetchingConsentStatus,
+      isFetchingConsentStatus: isFetchingConsentStatus ?? this.isFetchingConsentStatus,
       isFetchingData: isFetchingData ?? this.isFetchingData,
       isLoadingAccounts: isLoadingAccounts ?? this.isLoadingAccounts,
       isRevokingConsent: isRevokingConsent ?? this.isRevokingConsent,
@@ -98,8 +96,7 @@ class AccountAggregatorState extends Equatable {
 
 /// Notifier for Account Aggregator
 class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
-  AccountAggregatorNotifier(this._repository)
-      : super(const AccountAggregatorState()) {
+  AccountAggregatorNotifier(this._repository) : super(const AccountAggregatorState()) {
     _initialize();
   }
 
@@ -302,9 +299,8 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
     state = state.copyWith(isImportingTransactions: true);
 
     // Get selected transactions
-    final transactions = state.fetchedTransactions
-        .where((t) => state.selectedTransactions.contains(t.id))
-        .toList();
+    final transactions =
+        state.fetchedTransactions.where((t) => state.selectedTransactions.contains(t.id)).toList();
 
     // Validate we have transactions to import
     if (transactions.isEmpty) {
@@ -364,8 +360,7 @@ class AccountAggregatorNotifier extends StateNotifier<AccountAggregatorState> {
 
 /// Provider for Account Aggregator state
 final accountAggregatorProvider =
-    StateNotifierProvider<AccountAggregatorNotifier, AccountAggregatorState>(
-        (ref) {
+    StateNotifierProvider<AccountAggregatorNotifier, AccountAggregatorState>((ref) {
   final repository = ref.watch(accountAggregatorRepositoryProvider);
   return AccountAggregatorNotifier(repository);
 });
@@ -399,8 +394,8 @@ final selectedTransactionsCountProvider = Provider<int>((ref) {
 /// Total amount of selected transactions
 final selectedTransactionsTotalProvider = Provider<int>((ref) {
   final state = ref.watch(accountAggregatorProvider);
-  final selectedTxns = state.fetchedTransactions
-      .where((t) => state.selectedTransactions.contains(t.id));
+  final selectedTxns =
+      state.fetchedTransactions.where((t) => state.selectedTransactions.contains(t.id));
 
   return selectedTxns.fold<int>(0, (sum, txn) => sum + txn.amount.toInt());
 });
@@ -408,10 +403,11 @@ final selectedTransactionsTotalProvider = Provider<int>((ref) {
 /// Whether all transactions are selected
 final allTransactionsSelectedProvider = Provider<bool>((ref) {
   final state = ref.watch(accountAggregatorProvider);
-  if (state.fetchedTransactions.isEmpty) return false;
+  if (state.fetchedTransactions.isEmpty) {
+    return false;
+  }
 
-  return state.selectedTransactions.length ==
-      state.fetchedTransactions.length;
+  return state.selectedTransactions.length == state.fetchedTransactions.length;
 });
 
 /// Consent status message
@@ -419,7 +415,9 @@ final consentStatusMessageProvider = Provider<String>((ref) {
   final state = ref.watch(accountAggregatorProvider);
   final consent = state.consent;
 
-  if (consent == null) return 'No active consent';
+  if (consent == null) {
+    return 'No active consent';
+  }
 
   switch (consent.status) {
     case ConsentStatus.pending:

@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../di/injection.dart';
+import '../models/models.dart';
 import '../services/cache_service.dart';
 import '../services/connectivity_service.dart';
 import '../services/sync_service.dart';
-import '../models/models.dart';
-import '../../di/injection.dart';
 
 /// Provider for CacheService
 final cacheServiceProvider = Provider<CacheService>((ref) {
@@ -100,8 +101,7 @@ class SyncState {
 
 /// State notifier for sync status
 class SyncStatusNotifier extends StateNotifier<SyncState> {
-  SyncStatusNotifier(this._syncService, this._connectivityService)
-      : super(const SyncState()) {
+  SyncStatusNotifier(this._syncService, this._connectivityService) : super(const SyncState()) {
     _initialize();
   }
 
@@ -121,8 +121,7 @@ class SyncStatusNotifier extends StateNotifier<SyncState> {
     _syncService.syncProgress.listen((progress) {
       state = state.copyWith(
         progress: progress,
-        isSyncing: progress.phase != SyncPhase.complete &&
-                   progress.phase != SyncPhase.failed,
+        isSyncing: progress.phase != SyncPhase.complete && progress.phase != SyncPhase.failed,
       );
     });
 
@@ -148,7 +147,7 @@ class SyncStatusNotifier extends StateNotifier<SyncState> {
       return SyncResult.empty();
     }
 
-    state = state.copyWith(isSyncing: true, error: null);
+    state = state.copyWith(isSyncing: true);
 
     try {
       final result = await _syncService.syncAll();

@@ -41,7 +41,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
   /// Load all subscription-related data
   Future<void> _loadSubscriptionData() async {
-    final notifier = ref.read(subscriptionProvider.notifier);
+    final notifier = ref.read(subscriptionStateProvider.notifier);
     await Future.wait([
       notifier.loadSubscription(),
       notifier.loadPlans(),
@@ -67,17 +67,18 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
   /// Show cancel subscription bottom sheet
   void _showCancelSheet() {
-    final subscription = ref.read(subscriptionProvider).currentSubscription;
-    if (subscription == null) return;
+    final subscription = ref.read(subscriptionStateProvider).currentSubscription;
+    if (subscription == null) {
+      return;
+    }
 
     showCancelSubscriptionSheet(
-      context: context,
+      context,
       subscription: subscription,
-      onCancel: (cancelAtPeriodEnd, reason, feedback) async {
-        await ref.read(subscriptionProvider.notifier).cancelSubscription(
-              cancelAtPeriodEnd: cancelAtPeriodEnd,
+      onCancel: (reason, {required cancelImmediately}) async {
+        await ref.read(subscriptionStateProvider.notifier).cancelSubscription(
+              immediate: cancelImmediately,
               reason: reason,
-              feedback: feedback,
             );
       },
     );
@@ -85,19 +86,18 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
   /// Resume a cancelled subscription
   Future<void> _resumeSubscription() async {
-    await ref.read(subscriptionProvider.notifier).resumeSubscription();
+    await ref.read(subscriptionStateProvider.notifier).resumeSubscription();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(subscriptionProvider);
+    final state = ref.watch(subscriptionStateProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     // Listen for success/error messages
-    ref.listen<SubscriptionState>(subscriptionProvider, (previous, next) {
-      if (next.successMessage != null &&
-          next.successMessage != previous?.successMessage) {
+    ref.listen<SubscriptionState>(subscriptionStateProvider, (previous, next) {
+      if (next.successMessage != null && next.successMessage != previous?.successMessage) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.successMessage ?? ''),
@@ -105,7 +105,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        ref.read(subscriptionProvider.notifier).clearMessages();
+        ref.read(subscriptionStateProvider.notifier).clearMessages();
       }
 
       if (next.error != null && next.error != previous?.error) {
@@ -116,7 +116,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        ref.read(subscriptionProvider.notifier).clearMessages();
+        ref.read(subscriptionStateProvider.notifier).clearMessages();
       }
     });
 
@@ -150,9 +150,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     }
 
     // Error state
-    if (state.error != null &&
-        state.currentSubscription == null &&
-        state.plans.isEmpty) {
+    if (state.error != null && state.currentSubscription == null && state.plans.isEmpty) {
       return ErrorStateWidget(
         message: state.error ?? 'An error occurred',
         onRetry: _loadSubscriptionData,
@@ -227,9 +225,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
           Text(
             'Choose Your Plan',
             style: SpendexTheme.headlineSmall.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
 
@@ -248,7 +244,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             const EmptyStateWidget(
               icon: Iconsax.box_1,
               title: 'No Plans Available',
-              message: 'Please try again later.',
+              subtitle: 'Please try again later.',
             )
           else
             ...state.plans.map(
@@ -256,10 +252,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                 padding: const EdgeInsets.only(bottom: SpendexTheme.spacingMd),
                 child: PlanCard(
                   plan: plan,
-                  isSelected: false,
-                  isCurrentPlan: false,
+                  billingCycle: state.selectedBillingCycle,
                   onSelect: () {
-                    ref.read(subscriptionProvider.notifier).selectPlan(plan);
+                    ref.read(subscriptionStateProvider.notifier).selectPlan(plan);
                     _navigateToPlans();
                   },
                 ),
@@ -273,9 +268,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             Text(
               'Compare Features',
               style: SpendexTheme.headlineSmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: SpendexTheme.spacingMd),
@@ -300,7 +293,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     bool isDark,
   ) {
     final subscription = state.currentSubscription;
-    if (subscription == null) return const SizedBox.shrink();
+    if (subscription == null) {
+      return const SizedBox.shrink();
+    }
 
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -345,17 +340,13 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     bool isDark,
   ) {
     final plan = subscription.plan;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusXl),
@@ -387,8 +378,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   padding: const EdgeInsets.all(SpendexTheme.spacingMd),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius:
-                        BorderRadius.circular(SpendexTheme.radiusMd),
+                    borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                   ),
                   child: const Icon(
                     Iconsax.crown_1,
@@ -458,8 +448,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   padding: const EdgeInsets.all(SpendexTheme.spacingMd),
                   decoration: BoxDecoration(
                     color: _getStatusBackgroundColor(subscription),
-                    borderRadius:
-                        BorderRadius.circular(SpendexTheme.radiusMd),
+                    borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                   ),
                   child: Row(
                     children: [
@@ -508,8 +497,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                       ),
                       const SizedBox(height: SpendexTheme.spacingSm),
                       ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         child: LinearProgressIndicator(
                           value: subscription.periodProgressPercentage / 100,
                           backgroundColor: borderColor,
@@ -536,8 +524,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     ThemeData theme,
     bool isDark,
   ) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -571,7 +558,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
           const EmptyStateWidget(
             icon: Iconsax.chart_1,
             title: 'No Usage Data',
-            message: 'Usage statistics will appear here.',
+            subtitle: 'Usage statistics will appear here.',
             compact: true,
           )
         else
@@ -582,56 +569,52 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
   /// Build usage progress cards
   Widget _buildUsageCards(UsageModel? usage) {
-    if (usage == null) return const SizedBox.shrink();
+    if (usage == null) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       children: [
         UsageProgressCard(
           icon: Iconsax.receipt_2,
-          label: 'Transactions',
-          used: usage.transactionsUsed,
+          featureName: 'Transactions',
+          currentUsage: usage.transactionsUsed,
           limit: usage.limits.transactions,
-          isUnlimited: usage.limits.hasUnlimitedTransactions,
         ),
         const SizedBox(height: SpendexTheme.spacingSm),
         UsageProgressCard(
           icon: Iconsax.wallet_3,
-          label: 'Accounts',
-          used: usage.accountsUsed,
+          featureName: 'Accounts',
+          currentUsage: usage.accountsUsed,
           limit: usage.limits.accounts,
-          isUnlimited: usage.limits.hasUnlimitedAccounts,
         ),
         const SizedBox(height: SpendexTheme.spacingSm),
         UsageProgressCard(
           icon: Iconsax.money_send,
-          label: 'Budgets',
-          used: usage.budgetsUsed,
+          featureName: 'Budgets',
+          currentUsage: usage.budgetsUsed,
           limit: usage.limits.budgets,
-          isUnlimited: usage.limits.hasUnlimitedBudgets,
         ),
         const SizedBox(height: SpendexTheme.spacingSm),
         UsageProgressCard(
           icon: Iconsax.flag,
-          label: 'Goals',
-          used: usage.goalsUsed,
+          featureName: 'Goals',
+          currentUsage: usage.goalsUsed,
           limit: usage.limits.goals,
-          isUnlimited: usage.limits.hasUnlimitedGoals,
         ),
         const SizedBox(height: SpendexTheme.spacingSm),
         UsageProgressCard(
           icon: Iconsax.people,
-          label: 'Family Members',
-          used: usage.familyMembersUsed,
+          featureName: 'Family Members',
+          currentUsage: usage.familyMembersUsed,
           limit: usage.limits.familyMembers,
-          isUnlimited: usage.limits.hasUnlimitedFamilyMembers,
         ),
         const SizedBox(height: SpendexTheme.spacingSm),
         UsageProgressCard(
           icon: Iconsax.magic_star,
-          label: 'AI Insights',
-          used: usage.aiInsightsUsed,
+          featureName: 'AI Insights',
+          currentUsage: usage.aiInsightsUsed,
           limit: usage.limits.aiInsights,
-          isUnlimited: usage.limits.hasUnlimitedAiInsights,
         ),
       ],
     );
@@ -643,15 +626,11 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     ThemeData theme,
     bool isDark,
   ) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -661,7 +640,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
           style: SpendexTheme.headlineSmall.copyWith(color: textPrimary),
         ),
         const SizedBox(height: SpendexTheme.spacingMd),
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             color: cardColor,
             borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
@@ -729,15 +708,11 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     ThemeData theme,
     bool isDark,
   ) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -785,18 +760,14 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     ? 'Cancelled'
                     : _formatDate(subscription.currentPeriodEnd),
                 textPrimary,
-                subscription.cancelAtPeriodEnd
-                    ? SpendexColors.expense
-                    : textSecondary,
+                subscription.cancelAtPeriodEnd ? SpendexColors.expense : textSecondary,
               ),
               const SizedBox(height: SpendexTheme.spacingMd),
               _buildInfoRow(
                 'Auto Renewal',
                 subscription.willRenew ? 'Enabled' : 'Disabled',
                 textPrimary,
-                subscription.willRenew
-                    ? SpendexColors.income
-                    : SpendexColors.expense,
+                subscription.willRenew ? SpendexColors.income : SpendexColors.expense,
               ),
             ],
           ),
@@ -811,8 +782,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     ThemeData theme,
     bool isDark,
   ) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -842,17 +812,15 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
           const PaymentMethodCardSkeleton()
         else if (state.defaultPaymentMethod != null)
           PaymentMethodCard(
-            paymentMethod: state.defaultPaymentMethod,
+            paymentMethod: state.defaultPaymentMethod!,
             isSelected: true,
-            onTap: () {
+            onSelect: () {
               showPaymentMethodSelector(
-                context: context,
-                paymentMethods: state.paymentMethods,
-                selectedMethod: state.defaultPaymentMethod,
+                context,
+                savedMethods: state.paymentMethods,
+                selectedMethodId: state.defaultPaymentMethod?.id,
                 onSelect: (method) {
-                  ref
-                      .read(subscriptionProvider.notifier)
-                      .setDefaultPaymentMethod(method.id);
+                  ref.read(subscriptionStateProvider.notifier).setDefaultPaymentMethod(method.id);
                 },
               );
             },
@@ -865,13 +833,10 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
   /// Build add payment method card
   Widget _buildAddPaymentMethodCard(bool isDark) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return InkWell(
       onTap: () => context.push('/subscription/payment-methods/add'),
@@ -1112,7 +1077,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     return months[month - 1];
   }

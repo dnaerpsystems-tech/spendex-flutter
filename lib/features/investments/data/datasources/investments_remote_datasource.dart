@@ -20,7 +20,8 @@ abstract class InvestmentsRemoteDataSource {
   Future<Either<Failure, InvestmentModel>> createInvestment(CreateInvestmentRequest request);
 
   /// Update an existing investment
-  Future<Either<Failure, InvestmentModel>> updateInvestment(String id, CreateInvestmentRequest request);
+  Future<Either<Failure, InvestmentModel>> updateInvestment(
+      String id, CreateInvestmentRequest request,);
 
   /// Delete an investment
   Future<Either<Failure, void>> deleteInvestment(String id);
@@ -34,7 +35,6 @@ abstract class InvestmentsRemoteDataSource {
 
 /// Investments Remote Data Source Implementation
 class InvestmentsRemoteDataSourceImpl implements InvestmentsRemoteDataSource {
-
   InvestmentsRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -47,9 +47,8 @@ class InvestmentsRemoteDataSourceImpl implements InvestmentsRemoteDataSource {
     return result.fold(
       Left.new,
       (data) {
-        final investments = data
-            .map((json) => InvestmentModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final investments =
+            data.map((json) => InvestmentModel.fromJson(json as Map<String, dynamic>)).toList();
         return Right(investments);
       },
     );
@@ -102,7 +101,8 @@ class InvestmentsRemoteDataSourceImpl implements InvestmentsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, InvestmentModel>> updateInvestment(String id, CreateInvestmentRequest request) async {
+  Future<Either<Failure, InvestmentModel>> updateInvestment(
+      String id, CreateInvestmentRequest request,) async {
     final result = await _apiClient.put<Map<String, dynamic>>(
       ApiEndpoints.investmentById(id),
       data: request.toJson(),

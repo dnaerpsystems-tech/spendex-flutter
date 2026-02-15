@@ -14,7 +14,7 @@ class InAppReviewService {
 
   /// Check if in-app review is available
   static Future<bool> isAvailable() async {
-    return await _inAppReview.isAvailable();
+    return _inAppReview.isAvailable();
   }
 
   /// Request in-app review
@@ -42,7 +42,6 @@ class InAppReviewService {
     try {
       await _inAppReview.openStoreListing(
         appStoreId: '0000000000', // Replace with actual App Store ID
-        microsoftStoreId: null,
       );
     } catch (e) {
       AppLogger.e('InAppReviewService: Failed to open store listing', e);
@@ -55,17 +54,23 @@ class InAppReviewService {
 
     // Check if already reviewed
     final reviewed = prefs.getBool(_keyReviewRequested) ?? false;
-    if (reviewed) return false;
+    if (reviewed) {
+      return false;
+    }
 
     // Check last prompt time (don't prompt more than once per week)
     final lastPrompt = prefs.getInt(_keyLastReviewPrompt) ?? 0;
-    final daysSinceLastPrompt = DateTime.now().difference(
-      DateTime.fromMillisecondsSinceEpoch(lastPrompt),
-    ).inDays;
-    if (daysSinceLastPrompt < 7 && lastPrompt > 0) return false;
+    final daysSinceLastPrompt = DateTime.now()
+        .difference(
+          DateTime.fromMillisecondsSinceEpoch(lastPrompt),
+        )
+        .inDays;
+    if (daysSinceLastPrompt < 7 && lastPrompt > 0) {
+      return false;
+    }
 
     // Increment transaction count
-    int count = prefs.getInt(_keyTransactionCount) ?? 0;
+    var count = prefs.getInt(_keyTransactionCount) ?? 0;
     count++;
     await prefs.setInt(_keyTransactionCount, count);
 

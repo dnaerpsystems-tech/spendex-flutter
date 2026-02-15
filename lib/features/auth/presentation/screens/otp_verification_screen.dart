@@ -25,7 +25,8 @@ import '../widgets/auth_button.dart';
 /// - Animations (entrance, shake, success, pulse)
 /// - Error handling with visual feedback
 /// - Navigation based on purpose (verification/password_reset)
-class OtpVerificationScreen extends ConsumerStatefulWidget { // "verification" or "password_reset"
+class OtpVerificationScreen extends ConsumerStatefulWidget {
+  // "verification" or "password_reset"
   const OtpVerificationScreen({
     required this.email,
     required this.purpose,
@@ -36,8 +37,7 @@ class OtpVerificationScreen extends ConsumerStatefulWidget { // "verification" o
   final String purpose;
 
   @override
-  ConsumerState<OtpVerificationScreen> createState() =>
-      _OtpVerificationScreenState();
+  ConsumerState<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
 }
 
 class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
@@ -414,26 +414,20 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return AlertDialog(
-          backgroundColor: isDark
-              ? SpendexColors.darkSurface
-              : SpendexColors.lightSurface,
+          backgroundColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           title: Text(
             'Cancel Verification?',
             style: SpendexTheme.headlineMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           content: Text(
             'You will need to request a new verification code.',
             style: SpendexTheme.bodyMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextSecondary
-                  : SpendexColors.lightTextSecondary,
+              color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             ),
           ),
           actions: [
@@ -511,18 +505,14 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         }
       },
       child: Scaffold(
-        backgroundColor: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             icon: Icon(
               Iconsax.arrow_left,
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
             onPressed: () async {
               final shouldPop = await _onWillPop();
@@ -550,13 +540,10 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
 
                     // Title
                     Text(
-                      widget.purpose == 'password_reset'
-                          ? 'Reset Password'
-                          : 'Verify Your Email',
+                      widget.purpose == 'password_reset' ? 'Reset Password' : 'Verify Your Email',
                       style: SpendexTheme.displayLarge.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                         fontSize: 28,
                       ),
                       textAlign: TextAlign.center,
@@ -641,16 +628,12 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-              gradient: _isSuccess
-                  ? SpendexColors.incomeGradient
-                  : SpendexColors.primaryGradient,
+              gradient: _isSuccess ? SpendexColors.incomeGradient : SpendexColors.primaryGradient,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: (_isSuccess
-                          ? SpendexColors.income
-                          : SpendexColors.primary)
-                      .withValues(alpha:0.3),
+                  color: (_isSuccess ? SpendexColors.income : SpendexColors.primary)
+                      .withValues(alpha: 0.3),
                   blurRadius: 24,
                   offset: const Offset(0, 8),
                 ),
@@ -672,9 +655,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
                         ),
                       )
                     : Icon(
-                        widget.purpose == 'password_reset'
-                            ? Iconsax.lock
-                            : Iconsax.sms_tracking,
+                        widget.purpose == 'password_reset' ? Iconsax.lock : Iconsax.sms_tracking,
                         size: 48,
                         color: Colors.white,
                       ),
@@ -698,9 +679,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       textStyle: GoogleFonts.poppins(
         fontSize: 24,
         fontWeight: FontWeight.w600,
-        color: isDark
-            ? SpendexColors.darkTextPrimary
-            : SpendexColors.lightTextPrimary,
+        color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
       ),
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
@@ -718,7 +697,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         border: Border.all(color: SpendexColors.primary, width: 2),
         boxShadow: [
           BoxShadow(
-            color: SpendexColors.primary.withValues(alpha:0.2),
+            color: SpendexColors.primary.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -733,7 +712,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         color: SpendexColors.primary,
       ),
       decoration: BoxDecoration(
-        color: SpendexColors.primary.withValues(alpha:0.1),
+        color: SpendexColors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: SpendexColors.primary),
       ),
@@ -746,7 +725,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         color: SpendexColors.expense,
       ),
       decoration: BoxDecoration(
-        color: SpendexColors.expense.withValues(alpha:0.1),
+        color: SpendexColors.expense.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: SpendexColors.expense, width: 2),
       ),
@@ -759,7 +738,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         color: SpendexColors.income,
       ),
       decoration: BoxDecoration(
-        color: SpendexColors.income.withValues(alpha:0.1),
+        color: SpendexColors.income.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: SpendexColors.income, width: 2),
       ),
@@ -780,13 +759,11 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         length: 6,
         autofocus: true,
         hapticFeedbackType: HapticFeedbackType.lightImpact,
-        defaultPinTheme: _isSuccess
-            ? successPinTheme
-            : (_hasError ? errorPinTheme : defaultPinTheme),
+        defaultPinTheme:
+            _isSuccess ? successPinTheme : (_hasError ? errorPinTheme : defaultPinTheme),
         focusedPinTheme: focusedPinTheme,
-        submittedPinTheme: _isSuccess
-            ? successPinTheme
-            : (_hasError ? errorPinTheme : submittedPinTheme),
+        submittedPinTheme:
+            _isSuccess ? successPinTheme : (_hasError ? errorPinTheme : submittedPinTheme),
         errorPinTheme: errorPinTheme,
         enabled: !_isVerifying && !_isSuccess,
         pinputAutovalidateMode: PinputAutovalidateMode.disabled,
@@ -862,9 +839,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     return Text(
       'Enter the 6-digit code',
       style: SpendexTheme.bodyMedium.copyWith(
-        color: isDark
-            ? SpendexColors.darkTextTertiary
-            : SpendexColors.lightTextTertiary,
+        color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
       ),
     );
   }
@@ -874,10 +849,10 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: SpendexColors.expense.withValues(alpha:0.1),
+        color: SpendexColors.expense.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: SpendexColors.expense.withValues(alpha:0.3),
+          color: SpendexColors.expense.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -939,9 +914,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
         Text(
           "Didn't receive the code? ",
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         if (_isResending)
@@ -973,7 +946,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: SpendexColors.primary.withValues(alpha:0.1),
+              color: SpendexColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -1002,15 +975,11 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
 
   /// Build verify button
   Widget _buildVerifyButton() {
-    final isEnabled = _otpController.text.length == 6 &&
-        !_isVerifying &&
-        !_isSuccess;
+    final isEnabled = _otpController.text.length == 6 && !_isVerifying && !_isSuccess;
 
     return AuthPrimaryButton(
       text: _isSuccess ? 'Verified!' : 'Verify Code',
-      onPressed: isEnabled
-          ? () => _verifyOtp(_otpController.text)
-          : null,
+      onPressed: isEnabled ? () => _verifyOtp(_otpController.text) : null,
       isLoading: _isVerifying,
       isEnabled: isEnabled,
       icon: _isSuccess ? Iconsax.tick_circle5 : Iconsax.shield_tick,
@@ -1031,13 +1000,10 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen>
       child: Text(
         'Change Email Address',
         style: SpendexTheme.bodyMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           decoration: TextDecoration.underline,
-          decorationColor: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          decorationColor:
+              isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         ),
       ),
     );

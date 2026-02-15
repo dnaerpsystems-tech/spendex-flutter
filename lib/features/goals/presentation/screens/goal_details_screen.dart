@@ -103,9 +103,7 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
         content: Text(
           'Are you sure you want to delete "${goal.name}"? This action cannot be undone.',
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         actions: [
@@ -117,9 +115,7 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
             onPressed: () async {
               Navigator.pop(context);
 
-              final success = await ref
-                  .read(goalsStateProvider.notifier)
-                  .deleteGoal(widget.goalId);
+              final success = await ref.read(goalsStateProvider.notifier).deleteGoal(widget.goalId);
 
               if (context.mounted) {
                 if (success) {
@@ -169,9 +165,7 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
     final goal = goalsState.selectedGoal;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: Text(goal?.name ?? 'Goal Details'),
         centerTitle: true,
@@ -342,9 +336,7 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
                 Text(
                   '${progressPercentage.toStringAsFixed(1)}%',
                   style: SpendexTheme.displayLarge.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   ),
                 ),
               ],
@@ -400,9 +392,7 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
               Container(
                 width: 1,
                 height: 40,
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
               Expanded(
                 child: Column(
@@ -420,9 +410,8 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
                     Text(
                       CurrencyFormatter.formatPaise(goal.targetAmount),
                       style: SpendexTheme.headlineMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary,
+                        color:
+                            isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -446,18 +435,15 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
                 Text(
                   'Remaining',
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
                 Text(
                   CurrencyFormatter.formatPaise(remaining > 0 ? remaining : 0),
                   style: SpendexTheme.titleMedium.copyWith(
                     color: remaining > 0
-                        ? (isDark
-                            ? SpendexColors.darkTextPrimary
-                            : SpendexColors.lightTextPrimary)
+                        ? (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary)
                         : SpendexColors.income,
                     fontWeight: FontWeight.w600,
                   ),
@@ -480,9 +466,8 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
                   Icon(
                     Iconsax.calendar,
                     size: 18,
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -547,9 +532,8 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
                 Text(
                   'Status',
                   style: SpendexTheme.bodyMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
                 Container(
@@ -658,25 +642,20 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
             Text(
               'Contributions',
               style: SpendexTheme.headlineMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
               ),
               child: Text(
                 '0',
                 style: SpendexTheme.labelMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -706,9 +685,7 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
                 ),
                 child: Icon(
                   Iconsax.wallet_add,
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   size: 32,
                 ),
               ),
@@ -716,18 +693,15 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
               Text(
                 'No Contributions Yet',
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Start saving towards your goal',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

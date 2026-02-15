@@ -30,7 +30,9 @@ class ScreenSecurity {
   /// On Android, this sets FLAG_SECURE on the window.
   /// On iOS, this is currently a no-op (requires additional native setup).
   static Future<void> enableSecureMode() async {
-    if (_isSecureMode) return;
+    if (_isSecureMode) {
+      return;
+    }
 
     try {
       if (Platform.isAndroid) {
@@ -53,7 +55,9 @@ class ScreenSecurity {
 
   /// Disable secure mode to allow screenshots and screen recordings.
   static Future<void> disableSecureMode() async {
-    if (_isSecureMode == false) return;
+    if (_isSecureMode == false) {
+      return;
+    }
 
     try {
       if (Platform.isAndroid) {

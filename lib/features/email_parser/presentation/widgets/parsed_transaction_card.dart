@@ -175,17 +175,13 @@ class _DetailRow extends StatelessWidget {
         Icon(
           icon,
           size: 16,
-          color: isDark
-              ? SpendexColors.darkTextSecondary
-              : SpendexColors.lightTextSecondary,
+          color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         ),
         const SizedBox(width: 8),
         Text(
           '$label:',
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         const SizedBox(width: 8),

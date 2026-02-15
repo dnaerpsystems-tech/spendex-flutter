@@ -18,8 +18,7 @@ class ImportHistoryScreen extends ConsumerStatefulWidget {
   const ImportHistoryScreen({super.key});
 
   @override
-  ConsumerState<ImportHistoryScreen> createState() =>
-      _ImportHistoryScreenState();
+  ConsumerState<ImportHistoryScreen> createState() => _ImportHistoryScreenState();
 }
 
 class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
@@ -52,10 +51,11 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
   }
 
   Future<void> _deleteImport(String importId) async {
-    final success =
-        await ref.read(pdfImportProvider.notifier).deleteImport(importId);
+    final success = await ref.read(pdfImportProvider.notifier).deleteImport(importId);
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,14 +101,12 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
 
     // Filter by status
     if (_selectedStatus != null) {
-      filtered =
-          filtered.where((i) => i.status == _selectedStatus).toList();
+      filtered = filtered.where((i) => i.status == _selectedStatus).toList();
     }
 
     // Filter by file type
     if (_selectedFileType != null) {
-      filtered =
-          filtered.where((i) => i.fileType == _selectedFileType).toList();
+      filtered = filtered.where((i) => i.fileType == _selectedFileType).toList();
     }
 
     // Filter by search query
@@ -131,13 +129,10 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
     final importState = ref.watch(pdfImportProvider);
     final filteredImports = _filterImports(importState.importHistory);
 
-    final hasActiveFilters =
-        _selectedStatus != null || _selectedFileType != null;
+    final hasActiveFilters = _selectedStatus != null || _selectedFileType != null;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Import History'),
         centerTitle: true,
@@ -176,9 +171,8 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
                 hintText: 'Search by file name...',
                 prefixIcon: Icon(
                   Iconsax.search_normal,
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
@@ -197,22 +191,17 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
                       )
                     : null,
                 filled: true,
-                fillColor:
-                    isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -282,28 +271,22 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
                                       Icon(
                                         Iconsax.search_normal,
                                         size: 56,
-                                        color: SpendexColors.primary
-                                            .withValues(alpha: 0.5),
+                                        color: SpendexColors.primary.withValues(alpha: 0.5),
                                       ),
                                       const SizedBox(height: 16),
                                       Text(
                                         'No imports found',
-                                        style:
-                                            SpendexTheme.titleMedium.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
+                                        style: SpendexTheme.titleMedium.copyWith(
+                                          color: Theme.of(context).colorScheme.onSurface,
                                         ),
                                       ),
                                       const SizedBox(height: 8),
                                       Text(
                                         'Try adjusting your filters or search query',
-                                        style:
-                                            SpendexTheme.bodyMedium.copyWith(
+                                        style: SpendexTheme.bodyMedium.copyWith(
                                           color: isDark
                                               ? SpendexColors.darkTextSecondary
-                                              : SpendexColors
-                                                  .lightTextSecondary,
+                                              : SpendexColors.lightTextSecondary,
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -321,8 +304,7 @@ class _ImportHistoryScreenState extends ConsumerState<ImportHistoryScreen> {
                                 final import = filteredImports[index];
                                 return ImportHistoryCard(
                                   import: import,
-                                  onTap: () =>
-                                      _navigateToImportPreview(import.id),
+                                  onTap: () => _navigateToImportPreview(import.id),
                                   onDelete: () => _deleteImport(import.id),
                                 );
                               },
@@ -389,9 +371,7 @@ class _FilterSheetState extends State<_FilterSheet> {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkBackground
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SafeArea(
@@ -405,9 +385,8 @@ class _FilterSheetState extends State<_FilterSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),

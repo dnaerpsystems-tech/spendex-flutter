@@ -28,8 +28,7 @@ class UsageProgressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isUnlimited = limit == -1;
-    final percentage =
-        isUnlimited ? 0.0 : (currentUsage / limit).clamp(0.0, 1.0);
+    final percentage = isUnlimited ? 0.0 : (currentUsage / limit).clamp(0.0, 1.0);
     final progressColor = _getProgressColor(percentage);
 
     return Material(
@@ -43,9 +42,7 @@ class UsageProgressCard extends StatelessWidget {
             color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
             borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
             border: Border.all(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
             ),
           ),
           child: Column(
@@ -57,9 +54,8 @@ class UsageProgressCard extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: progressColor.withOpacity(0.1),
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusSm),
+                      color: progressColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                     ),
                     child: Icon(icon, size: 20, color: progressColor),
                   ),
@@ -154,8 +150,7 @@ class UsageProgressCard extends StatelessWidget {
         Container(
           height: 8,
           decoration: BoxDecoration(
-            color:
-                isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
             borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
           ),
         ),
@@ -173,7 +168,7 @@ class UsageProgressCard extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [color, color.withOpacity(0.8)],
+                  colors: [color, color.withValues(alpha: 0.8)],
                 ),
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
               ),
@@ -189,12 +184,11 @@ class UsageProgressCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
       decoration: BoxDecoration(
-        color: (isOverLimit ? SpendexColors.expense : SpendexColors.warning)
-            .withOpacity(0.1),
+        color: (isOverLimit ? SpendexColors.expense : SpendexColors.warning).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
         border: Border.all(
-          color: (isOverLimit ? SpendexColors.expense : SpendexColors.warning)
-              .withOpacity(0.3),
+          color:
+              (isOverLimit ? SpendexColors.expense : SpendexColors.warning).withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -211,8 +205,7 @@ class UsageProgressCard extends StatelessWidget {
                   ? 'Limit reached. Upgrade to continue.'
                   : 'Approaching limit. Consider upgrading.',
               style: SpendexTheme.bodySmall.copyWith(
-                color:
-                    isOverLimit ? SpendexColors.expense : SpendexColors.warning,
+                color: isOverLimit ? SpendexColors.expense : SpendexColors.warning,
               ),
             ),
           ),
@@ -222,8 +215,12 @@ class UsageProgressCard extends StatelessWidget {
   }
 
   Color _getProgressColor(double percentage) {
-    if (percentage >= 0.8) return SpendexColors.expense;
-    if (percentage >= 0.5) return SpendexColors.warning;
+    if (percentage >= 0.8) {
+      return SpendexColors.expense;
+    }
+    if (percentage >= 0.5) {
+      return SpendexColors.warning;
+    }
     return SpendexColors.income;
   }
 }
@@ -236,8 +233,8 @@ class UsageProgressCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final skeletonColor = isDark
-        ? SpendexColors.darkBorder.withOpacity(0.5)
-        : SpendexColors.lightBorder.withOpacity(0.5);
+        ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+        : SpendexColors.lightBorder.withValues(alpha: 0.5);
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
@@ -271,8 +268,7 @@ class UsageProgressCardSkeleton extends StatelessWidget {
                       height: 16,
                       decoration: BoxDecoration(
                         color: skeletonColor,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -281,8 +277,7 @@ class UsageProgressCardSkeleton extends StatelessWidget {
                       height: 12,
                       decoration: BoxDecoration(
                         color: skeletonColor,
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                     ),
                   ],

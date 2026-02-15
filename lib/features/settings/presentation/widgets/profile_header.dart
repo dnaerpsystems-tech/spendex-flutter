@@ -67,11 +67,9 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacing2xl),
@@ -147,9 +145,7 @@ class ProfileHeader extends StatelessWidget {
                 ],
               ),
         border: Border.all(
-          color: isDark
-              ? SpendexColors.darkBorder
-              : SpendexColors.lightBorder,
+          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
           width: 3,
         ),
         boxShadow: [
@@ -190,7 +186,9 @@ class ProfileHeader extends StatelessWidget {
 
   String _getInitials(String name) {
     final parts = name.trim().split(' ');
-    if (parts.isEmpty) return '?';
+    if (parts.isEmpty) {
+      return '?';
+    }
     if (parts.length == 1) {
       return parts[0].isNotEmpty ? parts[0][0].toUpperCase() : '?';
     }

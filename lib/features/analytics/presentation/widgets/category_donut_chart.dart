@@ -52,9 +52,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
           Text(
             '${widget.breakdown.isExpense ? "Expense" : "Income"} Distribution',
             style: SpendexTheme.titleMedium.copyWith(
-              color: isDark
-                  ? SpendexColors.darkTextPrimary
-                  : SpendexColors.lightTextPrimary,
+              color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: SpendexTheme.spacingLg),
@@ -66,7 +64,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
                 PieChart(
                   PieChartData(
                     pieTouchData: PieTouchData(
-                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      touchCallback: (event, pieTouchResponse) {
                         setState(() {
                           if (!event.isInterestedForInteractions ||
                               pieTouchResponse == null ||
@@ -74,8 +72,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
                             _touchedIndex = -1;
                             return;
                           }
-                          _touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
+                          _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
                         });
                       },
                     ),
@@ -106,13 +103,15 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
     for (var i = 0; i < widget.breakdown.categories.length; i++) {
       final cat = widget.breakdown.categories[i];
       if (i < widget.maxCategories) {
-        displayCategories.add(_DisplayCategory(
-          name: cat.categoryName,
-          amount: cat.amountInRupees,
-          percentage: cat.percentage,
-          color: cat.color,
-          isOther: false,
-        ));
+        displayCategories.add(
+          _DisplayCategory(
+            name: cat.categoryName,
+            amount: cat.amountInRupees,
+            percentage: cat.percentage,
+            color: cat.color,
+            isOther: false,
+          ),
+        );
       } else {
         otherAmount += cat.amountInRupees;
         otherPercentage += cat.percentage;
@@ -120,13 +119,15 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
     }
 
     if (otherAmount > 0) {
-      displayCategories.add(_DisplayCategory(
-        name: 'Other',
-        amount: otherAmount,
-        percentage: otherPercentage,
-        color: SpendexColors.lightTextTertiary,
-        isOther: true,
-      ));
+      displayCategories.add(
+        _DisplayCategory(
+          name: 'Other',
+          amount: otherAmount,
+          percentage: otherPercentage,
+          color: SpendexColors.lightTextTertiary,
+          isOther: true,
+        ),
+      );
     }
 
     return displayCategories;
@@ -157,9 +158,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
           ],
         ),
         titlePositionPercentageOffset: 0.55,
-        borderSide: isTouched
-            ? BorderSide(color: cat.color, width: 2)
-            : BorderSide.none,
+        borderSide: isTouched ? BorderSide(color: cat.color, width: 2) : BorderSide.none,
       );
     }).toList();
   }
@@ -171,9 +170,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
         Text(
           'Total',
           style: SpendexTheme.labelSmall.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         const SizedBox(height: 4),
@@ -183,9 +180,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
             decimalDigits: 1,
           ),
           style: SpendexTheme.headlineSmall.copyWith(
-            color: widget.breakdown.isExpense
-                ? SpendexColors.expense
-                : SpendexColors.income,
+            color: widget.breakdown.isExpense ? SpendexColors.expense : SpendexColors.income,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -215,9 +210,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
               vertical: SpendexTheme.spacingXs,
             ),
             decoration: BoxDecoration(
-              color: isTouched
-                  ? cat.color.withValues(alpha: 0.1)
-                  : Colors.transparent,
+              color: isTouched ? cat.color.withValues(alpha: 0.1) : Colors.transparent,
               borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
             ),
             child: Row(
@@ -235,9 +228,7 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
                 Text(
                   cat.name,
                   style: SpendexTheme.labelSmall.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     fontWeight: isTouched ? FontWeight.w600 : FontWeight.w500,
                   ),
                 ),
@@ -245,9 +236,8 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
                 Text(
                   '${cat.percentage.toStringAsFixed(1)}%',
                   style: SpendexTheme.labelSmall.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ],
@@ -275,17 +265,13 @@ class _CategoryDonutChartState extends State<CategoryDonutChart> {
             Icon(
               Icons.pie_chart_outline,
               size: 48,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             const SizedBox(height: SpendexTheme.spacingMd),
             Text(
               'No ${widget.breakdown.isExpense ? "expense" : "income"} data',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
           ],

@@ -28,7 +28,6 @@ abstract class InsightsRemoteDataSource {
 
 /// Implementation of [InsightsRemoteDataSource] using API client
 class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
-
   InsightsRemoteDataSourceImpl({
     required ApiClient apiClient,
   }) : _apiClient = apiClient;
@@ -43,10 +42,9 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
         Left.new,
         (response) {
           try {
-            final data = response['data'] as List<dynamic>;
-            final insights = data
-                .map((json) => InsightModel.fromJson(json as Map<String, dynamic>))
-                .toList();
+            final data = (response as Map<String, dynamic>)['data'] as List<dynamic>;
+            final insights =
+                data.map((json) => InsightModel.fromJson(json as Map<String, dynamic>)).toList();
             return Right(insights);
           } catch (e) {
             return Left(
@@ -71,10 +69,9 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
         Left.new,
         (response) {
           try {
-            final data = response['data'] as List<dynamic>;
-            final insights = data
-                .map((json) => InsightModel.fromJson(json as Map<String, dynamic>))
-                .toList();
+            final data = (response as Map<String, dynamic>)['data'] as List<dynamic>;
+            final insights =
+                data.map((json) => InsightModel.fromJson(json as Map<String, dynamic>)).toList();
             return Right(insights);
           } catch (e) {
             return Left(
@@ -99,7 +96,7 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
         Left.new,
         (response) {
           try {
-            final data = response['data'] as Map<String, dynamic>;
+            final data = (response as Map<String, dynamic>)['data'] as Map<String, dynamic>;
             final insight = InsightModel.fromJson(data);
             return Right(insight);
           } catch (e) {
@@ -130,10 +127,9 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
         Left.new,
         (response) {
           try {
-            final data = response['data'] as List<dynamic>;
-            final insights = data
-                .map((json) => InsightModel.fromJson(json as Map<String, dynamic>))
-                .toList();
+            final data = (response as Map<String, dynamic>)['data'] as List<dynamic>;
+            final insights =
+                data.map((json) => InsightModel.fromJson(json as Map<String, dynamic>)).toList();
             return Right(insights);
           } catch (e) {
             return Left(
@@ -158,7 +154,7 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
         Left.new,
         (response) {
           try {
-            final data = response['data'] as Map<String, dynamic>;
+            final data = (response as Map<String, dynamic>)['data'] as Map<String, dynamic>;
             final insight = InsightModel.fromJson(data);
             return Right(insight);
           } catch (e) {
@@ -184,7 +180,7 @@ class InsightsRemoteDataSourceImpl implements InsightsRemoteDataSource {
         Left.new,
         (response) {
           try {
-            final data = response['data'] as Map<String, dynamic>;
+            final data = (response as Map<String, dynamic>)['data'] as Map<String, dynamic>;
             final insight = InsightModel.fromJson(data);
             return Right(insight);
           } catch (e) {

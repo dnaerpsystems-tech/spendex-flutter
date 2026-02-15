@@ -96,8 +96,7 @@ class PinAuthState {
       isPinSet: isPinSet ?? this.isPinSet,
       isLocked: isLocked ?? this.isLocked,
       failedAttempts: failedAttempts ?? this.failedAttempts,
-      lockoutEndTime:
-          clearLockout ? null : (lockoutEndTime ?? this.lockoutEndTime),
+      lockoutEndTime: clearLockout ? null : (lockoutEndTime ?? this.lockoutEndTime),
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
     );
@@ -194,9 +193,7 @@ class PinAuthNotifier extends StateNotifier<PinAuthState> {
           failedAttempts: failedAttempts,
           isLocked: isLocked,
           lockoutEndTime: lockoutEndTime,
-          error: isLocked
-              ? 'Too many failed attempts. Account locked.'
-              : 'Incorrect PIN',
+          error: isLocked ? 'Too many failed attempts. Account locked.' : 'Incorrect PIN',
         );
         return false;
       }
@@ -260,8 +257,7 @@ class PinAuthNotifier extends StateNotifier<PinAuthState> {
 }
 
 /// Provider for PIN authentication state.
-final pinAuthStateProvider =
-    StateNotifierProvider<PinAuthNotifier, PinAuthState>((ref) {
+final pinAuthStateProvider = StateNotifierProvider<PinAuthNotifier, PinAuthState>((ref) {
   final pinService = ref.watch(pinServiceProvider);
   return PinAuthNotifier(pinService);
 });
@@ -269,8 +265,7 @@ final pinAuthStateProvider =
 /// Provider for device security check.
 ///
 /// Performs an async security check and returns the result.
-final deviceSecurityCheckProvider =
-    FutureProvider<SecurityCheckResult>((ref) async {
+final deviceSecurityCheckProvider = FutureProvider<SecurityCheckResult>((ref) async {
   return DeviceSecurity.performSecurityCheck();
 });
 
@@ -314,7 +309,9 @@ class SecurityState {
 
   /// Whether all security checks pass.
   bool get isFullySecure {
-    if (deviceSecurityResult == null) return true;
+    if (deviceSecurityResult == null) {
+      return true;
+    }
     return deviceSecurityResult!.isSecure;
   }
 

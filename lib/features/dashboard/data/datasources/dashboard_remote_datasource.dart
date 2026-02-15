@@ -29,7 +29,6 @@ abstract class DashboardRemoteDataSource {
 
 /// Dashboard Remote DataSource Implementation
 class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
-
   DashboardRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -76,14 +75,14 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
       (data) {
         if (data is Map<String, dynamic>) {
           final items = (data['data'] as List?)
-              ?.map((e) => TransactionModel.fromJson(e as Map<String, dynamic>))
-              .toList() ?? [];
+                  ?.map((e) => TransactionModel.fromJson(e as Map<String, dynamic>))
+                  .toList() ??
+              [];
           return Right(items);
         }
         if (data is List) {
-          final transactions = data
-              .map((json) => TransactionModel.fromJson(json as Map<String, dynamic>))
-              .toList();
+          final transactions =
+              data.map((json) => TransactionModel.fromJson(json as Map<String, dynamic>)).toList();
           return Right(transactions);
         }
         return const Right([]);

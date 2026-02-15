@@ -7,7 +7,6 @@ import '../models/loan_model.dart';
 
 /// Loans Repository Implementation
 class LoansRepositoryImpl implements LoansRepository {
-
   LoansRepositoryImpl(this._remoteDataSource);
   final LoansRemoteDataSource _remoteDataSource;
 

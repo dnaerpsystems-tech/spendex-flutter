@@ -68,9 +68,7 @@ class _TabChip extends StatelessWidget {
           style: SpendexTheme.labelMedium.copyWith(
             color: isSelected
                 ? Colors.white
-                : (isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary),
+                : (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
           ),
         ),

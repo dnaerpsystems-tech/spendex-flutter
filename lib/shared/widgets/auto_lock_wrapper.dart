@@ -41,8 +41,7 @@ class AutoLockWrapper extends ConsumerStatefulWidget {
   ConsumerState<AutoLockWrapper> createState() => _AutoLockWrapperState();
 }
 
-class _AutoLockWrapperState extends ConsumerState<AutoLockWrapper>
-    with WidgetsBindingObserver {
+class _AutoLockWrapperState extends ConsumerState<AutoLockWrapper> with WidgetsBindingObserver {
   /// Auto-lock service instance.
   late final AutoLockService _autoLockService;
 

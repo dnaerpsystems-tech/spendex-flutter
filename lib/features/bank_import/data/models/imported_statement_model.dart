@@ -13,7 +13,6 @@ enum FileType {
 }
 
 class ImportedStatementModel extends Equatable {
-
   const ImportedStatementModel({
     required this.id,
     required this.fileName,

@@ -55,9 +55,7 @@ class GoalProgressRing extends StatelessWidget {
             painter: CircularProgressPainter(
               progress: progress,
               color: color,
-              backgroundColor: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              backgroundColor: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               strokeWidth: strokeWidth,
             ),
           ),

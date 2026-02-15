@@ -87,9 +87,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
               Text(
                 'Sort By',
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const SizedBox(height: 16),
@@ -136,9 +134,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
     final budgetsState = ref.watch(budgetsStateProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Budgets'),
         centerTitle: true,
@@ -387,9 +383,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
               Text(
                 hasFilters ? 'No Matching Budgets' : 'No Budgets Yet',
                 style: SpendexTheme.headlineMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -398,9 +392,8 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                     ? 'Try adjusting your filters to see more results'
                     : 'Create your first budget to start tracking your spending',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -431,7 +424,6 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
 }
 
 class _SortOption extends StatelessWidget {
-
   const _SortOption({
     required this.label,
     required this.icon,
@@ -467,9 +459,7 @@ class _SortOption extends StatelessWidget {
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
-      trailing: isSelected
-          ? const Icon(Iconsax.tick_circle, color: SpendexColors.primary)
-          : null,
+      trailing: isSelected ? const Icon(Iconsax.tick_circle, color: SpendexColors.primary) : null,
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
     );

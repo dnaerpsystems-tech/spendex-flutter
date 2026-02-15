@@ -9,9 +9,9 @@ import '../../data/models/insight_model.dart';
 import 'insight_card.dart';
 
 class InsightsDashboardWidget extends ConsumerStatefulWidget {
-
   const InsightsDashboardWidget({
-    required this.insights, super.key,
+    required this.insights,
+    super.key,
     this.isLoading = false,
     this.error,
     this.onViewAllTap,
@@ -26,12 +26,10 @@ class InsightsDashboardWidget extends ConsumerStatefulWidget {
   final Function(String)? onDismiss;
 
   @override
-  ConsumerState<InsightsDashboardWidget> createState() =>
-      _InsightsDashboardWidgetState();
+  ConsumerState<InsightsDashboardWidget> createState() => _InsightsDashboardWidgetState();
 }
 
-class _InsightsDashboardWidgetState
-    extends ConsumerState<InsightsDashboardWidget> {
+class _InsightsDashboardWidgetState extends ConsumerState<InsightsDashboardWidget> {
   late PageController _pageController;
   Timer? _autoScrollTimer;
   int _currentPage = 0;
@@ -53,10 +51,14 @@ class _InsightsDashboardWidgetState
 
   void _startAutoScroll() {
     _autoScrollTimer?.cancel();
-    if (widget.insights.isEmpty || widget.isLoading) return;
+    if (widget.insights.isEmpty || widget.isLoading) {
+      return;
+    }
 
     _autoScrollTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_userInteracted) return;
+      if (_userInteracted) {
+        return;
+      }
 
       if (_currentPage < widget.insights.length - 1) {
         _currentPage++;
@@ -196,10 +198,10 @@ class _InsightsDashboardWidgetState
       child: Container(
         height: 140,
         decoration: BoxDecoration(
-          color: SpendexColors.expense.withOpacity(0.05),
+          color: SpendexColors.expense.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: SpendexColors.expense.withOpacity(0.2),
+            color: SpendexColors.expense.withValues(alpha: 0.2),
           ),
         ),
         child: Center(
@@ -245,13 +247,13 @@ class _InsightsDashboardWidgetState
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              SpendexColors.primary.withOpacity(0.05),
-              SpendexColors.primaryLight.withOpacity(0.05),
+              SpendexColors.primary.withValues(alpha: 0.05),
+              SpendexColors.primaryLight.withValues(alpha: 0.05),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: SpendexColors.primary.withOpacity(0.2),
+            color: SpendexColors.primary.withValues(alpha: 0.2),
           ),
         ),
         child: Center(
@@ -348,7 +350,7 @@ class _InsightsDashboardWidgetState
             shape: BoxShape.circle,
             color: _currentPage == index
                 ? SpendexColors.primary
-                : SpendexColors.lightTextSecondary.withOpacity(0.5),
+                : SpendexColors.lightTextSecondary.withValues(alpha: 0.5),
           ),
         ),
       ),
@@ -361,8 +363,7 @@ class _ShimmerCard extends StatefulWidget {
   State<_ShimmerCard> createState() => _ShimmerCardState();
 }
 
-class _ShimmerCardState extends State<_ShimmerCard>
-    with SingleTickerProviderStateMixin {
+class _ShimmerCardState extends State<_ShimmerCard> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -399,7 +400,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
             gradient: LinearGradient(
               colors: [
                 SpendexColors.lightSurface,
-                SpendexColors.lightSurface.withOpacity(0.5),
+                SpendexColors.lightSurface.withValues(alpha: 0.5),
                 SpendexColors.lightSurface,
               ],
               stops: [
@@ -418,7 +419,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                   width: 100,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: SpendexColors.lightTextSecondary.withOpacity(0.2),
+                    color: SpendexColors.lightTextSecondary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
@@ -427,7 +428,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                   width: double.infinity,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: SpendexColors.lightTextSecondary.withOpacity(0.2),
+                    color: SpendexColors.lightTextSecondary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -436,7 +437,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                   width: double.infinity,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: SpendexColors.lightTextSecondary.withOpacity(0.2),
+                    color: SpendexColors.lightTextSecondary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -447,7 +448,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                       width: 60,
                       height: 10,
                       decoration: BoxDecoration(
-                        color: SpendexColors.lightTextSecondary.withOpacity(0.2),
+                        color: SpendexColors.lightTextSecondary.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
@@ -456,7 +457,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
                       width: 40,
                       height: 10,
                       decoration: BoxDecoration(
-                        color: SpendexColors.lightTextSecondary.withOpacity(0.2),
+                        color: SpendexColors.lightTextSecondary.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),

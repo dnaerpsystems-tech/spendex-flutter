@@ -31,7 +31,6 @@ abstract class AccountsRemoteDataSource {
 
 /// Accounts Remote DataSource Implementation
 class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
-
   AccountsRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -45,9 +44,8 @@ class AccountsRemoteDataSourceImpl implements AccountsRemoteDataSource {
       Left.new,
       (data) {
         if (data is List) {
-          final accounts = data
-              .map((json) => AccountModel.fromJson(json as Map<String, dynamic>))
-              .toList();
+          final accounts =
+              data.map((json) => AccountModel.fromJson(json as Map<String, dynamic>)).toList();
           return Right(accounts);
         }
         return const Right([]);

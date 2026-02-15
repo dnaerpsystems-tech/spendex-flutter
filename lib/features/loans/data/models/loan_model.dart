@@ -3,7 +3,6 @@ import '../../../../core/constants/app_constants.dart';
 
 /// Loan Model
 class LoanModel extends Equatable {
-
   const LoanModel({
     required this.id,
     required this.name,
@@ -41,9 +40,8 @@ class LoanModel extends Equatable {
       remainingAmount: json['remainingAmount'] as int,
       totalInterest: json['totalInterest'] as int,
       startDate: DateTime.parse(json['startDate'] as String),
-      nextEmiDate: json['nextEmiDate'] != null
-          ? DateTime.parse(json['nextEmiDate'] as String)
-          : null,
+      nextEmiDate:
+          json['nextEmiDate'] != null ? DateTime.parse(json['nextEmiDate'] as String) : null,
       lender: json['lender'] as String?,
       accountNumber: json['accountNumber'] as String?,
       status: LoanStatus.values.firstWhere(
@@ -139,7 +137,6 @@ class LoanModel extends Equatable {
 
 /// EMI Schedule
 class EmiSchedule extends Equatable {
-
   const EmiSchedule({
     required this.month,
     required this.dueDate,
@@ -160,9 +157,7 @@ class EmiSchedule extends Equatable {
       interest: json['interest'] as int,
       balance: json['balance'] as int,
       isPaid: json['isPaid'] as bool,
-      paidDate: json['paidDate'] != null
-          ? DateTime.parse(json['paidDate'] as String)
-          : null,
+      paidDate: json['paidDate'] != null ? DateTime.parse(json['paidDate'] as String) : null,
     );
   }
   final int month;
@@ -209,7 +204,6 @@ class EmiSchedule extends Equatable {
 
 /// Loans Summary
 class LoansSummary extends Equatable {
-
   const LoansSummary({
     required this.totalOutstanding,
     required this.totalMonthlyEmi,
@@ -244,7 +238,6 @@ class LoansSummary extends Equatable {
 
 /// Create Loan Request
 class CreateLoanRequest {
-
   const CreateLoanRequest({
     required this.name,
     required this.type,
@@ -280,7 +273,6 @@ class CreateLoanRequest {
 
 /// EMI Payment Request
 class EmiPaymentRequest {
-
   const EmiPaymentRequest({
     required this.month,
     this.paidDate,

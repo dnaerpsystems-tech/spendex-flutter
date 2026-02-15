@@ -6,7 +6,6 @@ import '../../domain/repositories/insights_repository.dart';
 
 /// State class for managing insights data and UI state
 class InsightsState extends Equatable {
-
   const InsightsState({
     this.allInsights = const [],
     this.dashboardInsights = const [],
@@ -56,7 +55,6 @@ class InsightsState extends Equatable {
 
 /// Notifier for managing insights state and operations
 class InsightsNotifier extends StateNotifier<InsightsState> {
-
   InsightsNotifier(this._repository) : super(const InsightsState());
   final InsightsRepository _repository;
 
@@ -187,13 +185,10 @@ class InsightsNotifier extends StateNotifier<InsightsState> {
       },
       (success) {
         // Remove from local state
-        final updatedAllInsights = state.allInsights
-            .where((insight) => insight.id != id)
-            .toList();
+        final updatedAllInsights = state.allInsights.where((insight) => insight.id != id).toList();
 
-        final updatedDashboardInsights = state.dashboardInsights
-            .where((insight) => insight.id != id)
-            .toList();
+        final updatedDashboardInsights =
+            state.dashboardInsights.where((insight) => insight.id != id).toList();
 
         state = state.copyWith(
           allInsights: updatedAllInsights,
@@ -241,9 +236,7 @@ final allInsightsProvider = Provider<List<InsightModel>>((ref) {
   final selectedType = state.selectedType;
 
   if (selectedType != null) {
-    return state.allInsights
-        .where((insight) => insight.type == selectedType)
-        .toList();
+    return state.allInsights.where((insight) => insight.type == selectedType).toList();
   }
 
   return state.allInsights;

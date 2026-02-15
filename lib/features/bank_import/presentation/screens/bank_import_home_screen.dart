@@ -18,8 +18,7 @@ class BankImportHomeScreen extends ConsumerStatefulWidget {
   const BankImportHomeScreen({super.key});
 
   @override
-  ConsumerState<BankImportHomeScreen> createState() =>
-      _BankImportHomeScreenState();
+  ConsumerState<BankImportHomeScreen> createState() => _BankImportHomeScreenState();
 }
 
 class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
@@ -61,10 +60,11 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
   }
 
   Future<void> _deleteImport(String importId) async {
-    final success =
-        await ref.read(pdfImportProvider.notifier).deleteImport(importId);
+    final success = await ref.read(pdfImportProvider.notifier).deleteImport(importId);
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -92,9 +92,7 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
     final importState = ref.watch(pdfImportProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Bank Import'),
         centerTitle: true,
@@ -167,8 +165,7 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
                     ImportMethodCard(
                       icon: Iconsax.document_upload,
                       title: 'PDF/CSV Import',
-                      description:
-                          'Upload bank statements in PDF or CSV format',
+                      description: 'Upload bank statements in PDF or CSV format',
                       onTap: _navigateToPdfImport,
                       color: SpendexColors.primary,
                     ),
@@ -178,8 +175,7 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
                     ImportMethodCard(
                       icon: Iconsax.messages,
                       title: 'SMS Parser',
-                      description:
-                          'Automatically parse bank transaction SMS messages',
+                      description: 'Automatically parse bank transaction SMS messages',
                       onTap: _navigateToSmsParser,
                       color: SpendexColors.transfer,
                     ),
@@ -189,8 +185,7 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
                     ImportMethodCard(
                       icon: Iconsax.bank,
                       title: 'Account Aggregator',
-                      description:
-                          'Securely fetch transactions from linked bank accounts',
+                      description: 'Securely fetch transactions from linked bank accounts',
                       onTap: _navigateToAccountAggregator,
                       color: SpendexColors.warning,
                     ),
@@ -200,8 +195,7 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
                     ImportMethodCard(
                       icon: Iconsax.sms,
                       title: 'Email Parser',
-                      description:
-                          'Parse bank transaction emails from Gmail, Outlook & more',
+                      description: 'Parse bank transaction emails from Gmail, Outlook & more',
                       onTap: _navigateToEmailParser,
                       color: SpendexColors.income,
                     ),
@@ -263,7 +257,9 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     // Show only first 5 recent imports
-                    if (index >= 5) return null;
+                    if (index >= 5) {
+                      return null;
+                    }
 
                     final import = importState.importHistory[index];
                     return ImportHistoryCard(
@@ -272,9 +268,8 @@ class _BankImportHomeScreenState extends ConsumerState<BankImportHomeScreen> {
                       onDelete: () => _deleteImport(import.id),
                     );
                   },
-                  childCount: importState.importHistory.length > 5
-                      ? 5
-                      : importState.importHistory.length,
+                  childCount:
+                      importState.importHistory.length > 5 ? 5 : importState.importHistory.length,
                 ),
               ),
 

@@ -6,7 +6,6 @@ import '../../app/routes.dart';
 import '../../app/theme.dart';
 
 class MainScaffold extends StatefulWidget {
-
   const MainScaffold({required this.child, super.key});
   final Widget child;
 
@@ -129,7 +128,6 @@ class _MainScaffoldState extends State<MainScaffold> {
 }
 
 class _NavItem {
-
   _NavItem({
     required this.icon,
     required this.activeIcon,
@@ -145,7 +143,6 @@ class _NavItem {
 }
 
 class _NavItemWidget extends StatelessWidget {
-
   const _NavItemWidget({
     required this.item,
     required this.isSelected,
@@ -157,9 +154,8 @@ class _NavItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isSelected
-        ? SpendexColors.primary
-        : Theme.of(context).colorScheme.onSurfaceVariant;
+    final color =
+        isSelected ? SpendexColors.primary : Theme.of(context).colorScheme.onSurfaceVariant;
 
     return InkWell(
       onTap: onTap,
@@ -190,7 +186,6 @@ class _NavItemWidget extends StatelessWidget {
 }
 
 class _CenterButton extends StatelessWidget {
-
   const _CenterButton({
     required this.isSelected,
     required this.onTap,

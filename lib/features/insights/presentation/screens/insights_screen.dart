@@ -126,10 +126,10 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
           vertical: SpendexTheme.spacingSm,
         ),
         decoration: BoxDecoration(
-          color: SpendexColors.primary.withOpacity(0.1),
+          color: SpendexColors.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           border: Border.all(
-            color: SpendexColors.primary.withOpacity(0.3),
+            color: SpendexColors.primary.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
@@ -186,15 +186,9 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
 
   Widget _buildInsightsList(List<InsightModel> insights) {
     // Group insights by priority
-    final highPriority = insights
-        .where((i) => i.priority == InsightPriority.high)
-        .toList();
-    final mediumPriority = insights
-        .where((i) => i.priority == InsightPriority.medium)
-        .toList();
-    final lowPriority = insights
-        .where((i) => i.priority == InsightPriority.low)
-        .toList();
+    final highPriority = insights.where((i) => i.priority == InsightPriority.high).toList();
+    final mediumPriority = insights.where((i) => i.priority == InsightPriority.medium).toList();
+    final lowPriority = insights.where((i) => i.priority == InsightPriority.low).toList();
 
     return SliverList(
       delegate: SliverChildListDelegate([
@@ -283,9 +277,8 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
             )
           : const Icon(Iconsax.magic_star),
       label: Text(isGenerating ? 'Generating...' : 'Generate Insights'),
-      backgroundColor: isGenerating
-          ? SpendexColors.primary.withOpacity(0.5)
-          : SpendexColors.primary,
+      backgroundColor:
+          isGenerating ? SpendexColors.primary.withValues(alpha: 0.5) : SpendexColors.primary,
     );
   }
 

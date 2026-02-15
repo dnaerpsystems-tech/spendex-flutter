@@ -9,9 +9,9 @@ import 'budget_progress_bar.dart';
 /// Budget Summary Card Widget
 /// Displays overall budget summary with total amounts and progress
 class BudgetSummaryCard extends StatelessWidget {
-
   const BudgetSummaryCard({
-    required this.summary, super.key,
+    required this.summary,
+    super.key,
     this.onTap,
   });
   final BudgetsSummary summary;
@@ -156,9 +156,7 @@ class BudgetSummaryCard extends StatelessWidget {
                 Container(
                   width: 1,
                   height: 40,
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
                 Expanded(
                   child: _StatItem(
@@ -171,17 +169,14 @@ class BudgetSummaryCard extends StatelessWidget {
                 Container(
                   width: 1,
                   height: 40,
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
                 Expanded(
                   child: _StatItem(
                     label: 'Remaining',
                     value: _formatCurrency(summary.totalRemainingInRupees),
-                    color: summary.totalRemaining >= 0
-                        ? SpendexColors.income
-                        : SpendexColors.expense,
+                    color:
+                        summary.totalRemaining >= 0 ? SpendexColors.income : SpendexColors.expense,
                     isDark: isDark,
                   ),
                 ),
@@ -208,7 +203,6 @@ class BudgetSummaryCard extends StatelessWidget {
 }
 
 class _StatItem extends StatelessWidget {
-
   const _StatItem({
     required this.label,
     required this.value,
@@ -236,9 +230,7 @@ class _StatItem extends StatelessWidget {
         Text(
           label,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextTertiary
-                : SpendexColors.lightTextTertiary,
+            color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             fontSize: 11,
           ),
         ),
@@ -254,12 +246,10 @@ class BudgetSummaryLoadingSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final shimmerBase = isDark
-        ? Colors.white.withValues(alpha: 0.05)
-        : Colors.black.withValues(alpha: 0.05);
-    final shimmerHighlight = isDark
-        ? Colors.white.withValues(alpha: 0.1)
-        : Colors.black.withValues(alpha: 0.08);
+    final shimmerBase =
+        isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
+    final shimmerHighlight =
+        isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08);
 
     return Container(
       padding: const EdgeInsets.all(20),

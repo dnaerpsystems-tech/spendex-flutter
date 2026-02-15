@@ -276,18 +276,19 @@ class PaymentMethodTagger {
     final transactionTime = time ?? DateTime.now();
 
     // Always available methods
-    methods.add('cash');
-    methods.add('cheque');
-    methods.add('card');
-
-    // 24/7 instant methods
-    methods.add('upi'); // Up to ₹1L
-    methods.add('imps'); // Up to ₹5L
+    methods
+      ..add('cash')
+      ..add('cheque')
+      ..add('card')
+      // 24/7 instant methods
+      ..add('upi') // Up to ₹1L
+      ..add('imps'); // Up to ₹5L
 
     // Banking hours methods
     if (_isBankingHours(transactionTime.hour)) {
-      methods.add('neft'); // Any amount
-      methods.add('netbanking');
+      methods
+        ..add('neft') // Any amount
+        ..add('netbanking');
 
       if (_isRtgsHours(transactionTime.hour)) {
         methods.add('rtgs'); // ₹2L+
@@ -489,6 +490,5 @@ extension PaymentMethodExtension on String {
   bool get is24x7PaymentMethod => PaymentMethodTagger.is24x7Available(this);
 
   /// Check if payment method requires banking hours
-  bool get requiresBankingHoursPaymentMethod =>
-      PaymentMethodTagger.requiresBankingHours(this);
+  bool get requiresBankingHoursPaymentMethod => PaymentMethodTagger.requiresBankingHours(this);
 }

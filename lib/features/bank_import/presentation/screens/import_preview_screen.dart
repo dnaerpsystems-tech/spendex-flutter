@@ -26,8 +26,7 @@ class ImportPreviewScreen extends ConsumerStatefulWidget {
   final String importId;
 
   @override
-  ConsumerState<ImportPreviewScreen> createState() =>
-      _ImportPreviewScreenState();
+  ConsumerState<ImportPreviewScreen> createState() => _ImportPreviewScreenState();
 }
 
 class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
@@ -77,16 +76,17 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
 
   Future<void> _performImport() async {
     final state = ref.read(pdfImportProvider);
-    final selectedTransactions = state.parsedTransactions
-        .where((t) => state.selectedTransactions.contains(t.id))
-        .toList();
+    final selectedTransactions =
+        state.parsedTransactions.where((t) => state.selectedTransactions.contains(t.id)).toList();
 
     // Step 1: Check for duplicates
     await ref.read(duplicateDetectionProvider.notifier).detectDuplicates(
           transactions: selectedTransactions,
         );
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     final duplicateState = ref.read(duplicateDetectionProvider);
 
@@ -100,7 +100,9 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
         },
       );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       // If user resolved duplicates successfully
       if (result ?? false) {
@@ -120,11 +122,11 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
     }
 
     // Step 3: No duplicates, proceed with direct import
-    final success = await ref
-        .read(pdfImportProvider.notifier)
-        .confirmImport(widget.importId);
+    final success = await ref.read(pdfImportProvider.notifier).confirmImport(widget.importId);
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -167,8 +169,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
               color: Theme.of(context).brightness == Brightness.dark
                   ? SpendexColors.darkCard
                   : SpendexColors.lightCard,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
             child: Column(
               children: [
@@ -298,9 +299,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
     final allSelected = ref.watch(allTransactionsSelectedProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Review Import'),
         centerTitle: true,
@@ -325,9 +324,8 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
           : importState.error != null
               ? ErrorStateWidget(
                   message: importState.error!,
-                  onRetry: () => ref
-                      .read(pdfImportProvider.notifier)
-                      .getParseResults(widget.importId),
+                  onRetry: () =>
+                      ref.read(pdfImportProvider.notifier).getParseResults(widget.importId),
                 )
               : importState.parsedTransactions.isEmpty
                   ? const NoTransactionsParsedEmptyState()
@@ -342,8 +340,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: SpendexColors.primary
-                                    .withValues(alpha: 0.3),
+                                color: SpendexColors.primary.withValues(alpha: 0.3),
                                 blurRadius: 20,
                                 offset: const Offset(0, 10),
                               ),
@@ -352,25 +349,21 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Selected',
                                         style: SpendexTheme.bodyMedium.copyWith(
-                                          color: Colors.white
-                                              .withValues(alpha: 0.8),
+                                          color: Colors.white.withValues(alpha: 0.8),
                                         ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
                                         '$selectedCount / ${importState.parsedTransactions.length}',
-                                        style:
-                                            SpendexTheme.headlineMedium.copyWith(
+                                        style: SpendexTheme.headlineMedium.copyWith(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -383,8 +376,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
                                       Text(
                                         'Total Amount',
                                         style: SpendexTheme.bodyMedium.copyWith(
-                                          color: Colors.white
-                                              .withValues(alpha: 0.8),
+                                          color: Colors.white.withValues(alpha: 0.8),
                                         ),
                                       ),
                                       const SizedBox(height: 4),
@@ -393,8 +385,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
                                           totalAmount,
                                           decimalDigits: 0,
                                         ),
-                                        style:
-                                            SpendexTheme.headlineMedium.copyWith(
+                                        style: SpendexTheme.headlineMedium.copyWith(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -413,24 +404,19 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
                             padding: const EdgeInsets.only(bottom: 100),
                             itemCount: importState.parsedTransactions.length,
                             itemBuilder: (context, index) {
-                              final transaction =
-                                  importState.parsedTransactions[index];
-                              final isSelected = importState
-                                  .selectedTransactions
-                                  .contains(transaction.id);
+                              final transaction = importState.parsedTransactions[index];
+                              final isSelected =
+                                  importState.selectedTransactions.contains(transaction.id);
 
                               return TransactionPreviewTile(
                                 transaction: transaction,
                                 isSelected: isSelected,
                                 onSelectionChanged: (selected) {
-                                  ref
-                                      .read(pdfImportProvider.notifier)
-                                      .toggleTransactionSelection(
+                                  ref.read(pdfImportProvider.notifier).toggleTransactionSelection(
                                         transaction.id,
                                       );
                                 },
-                                onEdit: () =>
-                                    _showEditTransactionBottomSheet(index),
+                                onEdit: () => _showEditTransactionBottomSheet(index),
                               );
                             },
                           ),
@@ -441,8 +427,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
           ? Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color:
-                    isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -459,8 +444,7 @@ class _ImportPreviewScreenState extends ConsumerState<ImportPreviewScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: SpendexColors.primary,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor:
-                          SpendexColors.primary.withValues(alpha: 0.5),
+                      disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),

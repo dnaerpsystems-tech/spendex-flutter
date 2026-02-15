@@ -6,7 +6,9 @@ import '../../data/models/category_breakdown_model.dart';
 /// List view of category breakdown with percentage bars
 class CategoryBreakdownList extends StatelessWidget {
   const CategoryBreakdownList({
-    required this.categories, required this.title, super.key,
+    required this.categories,
+    required this.title,
+    super.key,
     this.maxItems = 8,
     this.onCategoryTap,
   });
@@ -25,9 +27,7 @@ class CategoryBreakdownList extends StatelessWidget {
         child: Text(
           'No data available',
           style: SpendexTheme.bodyMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
       );
@@ -102,9 +102,8 @@ class _CategoryRow extends StatelessWidget {
                     borderRadius: BorderRadius.circular(2),
                     child: LinearProgressIndicator(
                       value: category.percentage / 100,
-                      backgroundColor: isDark
-                          ? SpendexColors.darkBorder
-                          : SpendexColors.lightBorder,
+                      backgroundColor:
+                          isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       valueColor: AlwaysStoppedAnimation(category.color),
                       minHeight: 4,
                     ),
@@ -125,9 +124,8 @@ class _CategoryRow extends StatelessWidget {
                 Text(
                   '${category.percentage.toStringAsFixed(1)}%',
                   style: SpendexTheme.labelSmall.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ],

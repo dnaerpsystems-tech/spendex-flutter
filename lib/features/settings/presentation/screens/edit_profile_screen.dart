@@ -121,7 +121,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         await _uploadPhoto(File(image.path));
       }
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showErrorSnackBar('Failed to capture photo: $e');
     }
   }
@@ -139,7 +141,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         await _uploadPhoto(File(image.path));
       }
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showErrorSnackBar('Failed to select photo: $e');
     }
   }
@@ -158,10 +162,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         _avatarUrl = file.path;
       });
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showSuccessSnackBar('Photo updated successfully');
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showErrorSnackBar('Failed to upload photo: $e');
 
       setState(() {
@@ -190,10 +198,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         _avatarFile = null;
       });
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showSuccessSnackBar('Photo removed successfully');
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showErrorSnackBar('Failed to remove photo: $e');
     } finally {
       if (mounted) {
@@ -247,16 +259,22 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         _isDirty = false;
       });
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       _showSuccessSnackBar('Profile updated successfully');
 
       await Future.delayed(const Duration(milliseconds: 500));
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       context.pop();
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showErrorSnackBar('Failed to update profile: $e');
     } finally {
       if (mounted) {
@@ -276,8 +294,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Discard Changes?'),
-        content:
-            const Text('You have unsaved changes. Do you want to discard them?'),
+        content: const Text('You have unsaved changes. Do you want to discard them?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -319,7 +336,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   String _getInitials(String name) {
     final parts = name.trim().split(' ');
-    if (parts.isEmpty) return '?';
+    if (parts.isEmpty) {
+      return '?';
+    }
     if (parts.length == 1) {
       return parts[0].isNotEmpty ? parts[0][0].toUpperCase() : '?';
     }
@@ -329,18 +348,19 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
     final user = ref.watch(currentUserProvider);
 
     return PopScope(
       canPop: !_isDirty,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
+        if (didPop) {
+          return;
+        }
 
         final shouldPop = await _onWillPop();
-        if (shouldPop && mounted) {
+        if (shouldPop && context.mounted) {
           context.pop();
         }
       },
@@ -464,12 +484,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       fontSize: 11,
                     ),
                     disabledBorder: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(SpendexTheme.radiusMd),
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                       borderSide: BorderSide(
-                        color: isDark
-                            ? SpendexColors.darkBorder
-                            : SpendexColors.lightBorder,
+                        color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                       ),
                     ),
                   ),
@@ -498,8 +515,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   Widget _buildAvatar(bool isDark) {
     final user = ref.watch(currentUserProvider);
-    final hasPhoto = (_avatarFile != null) ||
-        (_avatarUrl != null && _avatarUrl!.isNotEmpty);
+    final hasPhoto = (_avatarFile != null) || (_avatarUrl != null && _avatarUrl!.isNotEmpty);
 
     return Container(
       width: 120,
@@ -545,7 +561,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         return _buildInitials(user?.name ?? '?');
                       },
                       loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
+                        if (loadingProgress == null) {
+                          return child;
+                        }
                         return Center(
                           child: CircularProgressIndicator(
                             value: loadingProgress.expectedTotalBytes != null

@@ -31,7 +31,6 @@ abstract class LoansRemoteDataSource {
 
 /// Loans Remote Data Source Implementation
 class LoansRemoteDataSourceImpl implements LoansRemoteDataSource {
-
   LoansRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -44,9 +43,7 @@ class LoansRemoteDataSourceImpl implements LoansRemoteDataSource {
     return result.fold(
       Left.new,
       (data) {
-        final loans = data
-            .map((json) => LoanModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final loans = data.map((json) => LoanModel.fromJson(json as Map<String, dynamic>)).toList();
         return Right(loans);
       },
     );

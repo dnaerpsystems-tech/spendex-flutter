@@ -46,27 +46,27 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
   /// Load invoices
   Future<void> _loadInvoices({bool refresh = false}) async {
     if (refresh) {
-      await ref.read(subscriptionProvider.notifier).refreshInvoices();
+      await ref.read(subscriptionStateProvider.notifier).refreshInvoices();
     } else {
-      await ref.read(subscriptionProvider.notifier).loadInvoices();
+      await ref.read(subscriptionStateProvider.notifier).loadInvoices();
     }
   }
 
   /// Handle scroll for pagination
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      final state = ref.read(subscriptionProvider);
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      final state = ref.read(subscriptionStateProvider);
       if (state.hasMoreInvoices && !state.isLoadingInvoices) {
-        ref.read(subscriptionProvider.notifier).loadMoreInvoices();
+        ref.read(subscriptionStateProvider.notifier).loadMoreInvoices();
       }
     }
   }
@@ -113,7 +113,7 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: ${e.toString()}'),
+            content: Text('Error: $e'),
             backgroundColor: SpendexColors.expense,
           ),
         );
@@ -123,13 +123,15 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
 
   /// Get filtered invoices
   List<InvoiceModel> _getFilteredInvoices(List<InvoiceModel> invoices) {
-    if (_selectedFilter == null) return invoices;
+    if (_selectedFilter == null) {
+      return invoices;
+    }
     return invoices.where((i) => i.status == _selectedFilter).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(subscriptionProvider);
+    final state = ref.watch(subscriptionStateProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -178,7 +180,7 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
       return const EmptyStateWidget(
         icon: Iconsax.receipt_1,
         title: 'No Invoices Yet',
-        message: 'Your invoices will appear here once you make a payment.',
+        subtitle: 'Your invoices will appear here once you make a payment.',
       );
     }
 
@@ -188,11 +190,8 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
   /// Build invoices list
   Widget _buildInvoicesList(SubscriptionState state, bool isDark) {
     final filteredInvoices = _getFilteredInvoices(state.invoices);
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     // Empty filtered results
     if (filteredInvoices.isEmpty && _selectedFilter != null) {
@@ -226,10 +225,13 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
                     padding: const EdgeInsets.only(
                       bottom: SpendexTheme.spacingMd,
                     ),
-                    child: InvoiceCard(
-                      invoice: invoice,
-                      onDownload: () => _downloadInvoice(invoice),
+                    child: InkWell(
                       onTap: () => _showInvoiceDetails(invoice, isDark),
+                      borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
+                      child: InvoiceCard(
+                        invoice: invoice,
+                        onDownload: () => _downloadInvoice(invoice),
+                      ),
                     ),
                   );
                 }
@@ -272,9 +274,6 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
 
   /// Build active filter chip
   Widget _buildActiveFilterChip(bool isDark) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-
     return Row(
       children: [
         Container(
@@ -314,9 +313,8 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
 
   /// Build empty filtered state
   Widget _buildEmptyFilteredState(bool isDark) {
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Center(
       child: Padding(
@@ -356,15 +354,9 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
 
   /// Show filter bottom sheet
   void _showFilterSheet(bool isDark) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     showModalBottomSheet(
       context: context,
@@ -455,10 +447,8 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
     required bool isDark,
   }) {
     final isSelected = _selectedFilter == status;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return InkWell(
       onTap: () {
@@ -469,9 +459,7 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
       child: Container(
         padding: const EdgeInsets.all(SpendexTheme.spacingMd),
         decoration: BoxDecoration(
-          color: isSelected
-              ? SpendexColors.primary.withValues(alpha: 0.1)
-              : Colors.transparent,
+          color: isSelected ? SpendexColors.primary.withValues(alpha: 0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           border: Border.all(
             color: isSelected ? SpendexColors.primary : borderColor,
@@ -512,15 +500,11 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
 
   /// Show invoice details
   void _showInvoiceDetails(InvoiceModel invoice, bool isDark) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     showModalBottomSheet(
       context: context,
@@ -717,8 +701,18 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
   /// Format date
   String _formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }

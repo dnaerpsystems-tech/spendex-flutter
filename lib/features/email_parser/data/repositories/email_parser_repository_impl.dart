@@ -13,7 +13,6 @@ import '../models/email_filter_model.dart';
 import '../models/email_message_model.dart';
 
 class EmailParserRepositoryImpl implements EmailParserRepository {
-
   EmailParserRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
@@ -39,8 +38,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
       final detectedProvider = provider ?? EmailAccountModel.detectProvider(email);
 
       // Get default IMAP config if not provided
-      final defaultConfig =
-          EmailAccountModel.getDefaultImapConfig(detectedProvider);
+      final defaultConfig = EmailAccountModel.getDefaultImapConfig(detectedProvider);
 
       final finalImapServer = imapServer ?? defaultConfig['imapServer'] as String;
       final finalImapPort = imapPort ?? defaultConfig['imapPort'] as int;
@@ -107,8 +105,7 @@ class EmailParserRepositoryImpl implements EmailParserRepository {
           await cachedAccountsResult.fold(
             (failure) => Future.value(),
             (cachedAccounts) async {
-              final updatedAccounts =
-                  cachedAccounts.where((a) => a.id != accountId).toList();
+              final updatedAccounts = cachedAccounts.where((a) => a.id != accountId).toList();
               await _localDataSource.cacheEmailAccounts(updatedAccounts);
             },
           );

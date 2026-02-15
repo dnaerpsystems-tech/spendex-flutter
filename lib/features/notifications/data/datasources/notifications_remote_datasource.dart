@@ -60,23 +60,26 @@ class NotificationsRemoteDataSourceImpl implements NotificationsRemoteDataSource
           return Right(NotificationsResponse.fromJson(data));
         }
         if (data is List) {
-          return Right(NotificationsResponse(
-            notifications: data
-                .map((e) => NotificationModel.fromJson(e as Map<String, dynamic>))
-                .toList(),
-            total: data.length,
-            page: page,
-            pageSize: pageSize,
-            hasMore: false,
-          ));
+          return Right(
+            NotificationsResponse(
+              notifications:
+                  data.map((e) => NotificationModel.fromJson(e as Map<String, dynamic>)).toList(),
+              total: data.length,
+              page: page,
+              pageSize: pageSize,
+              hasMore: false,
+            ),
+          );
         }
-        return Right(const NotificationsResponse(
-          notifications: [],
-          total: 0,
-          page: 1,
-          pageSize: 20,
-          hasMore: false,
-        ));
+        return const Right(
+          NotificationsResponse(
+            notifications: [],
+            total: 0,
+            page: 1,
+            pageSize: 20,
+            hasMore: false,
+          ),
+        );
       },
     );
   }
@@ -93,7 +96,7 @@ class NotificationsRemoteDataSourceImpl implements NotificationsRemoteDataSource
         if (data is Map<String, dynamic>) {
           return Right(UnreadCountResponse.fromJson(data));
         }
-        return Right(const UnreadCountResponse(count: 0));
+        return const Right(UnreadCountResponse(count: 0));
       },
     );
   }
@@ -102,7 +105,7 @@ class NotificationsRemoteDataSourceImpl implements NotificationsRemoteDataSource
   Future<Either<Failure, NotificationModel>> markAsRead(String notificationId) async {
     return _apiClient.post<NotificationModel>(
       ApiEndpoints.notificationRead(notificationId),
-      fromJson: (json) => NotificationModel.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => NotificationModel.fromJson(json! as Map<String, dynamic>),
     );
   }
 

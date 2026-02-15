@@ -67,7 +67,6 @@ abstract class EmailRemoteDataSource {
 }
 
 class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
-
   EmailRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -110,9 +109,7 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
       },
       fromJson: (json) {
         final list = json! as List<dynamic>;
-        return list
-            .map((e) => EmailMessageModel.fromJson(e as Map<String, dynamic>))
-            .toList();
+        return list.map((e) => EmailMessageModel.fromJson(e as Map<String, dynamic>)).toList();
       },
     );
   }
@@ -127,7 +124,9 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
         'emailId': emailId,
       },
       fromJson: (json) {
-        if (json == null) return null;
+        if (json == null) {
+          return null;
+        }
         if (json is Map<String, dynamic>) {
           return ParsedTransactionModel.fromJson(json);
         }
@@ -143,7 +142,9 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
     return _apiClient.delete<bool>(
       '/email/disconnect/$accountId',
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['success'] as bool? ?? false;
         }
@@ -173,9 +174,7 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
       '/email/accounts',
       fromJson: (json) {
         final list = json! as List<dynamic>;
-        return list
-            .map((e) => EmailAccountModel.fromJson(e as Map<String, dynamic>))
-            .toList();
+        return list.map((e) => EmailAccountModel.fromJson(e as Map<String, dynamic>)).toList();
       },
     );
   }
@@ -191,7 +190,9 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
         'source': 'email',
       },
       fromJson: (json) {
-        if (json is int) return json;
+        if (json is int) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return (json['count'] as num?)?.toInt() ?? 0;
         }
@@ -211,7 +212,9 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
         'source': 'email',
       },
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['success'] as bool? ?? false;
         }
@@ -229,7 +232,9 @@ class EmailRemoteDataSourceImpl implements EmailRemoteDataSource {
       '/email/accounts/$accountId/tracking',
       data: {'enabled': enabled},
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['enabled'] as bool? ?? false;
         }

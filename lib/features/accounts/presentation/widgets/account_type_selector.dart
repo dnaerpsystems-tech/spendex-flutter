@@ -7,7 +7,6 @@ import 'account_card.dart';
 /// Account Type Selector Widget
 /// A grid or horizontal list of account types with selection state
 class AccountTypeSelector extends StatelessWidget {
-
   const AccountTypeSelector({
     required this.selectedType,
     required this.onTypeSelected,
@@ -22,9 +21,8 @@ class AccountTypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final types = AccountType.values
-        .where((type) => !(excludeTypes?.contains(type) ?? false))
-        .toList();
+    final types =
+        AccountType.values.where((type) => !(excludeTypes?.contains(type) ?? false)).toList();
 
     if (horizontal) {
       return _buildHorizontalList(context, types);
@@ -95,18 +93,14 @@ class AccountTypeSelector extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? color.withValues(alpha: 0.2)
-                    : (isDark
-                        ? SpendexColors.darkBackground
-                        : SpendexColors.lightBackground),
+                    : (isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
                 getAccountTypeIcon(type),
                 color: isSelected
                     ? color
-                    : (isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary),
+                    : (isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary),
                 size: 20,
               ),
             ),
@@ -138,7 +132,6 @@ class AccountTypeSelector extends StatelessWidget {
 /// Account Type Chip
 /// A smaller, inline version for displaying account type
 class AccountTypeChip extends StatelessWidget {
-
   const AccountTypeChip({
     required this.type,
     super.key,
@@ -165,9 +158,8 @@ class AccountTypeChip extends StatelessWidget {
               : (isDark ? SpendexColors.darkCard : SpendexColors.lightCard),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: selected
-                ? color
-                : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
+            color:
+                selected ? color : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
           ),
         ),
         child: Row(
@@ -177,9 +169,7 @@ class AccountTypeChip extends StatelessWidget {
               getAccountTypeIcon(type),
               color: selected
                   ? color
-                  : (isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary),
+                  : (isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary),
               size: 16,
             ),
             const SizedBox(width: 6),
@@ -188,9 +178,7 @@ class AccountTypeChip extends StatelessWidget {
               style: SpendexTheme.labelMedium.copyWith(
                 color: selected
                     ? color
-                    : (isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary),
+                    : (isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary),
                 fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
@@ -204,7 +192,6 @@ class AccountTypeChip extends StatelessWidget {
 /// Account Type Filter List
 /// Horizontal scrollable list of account type chips for filtering
 class AccountTypeFilterList extends StatelessWidget {
-
   const AccountTypeFilterList({
     required this.selectedType,
     required this.onTypeSelected,
@@ -240,9 +227,7 @@ class AccountTypeFilterList extends StatelessWidget {
                     border: Border.all(
                       color: selectedType == null
                           ? SpendexColors.primary
-                          : (isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder),
+                          : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
                     ),
                   ),
                   child: Text(
@@ -253,8 +238,7 @@ class AccountTypeFilterList extends StatelessWidget {
                           : (isDark
                               ? SpendexColors.darkTextSecondary
                               : SpendexColors.lightTextSecondary),
-                      fontWeight:
-                          selectedType == null ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: selectedType == null ? FontWeight.w600 : FontWeight.w500,
                     ),
                   ),
                 ),

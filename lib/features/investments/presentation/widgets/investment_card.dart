@@ -35,12 +35,9 @@ class InvestmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -58,8 +55,7 @@ class InvestmentCard extends StatelessWidget {
                     height: 80,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: _getInvestmentTypeColor(investment.type)
-                          .withOpacity(0.1),
+                      color: _getInvestmentTypeColor(investment.type).withValues(alpha: 0.1),
                     ),
                     child: Icon(
                       _getInvestmentTypeIcon(investment.type),
@@ -154,7 +150,7 @@ class InvestmentCard extends StatelessWidget {
                           color: (investment.returns >= 0
                                   ? SpendexColors.income
                                   : SpendexColors.expense)
-                              .withOpacity(0.1),
+                              .withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(
                             SpendexTheme.radiusSm,
                           ),
@@ -181,10 +177,10 @@ class InvestmentCard extends StatelessWidget {
                     vertical: SpendexTheme.spacingSm,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.1),
+                    color: Colors.orange.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                     border: Border.all(
-                      color: Colors.orange.withOpacity(0.3),
+                      color: Colors.orange.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Row(

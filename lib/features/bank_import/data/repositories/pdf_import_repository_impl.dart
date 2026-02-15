@@ -7,7 +7,6 @@ import '../models/imported_statement_model.dart';
 import '../models/parsed_transaction_model.dart';
 
 class PdfImportRepositoryImpl implements PdfImportRepository {
-
   PdfImportRepositoryImpl(this._remoteDataSource);
   final PdfImportRemoteDataSource _remoteDataSource;
 

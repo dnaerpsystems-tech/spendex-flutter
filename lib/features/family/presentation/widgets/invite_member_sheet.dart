@@ -73,7 +73,7 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -102,7 +102,6 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
     final role = await MemberRoleSelector.show(
       context: context,
       currentRole: _selectedRole,
-      excludeOwner: true,
     );
     if (role != null && mounted) {
       setState(() {
@@ -114,15 +113,11 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor =
-        isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final backgroundColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     // Adjust for keyboard
     final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
@@ -166,8 +161,7 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
                         height: 44,
                         decoration: BoxDecoration(
                           color: SpendexColors.primary.withValues(alpha: 0.1),
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusMd),
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                         ),
                         child: const Icon(
                           Iconsax.user_add,
@@ -243,8 +237,7 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
                       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
                       decoration: BoxDecoration(
                         border: Border.all(color: borderColor),
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusMd),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                       ),
                       child: Row(
                         children: [
@@ -265,7 +258,8 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
                                 const SizedBox(height: 4),
                                 Text(
                                   MemberRoleSelector.getRoleDescription(
-                                      _selectedRole),
+                                    _selectedRole,
+                                  ),
                                   style: SpendexTheme.bodySmall.copyWith(
                                     color: textSecondary,
                                   ),
@@ -292,8 +286,7 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
                       padding: const EdgeInsets.all(SpendexTheme.spacingMd),
                       decoration: BoxDecoration(
                         color: SpendexColors.expense.withValues(alpha: 0.1),
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                         border: Border.all(
                           color: SpendexColors.expense.withValues(alpha: 0.3),
                         ),
@@ -329,8 +322,7 @@ class _InviteMemberSheetState extends ConsumerState<InviteMemberSheet> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : Row(

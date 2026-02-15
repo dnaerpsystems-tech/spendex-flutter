@@ -16,15 +16,17 @@ class RemoteConfigService {
 
   /// Initialize Remote Config with defaults
   static Future<void> initialize() async {
-    if (_initialized) return;
+    if (_initialized) {
+      return;
+    }
 
     try {
-      await instance.setConfigSettings(RemoteConfigSettings(
-        fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: kDebugMode
-            ? const Duration(minutes: 5)
-            : const Duration(hours: 12),
-      ));
+      await instance.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: const Duration(minutes: 1),
+          minimumFetchInterval: kDebugMode ? const Duration(minutes: 5) : const Duration(hours: 12),
+        ),
+      );
 
       // Set default values
       await instance.setDefaults(_defaults);

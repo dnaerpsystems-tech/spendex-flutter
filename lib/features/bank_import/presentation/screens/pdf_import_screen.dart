@@ -63,20 +63,19 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
 
       final file = File(pickedFile.path!);
 
-      // Validate file exists
-      if (!await file.exists()) {
+      // Validate file exists (sync check for better performance)
+      if (!file.existsSync()) {
         setState(() {
           _fileError = 'File does not exist';
         });
         return;
       }
 
-      // Validate file size
-      final fileSize = await file.length();
+      // Validate file size (sync check for better performance)
+      final fileSize = file.lengthSync();
       if (fileSize > _maxFileSizeBytes) {
         setState(() {
-          _fileError =
-              'File size exceeds 10 MB limit (${_formatFileSize(fileSize)})';
+          _fileError = 'File size exceeds 10 MB limit (${_formatFileSize(fileSize)})';
         });
         return;
       }
@@ -115,11 +114,11 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
       // Upload file based on type
       final importModel = extension == 'pdf'
           ? await ref.read(pdfImportProvider.notifier).uploadPdf(_selectedFile!)
-          : await ref
-              .read(pdfImportProvider.notifier)
-              .uploadCsv(_selectedFile!, {});
+          : await ref.read(pdfImportProvider.notifier).uploadCsv(_selectedFile!, {});
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       if (importModel != null) {
         // Upload successful, navigate to preview screen
@@ -139,7 +138,9 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
         _showErrorSnackBar(error ?? 'Upload failed');
       }
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       _showErrorSnackBar('Upload error: $e');
     }
   }
@@ -155,8 +156,12 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
   }
 
   String _formatFileSize(int bytes) {
-    if (bytes < 1024) return '$bytes B';
-    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    if (bytes < 1024) {
+      return '$bytes B';
+    }
+    if (bytes < 1024 * 1024) {
+      return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    }
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
   }
 
@@ -166,9 +171,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
     final importState = ref.watch(pdfImportProvider);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('PDF/CSV Import'),
         centerTitle: true,
@@ -215,9 +218,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(32),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkCard
-                              : SpendexColors.lightCard,
+                          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: _fileError != null
@@ -261,8 +262,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
                               Text(
                                 'Choose File',
                                 style: SpendexTheme.titleMedium.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -279,8 +279,7 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
                               Text(
                                 _selectedFile!.path.split('/').last,
                                 style: SpendexTheme.titleMedium.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                 ),
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
@@ -392,14 +391,11 @@ class _PdfImportScreenState extends ConsumerState<PdfImportScreen> {
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: _selectedFile != null && _fileError == null
-                            ? _uploadFile
-                            : null,
+                        onPressed: _selectedFile != null && _fileError == null ? _uploadFile : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: SpendexColors.primary,
                           foregroundColor: Colors.white,
-                          disabledBackgroundColor:
-                              SpendexColors.primary.withValues(alpha: 0.5),
+                          disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),

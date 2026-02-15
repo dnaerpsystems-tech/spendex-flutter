@@ -30,8 +30,7 @@ class AddInvestmentScreen extends ConsumerStatefulWidget {
   final String? investmentId;
 
   @override
-  ConsumerState<AddInvestmentScreen> createState() =>
-      _AddInvestmentScreenState();
+  ConsumerState<AddInvestmentScreen> createState() => _AddInvestmentScreenState();
 }
 
 class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
@@ -145,8 +144,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
   }
 
   void _calculateGoldInvestedAmount() {
-    if (_selectedType == InvestmentType.gold ||
-        _selectedType == InvestmentType.sovereignGoldBond) {
+    if (_selectedType == InvestmentType.gold || _selectedType == InvestmentType.sovereignGoldBond) {
       final weight = double.tryParse(_weightController.text) ?? 0;
       final pricePerGram = double.tryParse(_pricePerGramController.text) ?? 0;
       if (weight > 0 && pricePerGram > 0) {
@@ -171,8 +169,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         final rateDecimal = rate / 100;
         const n = 4;
 
-        final maturityAmount =
-            principal * math.pow(1 + rateDecimal / n, n * actualYears);
+        final maturityAmount = principal * math.pow(1 + rateDecimal / n, n * actualYears);
 
         _maturityAmountController.text = maturityAmount.toStringAsFixed(2);
 
@@ -182,8 +179,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
             _selectedPurchaseDate!.month + tenureMonths,
             _selectedPurchaseDate!.day,
           );
-          _maturityDateController.text =
-              DateFormat('dd MMM yyyy').format(_selectedMaturityDate!);
+          _maturityDateController.text = DateFormat('dd MMM yyyy').format(_selectedMaturityDate!);
         }
       }
     }
@@ -194,9 +190,8 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
       _isLoadingInvestment = true;
     });
 
-    final investment = await ref
-        .read(investmentsStateProvider.notifier)
-        .loadInvestmentById(widget.investmentId!);
+    final investment =
+        await ref.read(investmentsStateProvider.notifier).loadInvestmentById(widget.investmentId!);
 
     if (investment != null && mounted) {
       setState(() {
@@ -215,14 +210,12 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
 
   void _populateFields(InvestmentModel investment) {
     _nameController.text = investment.name;
-    _investedAmountController.text =
-        investment.investedAmountInRupees.toStringAsFixed(2);
+    _investedAmountController.text = investment.investedAmountInRupees.toStringAsFixed(2);
     _selectedType = investment.type;
 
     if (investment.purchaseDate != null) {
       _selectedPurchaseDate = investment.purchaseDate;
-      _purchaseDateController.text =
-          DateFormat('dd MMM yyyy').format(investment.purchaseDate!);
+      _purchaseDateController.text = DateFormat('dd MMM yyyy').format(investment.purchaseDate!);
     }
 
     _taxSaving = investment.taxSaving;
@@ -236,8 +229,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         _unitsController.text = investment.units!.toStringAsFixed(4);
       }
       if (investment.purchasePrice != null) {
-        _navController.text =
-            investment.purchasePriceInRupees!.toStringAsFixed(2);
+        _navController.text = investment.purchasePriceInRupees!.toStringAsFixed(2);
       }
     }
 
@@ -249,8 +241,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         _quantityController.text = investment.units!.toInt().toString();
       }
       if (investment.purchasePrice != null) {
-        _priceController.text =
-            investment.purchasePriceInRupees!.toStringAsFixed(2);
+        _priceController.text = investment.purchasePriceInRupees!.toStringAsFixed(2);
       }
       _brokerController.text = investment.broker ?? '';
     }
@@ -260,27 +251,22 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         investment.type == InvestmentType.recurringDeposit) {
       _bankController.text = investment.symbol ?? '';
       if (investment.interestRate != null) {
-        _interestRateController.text =
-            investment.interestRate!.toStringAsFixed(2);
+        _interestRateController.text = investment.interestRate!.toStringAsFixed(2);
       }
       if (investment.maturityDate != null) {
         _selectedMaturityDate = investment.maturityDate;
-        _maturityDateController.text =
-            DateFormat('dd MMM yyyy').format(investment.maturityDate!);
+        _maturityDateController.text = DateFormat('dd MMM yyyy').format(investment.maturityDate!);
 
         // Calculate tenure in months
         if (_selectedPurchaseDate != null) {
-          final months = (_selectedMaturityDate!.year -
-                  _selectedPurchaseDate!.year) *
-              12 +
+          final months = (_selectedMaturityDate!.year - _selectedPurchaseDate!.year) * 12 +
               _selectedMaturityDate!.month -
               _selectedPurchaseDate!.month;
           _tenureController.text = months.toString();
         }
       }
       if (investment.maturityAmount != null) {
-        _maturityAmountController.text =
-            investment.maturityAmountInRupees!.toStringAsFixed(2);
+        _maturityAmountController.text = investment.maturityAmountInRupees!.toStringAsFixed(2);
       }
     }
 
@@ -298,8 +284,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
         _weightController.text = investment.units!.toStringAsFixed(3);
       }
       if (investment.purchasePrice != null) {
-        _pricePerGramController.text =
-            investment.purchasePriceInRupees!.toStringAsFixed(2);
+        _pricePerGramController.text = investment.purchasePriceInRupees!.toStringAsFixed(2);
       }
     }
   }
@@ -429,8 +414,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
   Future<void> _selectMaturityDate() async {
     final date = await showDatePicker(
       context: context,
-      initialDate: _selectedMaturityDate ??
-          DateTime.now().add(const Duration(days: 365)),
+      initialDate: _selectedMaturityDate ?? DateTime.now().add(const Duration(days: 365)),
       firstDate: _selectedPurchaseDate ?? DateTime.now(),
       lastDate: DateTime(2050),
       builder: (context, child) {
@@ -529,8 +513,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
       return;
     }
 
-    final investedAmount =
-        double.parse(_investedAmountController.text.replaceAll(',', ''));
+    final investedAmount = double.parse(_investedAmountController.text.replaceAll(',', ''));
     final investedAmountInPaise = (investedAmount * 100).toInt();
 
     final request = CreateInvestmentRequest(
@@ -541,18 +524,14 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
       taxSaving: _taxSaving,
       taxSection: _taxSaving ? _selectedTaxSection : null,
       symbol: _getSymbolValue(),
-      isin: _isinController.text.trim().isEmpty
-          ? null
-          : _isinController.text.trim(),
+      isin: _isinController.text.trim().isEmpty ? null : _isinController.text.trim(),
       folioNumber: _getFolioValue(),
       units: _getUnitsValue(),
       purchasePrice: _getPurchasePriceValue(),
       interestRate: _getInterestRateValue(),
       maturityDate: _selectedMaturityDate,
       maturityAmount: _getMaturityAmountValue(),
-      broker: _brokerController.text.trim().isEmpty
-          ? null
-          : _brokerController.text.trim(),
+      broker: _brokerController.text.trim().isEmpty ? null : _brokerController.text.trim(),
     );
 
     final notifier = ref.read(investmentsStateProvider.notifier);
@@ -567,13 +546,13 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
       result = await notifier.createInvestment(request);
     }
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (result != null) {
       _showSuccessSnackBar(
-        isEditing
-            ? 'Investment updated successfully'
-            : 'Investment created successfully',
+        isEditing ? 'Investment updated successfully' : 'Investment created successfully',
       );
       context.pop();
     } else {
@@ -585,18 +564,12 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
   String? _getSymbolValue() {
     switch (_selectedType) {
       case InvestmentType.mutualFund:
-        return _schemeCodeController.text.trim().isEmpty
-            ? null
-            : _schemeCodeController.text.trim();
+        return _schemeCodeController.text.trim().isEmpty ? null : _schemeCodeController.text.trim();
       case InvestmentType.stock:
-        return _symbolController.text.trim().isEmpty
-            ? null
-            : _symbolController.text.trim();
+        return _symbolController.text.trim().isEmpty ? null : _symbolController.text.trim();
       case InvestmentType.fixedDeposit:
       case InvestmentType.recurringDeposit:
-        return _bankController.text.trim().isEmpty
-            ? null
-            : _bankController.text.trim();
+        return _bankController.text.trim().isEmpty ? null : _bankController.text.trim();
       default:
         return null;
     }
@@ -604,9 +577,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
 
   String? _getFolioValue() {
     if (_selectedType == InvestmentType.mutualFund) {
-      return _folioController.text.trim().isEmpty
-          ? null
-          : _folioController.text.trim();
+      return _folioController.text.trim().isEmpty ? null : _folioController.text.trim();
     } else if (_selectedType == InvestmentType.ppf ||
         _selectedType == InvestmentType.epf ||
         _selectedType == InvestmentType.nps) {
@@ -660,7 +631,8 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
     if (_selectedType == InvestmentType.fixedDeposit ||
         _selectedType == InvestmentType.recurringDeposit) {
       final amount = double.tryParse(
-          _maturityAmountController.text.replaceAll(',', ''),);
+        _maturityAmountController.text.replaceAll(',', ''),
+      );
       return amount != null ? (amount * 100).toInt() : null;
     }
     return null;
@@ -670,12 +642,12 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
-        children: [
-          const Icon(Iconsax.tick_circle, color: Colors.white),
-          const SizedBox(width: SpendexTheme.spacingMd),
-          Expanded(child: Text(message)),
-        ],
-      ),
+          children: [
+            const Icon(Iconsax.tick_circle, color: Colors.white),
+            const SizedBox(width: SpendexTheme.spacingMd),
+            Expanded(child: Text(message)),
+          ],
+        ),
         backgroundColor: SpendexColors.income,
         behavior: SnackBarBehavior.floating,
       ),
@@ -923,8 +895,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
                   hintText: '0.0000',
                   prefixIcon: Icon(Iconsax.note),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,4}')),
                 ],
@@ -941,8 +912,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
                   prefixText: '${CurrencyFormatter.symbol} ',
                   prefixIcon: Icon(Iconsax.money),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                 ],
@@ -1010,8 +980,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
                   prefixText: '${CurrencyFormatter.symbol} ',
                   prefixIcon: Icon(Iconsax.money),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                 ],
@@ -1068,8 +1037,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
                   suffixText: '%',
                   prefixIcon: Icon(Iconsax.percentage_circle),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                 ],
@@ -1133,11 +1101,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
           textInputAction: TextInputAction.next,
           readOnly: true,
           style: TextStyle(
-            color: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.color
-                ?.withValues(alpha: 0.7),
+            color: Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -1211,8 +1175,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
                   suffixText: isSGB ? 'units' : 'grams',
                   prefixIcon: const Icon(Iconsax.weight),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
                 ],
@@ -1229,8 +1192,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
                   prefixText: '${CurrencyFormatter.symbol} ',
                   prefixIcon: const Icon(Iconsax.money),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                 ],
@@ -1273,9 +1235,7 @@ class _AddInvestmentScreenState extends ConsumerState<AddInvestmentScreen> {
               hintText: 'Select tax section',
               prefixIcon: Icon(Iconsax.receipt_minus),
             ),
-            items: TaxSection.values
-                .where((section) => section != TaxSection.none)
-                .map((section) {
+            items: TaxSection.values.where((section) => section != TaxSection.none).map((section) {
               return DropdownMenuItem<TaxSection>(
                 value: section,
                 child: Text(section.label),

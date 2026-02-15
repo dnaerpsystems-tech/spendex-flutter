@@ -57,7 +57,6 @@ abstract class EmailLocalDataSource {
 }
 
 class EmailLocalDataSourceImpl implements EmailLocalDataSource {
-
   EmailLocalDataSourceImpl(this._secureStorage);
   final SecureStorageService _secureStorage;
 
@@ -91,9 +90,8 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
       }
 
       final accountsList = json.decode(accountsString) as List<dynamic>;
-      final accounts = accountsList
-          .map((e) => EmailAccountModel.fromJson(e as Map<String, dynamic>))
-          .toList();
+      final accounts =
+          accountsList.map((e) => EmailAccountModel.fromJson(e as Map<String, dynamic>)).toList();
 
       return Right(accounts);
     } catch (e) {
@@ -129,9 +127,8 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
       }
 
       final emailsList = json.decode(emailsString) as List<dynamic>;
-      var emails = emailsList
-          .map((e) => EmailMessageModel.fromJson(e as Map<String, dynamic>))
-          .toList();
+      var emails =
+          emailsList.map((e) => EmailMessageModel.fromJson(e as Map<String, dynamic>)).toList();
 
       // Filter by account ID if provided
       if (accountId != null) {
@@ -165,8 +162,7 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
       return result.fold(
         Left.new,
         (emails) async {
-          final filteredEmails =
-              emails.where((e) => e.accountId != accountId).toList();
+          final filteredEmails = emails.where((e) => e.accountId != accountId).toList();
           return cacheEmails(filteredEmails);
         },
       );
@@ -209,9 +205,8 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
 
       // Fetch recent messages
       final fetchLimit = filters?.maxResults ?? 100;
-      final startSeq = mailbox.messagesExists > fetchLimit
-          ? mailbox.messagesExists - fetchLimit + 1
-          : 1;
+      final startSeq =
+          mailbox.messagesExists > fetchLimit ? mailbox.messagesExists - fetchLimit + 1 : 1;
 
       final sequence = MessageSequence.fromRange(startSeq, mailbox.messagesExists);
       final fetchResult = await client.fetchMessages(
@@ -310,8 +305,9 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
       final sinceDate = filters.dateRange!.start;
       final beforeDate = filters.dateRange!.end.add(const Duration(days: 1));
 
-      criteria.add('SINCE ${sinceDate.day}-${_getMonthName(sinceDate.month)}-${sinceDate.year}');
-      criteria.add('BEFORE ${beforeDate.day}-${_getMonthName(beforeDate.month)}-${beforeDate.year}');
+      criteria
+        ..add('SINCE ${sinceDate.day}-${_getMonthName(sinceDate.month)}-${sinceDate.year}')
+        ..add('BEFORE ${beforeDate.day}-${_getMonthName(beforeDate.month)}-${beforeDate.year}');
     }
 
     // Search query filter
@@ -325,8 +321,18 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
   /// Get month name for IMAP date format
   String _getMonthName(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return months[month - 1];
   }
@@ -344,9 +350,7 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
     final date = mimeMessage.decodeDate() ?? DateTime.now();
 
     // Extract body (prefer plain text, fallback to HTML)
-    final body = mimeMessage.decodeTextPlainPart() ??
-        mimeMessage.decodeTextHtmlPart() ??
-        '';
+    final body = mimeMessage.decodeTextPlainPart() ?? mimeMessage.decodeTextHtmlPart() ?? '';
 
     // Extract attachments
     final attachments = <EmailAttachment>[];
@@ -378,8 +382,8 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
     final bankName = _detectBankName(from, subject, body);
 
     // Generate unique ID from guid or use timestamp
-    final emailId = mimeMessage.guid?.toString() ??
-        DateTime.now().millisecondsSinceEpoch.toString();
+    final emailId =
+        mimeMessage.guid?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString();
 
     return EmailMessageModel(
       id: emailId,
@@ -406,16 +410,15 @@ class EmailLocalDataSourceImpl implements EmailLocalDataSource {
     // Filter by selected banks
     if (filters.selectedBanks.isNotEmpty) {
       filtered = filtered
-          .where((e) =>
-              e.bankName != null && filters.selectedBanks.contains(e.bankName),)
+          .where(
+            (e) => e.bankName != null && filters.selectedBanks.contains(e.bankName),
+          )
           .toList();
     }
 
     // Filter by email types
     if (filters.emailTypes.isNotEmpty) {
-      filtered = filtered
-          .where((e) => filters.emailTypes.contains(e.emailType))
-          .toList();
+      filtered = filtered.where((e) => filters.emailTypes.contains(e.emailType)).toList();
     }
 
     // Filter by attachment

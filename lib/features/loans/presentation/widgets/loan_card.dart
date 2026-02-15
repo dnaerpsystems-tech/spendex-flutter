@@ -54,8 +54,7 @@ class LoanCard extends StatelessWidget {
             color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
             borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
             border: Border.all(
-              color:
-                  isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
             ),
           ),
           child: Column(
@@ -103,12 +102,9 @@ class LoanCard extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: loan.isActive
-                                    ? SpendexColors.income
-                                        .withValues(alpha: 0.12)
-                                    : SpendexColors.darkTextSecondary
-                                        .withValues(alpha: 0.12),
-                                borderRadius:
-                                    BorderRadius.circular(SpendexTheme.radiusSm),
+                                    ? SpendexColors.income.withValues(alpha: 0.12)
+                                    : SpendexColors.darkTextSecondary.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                               ),
                               child: Text(
                                 loan.status.label,
@@ -143,13 +139,9 @@ class LoanCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                 child: LinearProgressIndicator(
                   value: progress.clamp(0.0, 1.0),
-                  backgroundColor: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  backgroundColor: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    loan.isActive
-                        ? const Color(0xFF7C3AED)
-                        : SpendexColors.income,
+                    loan.isActive ? const Color(0xFF7C3AED) : SpendexColors.income,
                   ),
                   minHeight: 8,
                 ),

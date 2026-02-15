@@ -58,9 +58,8 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
               Text(
                 '${state.activeInvestments.length} Investment${state.activeInvestments.length == 1 ? '' : 's'}',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
               ),
           ],
@@ -206,12 +205,9 @@ class _HoldingsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     final totalValue = investments.fold<int>(
       0,
@@ -282,9 +278,7 @@ class _HoldingsSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final shimmerColor = isDark
-        ? SpendexColors.darkBorder
-        : SpendexColors.lightBorder;
+    final shimmerColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     return ListView.builder(
       padding: const EdgeInsets.all(SpendexTheme.spacingMd),

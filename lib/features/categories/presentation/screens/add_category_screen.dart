@@ -86,9 +86,8 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
       _isLoadingCategory = true;
     });
 
-    final category = await ref
-        .read(categoriesStateProvider.notifier)
-        .getCategoryById(widget.categoryId!);
+    final category =
+        await ref.read(categoriesStateProvider.notifier).getCategoryById(widget.categoryId!);
 
     if (category != null && mounted) {
       setState(() {
@@ -174,9 +173,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
           .read(categoriesStateProvider.notifier)
           .updateCategory(widget.categoryId!, request);
     } else {
-      result = await ref
-          .read(categoriesStateProvider.notifier)
-          .createCategory(request);
+      result = await ref.read(categoriesStateProvider.notifier).createCategory(request);
     }
 
     if (result != null && mounted) {
@@ -228,9 +225,8 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
     );
 
     if ((confirmed ?? false) && mounted) {
-      final success = await ref
-          .read(categoriesStateProvider.notifier)
-          .deleteCategory(widget.categoryId!);
+      final success =
+          await ref.read(categoriesStateProvider.notifier).deleteCategory(widget.categoryId!);
 
       if (success && mounted) {
         _showSuccessSnackBar('Category deleted successfully');
@@ -305,9 +301,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
   /// Gets the IconData for a given icon name
   IconData _getIconData(String? iconName) {
     if (iconName == null) {
-      return _selectedType == CategoryType.income
-          ? Iconsax.arrow_down
-          : Iconsax.arrow_up;
+      return _selectedType == CategoryType.income ? Iconsax.arrow_down : Iconsax.arrow_up;
     }
 
     // Map icon names to IconData
@@ -406,9 +400,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
   /// Parses a hex color string to Color
   Color _parseHexColor(String? hex) {
     if (hex == null || hex.isEmpty) {
-      return _selectedType == CategoryType.income
-          ? SpendexColors.income
-          : SpendexColors.expense;
+      return _selectedType == CategoryType.income ? SpendexColors.income : SpendexColors.expense;
     }
 
     try {
@@ -427,10 +419,12 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
   List<CategoryModel> _getParentCategories() {
     final categories = ref.watch(categoriesStateProvider).categories;
     return categories
-        .where((c) =>
-            c.type == _selectedType &&
-            c.parentId == null && // Only top-level categories can be parents
-            c.id != widget.categoryId,) // Exclude current category in edit mode
+        .where(
+          (c) =>
+              c.type == _selectedType &&
+              c.parentId == null && // Only top-level categories can be parents
+              c.id != widget.categoryId,
+        ) // Exclude current category in edit mode
         .toList();
   }
 
@@ -456,9 +450,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
       child: Stack(
         children: [
           Scaffold(
-            backgroundColor: isDark
-                ? SpendexColors.darkBackground
-                : SpendexColors.lightBackground,
+            backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
             appBar: _buildAppBar(isDark, isSubmitting),
             body: _isLoadingCategory
                 ? const Center(child: CircularProgressIndicator())
@@ -561,9 +553,8 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
                     hintText: 'e.g., Groceries, Salary',
                     prefixIcon: Icon(
                       Iconsax.text,
-                      color: isDark
-                          ? SpendexColors.darkTextTertiary
-                          : SpendexColors.lightTextTertiary,
+                      color:
+                          isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                     ),
                     counterText: '',
                   ),
@@ -698,9 +689,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
         Text(
           label,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextPrimary
-                : SpendexColors.lightTextPrimary,
+            color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -742,9 +731,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
             child: Text(
               'This is a system category and cannot be modified or deleted.',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary,
+                color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
               ),
             ),
           ),
@@ -774,14 +761,10 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(SpendexTheme.spacingMd),
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? SpendexColors.darkCard
-                      : SpendexColors.lightCard,
+                  color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                   border: Border.all(
-                    color: isDark
-                        ? SpendexColors.darkBorder
-                        : SpendexColors.lightBorder,
+                    color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                   ),
                 ),
                 child: Row(
@@ -790,9 +773,8 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
                     const Spacer(),
                     Icon(
                       Iconsax.arrow_right_3,
-                      color: isDark
-                          ? SpendexColors.darkTextTertiary
-                          : SpendexColors.lightTextTertiary,
+                      color:
+                          isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                       size: 18,
                     ),
                   ],
@@ -819,14 +801,10 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
             vertical: SpendexTheme.spacingXs,
           ),
           decoration: BoxDecoration(
-            color: isDark
-                ? SpendexColors.darkSurface
-                : SpendexColors.lightSurface,
+            color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
             borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
             border: Border.all(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
             ),
           ),
           child: DropdownButtonHideUnderline(
@@ -836,28 +814,21 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
               hint: Text(
                 'None (Top-level category)',
                 style: SpendexTheme.bodyMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                 ),
               ),
-              dropdownColor: isDark
-                  ? SpendexColors.darkCard
-                  : SpendexColors.lightCard,
+              dropdownColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               icon: Icon(
                 Iconsax.arrow_down_1,
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
               items: [
                 DropdownMenuItem<String?>(
                   child: Text(
                     'None (Top-level category)',
                     style: SpendexTheme.bodyMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                     ),
                   ),
                 ),
@@ -957,9 +928,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
                 Text(
                   name,
                   style: SpendexTheme.titleMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),

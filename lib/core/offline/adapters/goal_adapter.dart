@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import '../../../features/goals/data/models/goal_model.dart';
+
 import '../../../core/constants/app_constants.dart';
+import '../../../features/goals/data/models/goal_model.dart';
 
 /// Hive TypeAdapter for GoalModel
 class GoalModelAdapter extends TypeAdapter<GoalModel> {
@@ -13,7 +14,7 @@ class GoalModelAdapter extends TypeAdapter<GoalModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    
+
     return GoalModel(
       id: fields[0] as String,
       name: fields[1] as String,
@@ -69,9 +70,7 @@ class GoalModelAdapter extends TypeAdapter<GoalModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GoalModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is GoalModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 /// Hive TypeAdapter for GoalStatus enum
@@ -95,7 +94,5 @@ class GoalStatusAdapter extends TypeAdapter<GoalStatus> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GoalStatusAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is GoalStatusAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

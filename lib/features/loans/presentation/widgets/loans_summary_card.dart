@@ -77,9 +77,7 @@ class LoansSummaryCard extends StatelessWidget {
                 Text(
                   'Active Loans',
                   style: SpendexTheme.labelMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   ),
                 ),
                 Text(
@@ -119,9 +117,7 @@ class SummaryStatItem extends StatelessWidget {
         Text(
           label,
           style: SpendexTheme.labelMedium.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
           ),
         ),
         const SizedBox(height: 4),
@@ -129,9 +125,7 @@ class SummaryStatItem extends StatelessWidget {
           value,
           style: SpendexTheme.headlineMedium.copyWith(
             color: valueColor ??
-                (isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary),
+                (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
           ),
         ),
       ],

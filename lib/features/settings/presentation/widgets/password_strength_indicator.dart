@@ -155,20 +155,15 @@ class PasswordStrengthIndicator extends StatelessWidget {
           Icon(
             requirement.isMet ? Iconsax.tick_circle5 : Iconsax.close_circle,
             size: 16,
-            color: requirement.isMet
-                ? SpendexColors.income
-                : Colors.grey.shade400,
+            color: requirement.isMet ? SpendexColors.income : Colors.grey.shade400,
           ),
           const SizedBox(width: SpendexTheme.spacingSm),
           Expanded(
             child: Text(
               requirement.label,
               style: SpendexTheme.labelMedium.copyWith(
-                color: requirement.isMet
-                    ? SpendexColors.income
-                    : Colors.grey.shade600,
-                decoration:
-                    requirement.isMet ? TextDecoration.lineThrough : null,
+                color: requirement.isMet ? SpendexColors.income : Colors.grey.shade600,
+                decoration: requirement.isMet ? TextDecoration.lineThrough : null,
               ),
             ),
           ),

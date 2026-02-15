@@ -6,8 +6,8 @@ import '../../data/models/notification_model.dart';
 /// Notification tile widget
 class NotificationTile extends StatelessWidget {
   const NotificationTile({
-    super.key,
     required this.notification,
+    super.key,
     this.onTap,
     this.onDismissed,
     this.onMarkAsRead,
@@ -49,13 +49,11 @@ class NotificationTile extends StatelessWidget {
             color: notification.isRead
                 ? Colors.transparent
                 : (isDark
-                    ? SpendexColors.primary.withOpacity(0.08)
-                    : SpendexColors.primary.withOpacity(0.04)),
+                    ? SpendexColors.primary.withValues(alpha: 0.08)
+                    : SpendexColors.primary.withValues(alpha: 0.04)),
             border: Border(
               bottom: BorderSide(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 width: 0.5,
               ),
             ),
@@ -83,9 +81,7 @@ class NotificationTile extends StatelessWidget {
                               color: isDark
                                   ? SpendexColors.darkTextPrimary
                                   : SpendexColors.lightTextPrimary,
-                              fontWeight: notification.isRead
-                                  ? FontWeight.w500
-                                  : FontWeight.w600,
+                              fontWeight: notification.isRead ? FontWeight.w500 : FontWeight.w600,
                             ),
                           ),
                         ),
@@ -153,7 +149,7 @@ class NotificationTile extends StatelessWidget {
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: iconColor.withOpacity(0.12),
+        color: iconColor.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
       ),
       child: Icon(
@@ -171,7 +167,7 @@ class NotificationTile extends StatelessWidget {
         vertical: SpendexTheme.spacingXs,
       ),
       decoration: BoxDecoration(
-        color: _getColorForType(notification.type).withOpacity(0.12),
+        color: _getColorForType(notification.type).withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
       ),
       child: Text(
@@ -195,7 +191,7 @@ class NotificationTile extends StatelessWidget {
         vertical: SpendexTheme.spacingXs,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
       ),
       child: Row(
@@ -210,9 +206,7 @@ class NotificationTile extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            notification.priority == NotificationPriority.urgent
-                ? 'Urgent'
-                : 'High',
+            notification.priority == NotificationPriority.urgent ? 'Urgent' : 'High',
             style: SpendexTheme.labelSmall.copyWith(
               color: color,
               fontWeight: FontWeight.w600,
@@ -278,18 +272,14 @@ class NotificationTileSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final shimmerColor = isDark
-        ? SpendexColors.darkBorder
-        : SpendexColors.lightBorder;
+    final shimmerColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
 
     return Container(
       padding: const EdgeInsets.all(SpendexTheme.spacingLg),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: isDark
-                ? SpendexColors.darkBorder
-                : SpendexColors.lightBorder,
+            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
             width: 0.5,
           ),
         ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -46,9 +48,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   /// Load saved payment methods
   Future<void> _loadPaymentMethods() async {
-    await ref.read(subscriptionProvider.notifier).loadPaymentMethods();
+    await ref.read(subscriptionStateProvider.notifier).loadPaymentMethods();
     // Set default payment method if available
-    final state = ref.read(subscriptionProvider);
+    final state = ref.read(subscriptionStateProvider);
     if (state.defaultPaymentMethod != null) {
       setState(() {
         _selectedPaymentMethod = state.defaultPaymentMethod;
@@ -75,7 +77,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   /// Initiate checkout process
   Future<void> _initiateCheckout() async {
-    final state = ref.read(subscriptionProvider);
+    final state = ref.read(subscriptionStateProvider);
     final selectedPlan = state.selectedPlan;
 
     if (selectedPlan == null) {
@@ -96,20 +98,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
     try {
       // Create checkout session
-      await ref.read(subscriptionProvider.notifier).createCheckout(
-            planId: selectedPlan.id,
-            billingCycle: state.selectedBillingCycle,
-            paymentMethodType: _selectedPaymentType,
+      await ref.read(subscriptionStateProvider.notifier).createCheckout(
+            _selectedPaymentType,
           );
 
-      final checkoutState = ref.read(subscriptionProvider);
+      final checkoutState = ref.read(subscriptionStateProvider);
 
       if (checkoutState.checkoutSession != null) {
         // Handle payment based on type
         if (_selectedPaymentType == PaymentMethodType.upi) {
           // Navigate to UPI payment screen
           if (mounted) {
-            context.push('/subscription/upi-payment');
+            unawaited(context.push('/subscription/upi-payment'));
           }
         } else {
           // Open Razorpay for card/netbanking
@@ -135,7 +135,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   /// Open Razorpay checkout
   Future<void> _openRazorpay(CheckoutResponse? checkout) async {
-    if (checkout == null) return;
+    if (checkout == null) {
+      return;
+    }
 
     // In a real app, this would open the Razorpay SDK
     // For now, we'll simulate the callback
@@ -145,8 +147,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   /// Show payment simulation dialog (for demo purposes)
   void _showPaymentSimulationDialog(CheckoutResponse checkout) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     showDialog(
       context: context,
@@ -216,13 +217,15 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     });
 
     try {
-      await ref.read(subscriptionProvider.notifier).verifyPayment(
-            orderId: orderId,
-            paymentId: paymentId,
-            signature: signature,
+      await ref.read(subscriptionStateProvider.notifier).verifyPayment(
+            PaymentVerificationRequest(
+              orderId: orderId,
+              paymentId: paymentId,
+              signature: signature,
+            ),
           );
 
-      final state = ref.read(subscriptionProvider);
+      final state = ref.read(subscriptionStateProvider);
 
       if (state.error == null) {
         setState(() {
@@ -272,14 +275,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(subscriptionProvider);
+    final state = ref.watch(subscriptionStateProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     // Listen for state changes
-    ref.listen<SubscriptionState>(subscriptionProvider, (previous, next) {
-      if (next.successMessage != null &&
-          next.successMessage != previous?.successMessage) {
+    ref.listen<SubscriptionState>(subscriptionStateProvider, (previous, next) {
+      if (next.successMessage != null && next.successMessage != previous?.successMessage) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.successMessage ?? ''),
@@ -287,7 +289,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        ref.read(subscriptionProvider.notifier).clearMessages();
+        ref.read(subscriptionStateProvider.notifier).clearMessages();
       }
     });
 
@@ -341,15 +343,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     bool isDark,
   ) {
     final plan = state.selectedPlan;
-    if (plan == null) return const SizedBox.shrink();
+    if (plan == null) {
+      return const SizedBox.shrink();
+    }
 
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Column(
       children: [
@@ -404,12 +405,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   /// Build payment type selector
   Widget _buildPaymentTypeSelector(bool isDark) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
@@ -434,7 +433,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           ),
           Divider(height: 1, color: borderColor),
           _buildPaymentTypeOption(
-            type: PaymentMethodType.netbanking,
+            type: PaymentMethodType.netBanking,
             icon: Iconsax.bank,
             label: 'Net Banking',
             subtitle: 'All major banks',
@@ -454,11 +453,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     required bool isDark,
   }) {
     final isSelected = _selectedPaymentType == type;
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return InkWell(
       onTap: () => _onPaymentTypeChanged(type),
@@ -528,16 +525,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   /// Build saved payment methods section
   Widget _buildPaymentMethodsSection(SubscriptionState state, bool isDark) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     // Filter payment methods by selected type
-    final filteredMethods = state.paymentMethods
-        .where((m) => m.type == _selectedPaymentType)
-        .toList();
+    final filteredMethods =
+        state.paymentMethods.where((m) => m.type == _selectedPaymentType).toList();
 
     if (state.isLoadingPaymentMethods) {
       return Column(
@@ -568,7 +562,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               child: PaymentMethodCard(
                 paymentMethod: method,
                 isSelected: _selectedPaymentMethod?.id == method.id,
-                onTap: () => _onPaymentMethodSelected(method),
+                onSelect: () => _onPaymentMethodSelected(method),
               ),
             ),
           ),
@@ -586,10 +580,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     Color textSecondary,
     bool isDark,
   ) {
-    final borderColor =
-        isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final borderColor = isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
 
     final isSelected = _selectedPaymentMethod == null;
 
@@ -719,11 +711,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   /// Build success state
   Widget _buildSuccessState(bool isDark) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Center(
       child: Padding(
@@ -778,11 +768,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   /// Build failure state
   Widget _buildFailureState(bool isDark) {
-    final textPrimary =
-        isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Center(
       child: Padding(

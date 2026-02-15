@@ -5,7 +5,10 @@ import '../../../../core/utils/currency_formatter.dart';
 /// Reusable stat card for displaying financial values
 class StatCard extends StatelessWidget {
   const StatCard({
-    required this.title, required this.value, required this.color, super.key,
+    required this.title,
+    required this.value,
+    required this.color,
+    super.key,
     this.subtitle,
     this.icon,
     this.showTrend = false,
@@ -48,9 +51,8 @@ class StatCard extends StatelessWidget {
                 child: Text(
                   title,
                   style: SpendexTheme.labelSmall.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ),
@@ -69,9 +71,7 @@ class StatCard extends StatelessWidget {
             Text(
               subtitle!,
               style: SpendexTheme.labelSmall.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextTertiary
-                    : SpendexColors.lightTextTertiary,
+                color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
               ),
             ),
           ],
@@ -91,7 +91,9 @@ class StatCard extends StatelessWidget {
 /// Trend indicator showing percentage change
 class TrendIndicator extends StatelessWidget {
   const TrendIndicator({
-    required this.value, required this.isPositive, super.key,
+    required this.value,
+    required this.isPositive,
+    super.key,
   });
 
   final double value;

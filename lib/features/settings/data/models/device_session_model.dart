@@ -7,7 +7,10 @@ class DeviceSessionModel extends Equatable {
     required this.deviceName,
     required this.deviceType,
     required this.os,
-    required this.lastActive, required this.isCurrent, required this.createdAt, this.browser,
+    required this.lastActive,
+    required this.isCurrent,
+    required this.createdAt,
+    this.browser,
     this.ipAddress,
     this.location,
   });

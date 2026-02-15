@@ -58,7 +58,9 @@ class PlanComparisonTable extends StatelessWidget {
     return [
       _LimitFeature('Accounts', (p) => p.limits.maxAccounts),
       _LimitFeature(
-          'Transactions/month', (p) => p.limits.maxTransactionsPerMonth),
+        'Transactions/month',
+        (p) => p.limits.maxTransactionsPerMonth,
+      ),
       _LimitFeature('Budgets', (p) => p.limits.maxBudgets),
       _LimitFeature('Goals', (p) => p.limits.maxGoals),
     ];
@@ -68,9 +70,7 @@ class PlanComparisonTable extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: SpendexTheme.spacingMd),
       decoration: BoxDecoration(
-        color: isDark
-            ? SpendexColors.darkSurface
-            : SpendexColors.lightBackground,
+        color: isDark ? SpendexColors.darkSurface : SpendexColors.lightBackground,
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
       ),
       child: Row(
@@ -82,9 +82,7 @@ class PlanComparisonTable extends StatelessWidget {
               child: Text(
                 'Feature',
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
             ),
@@ -94,7 +92,8 @@ class PlanComparisonTable extends StatelessWidget {
             return Container(
               width: 100,
               padding: const EdgeInsets.symmetric(
-                  horizontal: SpendexTheme.spacingSm),
+                horizontal: SpendexTheme.spacingSm,
+              ),
               child: Column(
                 children: [
                   Text(
@@ -105,8 +104,7 @@ class PlanComparisonTable extends StatelessWidget {
                           : isDark
                               ? SpendexColors.darkTextPrimary
                               : SpendexColors.lightTextPrimary,
-                      fontWeight:
-                          isCurrentPlan ? FontWeight.w700 : FontWeight.w600,
+                      fontWeight: isCurrentPlan ? FontWeight.w700 : FontWeight.w600,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -118,9 +116,8 @@ class PlanComparisonTable extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: SpendexColors.primary.withOpacity(0.1),
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusSm),
+                        color: SpendexColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                       ),
                       child: Text(
                         'Current',
@@ -152,7 +149,7 @@ class PlanComparisonTable extends StatelessWidget {
         bottom: SpendexTheme.spacingXs,
       ),
       decoration: BoxDecoration(
-        color: SpendexColors.primary.withOpacity(0.05),
+        color: SpendexColors.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
       ),
       child: Text(
@@ -171,8 +168,7 @@ class PlanComparisonTable extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color:
-                isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
+            color: isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
           ),
         ),
       ),
@@ -185,9 +181,8 @@ class PlanComparisonTable extends StatelessWidget {
               child: Text(
                 feature,
                 style: SpendexTheme.bodySmall.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
               ),
             ),
@@ -199,7 +194,8 @@ class PlanComparisonTable extends StatelessWidget {
               width: 100,
               decoration: isCurrentPlan
                   ? BoxDecoration(
-                      color: SpendexColors.primary.withOpacity(0.03))
+                      color: SpendexColors.primary.withValues(alpha: 0.03),
+                    )
                   : null,
               child: Center(child: _buildCheckIndicator(hasFeature, isDark)),
             );
@@ -210,14 +206,16 @@ class PlanComparisonTable extends StatelessWidget {
   }
 
   Widget _buildLimitRow(
-      BuildContext context, bool isDark, _LimitFeature limit) {
+    BuildContext context,
+    bool isDark,
+    _LimitFeature limit,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: SpendexTheme.spacingMd),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color:
-                isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
+            color: isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
           ),
         ),
       ),
@@ -230,9 +228,8 @@ class PlanComparisonTable extends StatelessWidget {
               child: Text(
                 limit.name,
                 style: SpendexTheme.bodySmall.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextSecondary
-                      : SpendexColors.lightTextSecondary,
+                  color:
+                      isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                 ),
               ),
             ),
@@ -244,7 +241,8 @@ class PlanComparisonTable extends StatelessWidget {
               width: 100,
               decoration: isCurrentPlan
                   ? BoxDecoration(
-                      color: SpendexColors.primary.withOpacity(0.03))
+                      color: SpendexColors.primary.withValues(alpha: 0.03),
+                    )
                   : null,
               child: Center(child: _buildLimitValue(value, isDark)),
             );
@@ -260,7 +258,7 @@ class PlanComparisonTable extends StatelessWidget {
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-          color: SpendexColors.income.withOpacity(0.1),
+          color: SpendexColors.income.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: const Icon(
@@ -275,16 +273,14 @@ class PlanComparisonTable extends StatelessWidget {
       height: 24,
       decoration: BoxDecoration(
         color: isDark
-            ? SpendexColors.darkBorder.withOpacity(0.3)
-            : SpendexColors.lightBorder.withOpacity(0.5),
+            ? SpendexColors.darkBorder.withValues(alpha: 0.3)
+            : SpendexColors.lightBorder.withValues(alpha: 0.5),
         shape: BoxShape.circle,
       ),
       child: Icon(
         Iconsax.close_circle5,
         size: 16,
-        color: isDark
-            ? SpendexColors.darkTextTertiary
-            : SpendexColors.lightTextTertiary,
+        color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
       ),
     );
   }
@@ -321,15 +317,15 @@ class PlanComparisonTableSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final skeletonColor = isDark
-        ? SpendexColors.darkBorder.withOpacity(0.5)
-        : SpendexColors.lightBorder.withOpacity(0.5);
+        ? SpendexColors.darkBorder.withValues(alpha: 0.5)
+        : SpendexColors.lightBorder.withValues(alpha: 0.5);
 
     return Column(
       children: [
         Container(
           height: 60,
           decoration: BoxDecoration(
-            color: skeletonColor.withOpacity(0.5),
+            color: skeletonColor.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           ),
         ),
@@ -339,7 +335,7 @@ class PlanComparisonTableSkeleton extends StatelessWidget {
             height: 48,
             margin: const EdgeInsets.only(bottom: SpendexTheme.spacingSm),
             decoration: BoxDecoration(
-              color: skeletonColor.withOpacity(0.3),
+              color: skeletonColor.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
             ),
           ),

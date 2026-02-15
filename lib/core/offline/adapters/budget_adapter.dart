@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import '../../../features/budgets/data/models/budget_model.dart';
+
 import '../../../core/constants/app_constants.dart';
+import '../../../features/budgets/data/models/budget_model.dart';
 
 /// Hive TypeAdapter for BudgetModel
 class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
@@ -13,7 +14,7 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    
+
     return BudgetModel(
       id: fields[0] as String,
       name: fields[1] as String,
@@ -76,9 +77,7 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BudgetModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is BudgetModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 /// Hive TypeAdapter for BudgetPeriod enum
@@ -102,7 +101,5 @@ class BudgetPeriodAdapter extends TypeAdapter<BudgetPeriod> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BudgetPeriodAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is BudgetPeriodAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

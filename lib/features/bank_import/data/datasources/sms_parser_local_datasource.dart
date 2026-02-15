@@ -18,11 +18,10 @@ abstract class SmsParserLocalDataSource {
 
   Future<Either<Failure, bool>> getTrackingStatus();
 
-  Future<Either<Failure, bool>> setTrackingStatus(bool enabled);
+  Future<Either<Failure, bool>> setTrackingStatus({required bool enabled});
 }
 
 class SmsParserLocalDataSourceImpl implements SmsParserLocalDataSource {
-
   SmsParserLocalDataSourceImpl(this._secureStorage);
   final SecureStorageService _secureStorage;
   final SmsQuery _smsQuery = SmsQuery();
@@ -112,7 +111,9 @@ class SmsParserLocalDataSourceImpl implements SmsParserLocalDataSource {
       // Filter by date range and convert to SmsMessageModel
       final filteredMessages = messages
           .where((sms) {
-            if (sms.date == null) return false;
+            if (sms.date == null) {
+              return false;
+            }
             final smsDate = sms.date!;
             return smsDate.isAfter(startDate) &&
                 smsDate.isBefore(endDate.add(const Duration(days: 1)));
@@ -146,7 +147,7 @@ class SmsParserLocalDataSourceImpl implements SmsParserLocalDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> setTrackingStatus(bool enabled) async {
+  Future<Either<Failure, bool>> setTrackingStatus({required bool enabled}) async {
     try {
       await _secureStorage.save(_trackingStatusKey, enabled.toString());
       return Right(enabled);

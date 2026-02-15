@@ -8,8 +8,8 @@ import '../services/sync_service.dart';
 /// Dialog for resolving sync conflicts
 class ConflictResolutionDialog extends ConsumerStatefulWidget {
   const ConflictResolutionDialog({
-    super.key,
     required this.conflict,
+    super.key,
   });
 
   final SyncConflict conflict;
@@ -26,12 +26,10 @@ class ConflictResolutionDialog extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<ConflictResolutionDialog> createState() =>
-      _ConflictResolutionDialogState();
+  ConsumerState<ConflictResolutionDialog> createState() => _ConflictResolutionDialogState();
 }
 
-class _ConflictResolutionDialogState
-    extends ConsumerState<ConflictResolutionDialog> {
+class _ConflictResolutionDialogState extends ConsumerState<ConflictResolutionDialog> {
   ConflictResolution? _selectedResolution;
   bool _showDetails = false;
 
@@ -207,7 +205,7 @@ class _ConflictResolutionDialogState
   Widget _buildDataComparison(BuildContext context, SyncConflict conflict) {
     final theme = Theme.of(context);
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(color: theme.colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(8),
@@ -265,8 +263,7 @@ class _ConflictResolutionDialogState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: data.entries.map((entry) {
-          final isConflicting =
-              widget.conflict.conflictingFields.contains(entry.key);
+          final isConflicting = widget.conflict.conflictingFields.contains(entry.key);
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 2),
@@ -284,9 +281,7 @@ class _ConflictResolutionDialogState
                   '${entry.key}: ',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: isConflicting
-                        ? theme.colorScheme.error
-                        : theme.colorScheme.onSurface,
+                    color: isConflicting ? theme.colorScheme.error : theme.colorScheme.onSurface,
                   ),
                 ),
                 Expanded(
@@ -322,22 +317,17 @@ class _ConflictResolutionDialogState
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outlineVariant,
+            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outlineVariant,
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(8),
-          color: isSelected
-              ? theme.colorScheme.primaryContainer.withOpacity(0.3)
-              : null,
+          color: isSelected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3) : null,
         ),
         child: Row(
           children: [
             Icon(
               icon,
-              color:
-                  isSelected ? theme.colorScheme.primary : theme.colorScheme.outline,
+              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -374,9 +364,15 @@ class _ConflictResolutionDialogState
     final now = DateTime.now();
     final diff = now.difference(dateTime);
 
-    if (diff.inMinutes < 1) return 'Just now';
-    if (diff.inHours < 1) return '${diff.inMinutes}m ago';
-    if (diff.inDays < 1) return '${diff.inHours}h ago';
+    if (diff.inMinutes < 1) {
+      return 'Just now';
+    }
+    if (diff.inHours < 1) {
+      return '${diff.inMinutes}m ago';
+    }
+    if (diff.inDays < 1) {
+      return '${diff.inHours}h ago';
+    }
 
     return '${dateTime.day}/${dateTime.month} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
@@ -385,8 +381,8 @@ class _ConflictResolutionDialogState
 /// List widget for showing multiple conflicts
 class ConflictsList extends ConsumerWidget {
   const ConflictsList({
-    super.key,
     required this.conflicts,
+    super.key,
     this.onResolved,
   });
 
@@ -456,9 +452,15 @@ class ConflictsList extends ConsumerWidget {
   }
 
   String _formatTimeDiff(Duration duration) {
-    if (duration.inMinutes < 1) return 'seconds';
-    if (duration.inHours < 1) return '${duration.inMinutes} minutes';
-    if (duration.inDays < 1) return '${duration.inHours} hours';
+    if (duration.inMinutes < 1) {
+      return 'seconds';
+    }
+    if (duration.inHours < 1) {
+      return '${duration.inMinutes} minutes';
+    }
+    if (duration.inDays < 1) {
+      return '${duration.inHours} hours';
+    }
     return '${duration.inDays} days';
   }
 }

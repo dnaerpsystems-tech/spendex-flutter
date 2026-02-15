@@ -28,12 +28,10 @@ class PortfolioDashboardScreen extends ConsumerStatefulWidget {
   const PortfolioDashboardScreen({super.key});
 
   @override
-  ConsumerState<PortfolioDashboardScreen> createState() =>
-      _PortfolioDashboardScreenState();
+  ConsumerState<PortfolioDashboardScreen> createState() => _PortfolioDashboardScreenState();
 }
 
-class _PortfolioDashboardScreenState
-    extends ConsumerState<PortfolioDashboardScreen> {
+class _PortfolioDashboardScreenState extends ConsumerState<PortfolioDashboardScreen> {
   @override
   void initState() {
     super.initState();
@@ -47,10 +45,11 @@ class _PortfolioDashboardScreenState
   }
 
   Future<void> _handleSyncPrices() async {
-    final success =
-        await ref.read(investmentsStateProvider.notifier).syncPrices();
+    final success = await ref.read(investmentsStateProvider.notifier).syncPrices();
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -219,13 +218,15 @@ class _PortfolioDashboardScreenState
   ) {
     final bestPerformer = investments.isEmpty
         ? null
-        : investments.reduce((curr, next) =>
-            curr.returnsPercent > next.returnsPercent ? curr : next,);
+        : investments.reduce(
+            (curr, next) => curr.returnsPercent > next.returnsPercent ? curr : next,
+          );
 
     final worstPerformer = investments.isEmpty
         ? null
-        : investments.reduce((curr, next) =>
-            curr.returnsPercent < next.returnsPercent ? curr : next,);
+        : investments.reduce(
+            (curr, next) => curr.returnsPercent < next.returnsPercent ? curr : next,
+          );
 
     final taxSavingInvestments = investments.where((i) => i.taxSaving).toList();
     final taxSavingsTotal = taxSavingInvestments.fold<int>(
@@ -325,9 +326,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -370,12 +369,9 @@ class _QuickStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Card(
       child: Padding(
@@ -387,7 +383,7 @@ class _QuickStatCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(SpendexTheme.spacingSm),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
               ),
               child: Icon(

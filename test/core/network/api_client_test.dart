@@ -1,10 +1,8 @@
-import 'dart:io';
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:spendex/core/network/api_client.dart';
 import 'package:spendex/core/errors/failures.dart';
+import 'package:spendex/core/network/api_client.dart';
 
 class MockDio extends Mock implements Dio {}
 
@@ -36,15 +34,15 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenAnswer((_) async => Response(
+        ),).thenAnswer((_) async => Response(
           data: responseData,
           statusCode: 200,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<Map<String, dynamic>>(
           '/test',
-          fromJson: (data) => data as Map<String, dynamic>,
+          fromJson: (data) => data! as Map<String, dynamic>,
         );
 
         expect(result.isRight(), isTrue);
@@ -59,10 +57,10 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.connectionTimeout,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -78,10 +76,10 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.sendTimeout,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -100,10 +98,10 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.connectionError,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -122,7 +120,7 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(Exception('Unknown error'));
+        ),).thenThrow(Exception('Unknown error'));
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -138,11 +136,11 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenAnswer((_) async => Response(
+        ),).thenAnswer((_) async => Response(
           data: {'success': true, 'data': {}},
           statusCode: 200,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         await apiClient.get<dynamic>(
           '/test',
@@ -153,7 +151,7 @@ void main() {
           '/test',
           queryParameters: {'page': 1, 'limit': 20},
           options: any(named: 'options'),
-        )).called(1);
+        ),).called(1);
       });
     });
 
@@ -172,16 +170,16 @@ void main() {
           data: any(named: 'data'),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenAnswer((_) async => Response(
+        ),).thenAnswer((_) async => Response(
           data: responseData,
           statusCode: 201,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.post<Map<String, dynamic>>(
           '/test',
           data: {'name': 'Test'},
-          fromJson: (data) => data as Map<String, dynamic>,
+          fromJson: (data) => data! as Map<String, dynamic>,
         );
 
         expect(result.isRight(), isTrue);
@@ -197,11 +195,11 @@ void main() {
           data: any(named: 'data'),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenAnswer((_) async => Response(
+        ),).thenAnswer((_) async => Response(
           data: {'success': true, 'data': {}},
           statusCode: 201,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final requestData = {'email': 'test@example.com', 'password': 'secret'};
         await apiClient.post<dynamic>('/test', data: requestData);
@@ -211,7 +209,7 @@ void main() {
           data: requestData,
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).called(1);
+        ),).called(1);
       });
     });
 
@@ -230,16 +228,16 @@ void main() {
           data: any(named: 'data'),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenAnswer((_) async => Response(
+        ),).thenAnswer((_) async => Response(
           data: responseData,
           statusCode: 200,
           requestOptions: RequestOptions(path: '/test/123'),
-        ));
+        ),);
 
         final result = await apiClient.put<Map<String, dynamic>>(
           '/test/123',
           data: {'name': 'Updated'},
-          fromJson: (data) => data as Map<String, dynamic>,
+          fromJson: (data) => data! as Map<String, dynamic>,
         );
 
         expect(result.isRight(), isTrue);
@@ -260,11 +258,11 @@ void main() {
           data: any(named: 'data'),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenAnswer((_) async => Response(
+        ),).thenAnswer((_) async => Response(
           data: {'success': true},
           statusCode: 204,
           requestOptions: RequestOptions(path: '/test/123'),
-        ));
+        ),);
 
         final result = await apiClient.delete<dynamic>('/test/123');
 
@@ -287,16 +285,16 @@ void main() {
           data: any(named: 'data'),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenAnswer((_) async => Response(
+        ),).thenAnswer((_) async => Response(
           data: responseData,
           statusCode: 200,
           requestOptions: RequestOptions(path: '/test/123'),
-        ));
+        ),);
 
         final result = await apiClient.patch<Map<String, dynamic>>(
           '/test/123',
           data: {'status': 'active'},
-          fromJson: (data) => data as Map<String, dynamic>,
+          fromJson: (data) => data! as Map<String, dynamic>,
         );
 
         expect(result.isRight(), isTrue);
@@ -316,7 +314,7 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.badResponse,
           response: Response(
             statusCode: 401,
@@ -324,7 +322,7 @@ void main() {
             requestOptions: RequestOptions(path: '/test'),
           ),
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -340,7 +338,7 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.badResponse,
           response: Response(
             statusCode: 400,
@@ -348,7 +346,7 @@ void main() {
             requestOptions: RequestOptions(path: '/test'),
           ),
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -367,7 +365,7 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.badResponse,
           response: Response(
             statusCode: 500,
@@ -375,7 +373,7 @@ void main() {
             requestOptions: RequestOptions(path: '/test'),
           ),
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -391,7 +389,7 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.badResponse,
           response: Response(
             statusCode: 429,
@@ -399,7 +397,7 @@ void main() {
             requestOptions: RequestOptions(path: '/test'),
           ),
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -418,7 +416,7 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.badResponse,
           response: Response(
             statusCode: 403,
@@ -426,7 +424,7 @@ void main() {
             requestOptions: RequestOptions(path: '/test'),
           ),
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -447,10 +445,10 @@ void main() {
           any(),
           queryParameters: any(named: 'queryParameters'),
           options: any(named: 'options'),
-        )).thenThrow(DioException(
+        ),).thenThrow(DioException(
           type: DioExceptionType.cancel,
           requestOptions: RequestOptions(path: '/test'),
-        ));
+        ),);
 
         final result = await apiClient.get<dynamic>('/test');
 
@@ -479,7 +477,7 @@ void main() {
 
       final response = ApiResponse<Map<String, dynamic>>.fromJson(
         json,
-        (data) => data as Map<String, dynamic>,
+        (data) => data! as Map<String, dynamic>,
       );
 
       expect(response.success, isTrue);

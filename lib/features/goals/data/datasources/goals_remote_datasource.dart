@@ -31,7 +31,6 @@ abstract class GoalsRemoteDataSource {
 
 /// Goals Remote Data Source Implementation
 class GoalsRemoteDataSourceImpl implements GoalsRemoteDataSource {
-
   GoalsRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -44,9 +43,7 @@ class GoalsRemoteDataSourceImpl implements GoalsRemoteDataSource {
     return result.fold(
       Left.new,
       (data) {
-        final goals = data
-            .map((json) => GoalModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final goals = data.map((json) => GoalModel.fromJson(json as Map<String, dynamic>)).toList();
         return Right(goals);
       },
     );

@@ -86,9 +86,7 @@ class GoalCard extends StatelessWidget {
               color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
               border: Border.all(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             child: Row(
@@ -128,8 +126,7 @@ class GoalCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: SpendexColors.income
-                                    .withValues(alpha: 0.1),
+                                color: SpendexColors.income.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(
                                   SpendexTheme.radiusSm,
                                 ),
@@ -184,8 +181,7 @@ class GoalCard extends StatelessWidget {
                                     : SpendexColors.lightTextTertiary,
                               ),
                             ),
-                            if (goal.daysRemaining != null &&
-                                goal.daysRemaining! > 0)
+                            if (goal.daysRemaining != null && goal.daysRemaining! > 0)
                               Text(
                                 ' (${goal.daysRemaining} days)',
                                 style: SpendexTheme.labelMedium.copyWith(

@@ -32,8 +32,7 @@ class InvestmentTypePickerModal extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final backgroundColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
 
     return Container(
       decoration: BoxDecoration(
@@ -57,9 +56,7 @@ class InvestmentTypePickerModal extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
               ),
             ),
@@ -131,12 +128,8 @@ class _InvestmentTypeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = isDark
-        ? SpendexColors.darkSurface
-        : SpendexColors.lightSurface;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
+    final backgroundColor = isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return Material(
       color: Colors.transparent,
@@ -145,16 +138,12 @@ class _InvestmentTypeTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected
-                ? SpendexColors.primary.withOpacity(0.1)
-                : backgroundColor,
+            color: isSelected ? SpendexColors.primary.withValues(alpha: 0.1) : backgroundColor,
             borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
             border: Border.all(
               color: isSelected
                   ? SpendexColors.primary
-                  : (isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder),
+                  : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
               width: isSelected ? 2 : 1,
             ),
           ),

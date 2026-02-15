@@ -41,13 +41,14 @@ library subscription_widgets;
 
 export 'cancel_subscription_sheet.dart';
 export 'checkout_summary_card.dart';
+export 'feature_gate_banner.dart';
 export 'invoice_card.dart';
 export 'payment_method_card.dart';
 export 'payment_method_selector.dart';
+export 'paywall_check_mixin.dart';
+export 'paywall_dialog.dart';
 export 'plan_card.dart';
 export 'plan_comparison_table.dart';
 export 'subscription_status_badge.dart';
-export 'usage_progress_card.dart';
-export 'paywall_dialog.dart';
 export 'subscription_status_indicator.dart';
-export 'paywall_check_mixin.dart';export 'feature_gate_banner.dart';
+export 'usage_progress_card.dart';

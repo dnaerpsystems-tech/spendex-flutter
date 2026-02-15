@@ -126,8 +126,7 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
         error: failure.message,
       ),
       (hasPermission) => state = state.copyWith(
-        permissionStatus:
-            hasPermission ? SmsPermissionStatus.granted : SmsPermissionStatus.denied,
+        permissionStatus: hasPermission ? SmsPermissionStatus.granted : SmsPermissionStatus.denied,
       ),
     );
   }
@@ -150,8 +149,7 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
       },
       (granted) {
         state = state.copyWith(
-          permissionStatus:
-              granted ? SmsPermissionStatus.granted : SmsPermissionStatus.denied,
+          permissionStatus: granted ? SmsPermissionStatus.granted : SmsPermissionStatus.denied,
         );
         return granted;
       },
@@ -283,10 +281,8 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
     }
 
     // Select all successfully parsed SMS by default
-    final selectedIds = parsedMessages
-        .where((s) => s.parseStatus == ParseStatus.parsed)
-        .map((s) => s.id)
-        .toSet();
+    final selectedIds =
+        parsedMessages.where((s) => s.parseStatus == ParseStatus.parsed).map((s) => s.id).toSet();
 
     state = state.copyWith(
       isLoadingSms: false,
@@ -334,8 +330,9 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
 
     // Get parsed transactions from selected SMS
     final transactions = state.smsMessages
-        .where((s) =>
-            state.selectedSms.contains(s.id) && s.parsedTransaction != null,)
+        .where(
+          (s) => state.selectedSms.contains(s.id) && s.parsedTransaction != null,
+        )
         .map((s) => s.parsedTransaction!)
         .toList();
 
@@ -361,8 +358,8 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
   }
 
   /// Toggle SMS tracking
-  Future<void> toggleSmsTracking(bool enabled) async {
-    final result = await _repository.toggleSmsTracking(enabled);
+  Future<void> toggleSmsTracking({required bool enabled}) async {
+    final result = await _repository.toggleSmsTracking(enabled: enabled);
 
     result.fold(
       (failure) => state = state.copyWith(error: failure.message),
@@ -387,8 +384,7 @@ class SmsParserNotifier extends StateNotifier<SmsParserState> {
 }
 
 /// Provider for SMS Parser state
-final smsParserProvider =
-    StateNotifierProvider<SmsParserNotifier, SmsParserState>((ref) {
+final smsParserProvider = StateNotifierProvider<SmsParserNotifier, SmsParserState>((ref) {
   final repository = ref.watch(smsParserRepositoryProvider);
   return SmsParserNotifier(repository);
 });
@@ -404,17 +400,13 @@ final selectedSmsCountProvider = Provider<int>((ref) {
 /// Parsed SMS count
 final parsedSmsCountProvider = Provider<int>((ref) {
   final state = ref.watch(smsParserProvider);
-  return state.smsMessages
-      .where((s) => s.parseStatus == ParseStatus.parsed)
-      .length;
+  return state.smsMessages.where((s) => s.parseStatus == ParseStatus.parsed).length;
 });
 
 /// Failed SMS count
 final failedSmsCountProvider = Provider<int>((ref) {
   final state = ref.watch(smsParserProvider);
-  return state.smsMessages
-      .where((s) => s.parseStatus == ParseStatus.failed)
-      .length;
+  return state.smsMessages.where((s) => s.parseStatus == ParseStatus.failed).length;
 });
 
 /// Total amount of selected transactions
@@ -432,11 +424,11 @@ final selectedSmsTotalProvider = Provider<int>((ref) {
 /// Whether all parsed SMS are selected
 final allSmsSelectedProvider = Provider<bool>((ref) {
   final state = ref.watch(smsParserProvider);
-  final parsedCount = state.smsMessages
-      .where((s) => s.parseStatus == ParseStatus.parsed)
-      .length;
+  final parsedCount = state.smsMessages.where((s) => s.parseStatus == ParseStatus.parsed).length;
 
-  if (parsedCount == 0) return false;
+  if (parsedCount == 0) {
+    return false;
+  }
 
   return state.selectedSms.length == parsedCount;
 });

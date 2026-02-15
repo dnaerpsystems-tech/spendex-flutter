@@ -51,9 +51,7 @@ class _CashFlowChartState extends State<CashFlowChart> {
               Text(
                 'Cash Flow',
                 style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextPrimary
-                      : SpendexColors.lightTextPrimary,
+                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                 ),
               ),
               _buildLegend(isDark),
@@ -81,7 +79,6 @@ class _CashFlowChartState extends State<CashFlowChart> {
 
   LineTouchData _buildTouchData(bool isDark) {
     return LineTouchData(
-      enabled: true,
       touchTooltipData: LineTouchTooltipData(
         tooltipPadding: const EdgeInsets.all(8),
         tooltipMargin: 8,
@@ -113,7 +110,7 @@ class _CashFlowChartState extends State<CashFlowChart> {
         getTooltipColor: (touchedSpot) =>
             isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
       ),
-      touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+      touchCallback: (event, touchResponse) {
         setState(() {
           if (!event.isInterestedForInteractions ||
               touchResponse == null ||
@@ -125,20 +122,17 @@ class _CashFlowChartState extends State<CashFlowChart> {
           _touchedIndex = touchResponse.lineBarSpots!.first.x.toInt();
         });
       },
-      handleBuiltInTouches: true,
     );
   }
 
   FlGridData _buildGridData(bool isDark) {
     return FlGridData(
-      show: true,
       drawVerticalLine: false,
       horizontalInterval: _calculateInterval(),
       getDrawingHorizontalLine: (value) {
         return FlLine(
-          color: isDark
-              ? SpendexColors.darkBorder.withValues(alpha: 0.5)
-              : SpendexColors.lightBorder,
+          color:
+              isDark ? SpendexColors.darkBorder.withValues(alpha: 0.5) : SpendexColors.lightBorder,
           strokeWidth: 1,
           dashArray: [5, 5],
         );
@@ -166,9 +160,7 @@ class _CashFlowChartState extends State<CashFlowChart> {
                   decimalDigits: 0,
                 ),
                 style: SpendexTheme.labelSmall.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   fontSize: 10,
                 ),
               ),
@@ -194,9 +186,7 @@ class _CashFlowChartState extends State<CashFlowChart> {
               child: Text(
                 widget.stats[index].shortLabel,
                 style: SpendexTheme.labelSmall.copyWith(
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                   fontSize: 10,
                 ),
               ),
@@ -210,92 +200,90 @@ class _CashFlowChartState extends State<CashFlowChart> {
   }
 
   List<LineChartBarData> _buildLineBarsData() {
-    final lines = <LineChartBarData>[];
-
-    // Income line
-    lines.add(LineChartBarData(
-      spots: widget.stats.asMap().entries.map((entry) {
-        return FlSpot(entry.key.toDouble(), entry.value.incomeInRupees);
-      }).toList(),
-      isCurved: true,
-      curveSmoothness: 0.3,
-      color: SpendexColors.income,
-      barWidth: 3,
-      isStrokeCapRound: true,
-      dotData: FlDotData(
-        show: true,
-        getDotPainter: (spot, percent, bar, index) {
-          final isHighlighted = _touchedIndex == index;
-          return FlDotCirclePainter(
-            radius: isHighlighted ? 6 : 3,
-            color: SpendexColors.income,
-            strokeWidth: isHighlighted ? 2 : 0,
-            strokeColor: Colors.white,
-          );
-        },
-      ),
-      belowBarData: BarAreaData(
-        show: true,
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            SpendexColors.income.withValues(alpha: 0.3),
-            SpendexColors.income.withValues(alpha: 0.0),
-          ],
+    final lines = <LineChartBarData>[LineChartBarData(
+          spots: widget.stats.asMap().entries.map((entry) {
+            return FlSpot(entry.key.toDouble(), entry.value.incomeInRupees);
+          }).toList(),
+          isCurved: true,
+          curveSmoothness: 0.3,
+          color: SpendexColors.income,
+          barWidth: 3,
+          isStrokeCapRound: true,
+          dotData: FlDotData(
+            getDotPainter: (spot, percent, bar, index) {
+              final isHighlighted = _touchedIndex == index;
+              return FlDotCirclePainter(
+                radius: isHighlighted ? 6 : 3,
+                color: SpendexColors.income,
+                strokeWidth: isHighlighted ? 2 : 0,
+                strokeColor: Colors.white,
+              );
+            },
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                SpendexColors.income.withValues(alpha: 0.3),
+                SpendexColors.income.withValues(alpha: 0),
+              ],
+            ),
+          ),
         ),
-      ),
-    ));
-
-    // Expense line
-    lines.add(LineChartBarData(
-      spots: widget.stats.asMap().entries.map((entry) {
-        return FlSpot(entry.key.toDouble(), entry.value.expenseInRupees);
-      }).toList(),
-      isCurved: true,
-      curveSmoothness: 0.3,
-      color: SpendexColors.expense,
-      barWidth: 3,
-      isStrokeCapRound: true,
-      dotData: FlDotData(
-        show: true,
-        getDotPainter: (spot, percent, bar, index) {
-          final isHighlighted = _touchedIndex == index;
-          return FlDotCirclePainter(
-            radius: isHighlighted ? 6 : 3,
-            color: SpendexColors.expense,
-            strokeWidth: isHighlighted ? 2 : 0,
-            strokeColor: Colors.white,
-          );
-        },
-      ),
-      belowBarData: BarAreaData(
-        show: true,
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            SpendexColors.expense.withValues(alpha: 0.3),
-            SpendexColors.expense.withValues(alpha: 0.0),
-          ],
-        ),
-      ),
-    ));
-
-    // Net flow line (optional)
-    if (widget.showNetFlow) {
-      lines.add(LineChartBarData(
+        LineChartBarData(
         spots: widget.stats.asMap().entries.map((entry) {
-          return FlSpot(entry.key.toDouble(), entry.value.netFlowInRupees);
+          return FlSpot(entry.key.toDouble(), entry.value.expenseInRupees);
         }).toList(),
         isCurved: true,
         curveSmoothness: 0.3,
-        color: SpendexColors.primary,
-        barWidth: 2,
+        color: SpendexColors.expense,
+        barWidth: 3,
         isStrokeCapRound: true,
-        dashArray: [5, 5],
-        dotData: const FlDotData(show: false),
-      ));
+        dotData: FlDotData(
+          getDotPainter: (spot, percent, bar, index) {
+            final isHighlighted = _touchedIndex == index;
+            return FlDotCirclePainter(
+              radius: isHighlighted ? 6 : 3,
+              color: SpendexColors.expense,
+              strokeWidth: isHighlighted ? 2 : 0,
+              strokeColor: Colors.white,
+            );
+          },
+        ),
+        belowBarData: BarAreaData(
+          show: true,
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              SpendexColors.expense.withValues(alpha: 0.3),
+              SpendexColors.expense.withValues(alpha: 0),
+            ],
+          ),
+        ),
+      ),]
+      // Income line
+      
+      // Expense line
+      ;
+
+    // Net flow line (optional)
+    if (widget.showNetFlow) {
+      lines.add(
+        LineChartBarData(
+          spots: widget.stats.asMap().entries.map((entry) {
+            return FlSpot(entry.key.toDouble(), entry.value.netFlowInRupees);
+          }).toList(),
+          isCurved: true,
+          curveSmoothness: 0.3,
+          color: SpendexColors.primary,
+          isStrokeCapRound: true,
+          dashArray: [5, 5],
+          dotData: const FlDotData(show: false),
+        ),
+      );
     }
 
     return lines;
@@ -304,24 +292,34 @@ class _CashFlowChartState extends State<CashFlowChart> {
   double _calculateMaxY() {
     var maxValue = 0.0;
     for (final stat in widget.stats) {
-      if (stat.incomeInRupees > maxValue) maxValue = stat.incomeInRupees;
-      if (stat.expenseInRupees > maxValue) maxValue = stat.expenseInRupees;
+      if (stat.incomeInRupees > maxValue) {
+        maxValue = stat.incomeInRupees;
+      }
+      if (stat.expenseInRupees > maxValue) {
+        maxValue = stat.expenseInRupees;
+      }
     }
     return maxValue * 1.15;
   }
 
   double _calculateMinY() {
-    if (!widget.showNetFlow) return 0;
+    if (!widget.showNetFlow) {
+      return 0;
+    }
     var minValue = 0.0;
     for (final stat in widget.stats) {
-      if (stat.netFlowInRupees < minValue) minValue = stat.netFlowInRupees;
+      if (stat.netFlowInRupees < minValue) {
+        minValue = stat.netFlowInRupees;
+      }
     }
     return minValue < 0 ? minValue * 1.15 : 0;
   }
 
   double _calculateInterval() {
     final maxY = _calculateMaxY();
-    if (maxY <= 0) return 1000;
+    if (maxY <= 0) {
+      return 1000;
+    }
 
     final rawInterval = maxY / 4;
     final magnitude = _calculateMagnitude(rawInterval);
@@ -342,7 +340,9 @@ class _CashFlowChartState extends State<CashFlowChart> {
   }
 
   double _calculateMagnitude(double value) {
-    if (value == 0) return 1;
+    if (value == 0) {
+      return 1;
+    }
     var magnitude = 1.0;
     final absValue = value.abs();
 
@@ -406,9 +406,7 @@ class _CashFlowChartState extends State<CashFlowChart> {
         Text(
           label,
           style: SpendexTheme.labelSmall.copyWith(
-            color: isDark
-                ? SpendexColors.darkTextSecondary
-                : SpendexColors.lightTextSecondary,
+            color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
             fontSize: 10,
           ),
         ),
@@ -434,17 +432,13 @@ class _CashFlowChartState extends State<CashFlowChart> {
             Icon(
               Icons.show_chart,
               size: 48,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
             const SizedBox(height: SpendexTheme.spacingMd),
             Text(
               'No cash flow data available',
               style: SpendexTheme.bodyMedium.copyWith(
-                color: isDark
-                    ? SpendexColors.darkTextSecondary
-                    : SpendexColors.lightTextSecondary,
+                color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
               ),
             ),
           ],

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,12 +17,10 @@ class SecuritySettingsScreen extends ConsumerStatefulWidget {
   const SecuritySettingsScreen({super.key});
 
   @override
-  ConsumerState<SecuritySettingsScreen> createState() =>
-      _SecuritySettingsScreenState();
+  ConsumerState<SecuritySettingsScreen> createState() => _SecuritySettingsScreenState();
 }
 
-class _SecuritySettingsScreenState
-    extends ConsumerState<SecuritySettingsScreen> {
+class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen> {
   bool _pinEnabled = false;
   bool _biometricEnabled = false;
   String _autoLockDuration = 'never';
@@ -79,8 +79,7 @@ class _SecuritySettingsScreenState
         setState(() {
           _pinEnabled = isPinSet;
           _biometricEnabled = isBiometricEnabled;
-          _autoLockDuration =
-              _durationToString(autoLockTimeout, autoLockEnabled);
+          _autoLockDuration = _durationToString(autoLockTimeout, autoLockEnabled);
           _isLoading = false;
         });
       }
@@ -135,7 +134,7 @@ class _SecuritySettingsScreenState
       if ((result ?? false) || result == null) {
         await _loadSecuritySettings();
         // Refresh the pinAuthStateProvider
-        ref.read(pinAuthStateProvider.notifier).refresh();
+        unawaited(ref.read(pinAuthStateProvider.notifier).refresh());
       }
     } else {
       await _showRemovePinDialog();
@@ -179,10 +178,10 @@ class _SecuritySettingsScreenState
     try {
       await _pinService.clearPin();
       await _biometricService.disableBiometric();
-      await _autoLockService.setEnabled(false);
+      await _autoLockService.setEnabled(enabled: false);
 
       // Refresh the pinAuthStateProvider
-      ref.read(pinAuthStateProvider.notifier).refresh();
+      unawaited(ref.read(pinAuthStateProvider.notifier).refresh());
 
       if (mounted) {
         setState(() {
@@ -252,9 +251,7 @@ class _SecuritySettingsScreenState
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              value
-                  ? 'Biometric authentication enabled'
-                  : 'Biometric authentication disabled',
+              value ? 'Biometric authentication enabled' : 'Biometric authentication disabled',
             ),
             backgroundColor: SpendexColors.income,
             behavior: SnackBarBehavior.floating,
@@ -299,9 +296,9 @@ class _SecuritySettingsScreenState
       });
       try {
         if (result == 'never') {
-          await _autoLockService.setEnabled(false);
+          await _autoLockService.setEnabled(enabled: false);
         } else {
-          await _autoLockService.setEnabled(true);
+          await _autoLockService.setEnabled(enabled: true);
           await _autoLockService.setTimeout(_stringToDuration(result));
         }
         if (mounted) {
@@ -361,7 +358,7 @@ class _SecuritySettingsScreenState
     final result = await context.push<bool>('/settings/set-pin');
     if ((result ?? false) || result == null) {
       // Refresh the pinAuthStateProvider
-      ref.read(pinAuthStateProvider.notifier).refresh();
+      unawaited(ref.read(pinAuthStateProvider.notifier).refresh());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -380,14 +377,10 @@ class _SecuritySettingsScreenState
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final secondaryTextColor = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
-    final cardColor =
-        isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final secondaryTextColor =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
+    final cardColor = isDark ? SpendexColors.darkCard : SpendexColors.lightCard;
 
     return Scaffold(
       appBar: AppBar(
@@ -418,12 +411,9 @@ class _SecuritySettingsScreenState
                     Card(
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusLg),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
                         side: BorderSide(
-                          color: isDark
-                              ? SpendexColors.darkBorder
-                              : SpendexColors.lightBorder,
+                          color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                         ),
                       ),
                       color: cardColor,
@@ -449,9 +439,7 @@ class _SecuritySettingsScreenState
                           ),
                           Divider(
                             height: 1,
-                            color: isDark
-                                ? SpendexColors.darkBorder
-                                : SpendexColors.lightBorder,
+                            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                           ),
                           ListTile(
                             leading: const Icon(
@@ -487,9 +475,7 @@ class _SecuritySettingsScreenState
                     description: _getBiometricDescription(),
                     isEnabled: _biometricEnabled && _pinEnabled,
                     showSwitch: _pinEnabled && _biometricAvailable,
-                    onToggle: _pinEnabled && _biometricAvailable
-                        ? _toggleBiometric
-                        : null,
+                    onToggle: _pinEnabled && _biometricAvailable ? _toggleBiometric : null,
                   ),
                   if (!_pinEnabled || !_biometricAvailable) ...[
                     const SizedBox(height: SpendexTheme.spacingSm),
@@ -519,9 +505,7 @@ class _SecuritySettingsScreenState
                     isEnabled: _pinEnabled || _biometricEnabled,
                     showSwitch: false,
                     showArrow: true,
-                    onTap: (_pinEnabled || _biometricEnabled)
-                        ? _showAutoLockSelector
-                        : null,
+                    onTap: (_pinEnabled || _biometricEnabled) ? _showAutoLockSelector : null,
                   ),
                   const SizedBox(height: SpendexTheme.spacing2xl),
                   _SectionTitle(
@@ -548,8 +532,7 @@ class _SecuritySettingsScreenState
                           ),
                           decoration: BoxDecoration(
                             color: SpendexColors.primary.withValues(alpha: 0.1),
-                            borderRadius:
-                                BorderRadius.circular(SpendexTheme.radiusFull),
+                            borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                           ),
                           child: Text(
                             '$_activeSessions',
@@ -586,8 +569,7 @@ class _SecuritySettingsScreenState
                       ),
                       decoration: BoxDecoration(
                         color: SpendexColors.warning.withValues(alpha: 0.1),
-                        borderRadius:
-                            BorderRadius.circular(SpendexTheme.radiusFull),
+                        borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
                         border: Border.all(
                           color: SpendexColors.warning.withValues(alpha: 0.3),
                         ),
@@ -657,9 +639,7 @@ class _SectionTitle extends StatelessWidget {
       child: Text(
         title,
         style: SpendexTheme.titleMedium.copyWith(
-          color: isDark
-              ? SpendexColors.darkTextPrimary
-              : SpendexColors.lightTextPrimary,
+          color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
           fontWeight: FontWeight.w700,
           fontSize: 16,
         ),
@@ -678,9 +658,7 @@ class _AutoLockSelectorSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
+    final textColor = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     final options = [
       {'value': 'never', 'label': 'Never'},
@@ -706,9 +684,7 @@ class _AutoLockSelectorSheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
               ),
             ),
@@ -732,9 +708,7 @@ class _AutoLockSelectorSheet extends StatelessWidget {
               itemCount: options.length,
               separatorBuilder: (context, index) => Divider(
                 height: 1,
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
               itemBuilder: (context, index) {
                 final option = options[index];
@@ -745,8 +719,7 @@ class _AutoLockSelectorSheet extends StatelessWidget {
                     option['label']!,
                     style: SpendexTheme.bodyMedium.copyWith(
                       color: textColor,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     ),
                   ),
                   trailing: isSelected

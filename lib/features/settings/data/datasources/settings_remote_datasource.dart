@@ -140,9 +140,15 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
     String? photoUrl,
   }) async {
     final data = <String, dynamic>{};
-    if (name != null) data['name'] = name;
-    if (phone != null) data['phone'] = phone;
-    if (photoUrl != null) data['photoUrl'] = photoUrl;
+    if (name != null) {
+      data['name'] = name;
+    }
+    if (phone != null) {
+      data['phone'] = phone;
+    }
+    if (photoUrl != null) {
+      data['photoUrl'] = photoUrl;
+    }
 
     return _apiClient.patch<void>(
       '/user/profile',
@@ -157,9 +163,15 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
     String? autoLockDuration,
   }) async {
     final data = <String, dynamic>{};
-    if (pinEnabled != null) data['pinEnabled'] = pinEnabled;
-    if (biometricEnabled != null) data['biometricEnabled'] = biometricEnabled;
-    if (autoLockDuration != null) data['autoLockDuration'] = autoLockDuration;
+    if (pinEnabled != null) {
+      data['pinEnabled'] = pinEnabled;
+    }
+    if (biometricEnabled != null) {
+      data['biometricEnabled'] = biometricEnabled;
+    }
+    if (autoLockDuration != null) {
+      data['autoLockDuration'] = autoLockDuration;
+    }
 
     return _apiClient.patch<void>(
       '/user/security-settings',

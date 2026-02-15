@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class IfscDetailsModel extends Equatable {
-
   const IfscDetailsModel({
     required this.ifsc,
     required this.bank,

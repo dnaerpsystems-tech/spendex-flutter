@@ -37,7 +37,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
   }
 
   void _onProviderChanged(EmailProvider? provider) {
-    if (provider == null) return;
+    if (provider == null) {
+      return;
+    }
 
     setState(() {
       _selectedProvider = provider;
@@ -59,7 +61,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
   }
 
   Future<void> _connectAccount() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     setState(() {
       _isConnecting = true;
@@ -84,7 +88,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
       _isConnecting = false;
     });
 
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -133,7 +139,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
   }
 
   String? _validateImapServer(String? value) {
-    if (!_showAdvancedSettings) return null;
+    if (!_showAdvancedSettings) {
+      return null;
+    }
     if (value == null || value.isEmpty) {
       return 'Please enter IMAP server';
     }
@@ -141,7 +149,9 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
   }
 
   String? _validateImapPort(String? value) {
-    if (!_showAdvancedSettings) return null;
+    if (!_showAdvancedSettings) {
+      return null;
+    }
     if (value == null || value.isEmpty) {
       return 'Please enter IMAP port';
     }
@@ -159,9 +169,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: const Text('Connect Email Account'),
         centerTitle: true,
@@ -312,9 +320,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                 child: Row(
                   children: [
                     Icon(
-                      _showAdvancedSettings
-                          ? Iconsax.arrow_down_1
-                          : Iconsax.arrow_right_3,
+                      _showAdvancedSettings ? Iconsax.arrow_down_1 : Iconsax.arrow_right_3,
                       size: 20,
                       color: SpendexColors.primary,
                     ),
@@ -377,9 +383,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                 color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder,
+                  color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                 ),
               ),
               child: Column(
@@ -432,8 +436,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: SpendexColors.primary,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor:
-                      SpendexColors.primary.withValues(alpha: 0.5),
+                  disabledBackgroundColor: SpendexColors.primary.withValues(alpha: 0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -447,8 +450,7 @@ class _EmailSetupScreenState extends ConsumerState<EmailSetupScreen> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -509,32 +511,33 @@ class _HelpText extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        ...steps.map((step) => Padding(
-              padding: const EdgeInsets.only(left: 12, top: 2),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '• ',
+        ...steps.map(
+          (step) => Padding(
+            padding: const EdgeInsets.only(left: 12, top: 2),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '• ',
+                  style: SpendexTheme.labelMedium.copyWith(
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    step,
                     style: SpendexTheme.labelMedium.copyWith(
                       color: isDark
                           ? SpendexColors.darkTextSecondary
                           : SpendexColors.lightTextSecondary,
                     ),
                   ),
-                  Expanded(
-                    child: Text(
-                      step,
-                      style: SpendexTheme.labelMedium.copyWith(
-                        color: isDark
-                            ? SpendexColors.darkTextSecondary
-                            : SpendexColors.lightTextSecondary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

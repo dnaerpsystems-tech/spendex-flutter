@@ -34,8 +34,23 @@ class MonthlyStatsModel extends Equatable {
   double get netFlowInRupees => netFlow / 100;
 
   String get label {
-    if (monthName != null) return monthName!;
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if (monthName != null) {
+      return monthName!;
+    }
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return '${months[month - 1]} $year';
   }
 

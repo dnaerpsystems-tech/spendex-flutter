@@ -68,11 +68,15 @@ enum InsightActionType {
 
 /// Model class representing an insight
 class InsightModel extends Equatable {
-
   const InsightModel({
     required this.id,
     required this.type,
-    required this.title, required this.description, required this.priority, required this.actionType, required this.createdAt, this.category,
+    required this.title,
+    required this.description,
+    required this.priority,
+    required this.actionType,
+    required this.createdAt,
+    this.category,
     this.actionData,
     this.validUntil,
     this.isRead = false,
@@ -95,9 +99,8 @@ class InsightModel extends Equatable {
         json['action_type'] as String? ?? 'none',
       ),
       actionData: json['action_data'] as Map<String, dynamic>?,
-      validUntil: json['valid_until'] != null
-          ? DateTime.parse(json['valid_until'] as String)
-          : null,
+      validUntil:
+          json['valid_until'] != null ? DateTime.parse(json['valid_until'] as String) : null,
       isRead: json['is_read'] as bool? ?? false,
       isDismissed: json['is_dismissed'] as bool? ?? false,
       metadata: json['metadata'] as Map<String, dynamic>?,
@@ -106,6 +109,7 @@ class InsightModel extends Equatable {
           : DateTime.now(),
     );
   }
+
   /// Unique identifier for the insight
   final String id;
 
@@ -199,14 +203,20 @@ class InsightModel extends Equatable {
 
   /// Check if the insight is currently valid (not expired and not dismissed)
   bool get isValid {
-    if (isDismissed) return false;
-    if (validUntil == null) return true;
+    if (isDismissed) {
+      return false;
+    }
+    if (validUntil == null) {
+      return true;
+    }
     return DateTime.now().isBefore(validUntil!);
   }
 
   /// Check if the insight has expired
   bool get isExpired {
-    if (validUntil == null) return false;
+    if (validUntil == null) {
+      return false;
+    }
     return DateTime.now().isAfter(validUntil!);
   }
 
@@ -217,9 +227,13 @@ class InsightModel extends Equatable {
 
   /// Get the number of days remaining until the insight expires
   int? get daysRemaining {
-    if (validUntil == null) return null;
+    if (validUntil == null) {
+      return null;
+    }
     final now = DateTime.now();
-    if (now.isAfter(validUntil!)) return 0;
+    if (now.isAfter(validUntil!)) {
+      return 0;
+    }
     return validUntil!.difference(now).inDays;
   }
 
@@ -246,10 +260,11 @@ class InsightModel extends Equatable {
 
 /// Request model for creating a new insight
 class CreateInsightRequest extends Equatable {
-
   const CreateInsightRequest({
     required this.type,
-    required this.title, required this.description, this.category,
+    required this.title,
+    required this.description,
+    this.category,
     this.priority = InsightPriority.medium,
     this.actionType = InsightActionType.none,
     this.actionData,
@@ -271,12 +286,12 @@ class CreateInsightRequest extends Equatable {
         json['action_type'] as String? ?? 'none',
       ),
       actionData: json['action_data'] as Map<String, dynamic>?,
-      validUntil: json['valid_until'] != null
-          ? DateTime.parse(json['valid_until'] as String)
-          : null,
+      validUntil:
+          json['valid_until'] != null ? DateTime.parse(json['valid_until'] as String) : null,
       metadata: json['metadata'] as Map<String, dynamic>?,
     );
   }
+
   /// Type of the insight
   final InsightType type;
 
@@ -338,7 +353,6 @@ class CreateInsightRequest extends Equatable {
 
 /// Request model for updating an existing insight
 class UpdateInsightRequest extends Equatable {
-
   const UpdateInsightRequest({
     required this.id,
     this.type,
@@ -358,27 +372,24 @@ class UpdateInsightRequest extends Equatable {
   factory UpdateInsightRequest.fromJson(Map<String, dynamic> json) {
     return UpdateInsightRequest(
       id: json['id'] as String? ?? '',
-      type: json['type'] != null
-          ? InsightType.fromJson(json['type'] as String)
-          : null,
+      type: json['type'] != null ? InsightType.fromJson(json['type'] as String) : null,
       category: json['category'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
-      priority: json['priority'] != null
-          ? InsightPriority.fromJson(json['priority'] as String)
-          : null,
+      priority:
+          json['priority'] != null ? InsightPriority.fromJson(json['priority'] as String) : null,
       actionType: json['action_type'] != null
           ? InsightActionType.fromJson(json['action_type'] as String)
           : null,
       actionData: json['action_data'] as Map<String, dynamic>?,
-      validUntil: json['valid_until'] != null
-          ? DateTime.parse(json['valid_until'] as String)
-          : null,
+      validUntil:
+          json['valid_until'] != null ? DateTime.parse(json['valid_until'] as String) : null,
       isRead: json['is_read'] as bool?,
       isDismissed: json['is_dismissed'] as bool?,
       metadata: json['metadata'] as Map<String, dynamic>?,
     );
   }
+
   /// Insight ID to update
   final String id;
 
@@ -419,17 +430,39 @@ class UpdateInsightRequest extends Equatable {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{'id': id};
 
-    if (type != null) json['type'] = type!.toJson();
-    if (category != null) json['category'] = category;
-    if (title != null) json['title'] = title;
-    if (description != null) json['description'] = description;
-    if (priority != null) json['priority'] = priority!.toJson();
-    if (actionType != null) json['action_type'] = actionType!.toJson();
-    if (actionData != null) json['action_data'] = actionData;
-    if (validUntil != null) json['valid_until'] = validUntil!.toIso8601String();
-    if (isRead != null) json['is_read'] = isRead;
-    if (isDismissed != null) json['is_dismissed'] = isDismissed;
-    if (metadata != null) json['metadata'] = metadata;
+    if (type != null) {
+      json['type'] = type!.toJson();
+    }
+    if (category != null) {
+      json['category'] = category;
+    }
+    if (title != null) {
+      json['title'] = title;
+    }
+    if (description != null) {
+      json['description'] = description;
+    }
+    if (priority != null) {
+      json['priority'] = priority!.toJson();
+    }
+    if (actionType != null) {
+      json['action_type'] = actionType!.toJson();
+    }
+    if (actionData != null) {
+      json['action_data'] = actionData;
+    }
+    if (validUntil != null) {
+      json['valid_until'] = validUntil!.toIso8601String();
+    }
+    if (isRead != null) {
+      json['is_read'] = isRead;
+    }
+    if (isDismissed != null) {
+      json['is_dismissed'] = isDismissed;
+    }
+    if (metadata != null) {
+      json['metadata'] = metadata;
+    }
 
     return json;
   }

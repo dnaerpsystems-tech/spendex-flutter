@@ -168,7 +168,9 @@ class DuplicateDetectionStats extends Equatable {
 
   /// Get duplicate percentage
   double get duplicatePercentage {
-    if (totalChecked == 0) return 0;
+    if (totalChecked == 0) {
+      return 0;
+    }
     return (duplicatesFound / totalChecked) * 100;
   }
 

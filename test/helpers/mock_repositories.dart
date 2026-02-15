@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:mocktail/mocktail.dart';
-
+import 'package:spendex/core/constants/app_constants.dart';
 import 'package:spendex/core/errors/failures.dart';
-import 'package:spendex/features/auth/domain/repositories/auth_repository.dart';
-import 'package:spendex/features/auth/data/models/auth_response_model.dart';
-import 'package:spendex/features/auth/data/models/user_model.dart';
-import 'package:spendex/features/accounts/domain/repositories/accounts_repository.dart';
+import 'package:spendex/core/network/api_client.dart';
 import 'package:spendex/features/accounts/data/models/account_model.dart';
-import 'package:spendex/features/transactions/domain/repositories/transaction_repository.dart';
-import 'package:spendex/features/transactions/data/models/transaction_model.dart';
-import 'package:spendex/features/subscription/domain/repositories/subscription_repository.dart';
+import 'package:spendex/features/accounts/domain/repositories/accounts_repository.dart';
+import 'package:spendex/features/auth/data/models/user_model.dart';
+import 'package:spendex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:spendex/features/subscription/data/models/subscription_model.dart';
+import 'package:spendex/features/subscription/domain/repositories/subscription_repository.dart';
+import 'package:spendex/features/transactions/data/models/transaction_model.dart';
+import 'package:spendex/features/transactions/domain/repositories/transactions_repository.dart';
 
 // ===========================================================================
 // Mock Repository Implementations
@@ -22,8 +22,8 @@ class MockAuthRepositoryImpl extends Mock implements AuthRepository {}
 /// Fully mocked AccountsRepository with configurable responses
 class MockAccountsRepositoryImpl extends Mock implements AccountsRepository {}
 
-/// Fully mocked TransactionRepository with configurable responses
-class MockTransactionRepositoryImpl extends Mock implements TransactionRepository {}
+/// Fully mocked TransactionsRepository with configurable responses
+class MockTransactionRepositoryImpl extends Mock implements TransactionsRepository {}
 
 /// Fully mocked SubscriptionRepository with configurable responses
 class MockSubscriptionRepositoryImpl extends Mock implements SubscriptionRepository {}
@@ -37,7 +37,7 @@ void setupAuthLoginSuccess(
   MockAuthRepositoryImpl mock, {
   required String email,
   required String password,
-  required AuthResponseModel response,
+  required AuthResponse response,
 }) {
   when(() => mock.login(email, password)).thenAnswer((_) async => Right(response));
 }
@@ -91,15 +91,16 @@ void setupGetTransactionsSuccess(
   Map<String, dynamic>? params,
 }) {
   when(() => mock.getTransactions(
+        filter: any(named: 'filter'),
         page: any(named: 'page'),
         limit: any(named: 'limit'),
-        accountId: any(named: 'accountId'),
-        categoryId: any(named: 'categoryId'),
-        type: any(named: 'type'),
-        startDate: any(named: 'startDate'),
-        endDate: any(named: 'endDate'),
-        search: any(named: 'search'),
-      )).thenAnswer((_) async => Right(transactions));
+      ),).thenAnswer((_) async => Right(PaginatedResponse<TransactionModel>(
+        data: transactions,
+        total: transactions.length,
+        page: 1,
+        limit: transactions.length,
+        totalPages: 1,
+      ),),);
 }
 
 /// Setup TransactionRepository mock for getTransactions failure
@@ -108,15 +109,10 @@ void setupGetTransactionsFailure(
   Failure failure,
 ) {
   when(() => mock.getTransactions(
+        filter: any(named: 'filter'),
         page: any(named: 'page'),
         limit: any(named: 'limit'),
-        accountId: any(named: 'accountId'),
-        categoryId: any(named: 'categoryId'),
-        type: any(named: 'type'),
-        startDate: any(named: 'startDate'),
-        endDate: any(named: 'endDate'),
-        search: any(named: 'search'),
-      )).thenAnswer((_) async => Left(failure));
+      ),).thenAnswer((_) async => Left(failure));
 }
 
 /// Setup SubscriptionRepository mock for getCurrentSubscription success
@@ -145,23 +141,35 @@ UserModel createTestUser({
   String email = 'test@example.com',
   String name = 'Test User',
   String? phone,
+  UserRole role = UserRole.member,
+  UserStatus status = UserStatus.active,
+  UserPreferences? preferences,
+  String tenantId = 'tenant_123',
+  DateTime? createdAt,
+  DateTime? updatedAt,
 }) {
+  final now = DateTime.now();
   return UserModel(
     id: id,
     email: email,
     name: name,
     phone: phone,
-    createdAt: DateTime.now(),
+    role: role,
+    status: status,
+    preferences: preferences ?? const UserPreferences(),
+    tenantId: tenantId,
+    createdAt: createdAt ?? now,
+    updatedAt: updatedAt ?? now,
   );
 }
 
-/// Factory for creating test AuthResponseModel
-AuthResponseModel createTestAuthResponse({
+/// Factory for creating test AuthResponse
+AuthResponse createTestAuthResponse({
   String accessToken = 'test_access_token',
-  String refreshToken = 'test_refresh_token',
+  String? refreshToken = 'test_refresh_token',
   UserModel? user,
 }) {
-  return AuthResponseModel(
+  return AuthResponse(
     accessToken: accessToken,
     refreshToken: refreshToken,
     user: user ?? createTestUser(),
@@ -172,11 +180,14 @@ AuthResponseModel createTestAuthResponse({
 AccountModel createTestAccount({
   String id = 'acc_123',
   String name = 'Test Account',
-  String type = 'bank',
+  AccountType type = AccountType.savings,
   int balance = 100000,
   String? bankName,
   String? accountNumber,
+  DateTime? createdAt,
+  DateTime? updatedAt,
 }) {
+  final now = DateTime.now();
   return AccountModel(
     id: id,
     name: name,
@@ -184,6 +195,8 @@ AccountModel createTestAccount({
     balance: balance,
     bankName: bankName,
     accountNumber: accountNumber,
+    createdAt: createdAt ?? now,
+    updatedAt: updatedAt ?? now,
   );
 }
 
@@ -191,12 +204,15 @@ AccountModel createTestAccount({
 TransactionModel createTestTransaction({
   String id = 'txn_123',
   int amount = 15000,
-  String type = 'expense',
+  TransactionType type = TransactionType.expense,
   String? categoryId,
   String? accountId,
   String? description,
   DateTime? date,
+  DateTime? createdAt,
+  DateTime? updatedAt,
 }) {
+  final now = DateTime.now();
   return TransactionModel(
     id: id,
     amount: amount,
@@ -204,7 +220,9 @@ TransactionModel createTestTransaction({
     categoryId: categoryId ?? 'cat_123',
     accountId: accountId ?? 'acc_123',
     description: description ?? 'Test transaction',
-    date: date ?? DateTime.now(),
+    date: date ?? now,
+    createdAt: createdAt ?? now,
+    updatedAt: updatedAt ?? now,
   );
 }
 

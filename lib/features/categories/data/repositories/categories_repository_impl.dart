@@ -7,7 +7,6 @@ import '../models/category_model.dart';
 
 /// Categories Repository Implementation
 class CategoriesRepositoryImpl implements CategoriesRepository {
-
   CategoriesRepositoryImpl(this._remoteDataSource);
   final CategoriesRemoteDataSource _remoteDataSource;
 

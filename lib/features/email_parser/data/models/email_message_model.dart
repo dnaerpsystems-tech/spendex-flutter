@@ -10,7 +10,6 @@ enum EmailType {
 }
 
 class EmailAttachment extends Equatable {
-
   const EmailAttachment({
     required this.id,
     required this.fileName,
@@ -55,14 +54,14 @@ class EmailAttachment extends Equatable {
 }
 
 class EmailMessageModel extends Equatable {
-
   const EmailMessageModel({
     required this.id,
     required this.from,
     required this.subject,
     required this.body,
     required this.date,
-    required this.accountId, this.hasAttachment = false,
+    required this.accountId,
+    this.hasAttachment = false,
     this.attachments = const [],
     this.isRead = false,
     this.isParsed = false,
@@ -223,7 +222,9 @@ class EmailMessageModel extends Equatable {
 
   /// Get formatted file size for attachments
   String getAttachmentSizeFormatted() {
-    if (attachments.isEmpty) return '0 B';
+    if (attachments.isEmpty) {
+      return '0 B';
+    }
 
     final totalSize = attachments.fold<int>(
       0,

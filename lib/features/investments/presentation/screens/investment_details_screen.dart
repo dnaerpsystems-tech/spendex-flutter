@@ -28,19 +28,15 @@ class InvestmentDetailsScreen extends ConsumerStatefulWidget {
   final String investmentId;
 
   @override
-  ConsumerState<InvestmentDetailsScreen> createState() =>
-      _InvestmentDetailsScreenState();
+  ConsumerState<InvestmentDetailsScreen> createState() => _InvestmentDetailsScreenState();
 }
 
-class _InvestmentDetailsScreenState
-    extends ConsumerState<InvestmentDetailsScreen> {
+class _InvestmentDetailsScreenState extends ConsumerState<InvestmentDetailsScreen> {
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref
-          .read(investmentsStateProvider.notifier)
-          .loadInvestmentById(widget.investmentId);
+      ref.read(investmentsStateProvider.notifier).loadInvestmentById(widget.investmentId);
     });
   }
 
@@ -72,9 +68,7 @@ class _InvestmentDetailsScreenState
   ) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
 
     return AppBar(
       centerTitle: true,
@@ -213,8 +207,7 @@ class _InvestmentDetailsScreenState
       if (investment.broker != null) {
         rows.add(InfoRow(label: 'Broker', value: investment.broker!));
       }
-    } else if (type == InvestmentType.fixedDeposit ||
-        type == InvestmentType.recurringDeposit) {
+    } else if (type == InvestmentType.fixedDeposit || type == InvestmentType.recurringDeposit) {
       if (investment.broker != null) {
         rows.add(InfoRow(label: 'Bank Name', value: investment.broker!));
       }
@@ -227,10 +220,8 @@ class _InvestmentDetailsScreenState
         );
       }
       if (investment.purchaseDate != null && investment.maturityDate != null) {
-        final tenureMonths = investment.maturityDate!
-            .difference(investment.purchaseDate!)
-            .inDays ~/
-            30;
+        final tenureMonths =
+            investment.maturityDate!.difference(investment.purchaseDate!).inDays ~/ 30;
         rows.add(
           InfoRow(
             label: 'Tenure',
@@ -285,8 +276,7 @@ class _InvestmentDetailsScreenState
           InfoRow(label: 'Tax Section', value: investment.taxSection!.label),
         );
       }
-    } else if (type == InvestmentType.gold ||
-        type == InvestmentType.sovereignGoldBond) {
+    } else if (type == InvestmentType.gold || type == InvestmentType.sovereignGoldBond) {
       if (investment.units != null) {
         rows.add(
           InfoRow(
@@ -342,14 +332,11 @@ class _InvestmentDetailsScreenState
 
     var taxBenefitInfo = '';
     if (taxSection == TaxSection.section80C) {
-      taxBenefitInfo =
-          'Eligible for deduction up to ₹1.5 lakhs per year under Section 80C';
+      taxBenefitInfo = 'Eligible for deduction up to ₹1.5 lakhs per year under Section 80C';
     } else if (taxSection == TaxSection.section80CCD) {
-      taxBenefitInfo =
-          'Additional deduction up to ₹50,000 under Section 80CCD(1B)';
+      taxBenefitInfo = 'Additional deduction up to ₹50,000 under Section 80CCD(1B)';
     } else if (taxSection == TaxSection.section80D) {
-      taxBenefitInfo =
-          'Health insurance premium deduction under Section 80D';
+      taxBenefitInfo = 'Health insurance premium deduction under Section 80D';
     } else {
       taxBenefitInfo = 'Eligible for tax benefits under ${taxSection?.label}';
     }
@@ -375,20 +362,15 @@ class _InvestmentDetailsScreenState
         onPressed: isSyncing
             ? null
             : () async {
-                final success = await ref
-                    .read(investmentsStateProvider.notifier)
-                    .syncPrices();
+                final success = await ref.read(investmentsStateProvider.notifier).syncPrices();
 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        success
-                            ? 'Prices synced successfully'
-                            : 'Failed to sync prices',
+                        success ? 'Prices synced successfully' : 'Failed to sync prices',
                       ),
-                      backgroundColor:
-                          success ? SpendexColors.income : SpendexColors.expense,
+                      backgroundColor: success ? SpendexColors.income : SpendexColors.expense,
                     ),
                   );
                 }
@@ -430,9 +412,8 @@ class _InvestmentDetailsScreenState
     );
 
     if ((confirmed ?? false) && context.mounted) {
-      final success = await ref
-          .read(investmentsStateProvider.notifier)
-          .deleteInvestment(widget.investmentId);
+      final success =
+          await ref.read(investmentsStateProvider.notifier).deleteInvestment(widget.investmentId);
 
       if (context.mounted) {
         if (success) {
@@ -469,12 +450,9 @@ class _InvestmentHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     return Card(
       child: Padding(
@@ -569,12 +547,9 @@ class _PerformanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final textPrimary = isDark
-        ? SpendexColors.darkTextPrimary
-        : SpendexColors.lightTextPrimary;
-    final textSecondary = isDark
-        ? SpendexColors.darkTextSecondary
-        : SpendexColors.lightTextSecondary;
+    final textPrimary = isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary;
+    final textSecondary =
+        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary;
 
     final returnsColor = investment.isProfit
         ? SpendexColors.income
@@ -610,9 +585,7 @@ class _PerformanceCard extends StatelessWidget {
             ),
             const SizedBox(height: SpendexTheme.spacingLg),
             Divider(
-              color: isDark
-                  ? SpendexColors.darkDivider
-                  : SpendexColors.lightDivider,
+              color: isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
             ),
             const SizedBox(height: SpendexTheme.spacingLg),
             Row(
@@ -643,9 +616,7 @@ class _PerformanceCard extends StatelessWidget {
                 Container(
                   width: 1,
                   height: 40,
-                  color: isDark
-                      ? SpendexColors.darkDivider
-                      : SpendexColors.lightDivider,
+                  color: isDark ? SpendexColors.darkDivider : SpendexColors.lightDivider,
                 ),
                 Expanded(
                   child: Column(

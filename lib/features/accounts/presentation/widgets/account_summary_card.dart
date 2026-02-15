@@ -8,7 +8,6 @@ import 'account_card.dart';
 /// Account Summary Card Widget
 /// Displays total assets, liabilities, and net worth with gradient background
 class AccountSummaryCard extends StatelessWidget {
-
   const AccountSummaryCard({
     required this.summary,
     super.key,
@@ -217,7 +216,6 @@ class AccountSummaryCard extends StatelessWidget {
 
 /// Compact Summary Card (for dashboard)
 class AccountSummaryCompactCard extends StatelessWidget {
-
   const AccountSummaryCompactCard({
     required this.summary,
     super.key,
@@ -275,9 +273,8 @@ class AccountSummaryCompactCard extends StatelessWidget {
                   Text(
                     formatCurrency(summary.totalBalanceInRupees),
                     style: SpendexTheme.headlineMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextPrimary
-                          : SpendexColors.lightTextPrimary,
+                      color:
+                          isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -287,9 +284,7 @@ class AccountSummaryCompactCard extends StatelessWidget {
             // Arrow
             Icon(
               Iconsax.arrow_right_3,
-              color: isDark
-                  ? SpendexColors.darkTextTertiary
-                  : SpendexColors.lightTextTertiary,
+              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
             ),
           ],
         ),
@@ -305,12 +300,10 @@ class AccountSummaryLoadingSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final shimmerBase = isDark
-        ? Colors.white.withValues(alpha: 0.05)
-        : Colors.black.withValues(alpha: 0.05);
-    final shimmerHighlight = isDark
-        ? Colors.white.withValues(alpha: 0.1)
-        : Colors.black.withValues(alpha: 0.08);
+    final shimmerBase =
+        isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05);
+    final shimmerHighlight =
+        isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08);
 
     return Container(
       width: double.infinity,

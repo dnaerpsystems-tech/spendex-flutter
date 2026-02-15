@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import '../../../features/transactions/data/models/transaction_model.dart';
+
 import '../../../core/constants/app_constants.dart';
+import '../../../features/transactions/data/models/transaction_model.dart';
 
 /// Hive TypeAdapter for TransactionModel
 class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
@@ -13,7 +14,7 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    
+
     return TransactionModel(
       id: fields[0] as String,
       type: TransactionType.values[fields[1] as int],
@@ -102,7 +103,5 @@ class TransactionTypeAdapter extends TypeAdapter<TransactionType> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TransactionTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is TransactionTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

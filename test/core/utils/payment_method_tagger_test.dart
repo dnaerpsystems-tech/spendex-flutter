@@ -104,7 +104,7 @@ void main() {
         final result = PaymentMethodTagger.detectPaymentMethod(
           amount: 20000000, // 2 lakh in paise
           description: 'Transfer to account',
-          transactionTime: DateTime(2023, 12, 25, 10, 0), // 10 AM
+          transactionTime: DateTime(2023, 12, 25, 10), // 10 AM
         );
         expect(result, equals('rtgs'));
       });
@@ -131,7 +131,7 @@ void main() {
         final result = PaymentMethodTagger.detectPaymentMethod(
           amount: 15000000, // 1.5 lakh in paise
           description: 'Bank transfer',
-          transactionTime: DateTime(2023, 12, 25, 14, 0), // 2 PM
+          transactionTime: DateTime(2023, 12, 25, 14), // 2 PM
           isInstant: false,
         );
         expect(result, equals('neft'));
@@ -141,7 +141,7 @@ void main() {
         final result = PaymentMethodTagger.detectPaymentMethod(
           amount: 1000000, // 10K in paise
           description: 'Late night transfer',
-          transactionTime: DateTime(2023, 12, 25, 22, 0), // 10 PM
+          transactionTime: DateTime(2023, 12, 25, 22), // 10 PM
         );
         expect(result, equals('imps'));
       });
@@ -203,34 +203,34 @@ void main() {
 
       group('isValidNeftTime()', () {
         test('returns true during banking hours', () {
-          final time = DateTime(2023, 12, 25, 10, 0); // 10 AM
+          final time = DateTime(2023, 12, 25, 10); // 10 AM
           expect(PaymentMethodTagger.isValidNeftTime(time), isTrue);
         });
 
         test('returns false before banking hours', () {
-          final time = DateTime(2023, 12, 25, 6, 0); // 6 AM
+          final time = DateTime(2023, 12, 25, 6); // 6 AM
           expect(PaymentMethodTagger.isValidNeftTime(time), isFalse);
         });
 
         test('returns false after banking hours', () {
-          final time = DateTime(2023, 12, 25, 20, 0); // 8 PM
+          final time = DateTime(2023, 12, 25, 20); // 8 PM
           expect(PaymentMethodTagger.isValidNeftTime(time), isFalse);
         });
       });
 
       group('isValidRtgsTime()', () {
         test('returns true during RTGS hours', () {
-          final time = DateTime(2023, 12, 25, 10, 0); // 10 AM
+          final time = DateTime(2023, 12, 25, 10); // 10 AM
           expect(PaymentMethodTagger.isValidRtgsTime(time), isTrue);
         });
 
         test('returns false before RTGS hours', () {
-          final time = DateTime(2023, 12, 25, 8, 0); // 8 AM
+          final time = DateTime(2023, 12, 25, 8); // 8 AM
           expect(PaymentMethodTagger.isValidRtgsTime(time), isFalse);
         });
 
         test('returns false after RTGS hours', () {
-          final time = DateTime(2023, 12, 25, 17, 0); // 5 PM
+          final time = DateTime(2023, 12, 25, 17); // 5 PM
           expect(PaymentMethodTagger.isValidRtgsTime(time), isFalse);
         });
       });
@@ -365,7 +365,7 @@ void main() {
       test('includes NEFT during banking hours', () {
         final methods = PaymentMethodTagger.getSuggestedMethods(
           amount: 10000000,
-          time: DateTime(2023, 12, 25, 10, 0),
+          time: DateTime(2023, 12, 25, 10),
         );
         expect(methods, contains('neft'));
       });

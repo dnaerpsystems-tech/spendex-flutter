@@ -49,9 +49,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
   Future<void> _loadGoal() async {
     setState(() => _isLoading = true);
 
-    final goal = await ref
-        .read(goalsStateProvider.notifier)
-        .loadGoalById(widget.goalId!);
+    final goal = await ref.read(goalsStateProvider.notifier).loadGoalById(widget.goalId!);
 
     if (goal != null && mounted) {
       setState(() {
@@ -214,9 +212,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
     GoalModel? result;
 
     if (_isEditMode) {
-      result = await ref
-          .read(goalsStateProvider.notifier)
-          .updateGoal(widget.goalId!, request);
+      result = await ref.read(goalsStateProvider.notifier).updateGoal(widget.goalId!, request);
     } else {
       result = await ref.read(goalsStateProvider.notifier).createGoal(request);
     }
@@ -253,9 +249,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
     final isOperationInProgress = goalsState.isCreating || goalsState.isUpdating;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? SpendexColors.darkBackground
-          : SpendexColors.lightBackground,
+      backgroundColor: isDark ? SpendexColors.darkBackground : SpendexColors.lightBackground,
       appBar: AppBar(
         title: Text(_isEditMode ? 'Edit Goal' : 'Add Goal'),
         centerTitle: true,
@@ -281,9 +275,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                         hintText: 'e.g., Emergency Fund, New Car',
                         prefixIcon: const Icon(Iconsax.text),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.next,
@@ -298,9 +290,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                       }) =>
                           null,
                     ),
-
                     const SizedBox(height: 20),
-
                     _SectionTitle(title: 'Target Amount', isDark: isDark),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -319,9 +309,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                         ),
                         prefixIconConstraints: const BoxConstraints(),
                         filled: true,
-                        fillColor: isDark
-                            ? SpendexColors.darkCard
-                            : SpendexColors.lightCard,
+                        fillColor: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                       ),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.done,
@@ -332,9 +320,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                       validator: _validateAmount,
                       enabled: !isOperationInProgress,
                     ),
-
                     const SizedBox(height: 20),
-
                     _SectionTitle(
                       title: 'Target Date (Optional)',
                       isDark: isDark,
@@ -348,15 +334,10 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                           vertical: 14,
                         ),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? SpendexColors.darkCard
-                              : SpendexColors.lightCard,
-                          borderRadius:
-                              BorderRadius.circular(SpendexTheme.radiusMd),
+                          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+                          borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                           border: Border.all(
-                            color: isDark
-                                ? SpendexColors.darkBorder
-                                : SpendexColors.lightBorder,
+                            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
                           ),
                         ),
                         child: Row(
@@ -372,8 +353,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                               child: Text(
                                 _selectedDate == null
                                     ? 'Select target date'
-                                    : DateFormat('dd MMM yyyy')
-                                        .format(_selectedDate!),
+                                    : DateFormat('dd MMM yyyy').format(_selectedDate!),
                                 style: SpendexTheme.bodyMedium.copyWith(
                                   color: _selectedDate == null
                                       ? (isDark
@@ -387,9 +367,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                             ),
                             if (_selectedDate != null)
                               GestureDetector(
-                                onTap: isOperationInProgress
-                                    ? null
-                                    : _clearTargetDate,
+                                onTap: isOperationInProgress ? null : _clearTargetDate,
                                 child: Icon(
                                   Iconsax.close_circle,
                                   size: 20,
@@ -410,9 +388,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
                     Row(
                       children: [
                         Expanded(
@@ -422,15 +398,12 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                               _SectionTitle(title: 'Icon', isDark: isDark),
                               const SizedBox(height: 8),
                               GestureDetector(
-                                onTap: isOperationInProgress
-                                    ? null
-                                    : _openIconPicker,
+                                onTap: isOperationInProgress ? null : _openIconPicker,
                                 child: Container(
                                   padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
-                                    color: isDark
-                                        ? SpendexColors.darkCard
-                                        : SpendexColors.lightCard,
+                                    color:
+                                        isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                                     borderRadius: BorderRadius.circular(
                                       SpendexTheme.radiusMd,
                                     ),
@@ -480,15 +453,12 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                               _SectionTitle(title: 'Color', isDark: isDark),
                               const SizedBox(height: 8),
                               GestureDetector(
-                                onTap: isOperationInProgress
-                                    ? null
-                                    : _openColorPicker,
+                                onTap: isOperationInProgress ? null : _openColorPicker,
                                 child: Container(
                                   padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
-                                    color: isDark
-                                        ? SpendexColors.darkCard
-                                        : SpendexColors.lightCard,
+                                    color:
+                                        isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
                                     borderRadius: BorderRadius.circular(
                                       SpendexTheme.radiusMd,
                                     ),
@@ -540,22 +510,17 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 32),
-
                     SizedBox(
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: isOperationInProgress || _isLoading
-                            ? null
-                            : _saveGoal,
+                        onPressed: isOperationInProgress || _isLoading ? null : _saveGoal,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: SpendexColors.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(SpendexTheme.radiusMd),
+                            borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
                           ),
                         ),
                         child: isOperationInProgress || _isLoading
@@ -575,7 +540,6 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
                               ),
                       ),
                     ),
-
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -599,9 +563,7 @@ class _SectionTitle extends StatelessWidget {
     return Text(
       title,
       style: SpendexTheme.labelMedium.copyWith(
-        color: isDark
-            ? SpendexColors.darkTextSecondary
-            : SpendexColors.lightTextSecondary,
+        color: isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
         fontWeight: FontWeight.w600,
       ),
     );

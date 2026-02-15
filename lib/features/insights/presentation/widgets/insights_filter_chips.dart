@@ -33,11 +33,13 @@ extension InsightTypeExtension on InsightType {
 
 /// A horizontal scrollable filter chips widget for filtering insights by type
 class InsightsFilterChips extends StatelessWidget {
-
   const InsightsFilterChips({
-    required this.selectedType, required this.onTypeSelected, super.key,
+    required this.selectedType,
+    required this.onTypeSelected,
+    super.key,
     this.typeCounts = const {},
   });
+
   /// Currently selected insight type (null means "All")
   final InsightType? selectedType;
 
@@ -100,7 +102,6 @@ class InsightsFilterChips extends StatelessWidget {
     required VoidCallback onTap,
     required bool isDark,
   }) {
-
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -108,26 +109,20 @@ class InsightsFilterChips extends StatelessWidget {
           label: Text(label),
           selected: isSelected,
           onSelected: (_) => onTap(),
-          backgroundColor: isDark
-              ? SpendexColors.darkSurface
-              : SpendexColors.lightSurface,
+          backgroundColor: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
           selectedColor: SpendexColors.primary,
           checkmarkColor: Colors.white,
           labelStyle: SpendexTheme.labelMedium.copyWith(
             color: isSelected
                 ? Colors.white
-                : (isDark
-                    ? SpendexColors.darkTextPrimary
-                    : SpendexColors.lightTextPrimary),
+                : (isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
             side: BorderSide(
               color: isSelected
                   ? SpendexColors.primary
-                  : (isDark
-                      ? SpendexColors.darkBorder
-                      : SpendexColors.lightBorder),
+                  : (isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder),
               width: isSelected ? 0 : 1,
             ),
           ),
@@ -149,14 +144,10 @@ class InsightsFilterChips extends StatelessWidget {
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                color: isSelected
-                    ? Colors.white
-                    : SpendexColors.primary,
+                color: isSelected ? Colors.white : SpendexColors.primary,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isDark
-                      ? SpendexColors.darkSurface
-                      : SpendexColors.lightSurface,
+                  color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
                   width: 2,
                 ),
               ),
@@ -164,9 +155,7 @@ class InsightsFilterChips extends StatelessWidget {
                 child: Text(
                   count > 99 ? '99+' : count.toString(),
                   style: SpendexTheme.labelSmall.copyWith(
-                    color: isSelected
-                        ? SpendexColors.primary
-                        : Colors.white,
+                    color: isSelected ? SpendexColors.primary : Colors.white,
                     fontSize: 9,
                     fontWeight: FontWeight.w600,
                   ),

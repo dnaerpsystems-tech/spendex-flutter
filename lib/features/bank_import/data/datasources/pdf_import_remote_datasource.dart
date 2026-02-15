@@ -28,7 +28,6 @@ abstract class PdfImportRemoteDataSource {
 }
 
 class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
-
   PdfImportRemoteDataSourceImpl(this._apiClient);
   final ApiClient _apiClient;
 
@@ -69,9 +68,11 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
       fromJson: (json) {
         final list = json! as List<dynamic>;
         return list
-            .map((e) => ParsedTransactionModel.fromJson(
-                  e as Map<String, dynamic>,
-                ),)
+            .map(
+              (e) => ParsedTransactionModel.fromJson(
+                e as Map<String, dynamic>,
+              ),
+            )
             .toList();
       },
     );
@@ -88,7 +89,9 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
         'transactions': transactions.map((t) => t.toJson()).toList(),
       },
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['success'] as bool? ?? false;
         }
@@ -105,9 +108,11 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
       fromJson: (json) {
         final list = json! as List<dynamic>;
         return list
-            .map((e) => ImportedStatementModel.fromJson(
-                  e as Map<String, dynamic>,
-                ),)
+            .map(
+              (e) => ImportedStatementModel.fromJson(
+                e as Map<String, dynamic>,
+              ),
+            )
             .toList();
       },
     );
@@ -118,7 +123,9 @@ class PdfImportRemoteDataSourceImpl implements PdfImportRemoteDataSource {
     final result = await _apiClient.delete<bool>(
       '/import/$importId',
       fromJson: (json) {
-        if (json is bool) return json;
+        if (json is bool) {
+          return json;
+        }
         if (json is Map<String, dynamic>) {
           return json['success'] as bool? ?? false;
         }

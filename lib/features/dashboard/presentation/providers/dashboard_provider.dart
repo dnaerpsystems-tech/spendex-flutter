@@ -9,7 +9,6 @@ import '../../domain/repositories/dashboard_repository.dart';
 
 /// Dashboard State
 class DashboardState extends Equatable {
-
   const DashboardState({
     this.accountsSummary,
     this.monthlyStats,
@@ -89,7 +88,6 @@ class DashboardState extends Equatable {
 
 /// Dashboard State Notifier
 class DashboardNotifier extends StateNotifier<DashboardState> {
-
   DashboardNotifier(this._repository) : super(const DashboardState.initial());
   final DashboardRepository _repository;
 
@@ -214,9 +212,8 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
         );
       },
       (budgets) {
-        final alerts = budgets
-            .where((budget) => budget.percentage >= budget.alertThreshold)
-            .toList();
+        final alerts =
+            budgets.where((budget) => budget.percentage >= budget.alertThreshold).toList();
         state = state.copyWith(
           isBudgetsLoading: false,
           budgetAlerts: alerts,
@@ -238,8 +235,7 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
 }
 
 /// Dashboard State Provider
-final dashboardStateProvider =
-    StateNotifierProvider<DashboardNotifier, DashboardState>((ref) {
+final dashboardStateProvider = StateNotifierProvider<DashboardNotifier, DashboardState>((ref) {
   return DashboardNotifier(getIt<DashboardRepository>());
 });
 

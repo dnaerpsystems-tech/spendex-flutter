@@ -54,7 +54,7 @@ class OfflineBanner extends ConsumerWidget {
               child: Text(
                 syncState.isOnline
                     ? 'Back online. Syncing changes...'
-                    : 'You\'re offline. Changes will sync when connected.',
+                    : "You're offline. Changes will sync when connected.",
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: syncState.isOnline
                       ? theme.colorScheme.onPrimaryContainer
@@ -67,9 +67,7 @@ class OfflineBanner extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: syncState.isOnline
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.error,
+                  color: syncState.isOnline ? theme.colorScheme.primary : theme.colorScheme.error,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -93,8 +91,8 @@ class OfflineBanner extends ConsumerWidget {
 /// Wrapper widget that shows offline banner at the top of a scaffold
 class OfflineAwareScaffold extends ConsumerWidget {
   const OfflineAwareScaffold({
-    super.key,
     required this.body,
+    super.key,
     this.appBar,
     this.floatingActionButton,
     this.bottomNavigationBar,

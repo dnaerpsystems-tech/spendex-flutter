@@ -29,9 +29,7 @@ class FamilyModel extends Equatable {
       description: json['description'] as String?,
       avatarUrl: json['avatarUrl'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
-          : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt'] as String) : null,
       members: json['members'] != null
           ? (json['members'] as List)
               .map((e) => FamilyMemberModel.fromJson(e as Map<String, dynamic>))
@@ -80,6 +78,7 @@ class FamilyModel extends Equatable {
 
   /// Check if there's only one member (the owner)
   bool get isSingleMember => memberCount == 1;
+
   /// Check if there are pending invites
   bool get hasPendingInvites => pendingInvites != null && pendingInvites!.isNotEmpty;
 

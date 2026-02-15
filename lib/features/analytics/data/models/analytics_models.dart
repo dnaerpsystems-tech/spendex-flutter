@@ -26,9 +26,8 @@ class AnalyticsSummary extends Equatable {
       averageDailySpend: _parseDouble(json['averageDailySpend']),
       highestExpenseCategory: json['highestExpenseCategory'] as String? ?? '',
       highestExpenseAmount: _parseDouble(json['highestExpenseAmount']),
-      previousPeriodIncome: json['previousPeriodIncome'] != null
-          ? _parseDouble(json['previousPeriodIncome'])
-          : null,
+      previousPeriodIncome:
+          json['previousPeriodIncome'] != null ? _parseDouble(json['previousPeriodIncome']) : null,
       previousPeriodExpense: json['previousPeriodExpense'] != null
           ? _parseDouble(json['previousPeriodExpense'])
           : null,
@@ -47,17 +46,32 @@ class AnalyticsSummary extends Equatable {
   final double? previousPeriodExpense;
 
   double? get incomeChangePercent {
-    if (previousPeriodIncome == null || previousPeriodIncome == 0) return null;
+    if (previousPeriodIncome == null || previousPeriodIncome == 0) {
+      return null;
+    }
     return ((totalIncome - previousPeriodIncome!) / previousPeriodIncome!) * 100;
   }
 
   double? get expenseChangePercent {
-    if (previousPeriodExpense == null || previousPeriodExpense == 0) return null;
+    if (previousPeriodExpense == null || previousPeriodExpense == 0) {
+      return null;
+    }
     return ((totalExpense - previousPeriodExpense!) / previousPeriodExpense!) * 100;
   }
 
   @override
-  List<Object?> get props => [totalIncome, totalExpense, netSavings, savingsRate, transactionCount, averageDailySpend, highestExpenseCategory, highestExpenseAmount, previousPeriodIncome, previousPeriodExpense];
+  List<Object?> get props => [
+        totalIncome,
+        totalExpense,
+        netSavings,
+        savingsRate,
+        transactionCount,
+        averageDailySpend,
+        highestExpenseCategory,
+        highestExpenseAmount,
+        previousPeriodIncome,
+        previousPeriodExpense,
+      ];
 }
 
 /// Category Breakdown Model
@@ -93,7 +107,8 @@ class CategoryBreakdown extends Equatable {
   final String? icon;
 
   @override
-  List<Object?> get props => [categoryId, categoryName, amount, percentage, transactionCount, color, icon];
+  List<Object?> get props =>
+      [categoryId, categoryName, amount, percentage, transactionCount, color, icon];
 }
 
 /// Daily Stats Model
@@ -155,7 +170,20 @@ class MonthlyStats extends Equatable {
   double get savingsRate => income > 0 ? (netAmount / income) * 100 : 0;
 
   String get monthName {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return months[month - 1];
   }
 
@@ -244,16 +272,28 @@ enum DateRangePreset {
 }
 
 double _parseDouble(value) {
-  if (value == null) return 0;
-  if (value is double) return value;
-  if (value is int) return value.toDouble();
-  if (value is String) return double.tryParse(value) ?? 0.0;
+  if (value == null) {
+    return 0;
+  }
+  if (value is double) {
+    return value;
+  }
+  if (value is int) {
+    return value.toDouble();
+  }
+  if (value is String) {
+    return double.tryParse(value) ?? 0.0;
+  }
   return 0;
 }
 
 Color _parseColor(value) {
-  if (value == null) return const Color(0xFF10B981);
-  if (value is Color) return value;
+  if (value == null) {
+    return const Color(0xFF10B981);
+  }
+  if (value is Color) {
+    return value;
+  }
   if (value is String) {
     final hex = value.replaceAll('#', '');
     if (hex.length == 6) {

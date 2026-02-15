@@ -114,8 +114,7 @@ class DuplicateDetectionConfig extends Equatable {
       amountTolerance: amountTolerance ?? this.amountTolerance,
       descriptionSimilarityThreshold:
           descriptionSimilarityThreshold ?? this.descriptionSimilarityThreshold,
-      merchantSimilarityThreshold:
-          merchantSimilarityThreshold ?? this.merchantSimilarityThreshold,
+      merchantSimilarityThreshold: merchantSimilarityThreshold ?? this.merchantSimilarityThreshold,
       accountAware: accountAware ?? this.accountAware,
       minimumConfidence: minimumConfidence ?? this.minimumConfidence,
     );

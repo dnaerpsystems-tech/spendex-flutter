@@ -68,4 +68,10 @@ abstract class SubscriptionRepository {
 
   /// Get saved payment methods
   Future<Either<Failure, PaymentMethodsResponse>> getPaymentMethods();
+
+  /// Set a payment method as default
+  Future<Either<Failure, void>> setDefaultPaymentMethod(String paymentMethodId);
+
+  /// Check payment status for a transaction
+  Future<Either<Failure, String>> checkPaymentStatus(String transactionId);
 }

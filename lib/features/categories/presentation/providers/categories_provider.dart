@@ -8,7 +8,6 @@ import '../../domain/repositories/categories_repository.dart';
 
 /// Categories State
 class CategoriesState extends Equatable {
-
   const CategoriesState({
     this.categories = const [],
     this.incomeCategories = const [],
@@ -103,7 +102,6 @@ class CategoriesState extends Equatable {
 
 /// Categories State Notifier
 class CategoriesNotifier extends StateNotifier<CategoriesState> {
-
   CategoriesNotifier(this._repository) : super(const CategoriesState.initial());
   final CategoriesRepository _repository;
 
@@ -247,12 +245,10 @@ class CategoriesNotifier extends StateNotifier<CategoriesState> {
       },
       (category) {
         final updatedCategories = [...state.categories, category];
-        final updatedIncome = category.isIncome
-            ? [...state.incomeCategories, category]
-            : state.incomeCategories;
-        final updatedExpense = category.isExpense
-            ? [...state.expenseCategories, category]
-            : state.expenseCategories;
+        final updatedIncome =
+            category.isIncome ? [...state.incomeCategories, category] : state.incomeCategories;
+        final updatedExpense =
+            category.isExpense ? [...state.expenseCategories, category] : state.expenseCategories;
 
         state = state.copyWith(
           isCreating: false,
@@ -399,8 +395,7 @@ final selectedCategoryProvider = Provider<CategoryModel?>((ref) {
 });
 
 /// Categories By Type Provider
-final categoriesByTypeProvider =
-    Provider.family<List<CategoryModel>, CategoryType>((ref, type) {
+final categoriesByTypeProvider = Provider.family<List<CategoryModel>, CategoryType>((ref, type) {
   return ref.watch(categoriesStateProvider).getCategoriesByType(type);
 });
 

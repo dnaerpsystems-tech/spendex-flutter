@@ -92,8 +92,7 @@ class FamilyInviteModel extends Equatable {
   bool get isAccepted => status == InviteStatus.accepted;
 
   /// Check if the invite has expired (by status or date)
-  bool get isExpired =>
-      status == InviteStatus.expired || DateTime.now().isAfter(expiresAt);
+  bool get isExpired => status == InviteStatus.expired || DateTime.now().isAfter(expiresAt);
 
   /// Check if the invite has been cancelled
   bool get isValid => isPending && !isExpired;

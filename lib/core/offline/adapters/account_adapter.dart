@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import '../../../features/accounts/data/models/account_model.dart';
+
 import '../../../core/constants/app_constants.dart';
+import '../../../features/accounts/data/models/account_model.dart';
 
 /// Hive TypeAdapter for AccountModel
 class AccountModelAdapter extends TypeAdapter<AccountModel> {
@@ -13,7 +14,7 @@ class AccountModelAdapter extends TypeAdapter<AccountModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    
+
     return AccountModel(
       id: fields[0] as String,
       name: fields[1] as String,
@@ -72,9 +73,7 @@ class AccountModelAdapter extends TypeAdapter<AccountModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AccountModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is AccountModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 /// Hive TypeAdapter for AccountType enum
@@ -98,7 +97,5 @@ class AccountTypeAdapter extends TypeAdapter<AccountType> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AccountTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is AccountTypeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

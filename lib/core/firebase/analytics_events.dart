@@ -152,7 +152,7 @@ class AnalyticsEvents {
   static const String eventPasswordResetComplete = 'password_reset_complete';
 
   /// User deleted account
-  static const String eventAccountDeleted = 'account_deleted';
+  static const String eventUserAccountDeleted = 'user_account_deleted';
 
   // ============================================================
   // Transaction Events
@@ -357,6 +357,7 @@ class AnalyticsEvents {
 
   /// Feature gated (user hit premium wall)
   static const String eventFeatureGated = 'feature_gated';
+
   /// Feature used (custom feature tracking)
   static const String eventFeatureUsed = 'feature_used';
 

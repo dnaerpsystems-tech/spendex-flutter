@@ -1,4 +1,3 @@
-import '../../../../core/utils/app_logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +5,7 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import '../../../../core/utils/app_logger.dart';
 import '../../data/models/transaction_model.dart';
 import '../../data/services/voice_parser_service.dart';
 
@@ -147,8 +147,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
     if (!available) {
       state = state.copyWith(
         state: VoiceInputState.error,
-        errorMessage:
-            'Microphone permission is required. Please grant permission in settings.',
+        errorMessage: 'Microphone permission is required. Please grant permission in settings.',
       );
     }
 
@@ -166,8 +165,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
     if (!_isInitialized) {
       state = state.copyWith(
         state: VoiceInputState.error,
-        errorMessage:
-            'Speech recognition is not initialized. Please restart the app.',
+        errorMessage: 'Speech recognition is not initialized. Please restart the app.',
       );
       return;
     }
@@ -191,7 +189,8 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
         onResult: _onSpeechResult,
         listenFor: const Duration(seconds: 30),
         pauseFor: const Duration(seconds: 3),
-        onSoundLevelChange: _onSoundLevelChange,
+        onSoundLevelChange: (level) => _currentSoundLevel = level,
+        // ignore: deprecated_member_use
         cancelOnError: true,
       );
     } catch (e) {
@@ -259,11 +258,6 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
     _parseRecognizedText(text);
   }
 
-  /// Handle sound level changes for visual feedback
-  void _onSoundLevelChange(double level) {
-    _currentSoundLevel = level;
-  }
-
   /// Get current sound level (for UI if needed)
   double get currentSoundLevel => _currentSoundLevel;
 
@@ -285,8 +279,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
         errorMessage = 'Microphone error. Check your device settings.';
         break;
       case 'error_permission':
-        errorMessage =
-            'Microphone permission denied. Please enable it in settings.';
+        errorMessage = 'Microphone permission denied. Please enable it in settings.';
         break;
       case 'error_speech_timeout':
         errorMessage = 'No speech detected. Please try again.';
@@ -327,7 +320,9 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
     // Simulate typing effect
     for (var i = 0; i <= text.length; i++) {
       await Future.delayed(const Duration(milliseconds: 50));
-      if (state.state != VoiceInputState.listening) break;
+      if (state.state != VoiceInputState.listening) {
+        break;
+      }
       state = state.copyWith(recognizedText: text.substring(0, i));
     }
 
@@ -440,8 +435,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
 }
 
 /// Voice Input Provider
-final voiceInputProvider =
-    StateNotifierProvider<VoiceInputNotifier, VoiceInputData>((ref) {
+final voiceInputProvider = StateNotifierProvider<VoiceInputNotifier, VoiceInputData>((ref) {
   return VoiceInputNotifier();
 });
 

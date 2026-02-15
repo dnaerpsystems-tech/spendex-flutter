@@ -7,7 +7,6 @@ import '../models/aa_consent_model.dart';
 import '../models/parsed_transaction_model.dart';
 
 class AccountAggregatorRepositoryImpl implements AccountAggregatorRepository {
-
   AccountAggregatorRepositoryImpl(this._remoteDataSource);
   final AccountAggregatorRemoteDataSource _remoteDataSource;
 

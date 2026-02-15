@@ -30,7 +30,7 @@ class PaymentMethodSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? SpendexColors.darkSurface : SpendexColors.lightSurface,
         borderRadius: const BorderRadius.vertical(
@@ -45,9 +45,7 @@ class PaymentMethodSelector extends StatelessWidget {
             height: 4,
             margin: const EdgeInsets.only(top: SpendexTheme.spacingMd),
             decoration: BoxDecoration(
-              color: isDark
-                  ? SpendexColors.darkBorder
-                  : SpendexColors.lightBorder,
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               borderRadius: BorderRadius.circular(SpendexTheme.radiusFull),
             ),
           ),
@@ -58,9 +56,7 @@ class PaymentMethodSelector extends StatelessWidget {
                 Text(
                   'Select Payment Method',
                   style: SpendexTheme.headlineMedium.copyWith(
-                    color: isDark
-                        ? SpendexColors.darkTextPrimary
-                        : SpendexColors.lightTextPrimary,
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
                   ),
                 ),
                 const Spacer(),
@@ -68,9 +64,8 @@ class PaymentMethodSelector extends StatelessWidget {
                   onPressed: () => Navigator.of(context).pop(),
                   icon: Icon(
                     Iconsax.close_circle,
-                    color: isDark
-                        ? SpendexColors.darkTextSecondary
-                        : SpendexColors.lightTextSecondary,
+                    color:
+                        isDark ? SpendexColors.darkTextSecondary : SpendexColors.lightTextSecondary,
                   ),
                 ),
               ],
@@ -188,9 +183,7 @@ class PaymentMethodSelector extends StatelessWidget {
               color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
               borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
               border: Border.all(
-                color: isDark
-                    ? SpendexColors.darkBorder
-                    : SpendexColors.lightBorder,
+                color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
               ),
             ),
             child: Row(
@@ -199,7 +192,7 @@ class PaymentMethodSelector extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.1),
+                    color: iconColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(SpendexTheme.radiusSm),
                   ),
                   child: Icon(icon, size: 24, color: iconColor),
@@ -232,9 +225,7 @@ class PaymentMethodSelector extends StatelessWidget {
                 Icon(
                   Iconsax.arrow_right_3,
                   size: 20,
-                  color: isDark
-                      ? SpendexColors.darkTextTertiary
-                      : SpendexColors.lightTextTertiary,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
                 ),
               ],
             ),

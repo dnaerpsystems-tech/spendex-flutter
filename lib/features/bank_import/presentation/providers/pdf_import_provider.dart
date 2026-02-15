@@ -229,9 +229,8 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
     state = state.copyWith(isLoading: true);
 
     // Get only selected transactions
-    final selectedTxns = state.parsedTransactions
-        .where((t) => state.selectedTransactions.contains(t.id))
-        .toList();
+    final selectedTxns =
+        state.parsedTransactions.where((t) => state.selectedTransactions.contains(t.id)).toList();
 
     final result = await _repository.confirmImport(importId, selectedTxns);
 
@@ -294,8 +293,7 @@ class PdfImportNotifier extends StateNotifier<PdfImportState> {
 }
 
 /// Provider for PDF Import state
-final pdfImportProvider =
-    StateNotifierProvider<PdfImportNotifier, PdfImportState>((ref) {
+final pdfImportProvider = StateNotifierProvider<PdfImportNotifier, PdfImportState>((ref) {
   final repository = ref.watch(pdfImportRepositoryProvider);
   return PdfImportNotifier(repository);
 });
@@ -311,8 +309,8 @@ final selectedTransactionsCountProvider = Provider<int>((ref) {
 /// Total amount of selected transactions
 final selectedTransactionsTotalProvider = Provider<int>((ref) {
   final state = ref.watch(pdfImportProvider);
-  final selectedTxns = state.parsedTransactions
-      .where((t) => state.selectedTransactions.contains(t.id));
+  final selectedTxns =
+      state.parsedTransactions.where((t) => state.selectedTransactions.contains(t.id));
 
   return selectedTxns.fold<int>(0, (sum, txn) => sum + txn.amount.toInt());
 });
@@ -320,7 +318,9 @@ final selectedTransactionsTotalProvider = Provider<int>((ref) {
 /// Whether all transactions are selected
 final allTransactionsSelectedProvider = Provider<bool>((ref) {
   final state = ref.watch(pdfImportProvider);
-  if (state.parsedTransactions.isEmpty) return false;
+  if (state.parsedTransactions.isEmpty) {
+    return false;
+  }
 
   return state.selectedTransactions.length == state.parsedTransactions.length;
 });

@@ -45,8 +45,7 @@ class DuplicateDetectionConfig {
       amountTolerance: amountTolerance ?? this.amountTolerance,
       descriptionSimilarityThreshold:
           descriptionSimilarityThreshold ?? this.descriptionSimilarityThreshold,
-      merchantSimilarityThreshold:
-          merchantSimilarityThreshold ?? this.merchantSimilarityThreshold,
+      merchantSimilarityThreshold: merchantSimilarityThreshold ?? this.merchantSimilarityThreshold,
       accountAware: accountAware ?? this.accountAware,
     );
   }
@@ -88,9 +87,15 @@ class DuplicateMatchResult {
 
   /// Get confidence level as a string
   String get confidenceLevel {
-    if (confidenceScore >= 0.85) return 'high';
-    if (confidenceScore >= 0.70) return 'medium';
-    if (confidenceScore >= 0.50) return 'low';
+    if (confidenceScore >= 0.85) {
+      return 'high';
+    }
+    if (confidenceScore >= 0.70) {
+      return 'medium';
+    }
+    if (confidenceScore >= 0.50) {
+      return 'low';
+    }
     return 'very_low';
   }
 

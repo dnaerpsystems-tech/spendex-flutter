@@ -22,7 +22,8 @@ abstract class TransactionsRemoteDataSource {
   });
   Future<Either<Failure, TransactionModel>> getTransactionById(String id);
   Future<Either<Failure, TransactionModel>> createTransaction(CreateTransactionRequest request);
-  Future<Either<Failure, TransactionModel>> updateTransaction(String id, CreateTransactionRequest request);
+  Future<Either<Failure, TransactionModel>> updateTransaction(
+      String id, CreateTransactionRequest request,);
   Future<Either<Failure, void>> deleteTransaction(String id);
 }
 
@@ -53,24 +54,29 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
       (data) {
         if (data is Map<String, dynamic>) {
           final items = (data['data'] as List?)
-              ?.map((e) => TransactionModel.fromJson(e as Map<String, dynamic>))
-              .toList() ?? [];
+                  ?.map((e) => TransactionModel.fromJson(e as Map<String, dynamic>))
+                  .toList() ??
+              [];
           final meta = data['meta'] as Map<String, dynamic>?;
-          return Right(PaginatedResponse<TransactionModel>(
-            data: items,
-            page: meta?['page'] as int? ?? 1,
-            limit: meta?['limit'] as int? ?? 20,
-            total: meta?['total'] as int? ?? items.length,
-            totalPages: meta?['totalPages'] as int? ?? 1,
-          ),);
+          return Right(
+            PaginatedResponse<TransactionModel>(
+              data: items,
+              page: meta?['page'] as int? ?? 1,
+              limit: meta?['limit'] as int? ?? 20,
+              total: meta?['total'] as int? ?? items.length,
+              totalPages: meta?['totalPages'] as int? ?? 1,
+            ),
+          );
         }
-        return Right(PaginatedResponse<TransactionModel>(
-          data: [],
-          page: 1,
-          limit: 20,
-          total: 0,
-          totalPages: 1,
-        ),);
+        return Right(
+          PaginatedResponse<TransactionModel>(
+            data: [],
+            page: 1,
+            limit: 20,
+            total: 0,
+            totalPages: 1,
+          ),
+        );
       },
     );
   }
@@ -114,7 +120,9 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
           return Right(data.map((e) => DailyTotal.fromJson(e as Map<String, dynamic>)).toList());
         }
         if (data is Map<String, dynamic> && data['data'] is List) {
-          return Right((data['data'] as List).map((e) => DailyTotal.fromJson(e as Map<String, dynamic>)).toList());
+          return Right((data['data'] as List)
+              .map((e) => DailyTotal.fromJson(e as Map<String, dynamic>))
+              .toList(),);
         }
         return const Right([]);
       },
@@ -130,7 +138,8 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, TransactionModel>> createTransaction(CreateTransactionRequest request) async {
+  Future<Either<Failure, TransactionModel>> createTransaction(
+      CreateTransactionRequest request,) async {
     return _apiClient.post<TransactionModel>(
       ApiEndpoints.transactions,
       data: request.toJson(),
@@ -139,7 +148,8 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, TransactionModel>> updateTransaction(String id, CreateTransactionRequest request) async {
+  Future<Either<Failure, TransactionModel>> updateTransaction(
+      String id, CreateTransactionRequest request,) async {
     return _apiClient.put<TransactionModel>(
       ApiEndpoints.transactionById(id),
       data: request.toJson(),

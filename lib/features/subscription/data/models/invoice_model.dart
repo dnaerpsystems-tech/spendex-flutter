@@ -104,9 +104,7 @@ class InvoiceModel extends Equatable {
         (e) => e.value == json['status'],
         orElse: () => InvoiceStatus.pending,
       ),
-      paidAt: json['paidAt'] != null
-          ? DateTime.parse(json['paidAt'] as String)
-          : null,
+      paidAt: json['paidAt'] != null ? DateTime.parse(json['paidAt'] as String) : null,
       dueDate: DateTime.parse(json['dueDate'] as String),
       periodStart: DateTime.parse(json['periodStart'] as String),
       periodEnd: DateTime.parse(json['periodEnd'] as String),
@@ -213,7 +211,9 @@ class InvoiceModel extends Equatable {
 
   /// Check if invoice is overdue
   bool get isOverdue {
-    if (isPaid || isRefunded) return false;
+    if (isPaid || isRefunded) {
+      return false;
+    }
     return DateTime.now().isAfter(dueDate);
   }
 
@@ -221,6 +221,9 @@ class InvoiceModel extends Equatable {
   int get daysUntilDue {
     return dueDate.difference(DateTime.now()).inDays;
   }
+
+  /// Get date (alias for createdAt for backward compatibility)
+  DateTime get date => createdAt;
 
   @override
   List<Object?> get props => [
