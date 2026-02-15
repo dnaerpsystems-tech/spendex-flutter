@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 /// Ticket category types
 enum TicketCategory {
@@ -271,4 +273,33 @@ class CreateTicketRequest {
         if (deviceInfo != null) 'deviceInfo': deviceInfo,
         if (appVersion != null) 'appVersion': appVersion,
       };
+}
+
+
+extension TicketPriorityExtension on TicketPriority {
+  Color get color {
+    switch (this) {
+      case TicketPriority.low:
+        return const Color(0xFF4CAF50);
+      case TicketPriority.medium:
+        return const Color(0xFFFFC107);
+      case TicketPriority.high:
+        return const Color(0xFFFF9800);
+      case TicketPriority.urgent:
+        return const Color(0xFFF44336);
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case TicketPriority.low:
+        return Iconsax.arrow_down_1;
+      case TicketPriority.medium:
+        return Iconsax.minus;
+      case TicketPriority.high:
+        return Iconsax.arrow_up_2;
+      case TicketPriority.urgent:
+        return Iconsax.danger;
+    }
+  }
 }

@@ -2,17 +2,14 @@
   "@@locale": "en",
   "@@author": "Spendex Team",
   "@@last_modified": "2026-02-14",
-
   "appName": "Spendex",
   "@appName": {
     "description": "The application name"
   },
-
   "appTagline": "Smart Money Management",
   "@appTagline": {
     "description": "App tagline"
   },
-
   "welcomeMessage": "Welcome, {name}!",
   "@welcomeMessage": {
     "description": "Welcome message with user name",
@@ -23,362 +20,290 @@
       }
     }
   },
-
   "goodMorning": "Good Morning",
   "@goodMorning": {
     "description": "Morning greeting"
   },
-
   "goodAfternoon": "Good Afternoon",
   "@goodAfternoon": {
     "description": "Afternoon greeting"
   },
-
   "goodEvening": "Good Evening",
   "@goodEvening": {
     "description": "Evening greeting"
   },
-
   "save": "Save",
   "@save": {
     "description": "Save button label"
   },
-
   "cancel": "Cancel",
   "@cancel": {
     "description": "Cancel button label"
   },
-
   "delete": "Delete",
   "@delete": {
     "description": "Delete button label"
   },
-
   "edit": "Edit",
   "@edit": {
     "description": "Edit button label"
   },
-
   "confirm": "Confirm",
   "@confirm": {
     "description": "Confirm button label"
   },
-
   "submit": "Submit",
   "@submit": {
     "description": "Submit button label"
   },
-
   "done": "Done",
   "@done": {
     "description": "Done button label"
   },
-
   "next": "Next",
   "@next": {
     "description": "Next button label"
   },
-
   "back": "Back",
   "@back": {
     "description": "Back button label"
   },
-
   "skip": "Skip",
   "@skip": {
     "description": "Skip button label"
   },
-
   "close": "Close",
   "@close": {
     "description": "Close button label"
   },
-
   "retry": "Retry",
   "@retry": {
     "description": "Retry button label"
   },
-
   "dismiss": "Dismiss",
   "@dismiss": {
     "description": "Dismiss button label"
   },
-
   "add": "Add",
   "@add": {
     "description": "Add button label"
   },
-
   "update": "Update",
   "@update": {
     "description": "Update button label"
   },
-
   "remove": "Remove",
   "@remove": {
     "description": "Remove button label"
   },
-
   "view": "View",
   "@view": {
     "description": "View button label"
   },
-
   "viewAll": "View All",
   "@viewAll": {
     "description": "View all button label"
   },
-
   "seeMore": "See More",
   "@seeMore": {
     "description": "See more button label"
   },
-
   "seeLess": "See Less",
   "@seeLess": {
     "description": "See less button label"
   },
-
   "search": "Search",
   "@search": {
     "description": "Search button/placeholder"
   },
-
   "filter": "Filter",
   "@filter": {
     "description": "Filter button label"
   },
-
   "sort": "Sort",
   "@sort": {
     "description": "Sort button label"
   },
-
   "clear": "Clear",
   "@clear": {
     "description": "Clear button label"
   },
-
   "clearAll": "Clear All",
   "@clearAll": {
     "description": "Clear all button label"
   },
-
   "apply": "Apply",
   "@apply": {
     "description": "Apply button label"
   },
-
   "reset": "Reset",
   "@reset": {
     "description": "Reset button label"
   },
-
   "yes": "Yes",
   "@yes": {
     "description": "Yes option"
   },
-
   "no": "No",
   "@no": {
     "description": "No option"
   },
-
   "ok": "OK",
   "@ok": {
     "description": "OK button"
   },
-
   "loading": "Loading...",
   "@loading": {
     "description": "Loading state text"
   },
-
   "pleaseWait": "Please wait...",
   "@pleaseWait": {
     "description": "Please wait text"
   },
-
   "processing": "Processing...",
   "@processing": {
     "description": "Processing state text"
   },
-
   "success": "Success",
   "@success": {
     "description": "Success message"
   },
-
   "error": "Error",
   "@error": {
     "description": "Error title"
   },
-
   "warning": "Warning",
   "@warning": {
     "description": "Warning title"
   },
-
   "info": "Info",
   "@info": {
     "description": "Info title"
   },
-
   "noData": "No data available",
   "@noData": {
     "description": "No data message"
   },
-
   "noResults": "No results found",
   "@noResults": {
     "description": "No results message"
   },
-
   "emptyList": "Nothing here yet",
   "@emptyList": {
     "description": "Empty list message"
   },
-
   "somethingWentWrong": "Something went wrong",
   "@somethingWentWrong": {
     "description": "Generic error message"
   },
-
   "tryAgain": "Try Again",
   "@tryAgain": {
     "description": "Try again button"
   },
-
   "networkError": "Network error. Please check your connection.",
   "@networkError": {
     "description": "Network error message"
   },
-
   "serverError": "Server error. Please try again later.",
   "@serverError": {
     "description": "Server error message"
   },
-
   "sessionExpired": "Session expired. Please login again.",
   "@sessionExpired": {
     "description": "Session expired message"
   },
-
   "unauthorized": "You are not authorized to perform this action.",
   "@unauthorized": {
     "description": "Unauthorized error message"
   },
-
   "today": "Today",
   "@today": {
     "description": "Today label"
   },
-
   "yesterday": "Yesterday",
   "@yesterday": {
     "description": "Yesterday label"
   },
-
   "tomorrow": "Tomorrow",
   "@tomorrow": {
     "description": "Tomorrow label"
   },
-
   "thisWeek": "This Week",
   "@thisWeek": {
     "description": "This week label"
   },
-
   "lastWeek": "Last Week",
   "@lastWeek": {
     "description": "Last week label"
   },
-
   "thisMonth": "This Month",
   "@thisMonth": {
     "description": "This month label"
   },
-
   "lastMonth": "Last Month",
   "@lastMonth": {
     "description": "Last month label"
   },
-
   "thisYear": "This Year",
   "@thisYear": {
     "description": "This year label"
   },
-
   "lastYear": "Last Year",
   "@lastYear": {
     "description": "Last year label"
   },
-
   "custom": "Custom",
   "@custom": {
     "description": "Custom option"
   },
-
   "daily": "Daily",
   "@daily": {
     "description": "Daily frequency"
   },
-
   "weekly": "Weekly",
   "@weekly": {
     "description": "Weekly frequency"
   },
-
   "monthly": "Monthly",
   "@monthly": {
     "description": "Monthly frequency"
   },
-
   "yearly": "Yearly",
   "@yearly": {
     "description": "Yearly frequency"
   },
-
   "all": "All",
   "@all": {
     "description": "All option"
   },
-
   "none": "None",
   "@none": {
     "description": "None option"
   },
-
   "required": "This field is required",
   "@required": {
     "description": "Required field error"
   },
-
   "invalidEmail": "Please enter a valid email address",
   "@invalidEmail": {
     "description": "Invalid email error"
   },
-
   "invalidPhone": "Please enter a valid phone number",
   "@invalidPhone": {
     "description": "Invalid phone error"
   },
-
   "invalidAmount": "Please enter a valid amount",
   "@invalidAmount": {
     "description": "Invalid amount error"
   },
-
   "tooShort": "Too short",
   "@tooShort": {
     "description": "Too short error"
   },
-
   "tooLong": "Too long",
   "@tooLong": {
     "description": "Too long error"
   },
-
   "minLength": "Minimum {count} characters required",
   "@minLength": {
     "description": "Minimum length error",
@@ -389,7 +314,6 @@
       }
     }
   },
-
   "maxLength": "Maximum {count} characters allowed",
   "@maxLength": {
     "description": "Maximum length error",
@@ -400,7 +324,6 @@
       }
     }
   },
-
   "amountFormatted": "₹{amount}",
   "@amountFormatted": {
     "description": "Formatted currency amount",
@@ -410,157 +333,126 @@
       }
     }
   },
-
   "login": "Login",
   "@login": {
     "description": "Login button/title"
   },
-
   "loginTitle": "Welcome Back",
   "@loginTitle": {
     "description": "Login screen title"
   },
-
   "loginSubtitle": "Sign in to continue managing your finances",
   "@loginSubtitle": {
     "description": "Login screen subtitle"
   },
-
   "email": "Email",
   "@email": {
     "description": "Email label"
   },
-
   "emailHint": "Enter your email address",
   "@emailHint": {
     "description": "Email input hint"
   },
-
   "password": "Password",
   "@password": {
     "description": "Password label"
   },
-
   "passwordHint": "Enter your password",
   "@passwordHint": {
     "description": "Password input hint"
   },
-
   "confirmPassword": "Confirm Password",
   "@confirmPassword": {
     "description": "Confirm password label"
   },
-
   "confirmPasswordHint": "Re-enter your password",
   "@confirmPasswordHint": {
     "description": "Confirm password input hint"
   },
-
   "forgotPassword": "Forgot Password?",
   "@forgotPassword": {
     "description": "Forgot password link"
   },
-
   "rememberMe": "Remember me",
   "@rememberMe": {
     "description": "Remember me checkbox"
   },
-
   "orContinueWith": "Or continue with",
   "@orContinueWith": {
     "description": "Social login separator text"
   },
-
   "signInWithGoogle": "Sign in with Google",
   "@signInWithGoogle": {
     "description": "Google sign in button"
   },
-
   "signInWithApple": "Sign in with Apple",
   "@signInWithApple": {
     "description": "Apple sign in button"
   },
-
   "dontHaveAccount": "Don't have an account?",
   "@dontHaveAccount": {
     "description": "Don't have account text"
   },
-
   "signUp": "Sign Up",
   "@signUp": {
     "description": "Sign up button/link"
   },
-
   "register": "Register",
   "@register": {
     "description": "Register button"
   },
-
   "registerTitle": "Create Account",
   "@registerTitle": {
     "description": "Register screen title"
   },
-
   "registerSubtitle": "Start your journey to financial freedom",
   "@registerSubtitle": {
     "description": "Register screen subtitle"
   },
-
   "fullName": "Full Name",
   "@fullName": {
     "description": "Full name label"
   },
-
   "fullNameHint": "Enter your full name",
   "@fullNameHint": {
     "description": "Full name input hint"
   },
-
   "phoneNumber": "Phone Number",
   "@phoneNumber": {
     "description": "Phone number label"
   },
-
   "phoneNumberHint": "Enter your phone number",
   "@phoneNumberHint": {
     "description": "Phone number input hint"
   },
-
   "alreadyHaveAccount": "Already have an account?",
   "@alreadyHaveAccount": {
     "description": "Already have account text"
   },
-
   "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
   "@agreeToTerms": {
     "description": "Terms agreement checkbox"
   },
-
   "termsOfService": "Terms of Service",
   "@termsOfService": {
     "description": "Terms of service link"
   },
-
   "privacyPolicy": "Privacy Policy",
   "@privacyPolicy": {
     "description": "Privacy policy link"
   },
-
   "verifyEmail": "Verify Email",
   "@verifyEmail": {
     "description": "Verify email title"
   },
-
   "verifyPhone": "Verify Phone",
   "@verifyPhone": {
     "description": "Verify phone title"
   },
-
   "otpVerification": "OTP Verification",
   "@otpVerification": {
     "description": "OTP verification title"
   },
-
   "otpSentTo": "We've sent a verification code to {destination}",
   "@otpSentTo": {
     "description": "OTP sent message",
@@ -571,17 +463,14 @@
       }
     }
   },
-
   "enterOtp": "Enter OTP",
   "@enterOtp": {
     "description": "Enter OTP label"
   },
-
   "resendOtp": "Resend OTP",
   "@resendOtp": {
     "description": "Resend OTP button"
   },
-
   "resendOtpIn": "Resend OTP in {seconds}s",
   "@resendOtpIn": {
     "description": "Resend OTP countdown",
@@ -592,227 +481,182 @@
       }
     }
   },
-
   "verify": "Verify",
   "@verify": {
     "description": "Verify button"
   },
-
   "invalidOtp": "Invalid OTP. Please try again.",
   "@invalidOtp": {
     "description": "Invalid OTP error"
   },
-
   "otpExpired": "OTP has expired. Please request a new one.",
   "@otpExpired": {
     "description": "OTP expired error"
   },
-
   "resetPassword": "Reset Password",
   "@resetPassword": {
     "description": "Reset password title"
   },
-
   "resetPasswordSubtitle": "Enter your email to receive reset instructions",
   "@resetPasswordSubtitle": {
     "description": "Reset password subtitle"
   },
-
   "sendResetLink": "Send Reset Link",
   "@sendResetLink": {
     "description": "Send reset link button"
   },
-
   "resetLinkSent": "Password reset link sent to your email",
   "@resetLinkSent": {
     "description": "Reset link sent message"
   },
-
   "newPassword": "New Password",
   "@newPassword": {
     "description": "New password label"
   },
-
   "createNewPassword": "Create New Password",
   "@createNewPassword": {
     "description": "Create new password title"
   },
-
   "passwordRequirements": "Password must contain:",
   "@passwordRequirements": {
     "description": "Password requirements header"
   },
-
   "passwordMinLength": "At least 8 characters",
   "@passwordMinLength": {
     "description": "Password min length requirement"
   },
-
   "passwordUppercase": "One uppercase letter",
   "@passwordUppercase": {
     "description": "Password uppercase requirement"
   },
-
   "passwordLowercase": "One lowercase letter",
   "@passwordLowercase": {
     "description": "Password lowercase requirement"
   },
-
   "passwordNumber": "One number",
   "@passwordNumber": {
     "description": "Password number requirement"
   },
-
   "passwordSpecial": "One special character",
   "@passwordSpecial": {
     "description": "Password special char requirement"
   },
-
   "passwordsDoNotMatch": "Passwords do not match",
   "@passwordsDoNotMatch": {
     "description": "Passwords mismatch error"
   },
-
   "passwordChanged": "Password changed successfully",
   "@passwordChanged": {
     "description": "Password changed success message"
   },
-
   "loginFailed": "Login failed. Please check your credentials.",
   "@loginFailed": {
     "description": "Login failed error"
   },
-
   "registrationFailed": "Registration failed. Please try again.",
   "@registrationFailed": {
     "description": "Registration failed error"
   },
-
   "accountCreated": "Account created successfully",
   "@accountCreated": {
     "description": "Account created success message"
   },
-
   "logout": "Logout",
   "@logout": {
     "description": "Logout button"
   },
-
   "logoutConfirmation": "Are you sure you want to logout?",
   "@logoutConfirmation": {
     "description": "Logout confirmation message"
   },
-
   "biometricLogin": "Login with Biometrics",
   "@biometricLogin": {
     "description": "Biometric login button"
   },
-
   "useFaceId": "Use Face ID",
   "@useFaceId": {
     "description": "Face ID option"
   },
-
   "useFingerprint": "Use Fingerprint",
   "@useFingerprint": {
     "description": "Fingerprint option"
   },
-
   "biometricNotAvailable": "Biometric authentication is not available",
   "@biometricNotAvailable": {
     "description": "Biometric not available message"
   },
-
   "dashboard": "Dashboard",
   "@dashboard": {
     "description": "Dashboard title"
   },
-
   "totalBalance": "Total Balance",
   "@totalBalance": {
     "description": "Total balance label"
   },
-
   "income": "Income",
   "@income": {
     "description": "Income label"
   },
-
   "expense": "Expense",
   "@expense": {
     "description": "Expense label"
   },
-
   "expenses": "Expenses",
   "@expenses": {
     "description": "Expenses label (plural)"
   },
-
   "balance": "Balance",
   "@balance": {
     "description": "Balance label"
   },
-
   "availableBalance": "Available Balance",
   "@availableBalance": {
     "description": "Available balance label"
   },
-
   "currentBalance": "Current Balance",
   "@currentBalance": {
     "description": "Current balance label"
   },
-
   "recentTransactions": "Recent Transactions",
   "@recentTransactions": {
     "description": "Recent transactions section title"
   },
-
   "quickActions": "Quick Actions",
   "@quickActions": {
     "description": "Quick actions section title"
   },
-
   "spendingOverview": "Spending Overview",
   "@spendingOverview": {
     "description": "Spending overview section title"
   },
-
   "incomeVsExpense": "Income vs Expense",
   "@incomeVsExpense": {
     "description": "Income vs expense comparison title"
   },
-
   "monthlyOverview": "Monthly Overview",
   "@monthlyOverview": {
     "description": "Monthly overview title"
   },
-
   "financialSummary": "Financial Summary",
   "@financialSummary": {
     "description": "Financial summary title"
   },
-
   "cashFlow": "Cash Flow",
   "@cashFlow": {
     "description": "Cash flow label"
   },
-
   "netWorth": "Net Worth",
   "@netWorth": {
     "description": "Net worth label"
   },
-
   "savings": "Savings",
   "@savings": {
     "description": "Savings label"
   },
-
   "savingsRate": "Savings Rate",
   "@savingsRate": {
     "description": "Savings rate label"
   },
-
   "youSaved": "You saved {percentage}% this month",
   "@youSaved": {
     "description": "Savings percentage message",
@@ -822,17 +666,14 @@
       }
     }
   },
-
   "transactions": "Transactions",
   "@transactions": {
     "description": "Transactions title"
   },
-
   "transaction": "Transaction",
   "@transaction": {
     "description": "Single transaction label"
   },
-
   "transactionCount": "{count, plural, =0{No transactions} =1{1 transaction} other{{count} transactions}}",
   "@transactionCount": {
     "description": "Number of transactions with plural support",
@@ -842,417 +683,334 @@
       }
     }
   },
-
   "addTransaction": "Add Transaction",
   "@addTransaction": {
     "description": "Add transaction button"
   },
-
   "editTransaction": "Edit Transaction",
   "@editTransaction": {
     "description": "Edit transaction title"
   },
-
   "deleteTransaction": "Delete Transaction",
   "@deleteTransaction": {
     "description": "Delete transaction title"
   },
-
   "deleteTransactionConfirmation": "Are you sure you want to delete this transaction?",
   "@deleteTransactionConfirmation": {
     "description": "Delete transaction confirmation"
   },
-
   "transactionDeleted": "Transaction deleted successfully",
   "@transactionDeleted": {
     "description": "Transaction deleted message"
   },
-
   "transactionSaved": "Transaction saved successfully",
   "@transactionSaved": {
     "description": "Transaction saved message"
   },
-
   "amount": "Amount",
   "@amount": {
     "description": "Amount label"
   },
-
   "amountHint": "Enter amount",
   "@amountHint": {
     "description": "Amount input hint"
   },
-
   "category": "Category",
   "@category": {
     "description": "Category label"
   },
-
   "selectCategory": "Select Category",
   "@selectCategory": {
     "description": "Select category hint"
   },
-
   "date": "Date",
   "@date": {
     "description": "Date label"
   },
-
   "selectDate": "Select Date",
   "@selectDate": {
     "description": "Select date hint"
   },
-
   "time": "Time",
   "@time": {
     "description": "Time label"
   },
-
   "selectTime": "Select Time",
   "@selectTime": {
     "description": "Select time hint"
   },
-
   "note": "Note",
   "@note": {
     "description": "Note label"
   },
-
   "noteHint": "Add a note (optional)",
   "@noteHint": {
     "description": "Note input hint"
   },
-
   "description": "Description",
   "@description": {
     "description": "Description label"
   },
-
   "descriptionHint": "Enter description",
   "@descriptionHint": {
     "description": "Description input hint"
   },
-
   "attachReceipt": "Attach Receipt",
   "@attachReceipt": {
     "description": "Attach receipt button"
   },
-
   "receipt": "Receipt",
   "@receipt": {
     "description": "Receipt label"
   },
-
   "scanReceipt": "Scan Receipt",
   "@scanReceipt": {
     "description": "Scan receipt button"
   },
-
   "recurring": "Recurring",
   "@recurring": {
     "description": "Recurring label"
   },
-
   "recurringTransaction": "Recurring Transaction",
   "@recurringTransaction": {
     "description": "Recurring transaction label"
   },
-
   "frequency": "Frequency",
   "@frequency": {
     "description": "Frequency label"
   },
-
   "startDate": "Start Date",
   "@startDate": {
     "description": "Start date label"
   },
-
   "endDate": "End Date",
   "@endDate": {
     "description": "End date label"
   },
-
   "noEndDate": "No End Date",
   "@noEndDate": {
     "description": "No end date option"
   },
-
   "transfer": "Transfer",
   "@transfer": {
     "description": "Transfer label"
   },
-
   "fromAccount": "From Account",
   "@fromAccount": {
     "description": "From account label"
   },
-
   "toAccount": "To Account",
   "@toAccount": {
     "description": "To account label"
   },
-
   "transferFunds": "Transfer Funds",
   "@transferFunds": {
     "description": "Transfer funds title"
   },
-
   "transferSuccessful": "Transfer completed successfully",
   "@transferSuccessful": {
     "description": "Transfer success message"
   },
-
   "searchTransactions": "Search transactions...",
   "@searchTransactions": {
     "description": "Search transactions placeholder"
   },
-
   "filterByCategory": "Filter by Category",
   "@filterByCategory": {
     "description": "Filter by category option"
   },
-
   "filterByAccount": "Filter by Account",
   "@filterByAccount": {
     "description": "Filter by account option"
   },
-
   "filterByDate": "Filter by Date",
   "@filterByDate": {
     "description": "Filter by date option"
   },
-
   "sortByDate": "Sort by Date",
   "@sortByDate": {
     "description": "Sort by date option"
   },
-
   "sortByAmount": "Sort by Amount",
   "@sortByAmount": {
     "description": "Sort by amount option"
   },
-
   "ascending": "Ascending",
   "@ascending": {
     "description": "Ascending sort order"
   },
-
   "descending": "Descending",
   "@descending": {
     "description": "Descending sort order"
   },
-
   "accounts": "Accounts",
   "@accounts": {
     "description": "Accounts title"
   },
-
   "account": "Account",
   "@account": {
     "description": "Single account label"
   },
-
   "addAccount": "Add Account",
   "@addAccount": {
     "description": "Add account button"
   },
-
   "editAccount": "Edit Account",
   "@editAccount": {
     "description": "Edit account title"
   },
-
   "deleteAccount": "Delete Account",
   "@deleteAccount": {
     "description": "Delete account title"
   },
-
-  "deleteAccountConfirmation": "Are you sure you want to delete this account? All associated transactions will also be deleted.",
+  "deleteAccountConfirmation": "Are you sure you want to delete your account? All your data will be permanently deleted.",
   "@deleteAccountConfirmation": {
     "description": "Delete account confirmation"
   },
-
-  "accountDeleted": "Account deleted successfully",
+  "accountDeleted": "Your account has been deleted",
   "@accountDeleted": {
-    "description": "Account deleted message"
+    "description": "Account deleted confirmation"
   },
-
   "accountSaved": "Account saved successfully",
   "@accountSaved": {
     "description": "Account saved message"
   },
-
   "accountName": "Account Name",
   "@accountName": {
     "description": "Account name label"
   },
-
   "accountNameHint": "Enter account name",
   "@accountNameHint": {
     "description": "Account name input hint"
   },
-
   "accountType": "Account Type",
   "@accountType": {
     "description": "Account type label"
   },
-
   "selectAccountType": "Select Account Type",
   "@selectAccountType": {
     "description": "Select account type hint"
   },
-
   "initialBalance": "Initial Balance",
   "@initialBalance": {
     "description": "Initial balance label"
   },
-
   "initialBalanceHint": "Enter initial balance",
   "@initialBalanceHint": {
     "description": "Initial balance input hint"
   },
-
   "cash": "Cash",
   "@cash": {
     "description": "Cash account type"
   },
-
   "bankAccount": "Bank Account",
   "@bankAccount": {
     "description": "Bank account type"
   },
-
   "savingsAccount": "Savings Account",
   "@savingsAccount": {
     "description": "Savings account type"
   },
-
   "creditCard": "Credit Card",
   "@creditCard": {
     "description": "Credit card type"
   },
-
   "debitCard": "Debit Card",
   "@debitCard": {
     "description": "Debit card type"
   },
-
   "wallet": "Wallet",
   "@wallet": {
     "description": "Wallet account type"
   },
-
   "investment": "Investment",
   "@investment": {
     "description": "Investment account type"
   },
-
   "loan": "Loan",
   "@loan": {
     "description": "Loan account type"
   },
-
   "other": "Other",
   "@other": {
     "description": "Other option"
   },
-
   "currency": "Currency",
   "@currency": {
     "description": "Currency label"
   },
-
   "inr": "Indian Rupee (₹)",
   "@inr": {
     "description": "Indian Rupee currency"
   },
-
   "usd": "US Dollar ($)",
   "@usd": {
     "description": "US Dollar currency"
   },
-
   "includeInTotal": "Include in Total Balance",
   "@includeInTotal": {
     "description": "Include in total toggle"
   },
-
   "makeDefault": "Make Default Account",
   "@makeDefault": {
     "description": "Make default account toggle"
   },
-
   "defaultAccount": "Default Account",
   "@defaultAccount": {
     "description": "Default account label"
   },
-
   "budgets": "Budgets",
   "@budgets": {
     "description": "Budgets title"
   },
-
   "budget": "Budget",
   "@budget": {
     "description": "Single budget label"
   },
-
   "addBudget": "Add Budget",
   "@addBudget": {
     "description": "Add budget button"
   },
-
   "editBudget": "Edit Budget",
   "@editBudget": {
     "description": "Edit budget title"
   },
-
   "deleteBudget": "Delete Budget",
   "@deleteBudget": {
     "description": "Delete budget title"
   },
-
   "deleteBudgetConfirmation": "Are you sure you want to delete this budget?",
   "@deleteBudgetConfirmation": {
     "description": "Delete budget confirmation"
   },
-
   "budgetDeleted": "Budget deleted successfully",
   "@budgetDeleted": {
     "description": "Budget deleted message"
   },
-
   "budgetSaved": "Budget saved successfully",
   "@budgetSaved": {
     "description": "Budget saved message"
   },
-
   "budgetName": "Budget Name",
   "@budgetName": {
     "description": "Budget name label"
   },
-
   "budgetAmount": "Budget Amount",
   "@budgetAmount": {
     "description": "Budget amount label"
   },
-
   "budgetPeriod": "Budget Period",
   "@budgetPeriod": {
     "description": "Budget period label"
   },
-
   "spent": "Spent",
   "@spent": {
     "description": "Spent label"
   },
-
   "remaining": "Remaining",
   "@remaining": {
     "description": "Remaining label"
   },
-
   "budgetProgress": "{spent} of {total} spent",
   "@budgetProgress": {
     "description": "Budget progress text",
@@ -1265,7 +1023,6 @@
       }
     }
   },
-
   "budgetRemaining": "{amount} remaining",
   "@budgetRemaining": {
     "description": "Budget remaining text",
@@ -1275,27 +1032,22 @@
       }
     }
   },
-
   "budgetExceeded": "Budget Exceeded",
   "@budgetExceeded": {
     "description": "Budget exceeded label"
   },
-
   "overBudget": "Over Budget",
   "@overBudget": {
     "description": "Over budget label"
   },
-
   "underBudget": "Under Budget",
   "@underBudget": {
     "description": "Under budget label"
   },
-
   "onTrack": "On Track",
   "@onTrack": {
     "description": "On track label"
   },
-
   "budgetAlert": "You have spent {percentage}% of your {category} budget",
   "@budgetAlert": {
     "description": "Budget alert message",
@@ -1308,262 +1060,210 @@
       }
     }
   },
-
   "noBudgets": "No budgets set up yet",
   "@noBudgets": {
     "description": "No budgets message"
   },
-
   "createFirstBudget": "Create your first budget to track spending",
   "@createFirstBudget": {
     "description": "Create first budget prompt"
   },
-
   "categories": "Categories",
   "@categories": {
     "description": "Categories title"
   },
-
   "manageCategories": "Manage Categories",
   "@manageCategories": {
     "description": "Manage categories title"
   },
-
   "addCategory": "Add Category",
   "@addCategory": {
     "description": "Add category button"
   },
-
   "editCategory": "Edit Category",
   "@editCategory": {
     "description": "Edit category title"
   },
-
   "deleteCategory": "Delete Category",
   "@deleteCategory": {
     "description": "Delete category title"
   },
-
   "deleteCategoryConfirmation": "Are you sure you want to delete this category?",
   "@deleteCategoryConfirmation": {
     "description": "Delete category confirmation"
   },
-
   "categoryDeleted": "Category deleted successfully",
   "@categoryDeleted": {
     "description": "Category deleted message"
   },
-
   "categorySaved": "Category saved successfully",
   "@categorySaved": {
     "description": "Category saved message"
   },
-
   "categoryName": "Category Name",
   "@categoryName": {
     "description": "Category name label"
   },
-
   "categoryNameHint": "Enter category name",
   "@categoryNameHint": {
     "description": "Category name input hint"
   },
-
   "categoryIcon": "Category Icon",
   "@categoryIcon": {
     "description": "Category icon label"
   },
-
   "categoryColor": "Category Color",
   "@categoryColor": {
     "description": "Category color label"
   },
-
   "incomeCategories": "Income Categories",
   "@incomeCategories": {
     "description": "Income categories section"
   },
-
   "expenseCategories": "Expense Categories",
   "@expenseCategories": {
     "description": "Expense categories section"
   },
-
   "salary": "Salary",
   "@salary": {
     "description": "Salary category"
   },
-
   "business": "Business",
   "@business": {
     "description": "Business category"
   },
-
   "freelance": "Freelance",
   "@freelance": {
     "description": "Freelance category"
   },
-
   "investments": "Investments",
   "@investments": {
     "description": "Investments category"
   },
-
   "rental": "Rental",
   "@rental": {
     "description": "Rental category"
   },
-
   "gifts": "Gifts",
   "@gifts": {
     "description": "Gifts category"
   },
-
   "refunds": "Refunds",
   "@refunds": {
     "description": "Refunds category"
   },
-
   "food": "Food & Dining",
   "@food": {
     "description": "Food category"
   },
-
   "groceries": "Groceries",
   "@groceries": {
     "description": "Groceries category"
   },
-
   "shopping": "Shopping",
   "@shopping": {
     "description": "Shopping category"
   },
-
   "transportation": "Transportation",
   "@transportation": {
     "description": "Transportation category"
   },
-
   "utilities": "Utilities",
   "@utilities": {
     "description": "Utilities category"
   },
-
   "entertainment": "Entertainment",
   "@entertainment": {
     "description": "Entertainment category"
   },
-
   "healthcare": "Healthcare",
   "@healthcare": {
     "description": "Healthcare category"
   },
-
   "education": "Education",
   "@education": {
     "description": "Education category"
   },
-
   "personalCare": "Personal Care",
   "@personalCare": {
     "description": "Personal care category"
   },
-
   "travel": "Travel",
   "@travel": {
     "description": "Travel category"
   },
-
   "bills": "Bills & Fees",
   "@bills": {
     "description": "Bills category"
   },
-
   "insurance": "Insurance",
   "@insurance": {
     "description": "Insurance category"
   },
-
   "taxes": "Taxes",
   "@taxes": {
     "description": "Taxes category"
   },
-
   "subscriptions": "Subscriptions",
   "@subscriptions": {
     "description": "Subscriptions category"
   },
-
   "rent": "Rent",
   "@rent": {
     "description": "Rent category"
   },
-
   "goals": "Goals",
   "@goals": {
     "description": "Goals title"
   },
-
   "savingsGoals": "Savings Goals",
   "@savingsGoals": {
     "description": "Savings goals title"
   },
-
   "addGoal": "Add Goal",
   "@addGoal": {
     "description": "Add goal button"
   },
-
   "editGoal": "Edit Goal",
   "@editGoal": {
     "description": "Edit goal title"
   },
-
   "deleteGoal": "Delete Goal",
   "@deleteGoal": {
     "description": "Delete goal title"
   },
-
   "deleteGoalConfirmation": "Are you sure you want to delete this goal?",
   "@deleteGoalConfirmation": {
     "description": "Delete goal confirmation"
   },
-
   "goalDeleted": "Goal deleted successfully",
   "@goalDeleted": {
     "description": "Goal deleted message"
   },
-
   "goalSaved": "Goal saved successfully",
   "@goalSaved": {
     "description": "Goal saved message"
   },
-
   "goalName": "Goal Name",
   "@goalName": {
     "description": "Goal name label"
   },
-
   "goalNameHint": "What are you saving for?",
   "@goalNameHint": {
     "description": "Goal name input hint"
   },
-
   "targetAmount": "Target Amount",
   "@targetAmount": {
     "description": "Target amount label"
   },
-
   "currentAmount": "Current Amount",
   "@currentAmount": {
     "description": "Current amount label"
   },
-
   "targetDate": "Target Date",
   "@targetDate": {
     "description": "Target date label"
   },
-
   "goalProgress": "{percentage}% completed",
   "@goalProgress": {
     "description": "Goal progress text",
@@ -1573,22 +1273,18 @@
       }
     }
   },
-
   "addMoney": "Add Money",
   "@addMoney": {
     "description": "Add money button"
   },
-
   "withdrawMoney": "Withdraw Money",
   "@withdrawMoney": {
     "description": "Withdraw money button"
   },
-
   "goalAchieved": "Goal Achieved! 🎉",
   "@goalAchieved": {
     "description": "Goal achieved message"
   },
-
   "daysRemaining": "{count, plural, =0{Due today} =1{1 day remaining} other{{count} days remaining}}",
   "@daysRemaining": {
     "description": "Days remaining text",
@@ -1598,7 +1294,6 @@
       }
     }
   },
-
   "monthlyContribution": "Suggested monthly: {amount}",
   "@monthlyContribution": {
     "description": "Suggested monthly contribution",
@@ -1608,387 +1303,310 @@
       }
     }
   },
-
   "noGoals": "No savings goals yet",
   "@noGoals": {
     "description": "No goals message"
   },
-
   "createFirstGoal": "Set your first savings goal",
   "@createFirstGoal": {
     "description": "Create first goal prompt"
   },
-
   "analytics": "Analytics",
   "@analytics": {
     "description": "Analytics title"
   },
-
   "reports": "Reports",
   "@reports": {
     "description": "Reports title"
   },
-
   "insights": "Insights",
   "@insights": {
     "description": "Insights title"
   },
-
   "spendingByCategory": "Spending by Category",
   "@spendingByCategory": {
     "description": "Spending by category chart title"
   },
-
   "incomeByCategory": "Income by Category",
   "@incomeByCategory": {
     "description": "Income by category chart title"
   },
-
   "trendAnalysis": "Trend Analysis",
   "@trendAnalysis": {
     "description": "Trend analysis title"
   },
-
   "expenseTrend": "Expense Trend",
   "@expenseTrend": {
     "description": "Expense trend chart title"
   },
-
   "incomeTrend": "Income Trend",
   "@incomeTrend": {
     "description": "Income trend chart title"
   },
-
   "comparison": "Comparison",
   "@comparison": {
     "description": "Comparison title"
   },
-
   "vsLastMonth": "vs Last Month",
   "@vsLastMonth": {
     "description": "Comparison with last month"
   },
-
   "vsLastYear": "vs Last Year",
   "@vsLastYear": {
     "description": "Comparison with last year"
   },
-
   "averageSpending": "Average Spending",
   "@averageSpending": {
     "description": "Average spending label"
   },
-
   "averageIncome": "Average Income",
   "@averageIncome": {
     "description": "Average income label"
   },
-
   "highestSpending": "Highest Spending",
   "@highestSpending": {
     "description": "Highest spending label"
   },
-
   "lowestSpending": "Lowest Spending",
   "@lowestSpending": {
     "description": "Lowest spending label"
   },
-
   "topCategories": "Top Categories",
   "@topCategories": {
     "description": "Top categories section title"
   },
-
   "exportReport": "Export Report",
   "@exportReport": {
     "description": "Export report button"
   },
-
   "exportToPdf": "Export to PDF",
   "@exportToPdf": {
     "description": "Export to PDF option"
   },
-
   "exportToExcel": "Export to Excel",
   "@exportToExcel": {
     "description": "Export to Excel option"
   },
-
   "exportToCsv": "Export to CSV",
   "@exportToCsv": {
     "description": "Export to CSV option"
   },
-
   "exportSuccessful": "Report exported successfully",
   "@exportSuccessful": {
     "description": "Export success message"
   },
-
   "selectDateRange": "Select Date Range",
   "@selectDateRange": {
     "description": "Select date range prompt"
   },
-
   "from": "From",
   "@from": {
     "description": "From date label"
   },
-
   "to": "To",
   "@to": {
     "description": "To date label"
   },
-
   "settings": "Settings",
   "@settings": {
     "description": "Settings title"
   },
-
   "profile": "Profile",
   "@profile": {
     "description": "Profile title"
   },
-
   "editProfile": "Edit Profile",
   "@editProfile": {
     "description": "Edit profile title"
   },
-
   "profileUpdated": "Profile updated successfully",
   "@profileUpdated": {
     "description": "Profile updated message"
   },
-
   "changePhoto": "Change Photo",
   "@changePhoto": {
     "description": "Change photo button"
   },
-
   "removePhoto": "Remove Photo",
   "@removePhoto": {
     "description": "Remove photo button"
   },
-
   "camera": "Camera",
   "@camera": {
     "description": "Camera option"
   },
-
   "gallery": "Gallery",
   "@gallery": {
     "description": "Gallery option"
   },
-
   "personalInfo": "Personal Information",
   "@personalInfo": {
     "description": "Personal information section"
   },
-
   "securitySettings": "Security Settings",
   "@securitySettings": {
     "description": "Security settings section"
   },
-
   "changePassword": "Change Password",
   "@changePassword": {
     "description": "Change password button"
   },
-
   "currentPassword": "Current Password",
   "@currentPassword": {
     "description": "Current password label"
   },
-
   "enableBiometric": "Enable Biometric Login",
   "@enableBiometric": {
     "description": "Enable biometric toggle"
   },
-
   "enablePinLock": "Enable PIN Lock",
   "@enablePinLock": {
     "description": "Enable PIN lock toggle"
   },
-
   "setPin": "Set PIN",
   "@setPin": {
     "description": "Set PIN button"
   },
-
   "changePin": "Change PIN",
   "@changePin": {
     "description": "Change PIN button"
   },
-
   "enterPin": "Enter PIN",
   "@enterPin": {
     "description": "Enter PIN prompt"
   },
-
   "confirmPin": "Confirm PIN",
   "@confirmPin": {
     "description": "Confirm PIN prompt"
   },
-
   "pinChanged": "PIN changed successfully",
   "@pinChanged": {
     "description": "PIN changed message"
   },
-
   "invalidPin": "Invalid PIN",
   "@invalidPin": {
     "description": "Invalid PIN error"
   },
-
   "autoLock": "Auto Lock",
   "@autoLock": {
     "description": "Auto lock setting"
   },
-
   "autoLockAfter": "Auto lock after",
   "@autoLockAfter": {
     "description": "Auto lock timer setting"
   },
-
   "immediately": "Immediately",
   "@immediately": {
     "description": "Immediately option"
   },
-
   "after1Minute": "After 1 minute",
   "@after1Minute": {
     "description": "1 minute option"
   },
-
   "after5Minutes": "After 5 minutes",
   "@after5Minutes": {
     "description": "5 minutes option"
   },
-
   "after15Minutes": "After 15 minutes",
   "@after15Minutes": {
     "description": "15 minutes option"
   },
-
   "never": "Never",
   "@never": {
     "description": "Never option"
   },
-
   "appearance": "Appearance",
   "@appearance": {
     "description": "Appearance section"
   },
-
   "theme": "Theme",
   "@theme": {
     "description": "Theme setting"
   },
-
   "lightTheme": "Light",
   "@lightTheme": {
     "description": "Light theme option"
   },
-
   "darkTheme": "Dark",
   "@darkTheme": {
     "description": "Dark theme option"
   },
-
   "systemTheme": "System",
   "@systemTheme": {
     "description": "System theme option"
   },
-
   "language": "Language",
   "@language": {
     "description": "Language setting"
   },
-
   "selectLanguage": "Select Language",
   "@selectLanguage": {
     "description": "Select language prompt"
   },
-
   "english": "English",
   "@english": {
     "description": "English language option"
   },
-
   "hindi": "हिंदी",
   "@hindi": {
     "description": "Hindi language option"
   },
-
   "languageChanged": "Language changed successfully",
   "@languageChanged": {
     "description": "Language changed message"
   },
-
   "notifications": "Notifications",
   "@notifications": {
     "description": "Notifications title"
   },
-
   "notificationSettings": "Notification Settings",
   "@notificationSettings": {
     "description": "Notification settings title"
   },
-
   "pushNotifications": "Push Notifications",
   "@pushNotifications": {
     "description": "Push notifications toggle"
   },
-
   "emailNotifications": "Email Notifications",
   "@emailNotifications": {
     "description": "Email notifications toggle"
   },
-
   "transactionAlerts": "Transaction Alerts",
   "@transactionAlerts": {
     "description": "Transaction alerts toggle"
   },
-
   "budgetAlerts": "Budget Alerts",
   "@budgetAlerts": {
     "description": "Budget alerts toggle"
   },
-
   "goalReminders": "Goal Reminders",
   "@goalReminders": {
     "description": "Goal reminders toggle"
   },
-
   "billReminders": "Bill Reminders",
   "@billReminders": {
     "description": "Bill reminders toggle"
   },
-
   "weeklyReport": "Weekly Report",
   "@weeklyReport": {
     "description": "Weekly report toggle"
   },
-
   "monthlyReport": "Monthly Report",
   "@monthlyReport": {
     "description": "Monthly report toggle"
   },
-
   "dataAndBackup": "Data & Backup",
   "@dataAndBackup": {
     "description": "Data and backup section"
   },
-
   "backupData": "Backup Data",
   "@backupData": {
     "description": "Backup data button"
   },
-
   "restoreData": "Restore Data",
   "@restoreData": {
     "description": "Restore data button"
   },
-
   "lastBackup": "Last backup: {date}",
   "@lastBackup": {
     "description": "Last backup date",
@@ -1998,77 +1616,62 @@
       }
     }
   },
-
   "backupSuccessful": "Backup created successfully",
   "@backupSuccessful": {
     "description": "Backup success message"
   },
-
   "restoreSuccessful": "Data restored successfully",
   "@restoreSuccessful": {
     "description": "Restore success message"
   },
-
   "exportData": "Export Data",
   "@exportData": {
     "description": "Export data button"
   },
-
   "importData": "Import Data",
   "@importData": {
     "description": "Import data button"
   },
-
   "deleteAllData": "Delete All Data",
   "@deleteAllData": {
     "description": "Delete all data button"
   },
-
   "deleteAllDataConfirmation": "This will permanently delete all your data. This action cannot be undone.",
   "@deleteAllDataConfirmation": {
     "description": "Delete all data confirmation"
   },
-
   "dataDeleted": "All data has been deleted",
   "@dataDeleted": {
     "description": "Data deleted message"
   },
-
   "helpAndSupport": "Help & Support",
   "@helpAndSupport": {
     "description": "Help and support section"
   },
-
   "faq": "FAQ",
   "@faq": {
     "description": "FAQ title"
   },
-
   "contactSupport": "Contact Support",
   "@contactSupport": {
     "description": "Contact support button"
   },
-
   "sendFeedback": "Send Feedback",
   "@sendFeedback": {
     "description": "Send feedback button"
   },
-
   "rateApp": "Rate App",
   "@rateApp": {
     "description": "Rate app button"
   },
-
   "shareApp": "Share App",
   "@shareApp": {
     "description": "Share app button"
   },
-
   "aboutApp": "About",
   "@aboutApp": {
     "description": "About section"
   },
-
   "version": "Version {version}",
   "@version": {
     "description": "Version text",
@@ -2078,92 +1681,66 @@
       }
     }
   },
-
   "licenses": "Open Source Licenses",
   "@licenses": {
     "description": "Licenses section"
   },
-
-  "deleteAccount": "Delete Account",
-  "@deleteAccount": {
-    "description": "Delete account button"
-  },
-
-  "deleteAccountConfirmation": "Are you sure you want to delete your account? All your data will be permanently deleted.",
-  "@deleteAccountConfirmation": {
-    "description": "Delete account confirmation"
-  },
-
   "accountDeleted2": "Account deleted successfully",
   "@accountDeleted2": {
     "description": "Account deleted message"
   },
-
   "subscription": "Subscription",
   "@subscription": {
     "description": "Subscription title"
   },
-
   "currentPlan": "Current Plan",
   "@currentPlan": {
     "description": "Current plan label"
   },
-
   "freePlan": "Free Plan",
   "@freePlan": {
     "description": "Free plan name"
   },
-
   "basicPlan": "Basic Plan",
   "@basicPlan": {
     "description": "Basic plan name"
   },
-
   "premiumPlan": "Premium Plan",
   "@premiumPlan": {
     "description": "Premium plan name"
   },
-
   "familyPlan": "Family Plan",
   "@familyPlan": {
     "description": "Family plan name"
   },
-
   "upgradePlan": "Upgrade Plan",
   "@upgradePlan": {
     "description": "Upgrade plan button"
   },
-
   "choosePlan": "Choose a Plan",
   "@choosePlan": {
     "description": "Choose plan title"
   },
-
   "planFeatures": "Plan Features",
   "@planFeatures": {
     "description": "Plan features section"
   },
-
   "perMonth": "/month",
   "@perMonth": {
     "description": "Per month suffix"
   },
-
   "perYear": "/year",
   "@perYear": {
     "description": "Per year suffix"
   },
-
   "billedMonthly": "Billed monthly",
   "@billedMonthly": {
     "description": "Monthly billing"
   },
-
   "billedYearly": "Billed yearly",
   "@billedYearly": {
     "description": "Yearly billing"
   },
-
   "savePercent": "Save {percent}%",
   "@savePercent": {
     "description": "Save percentage text",
@@ -2173,17 +1750,14 @@
       }
     }
   },
-
   "subscribe": "Subscribe",
   "@subscribe": {
     "description": "Subscribe button"
   },
-
   "subscriptionActive": "Subscription Active",
   "@subscriptionActive": {
     "description": "Subscription active status"
   },
-
   "subscriptionExpires": "Expires on {date}",
   "@subscriptionExpires": {
     "description": "Subscription expiry date",
@@ -2193,252 +1767,202 @@
       }
     }
   },
-
   "cancelSubscription": "Cancel Subscription",
   "@cancelSubscription": {
     "description": "Cancel subscription button"
   },
-
   "cancelSubscriptionConfirmation": "Are you sure you want to cancel your subscription?",
   "@cancelSubscriptionConfirmation": {
     "description": "Cancel subscription confirmation"
   },
-
   "subscriptionCancelled": "Subscription cancelled",
   "@subscriptionCancelled": {
     "description": "Subscription cancelled message"
   },
-
   "renewSubscription": "Renew Subscription",
   "@renewSubscription": {
     "description": "Renew subscription button"
   },
-
   "paymentMethod": "Payment Method",
   "@paymentMethod": {
     "description": "Payment method label"
   },
-
   "addPaymentMethod": "Add Payment Method",
   "@addPaymentMethod": {
     "description": "Add payment method button"
   },
-
   "paymentSuccessful": "Payment successful",
   "@paymentSuccessful": {
     "description": "Payment success message"
   },
-
   "paymentFailed": "Payment failed. Please try again.",
   "@paymentFailed": {
     "description": "Payment failed message"
   },
-
   "invoiceHistory": "Invoice History",
   "@invoiceHistory": {
     "description": "Invoice history section"
   },
-
   "downloadInvoice": "Download Invoice",
   "@downloadInvoice": {
     "description": "Download invoice button"
   },
-
   "unlimitedTransactions": "Unlimited transactions",
   "@unlimitedTransactions": {
     "description": "Unlimited transactions feature"
   },
-
   "unlimitedAccounts": "Unlimited accounts",
   "@unlimitedAccounts": {
     "description": "Unlimited accounts feature"
   },
-
   "unlimitedBudgets": "Unlimited budgets",
   "@unlimitedBudgets": {
     "description": "Unlimited budgets feature"
   },
-
   "advancedAnalytics": "Advanced analytics",
   "@advancedAnalytics": {
     "description": "Advanced analytics feature"
   },
-
   "prioritySupport": "Priority support",
   "@prioritySupport": {
     "description": "Priority support feature"
   },
-
   "cloudBackup": "Cloud backup",
   "@cloudBackup": {
     "description": "Cloud backup feature"
   },
-
   "multiDeviceSync": "Multi-device sync",
   "@multiDeviceSync": {
     "description": "Multi-device sync feature"
   },
-
   "adFree": "Ad-free experience",
   "@adFree": {
     "description": "Ad-free feature"
   },
-
   "family": "Family",
   "@family": {
     "description": "Family title"
   },
-
   "familyMembers": "Family Members",
   "@familyMembers": {
     "description": "Family members section"
   },
-
   "inviteMember": "Invite Member",
   "@inviteMember": {
     "description": "Invite member button"
   },
-
   "inviteByEmail": "Invite by Email",
   "@inviteByEmail": {
     "description": "Invite by email option"
   },
-
   "inviteByLink": "Invite by Link",
   "@inviteByLink": {
     "description": "Invite by link option"
   },
-
   "copyInviteLink": "Copy Invite Link",
   "@copyInviteLink": {
     "description": "Copy invite link button"
   },
-
   "linkCopied": "Link copied to clipboard",
   "@linkCopied": {
     "description": "Link copied message"
   },
-
   "invitationSent": "Invitation sent successfully",
   "@invitationSent": {
     "description": "Invitation sent message"
   },
-
   "pendingInvitations": "Pending Invitations",
   "@pendingInvitations": {
     "description": "Pending invitations section"
   },
-
   "memberRole": "Member Role",
   "@memberRole": {
     "description": "Member role label"
   },
-
   "owner": "Owner",
   "@owner": {
     "description": "Owner role"
   },
-
   "admin": "Admin",
   "@admin": {
     "description": "Admin role"
   },
-
   "member": "Member",
   "@member": {
     "description": "Member role"
   },
-
   "viewer": "Viewer",
   "@viewer": {
     "description": "Viewer role"
   },
-
   "removeMember": "Remove Member",
   "@removeMember": {
     "description": "Remove member button"
   },
-
   "removeMemberConfirmation": "Are you sure you want to remove this member?",
   "@removeMemberConfirmation": {
     "description": "Remove member confirmation"
   },
-
   "memberRemoved": "Member removed successfully",
   "@memberRemoved": {
     "description": "Member removed message"
   },
-
   "leaveFamily": "Leave Family",
   "@leaveFamily": {
     "description": "Leave family button"
   },
-
   "leaveFamilyConfirmation": "Are you sure you want to leave this family?",
   "@leaveFamilyConfirmation": {
     "description": "Leave family confirmation"
   },
-
   "familyActivity": "Family Activity",
   "@familyActivity": {
     "description": "Family activity section"
   },
-
   "sharedExpenses": "Shared Expenses",
   "@sharedExpenses": {
     "description": "Shared expenses label"
   },
-
   "familyBudget": "Family Budget",
   "@familyBudget": {
     "description": "Family budget label"
   },
-
   "offline": "Offline",
   "@offline": {
     "description": "Offline status"
   },
-
   "online": "Online",
   "@online": {
     "description": "Online status"
   },
-
   "offlineMode": "Offline Mode",
   "@offlineMode": {
     "description": "Offline mode label"
   },
-
   "youAreOffline": "You are currently offline",
   "@youAreOffline": {
     "description": "Offline status message"
   },
-
   "offlineChanges": "Changes will be synced when online",
   "@offlineChanges": {
     "description": "Offline changes message"
   },
-
   "syncNow": "Sync Now",
   "@syncNow": {
     "description": "Sync now button"
   },
-
   "syncing": "Syncing...",
   "@syncing": {
     "description": "Syncing status"
   },
-
   "syncComplete": "Sync complete",
   "@syncComplete": {
     "description": "Sync complete message"
   },
-
   "syncFailed": "Sync failed. Please try again.",
   "@syncFailed": {
     "description": "Sync failed message"
   },
-
   "lastSynced": "Last synced: {time}",
   "@lastSynced": {
     "description": "Last synced time",
@@ -2448,7 +1972,6 @@
       }
     }
   },
-
   "pendingChanges": "{count, plural, =1{1 pending change} other{{count} pending changes}}",
   "@pendingChanges": {
     "description": "Pending changes count",
@@ -2458,52 +1981,42 @@
       }
     }
   },
-
   "conflictDetected": "Conflict Detected",
   "@conflictDetected": {
     "description": "Conflict detected title"
   },
-
   "keepLocal": "Keep Local Version",
   "@keepLocal": {
     "description": "Keep local version option"
   },
-
   "keepServer": "Keep Server Version",
   "@keepServer": {
     "description": "Keep server version option"
   },
-
   "mergeBoth": "Merge Both",
   "@mergeBoth": {
     "description": "Merge both option"
   },
-
   "bankImport": "Bank Import",
   "@bankImport": {
     "description": "Bank import title"
   },
-
   "importFromBank": "Import from Bank",
   "@importFromBank": {
     "description": "Import from bank button"
   },
-
   "importFromSms": "Import from SMS",
   "@importFromSms": {
     "description": "Import from SMS button"
   },
-
   "importFromEmail": "Import from Email",
   "@importFromEmail": {
     "description": "Import from email button"
   },
-
   "importSuccessful": "Import successful",
   "@importSuccessful": {
     "description": "Import success message"
   },
-
   "transactionsImported": "{count} transactions imported",
   "@transactionsImported": {
     "description": "Transactions imported count",
@@ -2513,169 +2026,236 @@
       }
     }
   },
-
   "duplicateDetected": "Duplicate Detected",
   "@duplicateDetected": {
     "description": "Duplicate detected title"
   },
-
   "possibleDuplicate": "This transaction may be a duplicate",
   "@possibleDuplicate": {
     "description": "Possible duplicate message"
   },
-
   "keepBoth": "Keep Both",
   "@keepBoth": {
     "description": "Keep both option"
   },
-
   "skipDuplicate": "Skip Duplicate",
   "@skipDuplicate": {
     "description": "Skip duplicate option"
   },
-
   "loans": "Loans",
   "@loans": {
     "description": "Loans title"
   },
-
   "addLoan": "Add Loan",
   "@addLoan": {
     "description": "Add loan button"
   },
-
   "loanDetails": "Loan Details",
   "@loanDetails": {
     "description": "Loan details title"
   },
-
   "loanAmount": "Loan Amount",
   "@loanAmount": {
     "description": "Loan amount label"
   },
-
   "interestRate": "Interest Rate",
   "@interestRate": {
     "description": "Interest rate label"
   },
-
   "emi": "EMI",
   "@emi": {
     "description": "EMI label"
   },
-
   "tenure": "Tenure",
   "@tenure": {
     "description": "Tenure label"
   },
-
   "remainingAmount": "Remaining Amount",
   "@remainingAmount": {
     "description": "Remaining amount label"
   },
-
   "paidAmount": "Paid Amount",
   "@paidAmount": {
     "description": "Paid amount label"
   },
-
   "nextPayment": "Next Payment",
   "@nextPayment": {
     "description": "Next payment label"
   },
-
   "paymentSchedule": "Payment Schedule",
   "@paymentSchedule": {
     "description": "Payment schedule section"
   },
-
   "voiceInput": "Voice Input",
   "@voiceInput": {
     "description": "Voice input button"
   },
-
   "speakNow": "Speak now...",
   "@speakNow": {
     "description": "Speak now prompt"
   },
-
   "listeningFailed": "Could not understand. Please try again.",
   "@listeningFailed": {
     "description": "Listening failed message"
   },
-
   "permissionRequired": "Permission Required",
   "@permissionRequired": {
     "description": "Permission required title"
   },
-
   "cameraPermission": "Camera permission is required to scan receipts",
   "@cameraPermission": {
     "description": "Camera permission message"
   },
-
   "microphonePermission": "Microphone permission is required for voice input",
   "@microphonePermission": {
     "description": "Microphone permission message"
   },
-
   "storagePermission": "Storage permission is required to save files",
   "@storagePermission": {
     "description": "Storage permission message"
   },
-
   "openSettings": "Open Settings",
   "@openSettings": {
     "description": "Open settings button"
   },
-
   "getStarted": "Get Started",
   "@getStarted": {
     "description": "Get started button"
   },
-
   "onboardingTitle1": "Track Your Expenses",
   "@onboardingTitle1": {
     "description": "Onboarding screen 1 title"
   },
-
   "onboardingDesc1": "Easily track all your income and expenses in one place",
   "@onboardingDesc1": {
     "description": "Onboarding screen 1 description"
   },
-
   "onboardingTitle2": "Set Budgets & Goals",
   "@onboardingTitle2": {
     "description": "Onboarding screen 2 title"
   },
-
   "onboardingDesc2": "Create budgets and savings goals to achieve financial freedom",
   "@onboardingDesc2": {
     "description": "Onboarding screen 2 description"
   },
-
   "onboardingTitle3": "Get Insights",
   "@onboardingTitle3": {
     "description": "Onboarding screen 3 title"
   },
-
   "onboardingDesc3": "Understand your spending patterns with detailed analytics",
   "@onboardingDesc3": {
     "description": "Onboarding screen 3 description"
   },
-
   "congratulations": "Congratulations!",
   "@congratulations": {
     "description": "Congratulations message"
   },
-
   "setupComplete": "Your setup is complete",
   "@setupComplete": {
     "description": "Setup complete message"
   },
-
   "startTracking": "Start Tracking",
   "@startTracking": {
     "description": "Start tracking button"
+  },
+  "deleteAccountTitle": "Delete Your Account",
+  "@deleteAccountTitle": {
+    "description": "Delete account screen title"
+  },
+  "deleteAccountWarning": "This action is permanent and cannot be undone.",
+  "@deleteAccountWarning": {
+    "description": "Delete account warning"
+  },
+  "deleteAccountConsequences": "All your data will be permanently deleted including transactions, budgets, goals, and settings.",
+  "@deleteAccountConsequences": {
+    "description": "Delete account consequences"
+  },
+  "activeSubscriptionWarning": "Your active subscription will be cancelled",
+  "@activeSubscriptionWarning": {
+    "description": "Active subscription warning"
+  },
+  "subscriptionWillBeCancelled": "The following subscription will be automatically cancelled:",
+  "@subscriptionWillBeCancelled": {
+    "description": "Subscription cancellation notice"
+  },
+  "enterPasswordToConfirm": "Enter your password to confirm",
+  "@enterPasswordToConfirm": {
+    "description": "Password confirmation prompt"
+  },
+  "typeDeleteToConfirm": "Type DELETE to confirm",
+  "@typeDeleteToConfirm": {
+    "description": "Delete confirmation prompt"
+  },
+  "deletingAccount": "Deleting your account...",
+  "@deletingAccount": {
+    "description": "Deleting account progress"
+  },
+  "dangerZone": "Danger Zone",
+  "@dangerZone": {
+    "description": "Danger zone section title"
+  },
+  "supportTitle": "Support",
+  "@supportTitle": {
+    "description": "Support screen title"
+  },
+  "reportBug": "Report Bug",
+  "@reportBug": {
+    "description": "Report bug option"
+  },
+  "featureRequest": "Feature Request",
+  "@featureRequest": {
+    "description": "Feature request option"
+  },
+  "billingIssue": "Billing Issue",
+  "@billingIssue": {
+    "description": "Billing issue option"
+  },
+  "accountSecurity": "Account & Security",
+  "@accountSecurity": {
+    "description": "Account security option"
+  },
+  "generalQuestion": "General Question",
+  "@generalQuestion": {
+    "description": "General question option"
+  },
+  "myTickets": "My Tickets",
+  "@myTickets": {
+    "description": "My tickets screen title"
+  },
+  "createTicket": "Create Ticket",
+  "@createTicket": {
+    "description": "Create ticket button"
+  },
+  "ticketSubject": "Subject",
+  "@ticketSubject": {
+    "description": "Ticket subject field"
+  },
+  "ticketDescription": "Description",
+  "@ticketDescription": {
+    "description": "Ticket description field"
+  },
+  "ticketCategory": "Category",
+  "@ticketCategory": {
+    "description": "Ticket category field"
+  },
+  "ticketPriority": "Priority",
+  "@ticketPriority": {
+    "description": "Ticket priority field"
+  },
+  "submitTicket": "Submit Ticket",
+  "@submitTicket": {
+    "description": "Submit ticket button"
+  },
+  "ticketSubmitted": "Ticket submitted successfully",
+  "@ticketSubmitted": {
+    "description": "Ticket submitted confirmation"
+  },
+  "emailSupport": "Email Support",
+  "@emailSupport": {
+    "description": "Email support option"
+  },
+  "supportEmail": "support@spendex.in",
+  "@supportEmail": {
+    "description": "Support email address"
   }
 }

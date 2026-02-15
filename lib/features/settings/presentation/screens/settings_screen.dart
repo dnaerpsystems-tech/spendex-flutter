@@ -222,8 +222,9 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             _SettingsTile(
               icon: Iconsax.message_question,
-              title: l10n.faq,
-              onTap: () {},
+              title: l10n.helpAndSupport,
+              subtitle: "FAQs, contact us, report issues",
+              onTap: () => context.push(AppRoutes.support),
             ),
             _SettingsTile(
               icon: Iconsax.sms,

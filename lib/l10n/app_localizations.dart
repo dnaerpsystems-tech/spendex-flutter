@@ -1316,7 +1316,7 @@ abstract class AppLocalizations {
   /// **'Edit Account'**
   String get editAccount;
 
-  /// Delete account button
+  /// Delete account title
   ///
   /// In en, this message translates to:
   /// **'Delete Account'**
@@ -1328,10 +1328,10 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete your account? All your data will be permanently deleted.'**
   String get deleteAccountConfirmation;
 
-  /// Account deleted message
+  /// Account deleted confirmation
   ///
   /// In en, this message translates to:
-  /// **'Account deleted successfully'**
+  /// **'Your account has been deleted'**
   String get accountDeleted;
 
   /// Account saved message
@@ -3157,6 +3157,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Tracking'**
   String get startTracking;
+
+  /// Delete account screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Your Account'**
+  String get deleteAccountTitle;
+
+  /// Delete account warning
+  ///
+  /// In en, this message translates to:
+  /// **'This action is permanent and cannot be undone.'**
+  String get deleteAccountWarning;
+
+  /// Delete account consequences
+  ///
+  /// In en, this message translates to:
+  /// **'All your data will be permanently deleted including transactions, budgets, goals, and settings.'**
+  String get deleteAccountConsequences;
+
+  /// Active subscription warning
+  ///
+  /// In en, this message translates to:
+  /// **'Your active subscription will be cancelled'**
+  String get activeSubscriptionWarning;
+
+  /// Subscription cancellation notice
+  ///
+  /// In en, this message translates to:
+  /// **'The following subscription will be automatically cancelled:'**
+  String get subscriptionWillBeCancelled;
+
+  /// Password confirmation prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm'**
+  String get enterPasswordToConfirm;
+
+  /// Delete confirmation prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Type DELETE to confirm'**
+  String get typeDeleteToConfirm;
+
+  /// Deleting account progress
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting your account...'**
+  String get deletingAccount;
+
+  /// Danger zone section title
+  ///
+  /// In en, this message translates to:
+  /// **'Danger Zone'**
+  String get dangerZone;
+
+  /// Support screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get supportTitle;
+
+  /// Report bug option
+  ///
+  /// In en, this message translates to:
+  /// **'Report Bug'**
+  String get reportBug;
+
+  /// Feature request option
+  ///
+  /// In en, this message translates to:
+  /// **'Feature Request'**
+  String get featureRequest;
+
+  /// Billing issue option
+  ///
+  /// In en, this message translates to:
+  /// **'Billing Issue'**
+  String get billingIssue;
+
+  /// Account security option
+  ///
+  /// In en, this message translates to:
+  /// **'Account & Security'**
+  String get accountSecurity;
+
+  /// General question option
+  ///
+  /// In en, this message translates to:
+  /// **'General Question'**
+  String get generalQuestion;
+
+  /// My tickets screen title
+  ///
+  /// In en, this message translates to:
+  /// **'My Tickets'**
+  String get myTickets;
+
+  /// Create ticket button
+  ///
+  /// In en, this message translates to:
+  /// **'Create Ticket'**
+  String get createTicket;
+
+  /// Ticket subject field
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get ticketSubject;
+
+  /// Ticket description field
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get ticketDescription;
+
+  /// Ticket category field
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get ticketCategory;
+
+  /// Ticket priority field
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get ticketPriority;
+
+  /// Submit ticket button
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Ticket'**
+  String get submitTicket;
+
+  /// Ticket submitted confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket submitted successfully'**
+  String get ticketSubmitted;
+
+  /// Email support option
+  ///
+  /// In en, this message translates to:
+  /// **'Email Support'**
+  String get emailSupport;
+
+  /// Support email address
+  ///
+  /// In en, this message translates to:
+  /// **'support@spendex.in'**
+  String get supportEmail;
 }
 
 class _AppLocalizationsDelegate

@@ -652,7 +652,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to delete your account? All your data will be permanently deleted.';
 
   @override
-  String get accountDeleted => 'Account deleted successfully';
+  String get accountDeleted => 'Your account has been deleted';
 
   @override
   String get accountSaved => 'Account saved successfully';
@@ -1617,4 +1617,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startTracking => 'Start Tracking';
+
+  @override
+  String get deleteAccountTitle => 'Delete Your Account';
+
+  @override
+  String get deleteAccountWarning =>
+      'This action is permanent and cannot be undone.';
+
+  @override
+  String get deleteAccountConsequences =>
+      'All your data will be permanently deleted including transactions, budgets, goals, and settings.';
+
+  @override
+  String get activeSubscriptionWarning =>
+      'Your active subscription will be cancelled';
+
+  @override
+  String get subscriptionWillBeCancelled =>
+      'The following subscription will be automatically cancelled:';
+
+  @override
+  String get enterPasswordToConfirm => 'Enter your password to confirm';
+
+  @override
+  String get typeDeleteToConfirm => 'Type DELETE to confirm';
+
+  @override
+  String get deletingAccount => 'Deleting your account...';
+
+  @override
+  String get dangerZone => 'Danger Zone';
+
+  @override
+  String get supportTitle => 'Support';
+
+  @override
+  String get reportBug => 'Report Bug';
+
+  @override
+  String get featureRequest => 'Feature Request';
+
+  @override
+  String get billingIssue => 'Billing Issue';
+
+  @override
+  String get accountSecurity => 'Account & Security';
+
+  @override
+  String get generalQuestion => 'General Question';
+
+  @override
+  String get myTickets => 'My Tickets';
+
+  @override
+  String get createTicket => 'Create Ticket';
+
+  @override
+  String get ticketSubject => 'Subject';
+
+  @override
+  String get ticketDescription => 'Description';
+
+  @override
+  String get ticketCategory => 'Category';
+
+  @override
+  String get ticketPriority => 'Priority';
+
+  @override
+  String get submitTicket => 'Submit Ticket';
+
+  @override
+  String get ticketSubmitted => 'Ticket submitted successfully';
+
+  @override
+  String get emailSupport => 'Email Support';
+
+  @override
+  String get supportEmail => 'support@spendex.in';
 }

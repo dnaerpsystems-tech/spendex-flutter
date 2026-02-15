@@ -651,7 +651,7 @@ class AppLocalizationsHi extends AppLocalizations {
       'क्या आप वाकई अपना खाता हटाना चाहते हैं? आपका सारा डेटा स्थायी रूप से हटा दिया जाएगा।';
 
   @override
-  String get accountDeleted => 'खाता सफलतापूर्वक हटाया गया';
+  String get accountDeleted => 'आपका खाता हटा दिया गया है';
 
   @override
   String get accountSaved => 'खाता सफलतापूर्वक सहेजा गया';
@@ -1617,4 +1617,84 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get startTracking => 'ट्रैकिंग शुरू करें';
+
+  @override
+  String get deleteAccountTitle => 'अपना खाता हटाएं';
+
+  @override
+  String get deleteAccountWarning =>
+      'यह क्रिया स्थायी है और पूर्ववत नहीं की जा सकती।';
+
+  @override
+  String get deleteAccountConsequences =>
+      'आपका सभी डेटा स्थायी रूप से हटा दिया जाएगा।';
+
+  @override
+  String get activeSubscriptionWarning =>
+      'आपकी सक्रिय सदस्यता रद्द कर दी जाएगी';
+
+  @override
+  String get subscriptionWillBeCancelled =>
+      'निम्नलिखित सदस्यता स्वचालित रूप से रद्द कर दी जाएगी:';
+
+  @override
+  String get enterPasswordToConfirm =>
+      'पुष्टि करने के लिए अपना पासवर्ड दर्ज करें';
+
+  @override
+  String get typeDeleteToConfirm => 'पुष्टि करने के लिए DELETE टाइप करें';
+
+  @override
+  String get deletingAccount => 'आपका खाता हटाया जा रहा है...';
+
+  @override
+  String get dangerZone => 'खतरे का क्षेत्र';
+
+  @override
+  String get supportTitle => 'समर्थन';
+
+  @override
+  String get reportBug => 'बग रिपोर्ट करें';
+
+  @override
+  String get featureRequest => 'फीचर अनुरोध';
+
+  @override
+  String get billingIssue => 'बिलिंग समस्या';
+
+  @override
+  String get accountSecurity => 'खाता और सुरक्षा';
+
+  @override
+  String get generalQuestion => 'सामान्य प्रश्न';
+
+  @override
+  String get myTickets => 'मेरे टिकट';
+
+  @override
+  String get createTicket => 'टिकट बनाएं';
+
+  @override
+  String get ticketSubject => 'विषय';
+
+  @override
+  String get ticketDescription => 'विवरण';
+
+  @override
+  String get ticketCategory => 'श्रेणी';
+
+  @override
+  String get ticketPriority => 'प्राथमिकता';
+
+  @override
+  String get submitTicket => 'टिकट जमा करें';
+
+  @override
+  String get ticketSubmitted => 'टिकट सफलतापूर्वक जमा किया गया';
+
+  @override
+  String get emailSupport => 'ईमेल समर्थन';
+
+  @override
+  String get supportEmail => 'support@spendex.in';
 }

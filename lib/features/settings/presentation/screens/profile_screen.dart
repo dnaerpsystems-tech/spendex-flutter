@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -89,6 +90,43 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             _buildQuickActionsSection(),
             const SizedBox(height: SpendexTheme.spacingLg),
             _buildLogoutSection(),
+            // Danger Zone Section
+            const SizedBox(height: 32),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.red.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Iconsax.danger, color: Colors.red, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Danger Zone',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  _DangerTile(
+                    icon: Iconsax.trash,
+                    title: 'Delete Account',
+                    subtitle: 'Permanently delete your account and all data',
+                    onTap: () => context.push(AppRoutes.deleteAccount),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: SpendexTheme.spacing2xl),
           ],
         ),
@@ -751,6 +789,78 @@ class _LogoutButton extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class _DangerTile extends StatelessWidget {
+  const _DangerTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.red.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                icon,
+                color: Colors.red,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.red,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.red.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Iconsax.arrow_right_3,
+              color: Colors.red.withValues(alpha: 0.5),
+              size: 18,
+            ),
+          ],
         ),
       ),
     );

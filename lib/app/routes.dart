@@ -61,6 +61,7 @@ import '../features/settings/presentation/screens/set_pin_screen.dart';
 import '../features/settings/presentation/screens/delete_account_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/support/presentation/screens/support_screen.dart';
+import '../features/support/presentation/screens/create_ticket_screen.dart';
 import '../features/subscription/presentation/screens/screens.dart';
 import '../features/transactions/presentation/screens/add_transaction_screen.dart';
 import '../features/transactions/presentation/screens/transaction_details_screen.dart';
@@ -135,6 +136,7 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String deleteAccount = '/delete-account';
   static const String support = '/support';
+  static const String createTicket = '/support/create-ticket';
   static const String profile = '/profile';
   static const String notifications = '/notifications';
 
@@ -503,6 +505,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.support,
         builder: (context, state) => const SupportScreen(),
+      ),
+      // Create Ticket Route
+      GoRoute(
+        path: AppRoutes.createTicket,
+        builder: (context, state) => const CreateTicketScreen(),
       ),
       GoRoute(
         path: '/profile/edit',
