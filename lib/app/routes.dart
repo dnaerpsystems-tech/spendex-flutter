@@ -59,6 +59,8 @@ import '../features/settings/presentation/screens/profile_screen.dart';
 import '../features/settings/presentation/screens/security_settings_screen.dart';
 import '../features/settings/presentation/screens/set_pin_screen.dart';
 import '../features/settings/presentation/screens/delete_account_screen.dart';
+import '../features/settings/presentation/screens/linked_accounts_screen.dart';
+import '../features/settings/presentation/screens/account_recovery_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/support/presentation/screens/support_screen.dart';
 import '../features/support/presentation/screens/create_ticket_screen.dart';
@@ -138,6 +140,8 @@ class AppRoutes {
   static const String subscriptionInvoices = '/subscription/invoices';
   static const String settings = '/settings';
   static const String deleteAccount = '/delete-account';
+  static const String linkedAccounts = '/settings/linked-accounts';
+  static const String accountRecovery = '/settings/account-recovery';
   static const String support = '/support';
   static const String createTicket = '/support/create-ticket';
   static const String ticketList = '/support/tickets';
@@ -505,6 +509,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.deleteAccount,
         builder: (context, state) => const DeleteAccountScreen(),
+      ),
+      // Linked Accounts Route
+      GoRoute(
+        path: AppRoutes.linkedAccounts,
+        builder: (context, state) => const LinkedAccountsScreen(),
+      ),
+      // Account Recovery Route
+      GoRoute(
+        path: AppRoutes.accountRecovery,
+        builder: (context, state) => const AccountRecoveryScreen(),
       ),
       // Support Route
       GoRoute(

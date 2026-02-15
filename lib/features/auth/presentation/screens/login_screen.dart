@@ -170,6 +170,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
 
   /// Handle login
   Future<void> _handleLogin() async {
+    // Dismiss keyboard first
+    FocusScope.of(context).unfocus();
+
     // Clear previous error
     ref.read(authStateProvider.notifier).clearError();
 

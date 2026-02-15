@@ -57,6 +57,37 @@ class DeleteAccountRequest {
       };
 }
 
+
+/// Response from account deletion request
+class DeleteAccountResponse extends Equatable {
+  const DeleteAccountResponse({
+    required this.success,
+    this.message,
+    this.scheduledDeletionDate,
+    this.canRecover = true,
+  });
+
+  factory DeleteAccountResponse.fromJson(Map<String, dynamic> json) {
+    return DeleteAccountResponse(
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String?,
+      scheduledDeletionDate: json['scheduled_deletion_date'] != null
+          ? DateTime.parse(json['scheduled_deletion_date'] as String)
+          : null,
+      canRecover: json['can_recover'] as bool? ?? true,
+    );
+  }
+
+  final bool success;
+  final String? message;
+  final DateTime? scheduledDeletionDate;
+  final bool canRecover;
+
+  @override
+  List<Object?> get props => [success, message, scheduledDeletionDate, canRecover];
+
+}
+
 /// Model for active subscription information
 class ActiveSubscriptionInfo extends Equatable {
   const ActiveSubscriptionInfo({

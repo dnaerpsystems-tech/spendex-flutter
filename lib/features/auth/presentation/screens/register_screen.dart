@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,23 @@ import '../widgets/social_auth_icon_buttons.dart';
 /// - Terms & Conditions bottom sheet
 /// - Progress step indicator
 /// - Back button with confirmation
+/// Debouncer utility class for rate-limiting validation calls
+class _Debouncer {
+  final Duration delay;
+  Timer? _timer;
+
+  _Debouncer({required this.delay});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(delay, action);
+  }
+
+  void dispose() {
+    _timer?.cancel();
+  }
+}
+
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -56,6 +74,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
   bool _isFormDirty = false;
   String _currentPassword = '';
   String _currentConfirmPassword = '';
+
+  // Debouncer for validation
+  final _validationDebouncer = _Debouncer(delay: const Duration(milliseconds: 300));
 
   // Animation Controllers
   late AnimationController _staggerController;
@@ -158,7 +179,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
         _isFormDirty = true;
       });
     }
-    // Clear error when user starts typing
+    // Clear error when user starts typing (debounced)
+    _validationDebouncer.run(() {
+      if (ref.read(authStateProvider).error != null) {
+        ref.read(authStateProvider.notifier).clearError();
+      }
+      // Trigger form validation
+      _formKey.currentState?.validate();
+    });
+    // Also clear immediately without debounce
     if (ref.read(authStateProvider).error != null) {
       ref.read(authStateProvider.notifier).clearError();
     }
@@ -185,6 +214,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
     _shakeController.dispose();
     _pulseController.dispose();
 
+    _validationDebouncer.dispose();
     super.dispose();
   }
 

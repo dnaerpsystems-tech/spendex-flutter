@@ -148,6 +148,12 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () {},
             ),
             _SettingsTile(
+              icon: Iconsax.link,
+              title: 'Linked Accounts',
+              subtitle: 'Connect social accounts',
+              onTap: () => context.push(AppRoutes.linkedAccounts),
+            ),
+            _SettingsTile(
               icon: Iconsax.global,
               title: l10n.language,
               subtitle: SupportedLocales.getDisplayName(currentLocale),
