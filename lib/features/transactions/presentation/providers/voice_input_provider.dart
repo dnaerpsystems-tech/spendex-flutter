@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +10,13 @@ import 'package:speech_to_text/speech_to_text.dart';
 import '../../../../core/utils/app_logger.dart';
 import '../../data/models/transaction_model.dart';
 import '../../data/services/voice_parser_service.dart';
+
+/// Check if speech is supported on this platform
+bool get isSpeechSupported {
+  if (kIsWeb) return false;
+  // Only support iOS and Android (not Windows, macOS, Linux)
+  return Platform.isIOS || Platform.isAndroid;
+}
 
 /// Voice Input States
 enum VoiceInputState {
@@ -112,6 +121,12 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
 
   /// Initialize speech recognition
   Future<void> _initializeSpeech() async {
+    // Skip initialization on unsupported platforms (Windows, macOS, Linux, Web)
+    if (!isSpeechSupported) {
+      _isInitialized = false;
+      return;
+    }
+
     try {
       _isInitialized = await _speech.initialize(
         onError: _onSpeechError,
@@ -156,6 +171,15 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
 
   /// Start listening for voice input
   Future<void> startListening() async {
+    // Check if platform supports speech
+    if (!isSpeechSupported) {
+      state = state.copyWith(
+        state: VoiceInputState.error,
+        errorMessage: 'Voice input is not supported on this platform.',
+      );
+      return;
+    }
+
     // Check if already listening
     if (_speech.isListening) {
       return;
@@ -399,7 +423,7 @@ class VoiceInputNotifier extends StateNotifier<VoiceInputData> {
   }
 
   /// Check if speech recognition is available
-  bool get isSpeechAvailable => _isInitialized;
+  bool get isSpeechAvailable => isSpeechSupported && _isInitialized;
 
   /// Check if currently listening
   bool get isListening => _speech.isListening;

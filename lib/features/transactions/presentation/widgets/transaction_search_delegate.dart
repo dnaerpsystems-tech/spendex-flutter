@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +12,12 @@ import '../../data/models/transaction_model.dart';
 import '../providers/search_history_provider.dart';
 import 'date_group_header.dart';
 import 'transaction_card.dart';
+
+/// Check if speech is supported on this platform
+bool get _isSpeechSupportedForSearch {
+  if (kIsWeb) return false;
+  return Platform.isIOS || Platform.isAndroid;
+}
 
 /// A custom SearchDelegate for searching transactions.
 ///
@@ -514,6 +522,17 @@ class TransactionSearchDelegate extends SearchDelegate<TransactionModel?> {
 
   /// Start voice search
   Future<void> _startVoiceSearch(BuildContext context) async {
+    // Check if platform supports speech
+    if (!_isSpeechSupportedForSearch) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Voice search is not supported on this platform'),
+          backgroundColor: SpendexColors.expense,
+        ),
+      );
+      return;
+    }
+
     // Initialize speech if not already initialized
     if (!_speechInitialized) {
       _speechInitialized = await _speech.initialize(
