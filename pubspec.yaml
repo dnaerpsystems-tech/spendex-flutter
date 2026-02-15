@@ -103,3 +103,8 @@ flutter:
     - assets/animations/
     - .env
   generate: true
+
+dependency_overrides:
+  speech_to_text_windows:
+    path: packages/speech_to_text_windows_stub
+

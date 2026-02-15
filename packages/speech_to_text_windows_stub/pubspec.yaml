@@ -1,0 +1,19 @@
+name: speech_to_text_windows
+description: Stub package to disable speech_to_text on Windows
+version: 1.0.0+stub
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  speech_to_text_platform_interface: ^2.3.0
+
+flutter:
+  plugin:
+    platforms:
+      windows:
+        pluginClass: SpeechToTextWindowsStub
