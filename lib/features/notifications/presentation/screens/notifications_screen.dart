@@ -5,6 +5,8 @@ import '../../../../app/theme.dart';
 import '../../data/models/notification_model.dart';
 import '../providers/notifications_provider.dart';
 import '../widgets/notification_tile.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 /// Notifications screen with filtering and infinite scroll
 class NotificationsScreen extends ConsumerStatefulWidget {
@@ -22,6 +24,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenNotifications);
     _tabController = TabController(length: 2, vsync: this);
     _scrollController.addListener(_onScroll);
 

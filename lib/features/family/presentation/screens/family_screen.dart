@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../../../../app/theme.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 import '../../data/models/family_models.dart';
 import '../providers/family_provider.dart';
 import '../widgets/family_member_card.dart';
 import '../widgets/invite_member_sheet.dart';
 import '../widgets/member_role_selector.dart';
 import '../widgets/pending_invite_card.dart';
-
 /// Family Screen
 /// Displays family info, members, pending invites with management options
 class FamilyScreen extends ConsumerStatefulWidget {
@@ -27,6 +27,8 @@ class _FamilyScreenState extends ConsumerState<FamilyScreen> with SingleTickerPr
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenFamily);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(familyStateProvider.notifier).loadFamily();
     });

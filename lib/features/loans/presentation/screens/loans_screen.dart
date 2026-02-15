@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../../../../app/theme.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 import '../../../../shared/widgets/empty_state_widget.dart';
 import '../../../../shared/widgets/error_state_widget.dart';
 import '../../data/models/loan_model.dart';
 import '../providers/loans_provider.dart';
 import '../widgets/loan_card.dart';
 import '../widgets/loans_summary_card.dart';
-
 class LoansScreen extends ConsumerStatefulWidget {
   const LoansScreen({super.key});
 
@@ -22,6 +22,8 @@ class _LoansScreenState extends ConsumerState<LoansScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenLoans);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(loansStateProvider.notifier).loadAll();
     });

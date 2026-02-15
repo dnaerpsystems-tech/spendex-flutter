@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -25,6 +27,8 @@ class _GoalDetailsScreenState extends ConsumerState<GoalDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenGoalDetails);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(goalsStateProvider.notifier).loadGoalById(widget.goalId);
     });

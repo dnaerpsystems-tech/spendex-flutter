@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,6 +74,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenForgotPassword);
     _initAnimations();
     _setupListeners();
 

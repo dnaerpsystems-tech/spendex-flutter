@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
@@ -36,6 +38,13 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenProfile);
+  }
+  
   final ImagePicker _imagePicker = ImagePicker();
 
   @override

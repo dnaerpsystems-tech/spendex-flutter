@@ -5,3 +5,5 @@
 library accessibility;
 
 export 'semantics_helper.dart';
+export 'semantic_wrapper.dart';
+export 'semantic_widgets.dart';

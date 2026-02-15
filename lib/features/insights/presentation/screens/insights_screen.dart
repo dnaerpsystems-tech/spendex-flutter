@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../shared/widgets/empty_state_widget.dart';
@@ -33,6 +35,8 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenInsights);
     // Load insights on initialization if not already loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = ref.read(insightsStateProvider);

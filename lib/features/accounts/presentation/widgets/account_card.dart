@@ -16,10 +16,39 @@ class AccountCard extends StatelessWidget {
     this.showBalance = true,
     this.compact = false,
   });
+
   final AccountModel account;
   final VoidCallback? onTap;
   final bool showBalance;
   final bool compact;
+
+  /// Build semantic label for screen readers
+  String _buildSemanticLabel() {
+    final parts = <String>[];
+    
+    parts.add(account.name);
+    parts.add(account.type.label);
+    
+    if (account.bankName != null) {
+      parts.add(account.bankName!);
+    }
+    
+    if (showBalance) {
+      final balanceLabel = account.isCreditCard ? 'Outstanding' : 'Balance';
+      parts.add('$balanceLabel: ${formatCurrency(account.balanceInRupees)}');
+    }
+    
+    if (account.isDefault) {
+      parts.add('Default account');
+    }
+    
+    if (account.isCreditCard && account.creditLimit != null) {
+      parts.add('Credit limit: ${formatCurrency(account.creditLimitInRupees ?? 0)}');
+      parts.add('Utilized: ${account.utilizedPercentage?.toStringAsFixed(0) ?? 0}%');
+    }
+    
+    return parts.join(', ');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,184 +59,187 @@ class AccountCard extends StatelessWidget {
       return _buildCompactCard(context, isDark, color);
     }
 
-    return GestureDetector(
+    return Semantics(
+      label: _buildSemanticLabel(),
+      button: onTap != null,
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              color,
-              color.withValues(alpha: 0.8),
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                color,
+                color.withValues(alpha: 0.8),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
             ],
           ),
-          borderRadius: BorderRadius.circular(SpendexTheme.radiusLg),
-          boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Account Type Icon
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      getAccountTypeIcon(account.type),
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                  // Default Badge
-                  if (account.isDefault)
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Account Type Icon
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
+                      width: 48,
+                      height: 48,
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Iconsax.star1,
-                            color: Colors.white,
-                            size: 14,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            'Default',
-                            style: TextStyle(
+                      child: Icon(
+                        getAccountTypeIcon(account.type),
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    // Default Badge
+                    if (account.isDefault)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Iconsax.star1,
                               color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
+                              size: 14,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 4),
+                            Text(
+                              'Default',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // Account Name
-              Text(
-                account.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+                  ],
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+                const SizedBox(height: 20),
 
-              const SizedBox(height: 4),
+                // Account Name
+                Text(
+                  account.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
 
-              // Bank Name & Account Number
-              Row(
-                children: [
-                  if (account.bankName != null) ...[
-                    Text(
-                      account.bankName!,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        fontSize: 14,
-                      ),
-                    ),
-                    if (account.accountNumber != null) ...[
+                // Bank Name & Account Number
+                Row(
+                  children: [
+                    if (account.bankName != null) ...[
                       Text(
-                        ' • ',
+                        account.bankName!,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 14,
                         ),
                       ),
+                      if (account.accountNumber != null) ...[
+                        Text(
+                          ' • ',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.6),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
-                  if (account.accountNumber != null)
-                    Text(
-                      _maskAccountNumber(account.accountNumber!),
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        fontSize: 14,
-                        fontFamily: 'monospace',
+                    if (account.accountNumber != null)
+                      Text(
+                        _maskAccountNumber(account.accountNumber!),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 14,
+                          fontFamily: 'monospace',
+                        ),
                       ),
-                    ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Balance
-              if (showBalance) ...[
-                Text(
-                  account.isCreditCard ? 'Outstanding' : 'Balance',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
-                    fontSize: 12,
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  formatCurrency(account.balanceInRupees),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-              ],
-
-              // Credit Card Info
-              if (account.isCreditCard && account.creditLimit != null) ...[
                 const SizedBox(height: 16),
-                _buildCreditCardInfo(),
-              ],
 
-              // Account Type Label
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  account.type.label,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                // Balance
+                if (showBalance) ...[
+                  Text(
+                    account.isCreditCard ? 'Outstanding' : 'Balance',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    formatCurrency(account.balanceInRupees),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                ],
+
+                // Credit Card Info
+                if (account.isCreditCard && account.creditLimit != null) ...[
+                  const SizedBox(height: 16),
+                  _buildCreditCardInfo(),
+                ],
+
+                // Account Type Label
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    account.type.label,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -215,91 +247,101 @@ class AccountCard extends StatelessWidget {
   }
 
   Widget _buildCompactCard(BuildContext context, bool isDark, Color color) {
-    return GestureDetector(
+    return Semantics(
+      label: _buildSemanticLabel(),
+      button: onTap != null,
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
-          borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
-          border: Border.all(
-            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+            borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
+            border: Border.all(
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            // Icon
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                getAccountTypeIcon(account.type),
-                color: color,
-                size: 22,
-              ),
-            ),
-            const SizedBox(width: 12),
-            // Account Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          account.name,
-                          style: SpendexTheme.titleMedium.copyWith(
-                            color: isDark
-                                ? SpendexColors.darkTextPrimary
-                                : SpendexColors.lightTextPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (account.isDefault) ...[
-                        const SizedBox(width: 8),
-                        Icon(
-                          Iconsax.star1,
-                          color: color,
-                          size: 16,
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    account.type.label,
-                    style: SpendexTheme.labelMedium.copyWith(
-                      color: isDark
-                          ? SpendexColors.darkTextSecondary
-                          : SpendexColors.lightTextSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Balance
-            if (showBalance)
-              Text(
-                formatCurrency(account.balanceInRupees),
-                style: SpendexTheme.titleMedium.copyWith(
-                  color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
-                  fontWeight: FontWeight.w600,
+          child: Row(
+            children: [
+              // Icon
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  getAccountTypeIcon(account.type),
+                  color: color,
+                  size: 22,
                 ),
               ),
-            const SizedBox(width: 8),
-            Icon(
-              Iconsax.arrow_right_3,
-              color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
-              size: 18,
-            ),
-          ],
+              const SizedBox(width: 12),
+
+              // Account Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            account.name,
+                            style: SpendexTheme.titleMedium.copyWith(
+                              color: isDark
+                                  ? SpendexColors.darkTextPrimary
+                                  : SpendexColors.lightTextPrimary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (account.isDefault) ...[
+                          const SizedBox(width: 8),
+                          Icon(
+                            Iconsax.star1,
+                            color: color,
+                            size: 16,
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      account.type.label,
+                      style: SpendexTheme.labelMedium.copyWith(
+                        color: isDark
+                            ? SpendexColors.darkTextSecondary
+                            : SpendexColors.lightTextSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Balance
+              if (showBalance)
+                Text(
+                  formatCurrency(account.balanceInRupees),
+                  style: SpendexTheme.titleMedium.copyWith(
+                    color: isDark ? SpendexColors.darkTextPrimary : SpendexColors.lightTextPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              const SizedBox(width: 8),
+              ExcludeSemantics(
+                child: Icon(
+                  Iconsax.arrow_right_3,
+                  color: isDark ? SpendexColors.darkTextTertiary : SpendexColors.lightTextTertiary,
+                  size: 18,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -325,6 +367,7 @@ class AccountCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
+
         // Credit Details Row
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -422,7 +465,7 @@ IconData getAccountTypeIcon(AccountType type) {
     case AccountType.investment:
       return Iconsax.chart;
     case AccountType.loan:
-      return Iconsax.receipt_item;
+      return Iconsax.receipt_2;
     case AccountType.other:
       return Iconsax.more;
   }
@@ -434,18 +477,18 @@ Color getAccountTypeColor(AccountType type) {
     case AccountType.savings:
       return SpendexColors.primary;
     case AccountType.current:
-      return const Color(0xFF3B82F6);
+      return SpendexColors.income;
     case AccountType.creditCard:
-      return const Color(0xFFF59E0B);
-    case AccountType.cash:
-      return const Color(0xFF8B5CF6);
-    case AccountType.wallet:
-      return const Color(0xFFEC4899);
-    case AccountType.investment:
-      return const Color(0xFF06B6D4);
-    case AccountType.loan:
       return SpendexColors.expense;
+    case AccountType.cash:
+      return SpendexColors.warning;
+    case AccountType.wallet:
+      return SpendexColors.transfer;
+    case AccountType.investment:
+      return const Color(0xFF6366F1);
+    case AccountType.loan:
+      return const Color(0xFFEC4899);
     case AccountType.other:
-      return const Color(0xFF64748B);
+      return SpendexColors.lightTextSecondary;
   }
 }

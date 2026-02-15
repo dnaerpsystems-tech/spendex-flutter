@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
@@ -28,6 +30,8 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenAccounts);
     _tabController = TabController(length: 3, vsync: this);
 
     // Load accounts when screen opens
@@ -61,9 +65,14 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
           onPressed: () => context.pop(),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Iconsax.refresh),
-            onPressed: accountsState.isLoading ? null : _refresh,
+          Semantics(
+            label: 'Refresh accounts',
+            button: true,
+            enabled: !accountsState.isLoading,
+            child: IconButton(
+              icon: const Icon(Iconsax.refresh),
+              onPressed: accountsState.isLoading ? null : _refresh,
+            ),
           ),
         ],
       ),
@@ -107,12 +116,17 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push(AppRoutes.addAccount),
-        icon: const Icon(Iconsax.add),
-        label: const Text('Add Account'),
-        backgroundColor: SpendexColors.primary,
-        foregroundColor: Colors.white,
+      floatingActionButton: Semantics(
+        label: 'Add new account',
+        hint: 'Double tap to add a new account',
+        button: true,
+        child: FloatingActionButton.extended(
+          onPressed: () => context.push(AppRoutes.addAccount),
+          icon: const Icon(Iconsax.add),
+          label: const Text('Add Account'),
+          backgroundColor: SpendexColors.primary,
+          foregroundColor: Colors.white,
+        ),
       ),
     );
   }
@@ -283,10 +297,14 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: _refresh,
-                icon: const Icon(Iconsax.refresh),
-                label: const Text('Retry'),
+              Semantics(
+                label: 'Retry loading accounts',
+                button: true,
+                child: ElevatedButton.icon(
+                  onPressed: _refresh,
+                  icon: const Icon(Iconsax.refresh),
+                  label: const Text('Retry'),
+                ),
               ),
             ],
           ),
@@ -408,10 +426,14 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen>
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: () => context.push(AppRoutes.addAccount),
-                icon: const Icon(Iconsax.add),
-                label: const Text('Add Account'),
+              Semantics(
+                label: 'Add your first account',
+                button: true,
+                child: ElevatedButton.icon(
+                  onPressed: () => context.push(AppRoutes.addAccount),
+                  icon: const Icon(Iconsax.add),
+                  label: const Text('Add Account'),
+                ),
               ),
             ],
           ),

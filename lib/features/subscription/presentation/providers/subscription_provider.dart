@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/firebase/analytics_service.dart';
 import '../../data/models/subscription_models.dart';
 import '../../domain/repositories/subscription_repository.dart';
-
 // ============================================================================
 // SUBSCRIPTION STATE
 // ============================================================================
@@ -687,6 +687,15 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         return false;
       },
       (subscription) {
+        // Analytics: Track subscription purchase
+        if (subscription.plan != null) {
+          AnalyticsService.logSubscriptionPurchase(
+            planId: subscription.plan!.id,
+            planName: subscription.plan!.name,
+            amount: subscription.plan!.priceInRupees,
+            currency: 'INR',
+          );
+        }
         state = state.copyWith(
           isVerifyingPayment: false,
           currentSubscription: subscription,

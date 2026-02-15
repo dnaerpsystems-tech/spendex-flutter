@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
@@ -26,6 +28,8 @@ class _AccountDetailsScreenState extends ConsumerState<AccountDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenAccountDetails);
     _loadAccount();
   }
 

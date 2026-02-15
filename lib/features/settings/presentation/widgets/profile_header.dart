@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
+import '../../../../shared/widgets/cached_image.dart';
 
 /// Represents a user subscription plan tier
 enum PlanTier {
@@ -157,14 +158,12 @@ class ProfileHeader extends StatelessWidget {
         ],
       ),
       child: hasPhoto
-          ? ClipOval(
-              child: Image.network(
-                photoUrl!,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildInitials();
-                },
-              ),
+          ? CachedImage(
+              imageUrl: photoUrl!,
+              width: avatarSize,
+              height: avatarSize,
+              shape: BoxShape.circle,
+              errorWidget: _buildInitials(),
             )
           : _buildInitials(),
     );

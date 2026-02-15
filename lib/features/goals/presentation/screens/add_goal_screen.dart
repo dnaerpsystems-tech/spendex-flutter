@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
@@ -37,6 +39,8 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenAddGoal);
     _isEditMode = widget.goalId != null;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -221,6 +225,13 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
       setState(() => _isLoading = false);
 
       if (result != null) {
+        // Analytics: Track goal created
+        if (!_isEditMode) {
+          AnalyticsService.logGoalCreated(
+            name: _nameController.text.trim(),
+            targetAmount: amountInPaise / 100,
+          );
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(_isEditMode ? 'Goal updated' : 'Goal created'),

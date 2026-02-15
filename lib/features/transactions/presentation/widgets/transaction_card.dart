@@ -38,6 +38,50 @@ class TransactionCard extends StatelessWidget {
   /// Whether to use compact layout.
   final bool compact;
 
+  /// Build semantic label for screen readers
+  String _buildSemanticLabel() {
+    final currencyFormat = NumberFormat.currency(
+      locale: 'en_IN',
+      symbol: '₹',
+      decimalDigits: 0,
+    );
+    
+    final parts = <String>[];
+    
+    // Add description or category name
+    final description = transaction.description ?? 
+                        transaction.category?.name ?? 
+                        transaction.type.label;
+    parts.add(description);
+    
+    // Add category if available and different from description
+    if (transaction.category != null && transaction.description != null) {
+      parts.add(transaction.category!.name);
+    }
+    
+    // Add amount with type prefix
+    final String amountPrefix;
+    switch (transaction.type) {
+      case TransactionType.income:
+        amountPrefix = 'income of ';
+        break;
+      case TransactionType.expense:
+        amountPrefix = 'expense of ';
+        break;
+      case TransactionType.transfer:
+        amountPrefix = 'transfer of ';
+        break;
+    }
+    parts.add('$amountPrefix${currencyFormat.format(transaction.amountInRupees)}');
+    
+    // Add date
+    if (showDate) {
+      parts.add(_formatDate(transaction.date));
+    }
+    
+    return parts.join(', ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -74,117 +118,123 @@ class TransactionCard extends StatelessWidget {
     // Format the date
     final dateString = _formatDate(transaction.date);
 
-    return GestureDetector(
+    return Semantics(
+      label: _buildSemanticLabel(),
+      button: onTap != null,
       onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(bottom: compact ? 6 : 8),
-        padding: EdgeInsets.all(compact ? 12 : 16),
-        decoration: BoxDecoration(
-          color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: EdgeInsets.only(bottom: compact ? 6 : 8),
+          padding: EdgeInsets.all(compact ? 12 : 16),
+          decoration: BoxDecoration(
+            color: isDark ? SpendexColors.darkCard : SpendexColors.lightCard,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDark ? SpendexColors.darkBorder : SpendexColors.lightBorder,
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            // Category Icon
-            Container(
-              width: compact ? 40 : 48,
-              height: compact ? 40 : 48,
-              decoration: BoxDecoration(
-                color: typeColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Center(
-                child: Icon(
-                  iconData,
-                  color: typeColor,
-                  size: compact ? 20 : 24,
+          child: Row(
+            children: [
+              // Category Icon
+              Container(
+                width: compact ? 40 : 48,
+                height: compact ? 40 : 48,
+                decoration: BoxDecoration(
+                  color: typeColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Center(
+                  child: Icon(
+                    iconData,
+                    color: typeColor,
+                    size: compact ? 20 : 24,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: compact ? 12 : 16),
-            // Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    transaction.description ?? transaction.category?.name ?? transaction.type.label,
-                    style: SpendexTheme.titleMedium.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: compact ? 13 : 14,
+              SizedBox(width: compact ? 12 : 16),
+              // Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      transaction.description ?? transaction.category?.name ?? transaction.type.label,
+                      style: SpendexTheme.titleMedium.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: compact ? 13 : 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: compact ? 2 : 4),
-                  Row(
-                    children: [
-                      // Category name
-                      if (transaction.category != null) ...[
-                        Flexible(
-                          child: Text(
-                            transaction.category!.name,
+                    SizedBox(height: compact ? 2 : 4),
+                    Row(
+                      children: [
+                        // Category name
+                        if (transaction.category != null) ...[
+                          Flexible(
+                            child: Text(
+                              transaction.category!.name,
+                              style: SpendexTheme.labelMedium.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                fontSize: compact ? 11 : 12,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ] else if (transaction.type == TransactionType.transfer) ...[
+                          Flexible(
+                            child: Text(
+                              'Transfer',
+                              style: SpendexTheme.labelMedium.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                fontSize: compact ? 11 : 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                        // Dot separator
+                        if (showDate &&
+                            (transaction.category != null ||
+                                transaction.type == TransactionType.transfer)) ...[
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            width: 4,
+                            height: 4,
+                            decoration: const BoxDecoration(
+                              color: SpendexColors.lightTextTertiary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                        // Date
+                        if (showDate)
+                          Text(
+                            dateString,
                             style: SpendexTheme.labelMedium.copyWith(
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
                               fontSize: compact ? 11 : 12,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ] else if (transaction.type == TransactionType.transfer) ...[
-                        Flexible(
-                          child: Text(
-                            'Transfer',
-                            style: SpendexTheme.labelMedium.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              fontSize: compact ? 11 : 12,
-                            ),
-                          ),
-                        ),
                       ],
-                      // Dot separator
-                      if (showDate &&
-                          (transaction.category != null ||
-                              transaction.type == TransactionType.transfer)) ...[
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          width: 4,
-                          height: 4,
-                          decoration: const BoxDecoration(
-                            color: SpendexColors.lightTextTertiary,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
-                      // Date
-                      if (showDate)
-                        Text(
-                          dateString,
-                          style: SpendexTheme.labelMedium.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontSize: compact ? 11 : 12,
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            // Amount
-            Text(
-              '$amountPrefix${currencyFormat.format(transaction.amountInRupees)}',
-              style: SpendexTheme.titleMedium.copyWith(
-                color: typeColor,
-                fontSize: compact ? 13 : 14,
+              const SizedBox(width: 8),
+              // Amount
+              Text(
+                '$amountPrefix${currencyFormat.format(transaction.amountInRupees)}',
+                style: SpendexTheme.titleMedium.copyWith(
+                  color: typeColor,
+                  fontSize: compact ? 13 : 14,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -247,6 +297,7 @@ class TransactionCard extends StatelessWidget {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final dateOnly = DateTime(date.year, date.month, date.day);
+
     final difference = today.difference(dateOnly).inDays;
 
     if (difference == 0) {

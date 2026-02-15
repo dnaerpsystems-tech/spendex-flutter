@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -554,26 +555,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         return _buildInitials(user?.name ?? '?');
                       },
                     )
-                  : Image.network(
-                      _avatarUrl!,
+                  : CachedNetworkImage(
+                      imageUrl: _avatarUrl!,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return _buildInitials(user?.name ?? '?');
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                            strokeWidth: 2,
-                          ),
-                        );
-                      },
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          _buildInitials(user?.name ?? '?'),
                     ),
             )
           : _buildInitials(user?.name ?? '?'),

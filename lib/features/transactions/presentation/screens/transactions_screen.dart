@@ -154,15 +154,23 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         title: const Text('Transactions'),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Iconsax.search_normal),
-            onPressed: _openSearch,
-            tooltip: 'Search transactions',
+          Semantics(
+            label: 'Search transactions',
+            button: true,
+            child: IconButton(
+              icon: const Icon(Iconsax.search_normal),
+              onPressed: _openSearch,
+              tooltip: 'Search transactions',
+            ),
           ),
-          IconButton(
-            icon: const Icon(Iconsax.filter),
-            onPressed: _showFilterSheet,
-            tooltip: 'Filter',
+          Semantics(
+            label: 'Filter transactions',
+            button: true,
+            child: IconButton(
+              icon: const Icon(Iconsax.filter),
+              onPressed: _showFilterSheet,
+              tooltip: 'Filter',
+            ),
           ),
         ],
       ),
@@ -308,10 +316,14 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                 style: SpendexTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: () => context.go(AppRoutes.addTransaction),
-                icon: const Icon(Iconsax.add),
-                label: const Text('Add Transaction'),
+              Semantics(
+                label: 'Add your first transaction',
+                button: true,
+                child: ElevatedButton.icon(
+                  onPressed: () => context.go(AppRoutes.addTransaction),
+                  icon: const Icon(Iconsax.add),
+                  label: const Text('Add Transaction'),
+                ),
               ),
             ],
           ),
@@ -391,9 +403,13 @@ class _FilterChip extends StatelessWidget {
         children: [
           Text(label, style: SpendexTheme.labelMedium.copyWith(color: chipColor)),
           const SizedBox(width: 8),
-          GestureDetector(
-            onTap: onRemove,
-            child: Icon(Icons.close, size: 16, color: chipColor),
+          Semantics(
+            label: 'Remove $label filter',
+            button: true,
+            child: GestureDetector(
+              onTap: onRemove,
+              child: Icon(Icons.close, size: 16, color: chipColor),
+            ),
           ),
         ],
       ),

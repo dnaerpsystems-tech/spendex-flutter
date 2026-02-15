@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/theme.dart';
+import '../../../../shared/widgets/cached_image.dart';
 import '../../data/models/family_member_model.dart';
 import 'role_badge.dart';
 
@@ -89,13 +90,12 @@ class FamilyMemberCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
           ),
           child: member.avatarUrl != null
-              ? ClipRRect(
+              ? CachedImage(
+                  imageUrl: member.avatarUrl!,
+                  width: 52,
+                  height: 52,
                   borderRadius: BorderRadius.circular(SpendexTheme.radiusMd),
-                  child: Image.network(
-                    member.avatarUrl!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => _buildInitials(),
-                  ),
+                  errorWidget: _buildInitials(),
                 )
               : _buildInitials(),
         ),

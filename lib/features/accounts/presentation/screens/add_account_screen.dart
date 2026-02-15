@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -42,6 +44,8 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenAddAccount);
     _setupListeners();
 
     if (isEditing) {
@@ -194,6 +198,16 @@ class _AddAccountScreenState extends ConsumerState<AddAccountScreen> {
     }
 
     if (result != null && mounted) {
+      // Analytics: Track account created
+      if (!isEditing) {
+        AnalyticsService.logEvent(
+          name: AnalyticsEvents.eventAccountCreated,
+          parameters: {
+            'account_type': _selectedType?.value ?? 'unknown',
+            'account_name': _nameController.text.trim(),
+          },
+        );
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(

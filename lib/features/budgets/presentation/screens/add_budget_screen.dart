@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/theme.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -42,6 +44,8 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenAddBudget);
     _isEditMode = widget.budgetId != null;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -221,6 +225,14 @@ class _AddBudgetScreenState extends ConsumerState<AddBudgetScreen> {
       setState(() => _isLoading = false);
 
       if (result != null) {
+        // Analytics: Track budget created
+        if (!_isEditMode) {
+          AnalyticsService.logBudgetCreated(
+            category: _selectedCategory?.name ?? 'uncategorized',
+            amount: amount / 100,
+            period: _selectedPeriod.value,
+          );
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(_isEditMode ? 'Budget updated' : 'Budget created'),

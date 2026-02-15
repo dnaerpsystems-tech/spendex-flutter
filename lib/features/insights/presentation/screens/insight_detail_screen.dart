@@ -10,6 +10,7 @@ import '../../../../shared/widgets/error_state_widget.dart';
 import '../../data/models/insight_model.dart';
 import '../providers/insights_provider.dart';
 import '../widgets/insight_type_icon.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 /// Extension to provide display labels for InsightPriority
 extension InsightPriorityExtension on InsightPriority {
@@ -66,6 +67,8 @@ class _InsightDetailScreenState extends ConsumerState<InsightDetailScreen> {
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: 'insight_detail');
     // Auto-mark as read after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted && !_autoMarkAsReadExecuted) {

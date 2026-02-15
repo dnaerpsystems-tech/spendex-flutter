@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
@@ -91,6 +93,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenSignUp);
     _initAnimations();
     _setupListeners();
     _staggerController.forward();
@@ -550,6 +554,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
         );
 
     if (success && mounted) {
+      // Analytics: Track registration complete
+      AnalyticsService.logSignUp(method: 'email');
       // Navigate to OTP verification
       await context.push(
         '${AppRoutes.otpVerification}?email=${Uri.encodeComponent(_emailController.text.trim())}&purpose=verification',

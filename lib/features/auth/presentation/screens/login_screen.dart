@@ -1,4 +1,6 @@
 import 'dart:math' as math;
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,6 +64,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenLogin);
     _initAnimations();
     _loadRememberedEmail();
     _checkBiometricAvailability();
@@ -195,6 +199,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
         );
 
     if (success && mounted) {
+      // Analytics: Track login success
+      AnalyticsService.logLogin(method: 'email');
       context.go(AppRoutes.home);
     } else {
       _shakeForm();
@@ -208,6 +214,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
     final success = await ref.read(authStateProvider.notifier).loginWithBiometric();
 
     if (success && mounted) {
+      // Analytics: Track login success
+      AnalyticsService.logLogin(method: 'email');
       context.go(AppRoutes.home);
     }
   }
@@ -230,6 +238,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
     }
 
     if (success && mounted) {
+      // Analytics: Track login success
+      AnalyticsService.logLogin(method: 'email');
       context.go(AppRoutes.home);
     } else if (!success && mounted) {
       _shakeForm();

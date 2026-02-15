@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/firebase/analytics_events.dart';
+import '../../../../core/firebase/analytics_service.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
@@ -35,6 +37,8 @@ class _TransactionDetailsScreenState extends ConsumerState<TransactionDetailsScr
   @override
   void initState() {
     super.initState();
+    // Analytics screen view
+    AnalyticsService.logScreenView(screenName: AnalyticsEvents.screenTransactionDetails);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadTransaction();
     });
@@ -216,8 +220,13 @@ class _TransactionDetailsScreenState extends ConsumerState<TransactionDetailsScr
   Future<void> _handleDelete(String transactionId) async {
     Navigator.pop(context); // Close dialog
 
-    final success =
-        await ref.read(transactionsStateProvider.notifier).deleteTransaction(transactionId);
+    // Analytics: Track transaction deleted
+    AnalyticsService.logEvent(
+      name: AnalyticsEvents.eventTransactionDeleted,
+      parameters: {'transaction_id': transactionId},
+    );
+    
+    final success = await ref.read(transactionsStateProvider.notifier).deleteTransaction(transactionId);
 
     if (mounted) {
       if (success) {
