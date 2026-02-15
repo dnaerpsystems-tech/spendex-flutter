@@ -256,4 +256,21 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> setBiometricEnabled({required bool enabled}) async {
     await _secureStorage.save(AppConstants.biometricEnabledKey, enabled.toString());
   }
+
+  @override
+  Future<Either<Failure, AuthResponse>> signInWithSocial(
+    Map<String, dynamic> credentials,
+  ) async {
+    final result = await _remoteDataSource.signInWithSocial(credentials);
+    return result.fold(
+      Left.new,
+      (response) async {
+        await _secureStorage.saveTokens(
+          response.accessToken,
+          response.refreshToken,
+        );
+        return Right(response);
+      },
+    );
+  }
 }

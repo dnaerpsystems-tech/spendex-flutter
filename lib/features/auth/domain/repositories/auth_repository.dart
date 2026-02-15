@@ -73,4 +73,10 @@ abstract class AuthRepository {
 
   /// Set biometric enabled state locally
   Future<void> setBiometricEnabled({required bool enabled});
+
+  // Social Authentication Methods
+  /// Sign in with social provider (Google, Apple, Facebook)
+  Future<Either<Failure, AuthResponse>> signInWithSocial(
+    Map<String, dynamic> credentials,
+  );
 }

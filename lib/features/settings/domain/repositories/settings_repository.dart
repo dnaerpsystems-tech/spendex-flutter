@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
-
 import '../../../../core/errors/failures.dart';
+import '../../data/models/deletion_models.dart';
 import '../../data/models/device_session_model.dart';
 import '../../data/models/security_log_model.dart';
 
@@ -51,4 +50,10 @@ abstract class SettingsRepository {
 
   /// Disable two-factor authentication
   Future<Either<Failure, void>> disableTwoFactor(String code);
+
+  /// Check if user has active subscription before account deletion
+  Future<Either<Failure, ActiveSubscriptionInfo>> checkActiveSubscription();
+
+  /// Delete user account permanently
+  Future<Either<Failure, void>> deleteAccount(DeleteAccountRequest request);
 }

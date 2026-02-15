@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failures.dart';
+import '../models/deletion_models.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../datasources/settings_remote_datasource.dart';
 import '../models/device_session_model.dart';
@@ -86,5 +87,15 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<Either<Failure, void>> disableTwoFactor(String code) {
     return _remoteDataSource.disableTwoFactor(code);
+  }
+
+  @override
+  Future<Either<Failure, ActiveSubscriptionInfo>> checkActiveSubscription() {
+    return _remoteDataSource.checkActiveSubscription();
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAccount(DeleteAccountRequest request) {
+    return _remoteDataSource.deleteAccount(request);
   }
 }

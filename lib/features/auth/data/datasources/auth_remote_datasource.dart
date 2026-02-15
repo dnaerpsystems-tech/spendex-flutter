@@ -26,6 +26,8 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, AuthResponse>> loginWithBiometric(Map<String, dynamic> credential);
   Future<Either<Failure, List<Map<String, dynamic>>>> getBiometricCredentials();
   Future<Either<Failure, bool>> deleteBiometricCredential(String id);
+  /// Sign in with social provider (Google, Apple, Facebook)
+  Future<Either<Failure, AuthResponse>> signInWithSocial(Map<String, dynamic> credentials);
 }
 
 /// Auth Remote Data Source Implementation
@@ -253,6 +255,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return result.fold(
       Left.new,
       (_) => const Right(true),
+    );
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> signInWithSocial(
+    Map<String, dynamic> credentials,
+  ) async {
+    return _apiClient.post<AuthResponse>(
+      ApiEndpoints.socialAuth,
+      data: credentials,
+      fromJson: (json) {
+        if (json == null) {
+          throw Exception('Invalid response: null data');
+        }
+        return AuthResponse.fromJson(json as Map<String, dynamic>);
+      },
     );
   }
 }

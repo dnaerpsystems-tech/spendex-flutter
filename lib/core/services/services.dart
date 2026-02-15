@@ -7,3 +7,4 @@ export 'in_app_review_service.dart';
 export 'paywall_service.dart';
 export 'push_notification_service.dart';
 export 'remote_config_service.dart';
+export 'social_auth_service.dart';

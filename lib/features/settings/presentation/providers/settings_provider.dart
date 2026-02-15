@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/di/injection.dart';
+import '../../data/models/deletion_models.dart';
 import '../../data/models/device_session_model.dart';
 import '../../data/models/security_log_model.dart';
 import '../../domain/repositories/settings_repository.dart';
@@ -15,24 +16,33 @@ class SettingsState extends Equatable {
     this.securityLogs = const [],
     this.isLoading = false,
     this.errorMessage,
+    this.deletionState = DeletionState.idle,
+    this.subscriptionInfo,
   });
 
   final List<DeviceSessionModel> deviceSessions;
   final List<SecurityLogModel> securityLogs;
   final bool isLoading;
   final String? errorMessage;
+  final DeletionState deletionState;
+  final ActiveSubscriptionInfo? subscriptionInfo;
 
   SettingsState copyWith({
     List<DeviceSessionModel>? deviceSessions,
     List<SecurityLogModel>? securityLogs,
     bool? isLoading,
     String? errorMessage,
+    DeletionState? deletionState,
+    ActiveSubscriptionInfo? subscriptionInfo,
+    bool clearSubscriptionInfo = false,
   }) {
     return SettingsState(
       deviceSessions: deviceSessions ?? this.deviceSessions,
       securityLogs: securityLogs ?? this.securityLogs,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,
+      deletionState: deletionState ?? this.deletionState,
+      subscriptionInfo: clearSubscriptionInfo ? null : (subscriptionInfo ?? this.subscriptionInfo),
     );
   }
 
@@ -42,6 +52,8 @@ class SettingsState extends Equatable {
         securityLogs,
         isLoading,
         errorMessage,
+        deletionState,
+        subscriptionInfo,
       ];
 }
 
@@ -231,6 +243,59 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     );
   }
 
+  /// Check active subscription before account deletion
+  Future<ActiveSubscriptionInfo?> checkActiveSubscription() async {
+    state = state.copyWith(deletionState: DeletionState.checkingSubscription);
+    
+    final result = await _repository.checkActiveSubscription();
+    
+    return result.fold(
+      (failure) {
+        state = state.copyWith(
+          deletionState: DeletionState.error,
+          errorMessage: failure.message,
+        );
+        return null;
+      },
+      (info) {
+        state = state.copyWith(
+          deletionState: DeletionState.confirming,
+          subscriptionInfo: info,
+        );
+        return info;
+      },
+    );
+  }
+
+  /// Delete user account
+  Future<bool> deleteAccount(DeleteAccountRequest request) async {
+    state = state.copyWith(deletionState: DeletionState.deleting);
+    
+    final result = await _repository.deleteAccount(request);
+    
+    return result.fold(
+      (failure) {
+        state = state.copyWith(
+          deletionState: DeletionState.error,
+          errorMessage: failure.message,
+        );
+        return false;
+      },
+      (_) {
+        state = state.copyWith(deletionState: DeletionState.success);
+        return true;
+      },
+    );
+  }
+
+  /// Reset deletion state
+  void resetDeletionState() {
+    state = state.copyWith(
+      deletionState: DeletionState.idle,
+      clearSubscriptionInfo: true,
+    );
+  }
+
   /// Clear error message
   void clearError() {
     state = state.copyWith();
@@ -275,4 +340,14 @@ final settingsLoadingProvider = Provider<bool>((ref) {
 /// Provider for settings error message
 final settingsErrorProvider = Provider<String?>((ref) {
   return ref.watch(settingsStateProvider).errorMessage;
+});
+
+/// Provider for deletion state
+final deletionStateProvider = Provider<DeletionState>((ref) {
+  return ref.watch(settingsStateProvider).deletionState;
+});
+
+/// Provider for subscription info (for deletion flow)
+final subscriptionInfoProvider = Provider<ActiveSubscriptionInfo?>((ref) {
+  return ref.watch(settingsStateProvider).subscriptionInfo;
 });

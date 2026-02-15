@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/network/api_client.dart';
+import '../models/deletion_models.dart';
 import '../models/device_session_model.dart';
 import '../models/security_log_model.dart';
 
@@ -52,6 +54,12 @@ abstract class SettingsRemoteDataSource {
 
   /// Disable two-factor authentication
   Future<Either<Failure, void>> disableTwoFactor(String code);
+
+  /// Check if user has active subscription before account deletion
+  Future<Either<Failure, ActiveSubscriptionInfo>> checkActiveSubscription();
+
+  /// Delete user account permanently
+  Future<Either<Failure, void>> deleteAccount(DeleteAccountRequest request);
 }
 
 /// Implementation of settings remote data source
@@ -205,6 +213,27 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
     return _apiClient.post<void>(
       '/user/2fa/disable',
       data: {'code': code},
+    );
+  }
+
+  @override
+  Future<Either<Failure, ActiveSubscriptionInfo>> checkActiveSubscription() async {
+    return _apiClient.get<ActiveSubscriptionInfo>(
+      ApiEndpoints.checkSubscription,
+      fromJson: (data) {
+        if (data is Map<String, dynamic>) {
+          return ActiveSubscriptionInfo.fromJson(data);
+        }
+        return ActiveSubscriptionInfo.none;
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAccount(DeleteAccountRequest request) async {
+    return _apiClient.delete<void>(
+      ApiEndpoints.deleteAccount,
+      data: request.toJson(),
     );
   }
 }

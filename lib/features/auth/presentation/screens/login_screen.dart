@@ -16,6 +16,7 @@ import '../widgets/auth_button.dart';
 import '../widgets/auth_header.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/biometric_button.dart';
+import '../widgets/social_auth_icon_buttons.dart';
 
 /// Login Form Data
 class _LoginFormData {
@@ -208,6 +209,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
     }
   }
 
+  /// Handle social login
+  Future<void> _handleSocialLogin(SocialAuthProviderType provider) async {
+    ref.read(authStateProvider.notifier).clearError();
+    
+    bool success = false;
+    switch (provider) {
+      case SocialAuthProviderType.google:
+        success = await ref.read(authStateProvider.notifier).signInWithGoogle();
+        break;
+      case SocialAuthProviderType.apple:
+        success = await ref.read(authStateProvider.notifier).signInWithApple();
+        break;
+      case SocialAuthProviderType.facebook:
+        success = await ref.read(authStateProvider.notifier).signInWithFacebook();
+        break;
+    }
+
+    if (success && mounted) {
+      context.go(AppRoutes.home);
+    } else if (!success && mounted) {
+      _shakeForm();
+    }
+  }
+
   /// Clear error on input change
   void _onInputChanged(String value) {
     if (ref.read(authStateProvider).error != null) {
@@ -388,43 +413,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
                               ],
                             ),
 
-                          // Social Login Buttons (Placeholder)
-                          Row(
-                            children: [
-                              Expanded(
-                                child: AuthSocialButton(
-                                  text: 'Google',
-                                  icon: Icons.g_mobiledata_rounded,
-                                  onPressed: () {
-                                    // TODO(spendex): Implement Google login.
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Google login coming soon'),
-                                        behavior: SnackBarBehavior.floating,
-                                      ),
-                                    );
-                                  },
-                                  height: 48,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: AuthSocialButton(
-                                  text: 'Apple',
-                                  icon: Icons.apple,
-                                  onPressed: () {
-                                    // TODO(spendex): Implement Apple login.
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Apple login coming soon'),
-                                        behavior: SnackBarBehavior.floating,
-                                      ),
-                                    );
-                                  },
-                                  height: 48,
-                                ),
-                              ),
-                            ],
+                          // Social Login Buttons
+                          SocialAuthSection(
+                            onGooglePressed: authState.isSocialLoading
+                                ? null
+                                : () => _handleSocialLogin(SocialAuthProviderType.google),
+                            onApplePressed: authState.isSocialLoading
+                                ? null
+                                : () => _handleSocialLogin(SocialAuthProviderType.apple),
+                            onFacebookPressed: authState.isSocialLoading
+                                ? null
+                                : () => _handleSocialLogin(SocialAuthProviderType.facebook),
+                            isGoogleLoading: authState.loadingSocialProvider == SocialAuthProviderType.google,
+                            isAppleLoading: authState.loadingSocialProvider == SocialAuthProviderType.apple,
+                            isFacebookLoading: authState.loadingSocialProvider == SocialAuthProviderType.facebook,
+                            showApple: ref.watch(isAppleSignInAvailableProvider),
                           ),
 
                           const SizedBox(height: 32),

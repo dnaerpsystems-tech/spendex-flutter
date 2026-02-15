@@ -13,6 +13,7 @@ import '../widgets/auth_button.dart';
 import '../widgets/auth_header.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/password_strength_indicator.dart';
+import '../widgets/social_auth_icon_buttons.dart';
 
 /// Registration Screen
 ///
@@ -528,6 +529,30 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
     }
   }
 
+  /// Handle social sign-up
+  Future<void> _handleSocialSignUp(SocialAuthProviderType provider) async {
+    ref.read(authStateProvider.notifier).clearError();
+    
+    bool success = false;
+    switch (provider) {
+      case SocialAuthProviderType.google:
+        success = await ref.read(authStateProvider.notifier).signInWithGoogle();
+        break;
+      case SocialAuthProviderType.apple:
+        success = await ref.read(authStateProvider.notifier).signInWithApple();
+        break;
+      case SocialAuthProviderType.facebook:
+        success = await ref.read(authStateProvider.notifier).signInWithFacebook();
+        break;
+    }
+
+    if (success && mounted) {
+      context.go(AppRoutes.home);
+    } else if (!success && mounted) {
+      _triggerShakeAnimation();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
@@ -723,9 +748,32 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
 
                       const SizedBox(height: 24),
 
-                      // Login Link
+                      // Social Sign-Up Section
                       _buildStaggeredChild(
                         index: 7,
+                        child: SocialAuthSection(
+                          dividerText: 'Or sign up with',
+                          onGooglePressed: authState.isSocialLoading
+                              ? null
+                              : () => _handleSocialSignUp(SocialAuthProviderType.google),
+                          onApplePressed: authState.isSocialLoading
+                              ? null
+                              : () => _handleSocialSignUp(SocialAuthProviderType.apple),
+                          onFacebookPressed: authState.isSocialLoading
+                              ? null
+                              : () => _handleSocialSignUp(SocialAuthProviderType.facebook),
+                          isGoogleLoading: authState.loadingSocialProvider == SocialAuthProviderType.google,
+                          isAppleLoading: authState.loadingSocialProvider == SocialAuthProviderType.apple,
+                          isFacebookLoading: authState.loadingSocialProvider == SocialAuthProviderType.facebook,
+                          showApple: ref.watch(isAppleSignInAvailableProvider),
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Login Link
+                      _buildStaggeredChild(
+                        index: 8,
                         child: AuthFooter(
                           text: 'Already have an account? ',
                           linkText: 'Sign In',

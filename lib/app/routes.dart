@@ -58,7 +58,9 @@ import '../features/settings/presentation/screens/preferences_screen.dart';
 import '../features/settings/presentation/screens/profile_screen.dart';
 import '../features/settings/presentation/screens/security_settings_screen.dart';
 import '../features/settings/presentation/screens/set_pin_screen.dart';
+import '../features/settings/presentation/screens/delete_account_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
+import '../features/support/presentation/screens/support_screen.dart';
 import '../features/subscription/presentation/screens/screens.dart';
 import '../features/transactions/presentation/screens/add_transaction_screen.dart';
 import '../features/transactions/presentation/screens/transaction_details_screen.dart';
@@ -131,6 +133,8 @@ class AppRoutes {
   static const String subscriptionUpi = '/subscription/upi';
   static const String subscriptionInvoices = '/subscription/invoices';
   static const String settings = '/settings';
+  static const String deleteAccount = '/delete-account';
+  static const String support = '/support';
   static const String profile = '/profile';
   static const String notifications = '/notifications';
 
@@ -489,6 +493,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.profile,
         builder: (context, state) => const ProfileScreen(),
+      ),
+      // Delete Account Route
+      GoRoute(
+        path: AppRoutes.deleteAccount,
+        builder: (context, state) => const DeleteAccountScreen(),
+      ),
+      // Support Route
+      GoRoute(
+        path: AppRoutes.support,
+        builder: (context, state) => const SupportScreen(),
       ),
       GoRoute(
         path: '/profile/edit',

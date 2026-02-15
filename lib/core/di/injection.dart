@@ -82,6 +82,7 @@ import '../security/auto_lock_service.dart';
 import '../security/biometric_service.dart';
 import '../security/pin_service.dart';
 import '../services/paywall_service.dart';
+import '../services/social_auth_service.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
 
@@ -173,6 +174,9 @@ void _registerCore() {
     authInterceptor,
     LogInterceptor(responseBody: true, requestBody: true),
   ]);
+
+  // Social Auth Service
+  getIt.registerLazySingleton<SocialAuthService>(() => SocialAuthService());
 
   // API Client
   getIt.registerLazySingleton<ApiClient>(
