@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../app/theme.dart';
-import '../../data/models/ticket_model.dart';
 import '../../data/datasources/support_local_datasource.dart';
+import '../../data/models/ticket_model.dart';
 
 /// Create Ticket Screen
 ///
@@ -57,7 +59,9 @@ class _CreateTicketScreenState extends ConsumerState<CreateTicketScreen> {
   static String? _cachedDeviceInfo;
 
   bool get _canSubmit {
-    if (_lastSubmissionTime == null) return true;
+    if (_lastSubmissionTime == null) {
+      return true;
+    }
     return DateTime.now().difference(_lastSubmissionTime!) > _minSubmissionInterval;
   }
 
@@ -169,7 +173,9 @@ class _CreateTicketScreenState extends ConsumerState<CreateTicketScreen> {
   }
 
   Future<void> _submitTicket() async {
-    if (_formKey.currentState?.validate() != true) return;
+    if (_formKey.currentState?.validate() != true) {
+      return;
+    }
 
     // Check rate limiting
     if (_canSubmit == false) {
@@ -228,7 +234,7 @@ Ticket ID: ${ticket.id}
 Submitted via: Spendex App
 ''');
 
-      final Uri emailUri = Uri.parse(
+      final emailUri = Uri.parse(
         'mailto:support@spendex.in?subject=$subject&body=$body',
       );
 
@@ -276,7 +282,7 @@ Submitted via: Spendex App
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: ${e.toString()}'),
+            content: Text('Error: $e'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: SpendexColors.expense,
           ),
@@ -384,18 +390,18 @@ Submitted via: Spendex App
                   ),
                 ),
                 const SizedBox(height: 8),
-                Container(
+                DecoratedBox(
                   decoration: BoxDecoration(
                     color: cardColor,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: borderColor),
                   ),
                   child: DropdownButtonFormField<TicketCategory>(
-                    value: _selectedCategory,
+                    initialValue: _selectedCategory,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
+                          horizontal: 16, vertical: 12,),
                       prefixIcon: Icon(Iconsax.category, color: secondaryTextColor),
                     ),
                     dropdownColor: cardColor,

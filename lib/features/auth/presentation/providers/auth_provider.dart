@@ -385,7 +385,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(
       isSocialLoading: true,
       loadingSocialProvider: SocialAuthProviderType.google,
-      error: null,
     );
 
     final credentialsResult = await _socialAuthService.signInWithGoogle();
@@ -445,7 +444,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(
       isSocialLoading: true,
       loadingSocialProvider: SocialAuthProviderType.apple,
-      error: null,
     );
 
     final credentialsResult = await _socialAuthService.signInWithApple();
@@ -498,7 +496,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(
       isSocialLoading: true,
       loadingSocialProvider: SocialAuthProviderType.facebook,
-      error: null,
     );
 
     final credentialsResult = await _socialAuthService.signInWithFacebook();
@@ -689,7 +686,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void clearError() {
-    state = state.copyWith(error: null);
+    state = state.copyWith();
   }
 
   void updateUser(UserModel user) {

@@ -175,13 +175,12 @@ void _registerCore() {
     LogInterceptor(responseBody: true, requestBody: true),
   ]);
 
-  // Social Auth Service
-  getIt.registerLazySingleton<SocialAuthService>(() => SocialAuthService());
-
-  // API Client
-  getIt.registerLazySingleton<ApiClient>(
-    () => ApiClient(getIt<Dio>()),
-  );
+  // Social Auth Service & API Client
+  getIt
+    ..registerLazySingleton<SocialAuthService>(SocialAuthService.new)
+    ..registerLazySingleton<ApiClient>(
+      () => ApiClient(getIt<Dio>()),
+    );
 }
 
 /// Register security services (PIN, Auto-Lock).

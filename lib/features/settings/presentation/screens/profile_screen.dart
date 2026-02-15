@@ -103,10 +103,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Icon(Iconsax.danger, color: Colors.red, size: 20),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         'Danger Zone',
                         style: TextStyle(

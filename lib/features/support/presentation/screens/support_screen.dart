@@ -6,8 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
-import '../../data/models/ticket_model.dart';
 import '../../data/datasources/support_local_datasource.dart';
+import '../../data/models/ticket_model.dart';
 
 /// Help & Support Screen
 ///
@@ -56,7 +56,7 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
     String subject = '',
     String body = '',
   }) async {
-    final Uri emailUri = Uri(
+    final emailUri = Uri(
       scheme: 'mailto',
       path: 'support@spendex.in',
       query: Uri.encodeFull('subject=$subject&body=$body'),

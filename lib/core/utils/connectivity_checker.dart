@@ -1,7 +1,9 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 /// Utility class for checking network connectivity.
-class ConnectivityChecker {
+abstract final class ConnectivityChecker {
   static final Connectivity _connectivity = Connectivity();
 
   /// Check if device has network connectivity

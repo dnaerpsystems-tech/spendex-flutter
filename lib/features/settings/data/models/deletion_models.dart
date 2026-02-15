@@ -125,7 +125,9 @@ class ActiveSubscriptionInfo extends Equatable {
   final String? status;
 
   String get formattedAmount {
-    if (amountPaid == null) return 'N/A';
+    if (amountPaid == null) {
+      return 'N/A';
+    }
     return '₹${amountPaid!.toStringAsFixed(2)}';
   }
 

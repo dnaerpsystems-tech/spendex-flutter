@@ -1,3 +1,5 @@
+// ignore_for_file: unawaited_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,8 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/routes.dart';
 import '../../../../app/theme.dart';
-import '../../data/models/ticket_model.dart';
 import '../../data/datasources/support_local_datasource.dart';
+import '../../data/models/ticket_model.dart';
 
 /// Ticket List Screen
 ///
@@ -58,7 +60,9 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
   }
 
   List<Ticket> get _filteredTickets {
-    if (_filterStatus == null) return _tickets;
+    if (_filterStatus == null) {
+      return _tickets;
+    }
     return _tickets.where((t) => t.status == _filterStatus).toList();
   }
 
@@ -91,7 +95,6 @@ class _TicketListScreenState extends ConsumerState<TicketListScreen> {
             },
             itemBuilder: (context) => [
               PopupMenuItem(
-                value: null,
                 child: Row(
                   children: [
                     Icon(

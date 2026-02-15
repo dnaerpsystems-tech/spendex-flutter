@@ -40,7 +40,7 @@ class _AccountRecoveryScreenState extends ConsumerState<AccountRecoveryScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to recover account: ${e.toString()}'),
+            content: Text('Failed to recover account: $e'),
             backgroundColor: SpendexColors.expense,
           ),
         );
@@ -72,7 +72,6 @@ class _AccountRecoveryScreenState extends ConsumerState<AccountRecoveryScreen> {
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 40),
 

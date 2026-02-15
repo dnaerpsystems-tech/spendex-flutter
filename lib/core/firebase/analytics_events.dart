@@ -578,49 +578,49 @@ class AnalyticsEvents {
   // Social Auth Events
   // ============================================================
   /// Google social login initiated
-  static const String eventSocialLoginGoogle = "social_login_google";
+  static const String eventSocialLoginGoogle = 'social_login_google';
 
   /// Apple social login initiated
-  static const String eventSocialLoginApple = "social_login_apple";
+  static const String eventSocialLoginApple = 'social_login_apple';
 
   /// Facebook social login initiated
-  static const String eventSocialLoginFacebook = "social_login_facebook";
+  static const String eventSocialLoginFacebook = 'social_login_facebook';
 
   /// Social login successful
-  static const String eventSocialLoginSuccess = "social_login_success";
+  static const String eventSocialLoginSuccess = 'social_login_success';
 
   /// Social login failed
-  static const String eventSocialLoginFailed = "social_login_failed";
+  static const String eventSocialLoginFailed = 'social_login_failed';
 
   // ============================================================
   // Delete Account Events
   // ============================================================
   /// Delete account flow started
-  static const String eventDeleteAccountStarted = "delete_account_started";
+  static const String eventDeleteAccountStarted = 'delete_account_started';
 
   /// Delete account confirmed by user
-  static const String eventDeleteAccountConfirmed = "delete_account_confirmed";
+  static const String eventDeleteAccountConfirmed = 'delete_account_confirmed';
 
   /// Delete account completed successfully
-  static const String eventDeleteAccountCompleted = "delete_account_completed";
+  static const String eventDeleteAccountCompleted = 'delete_account_completed';
 
   /// Delete account cancelled by user
-  static const String eventDeleteAccountCancelled = "delete_account_cancelled";
+  static const String eventDeleteAccountCancelled = 'delete_account_cancelled';
 
   // ============================================================
   // Support Events
   // ============================================================
   /// Support screen viewed
-  static const String eventSupportScreenViewed = "support_screen_viewed";
+  static const String eventSupportScreenViewed = 'support_screen_viewed';
 
   /// Support ticket created
-  static const String eventSupportTicketCreated = "support_ticket_created";
+  static const String eventSupportTicketCreated = 'support_ticket_created';
 
   /// FAQ viewed
-  static const String eventSupportFaqViewed = "support_faq_viewed";
+  static const String eventSupportFaqViewed = 'support_faq_viewed';
 
   /// Contact support tapped
-  static const String eventSupportContactTapped = "support_contact_tapped";
+  static const String eventSupportContactTapped = 'support_contact_tapped';
 
   // ============================================================
   // User Properties

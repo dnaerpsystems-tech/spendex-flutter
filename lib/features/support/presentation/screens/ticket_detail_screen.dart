@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/theme.dart';
-import '../../data/models/ticket_model.dart';
 import '../../data/datasources/support_local_datasource.dart';
+import '../../data/models/ticket_model.dart';
 
 /// Ticket Detail Screen
 ///
@@ -19,8 +19,7 @@ import '../../data/datasources/support_local_datasource.dart';
 /// - Option to add follow-up via email
 class TicketDetailScreen extends ConsumerStatefulWidget {
   const TicketDetailScreen({
-    super.key,
-    required this.ticketId,
+    required this.ticketId, super.key,
   });
 
   final String ticketId;
@@ -65,7 +64,9 @@ class _TicketDetailScreenState extends ConsumerState<TicketDetailScreen> {
   }
 
   Future<void> _sendFollowUpEmail() async {
-    if (_ticket == null) return;
+    if (_ticket == null) {
+      return;
+    }
 
     final subject = Uri.encodeComponent(
       'Re: [Spendex Support] ${_ticket!.category.label}: ${_ticket!.subject}',
@@ -80,7 +81,7 @@ Priority: ${_ticket!.priority.label}
 Created: ${DateFormat.yMMMd().add_jm().format(_ticket!.createdAt)}
 ''');
 
-    final Uri emailUri = Uri.parse(
+    final emailUri = Uri.parse(
       'mailto:support@spendex.in?subject=$subject&body=$body',
     );
 
@@ -123,7 +124,7 @@ Created: ${DateFormat.yMMMd().add_jm().format(_ticket!.createdAt)}
       ),
     );
 
-    if (confirm == true && mounted) {
+    if ((confirm ?? false) && mounted) {
       await SupportLocalDataSource.instance.deleteTicket(widget.ticketId);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -138,7 +139,9 @@ Created: ${DateFormat.yMMMd().add_jm().format(_ticket!.createdAt)}
   }
 
   void _copyTicketId() {
-    if (_ticket == null) return;
+    if (_ticket == null) {
+      return;
+    }
     Clipboard.setData(ClipboardData(text: _ticket!.id));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -246,7 +249,7 @@ Created: ${DateFormat.yMMMd().add_jm().format(_ticket!.createdAt)}
                   ],
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'delete',
                 child: Row(
                   children: [
@@ -255,7 +258,7 @@ Created: ${DateFormat.yMMMd().add_jm().format(_ticket!.createdAt)}
                       size: 20,
                       color: SpendexColors.expense,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(
                       'Delete Ticket',
                       style: TextStyle(color: SpendexColors.expense),
@@ -483,7 +486,7 @@ Created: ${DateFormat.yMMMd().add_jm().format(_ticket!.createdAt)}
                           textColor,
                           secondaryTextColor,
                           cardColor,
-                        )),
+                        ),),
                   ],
                 ),
               ),

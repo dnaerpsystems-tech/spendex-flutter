@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_constructors_over_static_methods
+
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/ticket_model.dart';
@@ -26,10 +28,12 @@ class SupportLocalDataSource {
   Future<List<Ticket>> getTickets() async {
     await _ensureInitialized();
     final jsonString = _prefs!.getString(_ticketsKey);
-    if (jsonString == null) return [];
+    if (jsonString == null) {
+      return [];
+    }
 
     try {
-      final List<dynamic> jsonList = json.decode(jsonString) as List<dynamic>;
+      final jsonList = json.decode(jsonString) as List<dynamic>;
       return jsonList
           .map((e) => Ticket.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -73,7 +77,9 @@ class SupportLocalDataSource {
     final tickets = await getTickets();
     final index = tickets.indexWhere((t) => t.id == ticket.id);
 
-    if (index == -1) return null;
+    if (index == -1) {
+      return null;
+    }
 
     tickets[index] = ticket;
 

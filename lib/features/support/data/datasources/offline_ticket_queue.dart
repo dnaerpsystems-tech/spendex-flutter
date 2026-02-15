@@ -1,13 +1,15 @@
+// ignore_for_file: prefer_constructors_over_static_methods
+
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/ticket_model.dart';
 
 /// Queue for managing offline support tickets that need to be synced when online.
 class OfflineTicketQueue {
-  static const String _queueKey = 'offline_ticket_queue';
-  static OfflineTicketQueue? _instance;
 
   OfflineTicketQueue._();
+  static const String _queueKey = 'offline_ticket_queue';
+  static OfflineTicketQueue? _instance;
 
   static OfflineTicketQueue get instance {
     _instance ??= OfflineTicketQueue._();
@@ -40,7 +42,7 @@ class OfflineTicketQueue {
     }
 
     try {
-      final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
+      final jsonList = jsonDecode(jsonString) as List<dynamic>;
       return jsonList
           .map((json) => Ticket.fromJson(json as Map<String, dynamic>))
           .toList();

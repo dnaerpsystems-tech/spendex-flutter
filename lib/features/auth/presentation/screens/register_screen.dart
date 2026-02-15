@@ -27,10 +27,10 @@ import '../widgets/social_auth_icon_buttons.dart';
 /// - Back button with confirmation
 /// Debouncer utility class for rate-limiting validation calls
 class _Debouncer {
-  final Duration delay;
-  Timer? _timer;
 
   _Debouncer({required this.delay});
+  final Duration delay;
+  Timer? _timer;
 
   void run(VoidCallback action) {
     _timer?.cancel();
@@ -563,7 +563,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> with TickerProv
   Future<void> _handleSocialSignUp(SocialAuthProviderType provider) async {
     ref.read(authStateProvider.notifier).clearError();
     
-    bool success = false;
+    var success = false;
     switch (provider) {
       case SocialAuthProviderType.google:
         success = await ref.read(authStateProvider.notifier).signInWithGoogle();

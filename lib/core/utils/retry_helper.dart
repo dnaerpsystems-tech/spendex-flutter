@@ -1,8 +1,10 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'dart:async';
 import 'dart:math';
 
 /// Utility class for retrying async operations with exponential backoff.
-class RetryHelper {
+abstract final class RetryHelper {
   /// Executes an async operation with exponential backoff retry logic.
   ///
   /// [operation] - The async operation to execute
@@ -17,8 +19,8 @@ class RetryHelper {
     Duration maxDelay = const Duration(seconds: 30),
     bool Function(Exception)? retryIf,
   }) async {
-    int attempts = 0;
-    Duration currentDelay = initialDelay;
+    var attempts = 0;
+    var currentDelay = initialDelay;
 
     while (true) {
       try {

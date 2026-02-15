@@ -332,7 +332,6 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     final request = DeleteAccountRequest(
       verificationToken: token,
       confirmationText: confirmationText,
-      cancelSubscription: true,
       reason: reason,
     );
 

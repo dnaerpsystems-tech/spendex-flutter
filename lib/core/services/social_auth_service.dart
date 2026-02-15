@@ -119,7 +119,7 @@ class SocialAuthService {
         accessToken: auth.accessToken,
         email: account.email,
         name: account.displayName,
-      ));
+      ),);
     } on TimeoutException {
       AppLogger.e('Google Sign-In: Timeout');
       return const Left(
@@ -160,7 +160,7 @@ class SocialAuthService {
         nonce: hashedNonce,
       ).timeout(_authTimeout, onTimeout: () {
         throw TimeoutException('Apple Sign-In timed out');
-      });
+      },);
 
       final idToken = credential.identityToken;
       if (idToken == null) {
@@ -187,7 +187,7 @@ class SocialAuthService {
         email: credential.email,
         name: fullName,
         nonce: rawNonce, // Send raw nonce to backend for verification
-      ));
+      ),);
     } on TimeoutException {
       AppLogger.e('Apple Sign-In: Timeout');
       return const Left(
@@ -228,7 +228,7 @@ class SocialAuthService {
           idToken: existingToken.tokenString,
           email: userData['email'] as String?,
           name: userData['name'] as String?,
-        ));
+        ),);
       }
 
       // Perform fresh login
@@ -236,7 +236,7 @@ class SocialAuthService {
           .login(permissions: ['email', 'public_profile']).timeout(
         _authTimeout,
         onTimeout: () {
-          return LoginResult(status: LoginStatus.failed, message: 'Timeout');
+          return LoginResult(status: LoginStatus.failed, message: 'Timeout',);
         },
       );
 
@@ -270,7 +270,7 @@ class SocialAuthService {
         idToken: accessToken.tokenString,
         email: userData['email'] as String?,
         name: userData['name'] as String?,
-      ));
+      ),);
     } on TimeoutException {
       AppLogger.e('Facebook Sign-In: Timeout');
       return const Left(

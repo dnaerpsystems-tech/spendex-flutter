@@ -237,7 +237,12 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
     return _apiClient.post<VerifyPasswordResponse>(
       ApiEndpoints.verifyPassword,
       data: VerifyPasswordRequest(password: password).toJson(),
-      fromJson: (data) { if (data is Map<String, dynamic>) { return VerifyPasswordResponse.fromJson(data); } return const VerifyPasswordResponse(verified: false); },
+      fromJson: (data) {
+        if (data is Map<String, dynamic>) {
+          return VerifyPasswordResponse.fromJson(data);
+        }
+        return const VerifyPasswordResponse(verified: false);
+      },
     );
   }
 

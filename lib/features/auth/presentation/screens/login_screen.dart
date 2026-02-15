@@ -216,7 +216,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
   Future<void> _handleSocialLogin(SocialAuthProviderType provider) async {
     ref.read(authStateProvider.notifier).clearError();
     
-    bool success = false;
+    var success = false;
     switch (provider) {
       case SocialAuthProviderType.google:
         success = await ref.read(authStateProvider.notifier).signInWithGoogle();

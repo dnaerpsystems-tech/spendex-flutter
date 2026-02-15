@@ -229,7 +229,7 @@ class SettingsScreen extends ConsumerWidget {
             _SettingsTile(
               icon: Iconsax.message_question,
               title: l10n.helpAndSupport,
-              subtitle: "FAQs, contact us, report issues",
+              subtitle: 'FAQs, contact us, report issues',
               onTap: () => context.push(AppRoutes.support),
             ),
             _SettingsTile(

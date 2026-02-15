@@ -152,15 +152,15 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: Row(
+            title: const Row(
               children: [
                 Icon(
                   Iconsax.danger,
                   color: SpendexColors.expense,
                   size: 24,
                 ),
-                const SizedBox(width: 12),
-                const Text('Final Confirmation'),
+                SizedBox(width: 12),
+                Text('Final Confirmation'),
               ],
             ),
             content: const Text(
@@ -201,7 +201,9 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
 
     // Show final confirmation dialog
     final confirmed = await _showFinalConfirmationDialog();
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     final success = await ref.read(settingsStateProvider.notifier).deleteAccount(
           _confirmController.text,
@@ -309,7 +311,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Iconsax.warning_2,
             color: SpendexColors.expense,
             size: 20,
@@ -324,7 +326,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
             ),
           ),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Iconsax.close_circle,
               color: SpendexColors.expense,
               size: 20,
@@ -345,7 +347,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
+          const CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(SpendexColors.expense),
           ),
           const SizedBox(height: 24),
@@ -730,7 +732,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Text(
-                  'You don\'t have any active subscriptions. You can proceed with account deletion.',
+                  "You don't have any active subscriptions. You can proceed with account deletion.",
                   style: SpendexTheme.bodyMedium.copyWith(
                     color: secondaryTextColor,
                   ),
@@ -835,7 +837,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
             const SizedBox(height: 32),
 
             // Password Input
-            Container(
+            DecoratedBox(
               decoration: BoxDecoration(
                 color: cardColor,
                 borderRadius: BorderRadius.circular(12),
@@ -1023,7 +1025,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
               children: [
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Iconsax.danger,
                       color: SpendexColors.expense,
                       size: 20,
@@ -1065,7 +1067,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
           ),
           const SizedBox(height: 12),
 
-          Container(
+          DecoratedBox(
             decoration: BoxDecoration(
               color: cardColor,
               borderRadius: BorderRadius.circular(12),

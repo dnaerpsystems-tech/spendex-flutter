@@ -1,3 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: unawaited_futures
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -43,9 +48,9 @@ class _LinkedAccountsScreenState extends ConsumerState<LinkedAccountsScreen> {
     final user = ref.read(currentUserProvider);
     if (user != null) {
       setState(() {
-        _isGoogleLinked = false; // TODO: Implement when backend supports social linking
-        _isAppleLinked = false; // TODO: Implement when backend supports social linking
-        _isFacebookLinked = false; // TODO: Implement when backend supports social linking
+        _isGoogleLinked = false; // TODO(dev): Implement when backend supports social linking
+        _isAppleLinked = false; // TODO(dev): Implement when backend supports social linking
+        _isFacebookLinked = false; // TODO(dev): Implement when backend supports social linking
       });
     }
   }
@@ -54,21 +59,29 @@ class _LinkedAccountsScreenState extends ConsumerState<LinkedAccountsScreen> {
     setState(() => _isLinkingGoogle = true);
     try {
       final result = await _socialAuthService.signInWithGoogle();
-      result.fold(
+      unawaited(result.fold(
         (failure) {
+          if (!mounted) {
+      return;
+    }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(failure.message), backgroundColor: SpendexColors.expense),
           );
+          return null;
         },
-        (credential) async {
+        (credential) {
           // Send to backend to link account
-          // await ref.read(authStateProvider.notifier).linkSocialAccount('google', credential.accessToken);
+          // ref.read(authStateProvider.notifier).linkSocialAccount('google', credential.accessToken);
+          if (!mounted) {
+      return;
+    }
           setState(() => _isGoogleLinked = true);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Google account linked successfully'), backgroundColor: SpendexColors.income),
           );
+          return null;
         },
-      );
+      ),);
     } finally {
       setState(() => _isLinkingGoogle = false);
     }
@@ -76,7 +89,9 @@ class _LinkedAccountsScreenState extends ConsumerState<LinkedAccountsScreen> {
 
   Future<void> _unlinkGoogle() async {
     final confirm = await _showUnlinkConfirmation('Google');
-    if (confirm != true) return;
+    if (confirm != true) {
+      return;
+    }
 
     setState(() => _isLinkingGoogle = true);
     try {
@@ -114,7 +129,9 @@ class _LinkedAccountsScreenState extends ConsumerState<LinkedAccountsScreen> {
 
   Future<void> _unlinkApple() async {
     final confirm = await _showUnlinkConfirmation('Apple');
-    if (confirm != true) return;
+    if (confirm != true) {
+      return;
+    }
 
     setState(() => _isLinkingApple = true);
     try {
@@ -151,7 +168,9 @@ class _LinkedAccountsScreenState extends ConsumerState<LinkedAccountsScreen> {
 
   Future<void> _unlinkFacebook() async {
     final confirm = await _showUnlinkConfirmation('Facebook');
-    if (confirm != true) return;
+    if (confirm != true) {
+      return;
+    }
 
     setState(() => _isLinkingFacebook = true);
     try {
@@ -256,7 +275,7 @@ class _LinkedAccountsScreenState extends ConsumerState<LinkedAccountsScreen> {
             ),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   Iconsax.info_circle,
                   color: SpendexColors.primary,
                 ),
@@ -279,12 +298,6 @@ class _LinkedAccountsScreenState extends ConsumerState<LinkedAccountsScreen> {
 }
 
 class _AccountTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final bool isLinked;
-  final bool isLoading;
-  final VoidCallback onLink;
-  final VoidCallback onUnlink;
 
   const _AccountTile({
     required this.icon,
@@ -294,6 +307,12 @@ class _AccountTile extends StatelessWidget {
     required this.onLink,
     required this.onUnlink,
   });
+  final IconData icon;
+  final String title;
+  final bool isLinked;
+  final bool isLoading;
+  final VoidCallback onLink;
+  final VoidCallback onUnlink;
 
   @override
   Widget build(BuildContext context) {
