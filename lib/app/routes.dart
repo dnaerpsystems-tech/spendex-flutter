@@ -184,7 +184,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    observers: [AnalyticsService.observer],
+    observers: [if (AnalyticsService.observer != null) AnalyticsService.observer!],
     debugLogDiagnostics: true,
     initialLocation: AppRoutes.splash,
     refreshListenable: authNotifier,
