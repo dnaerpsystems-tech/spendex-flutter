@@ -171,9 +171,8 @@ class _AutoLockWrapperState extends ConsumerState<AutoLockWrapper> with WidgetsB
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: _recordActivity,
-      onPanDown: (_) => _recordActivity(),
-      onPanUpdate: (_) => _recordActivity(),
       onScaleStart: (_) => _recordActivity(),
+      onScaleUpdate: (_) => _recordActivity(),
       child: Listener(
         // Use Listener for lower-level pointer events
         onPointerDown: (_) => _recordActivity(),
