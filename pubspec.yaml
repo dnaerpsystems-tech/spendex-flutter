@@ -48,7 +48,7 @@ dependencies:
   hive: any
   hive_flutter: ^1.1.0
   iconsax: ^0.0.8
-  image_cropper: ^8.0.0
+  image_cropper: ^11.0.0
   image_picker: ^1.0.7
   in_app_review: ^2.0.8
   infinite_scroll_pagination: ^4.0.0
