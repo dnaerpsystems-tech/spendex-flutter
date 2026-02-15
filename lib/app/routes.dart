@@ -358,7 +358,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AddCategoryScreen(),
       ),
       GoRoute(
-        path: '${AppRoutes.categoryDetails}/:id',
+        path: AppRoutes.categoryDetails,
         builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
           return CategoryDetailsScreen(categoryId: id);
