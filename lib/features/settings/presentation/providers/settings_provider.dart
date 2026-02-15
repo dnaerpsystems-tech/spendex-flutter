@@ -18,6 +18,8 @@ class SettingsState extends Equatable {
     this.errorMessage,
     this.deletionState = DeletionState.idle,
     this.subscriptionInfo,
+    this.verificationToken,
+    this.deletionError,
   });
 
   final List<DeviceSessionModel> deviceSessions;
@@ -26,6 +28,8 @@ class SettingsState extends Equatable {
   final String? errorMessage;
   final DeletionState deletionState;
   final ActiveSubscriptionInfo? subscriptionInfo;
+  final String? verificationToken;
+  final String? deletionError;
 
   SettingsState copyWith({
     List<DeviceSessionModel>? deviceSessions,
@@ -34,7 +38,11 @@ class SettingsState extends Equatable {
     String? errorMessage,
     DeletionState? deletionState,
     ActiveSubscriptionInfo? subscriptionInfo,
+    String? verificationToken,
+    String? deletionError,
     bool clearSubscriptionInfo = false,
+    bool clearVerificationToken = false,
+    bool clearDeletionError = false,
   }) {
     return SettingsState(
       deviceSessions: deviceSessions ?? this.deviceSessions,
@@ -43,6 +51,8 @@ class SettingsState extends Equatable {
       errorMessage: errorMessage,
       deletionState: deletionState ?? this.deletionState,
       subscriptionInfo: clearSubscriptionInfo ? null : (subscriptionInfo ?? this.subscriptionInfo),
+      verificationToken: clearVerificationToken ? null : (verificationToken ?? this.verificationToken),
+      deletionError: clearDeletionError ? null : (deletionError ?? this.deletionError),
     );
   }
 
@@ -54,6 +64,8 @@ class SettingsState extends Equatable {
         errorMessage,
         deletionState,
         subscriptionInfo,
+        verificationToken,
+        deletionError,
       ];
 }
 
@@ -91,7 +103,6 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
         return false;
       },
       (_) {
-        // Remove from local state
         final updatedSessions =
             state.deviceSessions.where((session) => session.id != sessionId).toList();
         state = state.copyWith(deviceSessions: updatedSessions);
@@ -110,7 +121,6 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
         return false;
       },
       (_) {
-        // Keep only current session
         final updatedSessions = state.deviceSessions.where((session) => session.isCurrent).toList();
         state = state.copyWith(deviceSessions: updatedSessions);
         return true;
@@ -244,40 +254,95 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   }
 
   /// Check active subscription before account deletion
-  Future<ActiveSubscriptionInfo?> checkActiveSubscription() async {
-    state = state.copyWith(deletionState: DeletionState.checkingSubscription);
-    
+  Future<void> checkActiveSubscription() async {
+    state = state.copyWith(
+      deletionState: DeletionState.checkingSubscription,
+      clearDeletionError: true,
+    );
+
     final result = await _repository.checkActiveSubscription();
-    
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          deletionState: DeletionState.error,
+          deletionError: failure.message,
+        );
+      },
+      (subscription) {
+        state = state.copyWith(
+          deletionState: DeletionState.idle,
+          subscriptionInfo: subscription,
+        );
+      },
+    );
+  }
+
+  /// Verify password for account deletion
+  Future<bool> verifyPasswordForDeletion(String password) async {
+    state = state.copyWith(
+      deletionState: DeletionState.verifyingPassword,
+      clearDeletionError: true,
+    );
+
+    final result = await _repository.verifyPassword(password);
+
     return result.fold(
       (failure) {
         state = state.copyWith(
           deletionState: DeletionState.error,
-          errorMessage: failure.message,
+          deletionError: failure.message,
         );
-        return null;
+        return false;
       },
-      (info) {
-        state = state.copyWith(
-          deletionState: DeletionState.confirming,
-          subscriptionInfo: info,
-        );
-        return info;
+      (response) {
+        if (response.verified && response.verificationToken != null) {
+          state = state.copyWith(
+            deletionState: DeletionState.confirming,
+            verificationToken: response.verificationToken,
+          );
+          return true;
+        } else {
+          state = state.copyWith(
+            deletionState: DeletionState.error,
+            deletionError: 'Invalid password. Please try again.',
+          );
+          return false;
+        }
       },
     );
   }
 
   /// Delete user account
-  Future<bool> deleteAccount(DeleteAccountRequest request) async {
-    state = state.copyWith(deletionState: DeletionState.deleting);
-    
+  Future<bool> deleteAccount(String confirmationText, {String? reason}) async {
+    final token = state.verificationToken;
+    if (token == null) {
+      state = state.copyWith(
+        deletionState: DeletionState.error,
+        deletionError: 'Please verify your password first.',
+      );
+      return false;
+    }
+
+    state = state.copyWith(
+      deletionState: DeletionState.deleting,
+      clearDeletionError: true,
+    );
+
+    final request = DeleteAccountRequest(
+      verificationToken: token,
+      confirmationText: confirmationText,
+      cancelSubscription: true,
+      reason: reason,
+    );
+
     final result = await _repository.deleteAccount(request);
-    
+
     return result.fold(
       (failure) {
         state = state.copyWith(
           deletionState: DeletionState.error,
-          errorMessage: failure.message,
+          deletionError: failure.message,
         );
         return false;
       },
@@ -293,7 +358,14 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     state = state.copyWith(
       deletionState: DeletionState.idle,
       clearSubscriptionInfo: true,
+      clearVerificationToken: true,
+      clearDeletionError: true,
     );
+  }
+
+  /// Clear deletion error
+  void clearDeletionError() {
+    state = state.copyWith(clearDeletionError: true);
   }
 
   /// Clear error message
@@ -350,4 +422,14 @@ final deletionStateProvider = Provider<DeletionState>((ref) {
 /// Provider for subscription info (for deletion flow)
 final subscriptionInfoProvider = Provider<ActiveSubscriptionInfo?>((ref) {
   return ref.watch(settingsStateProvider).subscriptionInfo;
+});
+
+/// Provider for deletion error
+final deletionErrorProvider = Provider<String?>((ref) {
+  return ref.watch(settingsStateProvider).deletionError;
+});
+
+/// Provider for verification token
+final verificationTokenProvider = Provider<String?>((ref) {
+  return ref.watch(settingsStateProvider).verificationToken;
 });

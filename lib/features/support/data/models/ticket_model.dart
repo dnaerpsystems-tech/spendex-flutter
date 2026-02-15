@@ -39,6 +39,21 @@ enum TicketCategory {
         return '❓';
     }
   }
+
+  Color get color {
+    switch (this) {
+      case TicketCategory.bugReport:
+        return const Color(0xFFF44336); // Red
+      case TicketCategory.featureRequest:
+        return const Color(0xFF6C5CE7); // Purple
+      case TicketCategory.billingIssue:
+        return const Color(0xFFFF9800); // Orange
+      case TicketCategory.accountSecurity:
+        return const Color(0xFF4CAF50); // Green
+      case TicketCategory.generalQuestion:
+        return const Color(0xFF2196F3); // Blue
+    }
+  }
 }
 
 /// Ticket priority levels
@@ -60,6 +75,32 @@ enum TicketPriority {
         return 'Urgent';
     }
   }
+
+  Color get color {
+    switch (this) {
+      case TicketPriority.low:
+        return const Color(0xFF4CAF50);
+      case TicketPriority.medium:
+        return const Color(0xFFFFC107);
+      case TicketPriority.high:
+        return const Color(0xFFFF9800);
+      case TicketPriority.urgent:
+        return const Color(0xFFF44336);
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case TicketPriority.low:
+        return Iconsax.arrow_down_1;
+      case TicketPriority.medium:
+        return Iconsax.minus;
+      case TicketPriority.high:
+        return Iconsax.arrow_up_2;
+      case TicketPriority.urgent:
+        return Iconsax.danger;
+    }
+  }
 }
 
 /// Ticket status types
@@ -79,6 +120,19 @@ enum TicketStatus {
         return 'Resolved';
       case TicketStatus.closed:
         return 'Closed';
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case TicketStatus.open:
+        return const Color(0xFF2196F3); // Blue
+      case TicketStatus.inProgress:
+        return const Color(0xFFFF9800); // Orange
+      case TicketStatus.resolved:
+        return const Color(0xFF4CAF50); // Green
+      case TicketStatus.closed:
+        return const Color(0xFF9E9E9E); // Grey
     }
   }
 }
@@ -273,33 +327,4 @@ class CreateTicketRequest {
         if (deviceInfo != null) 'deviceInfo': deviceInfo,
         if (appVersion != null) 'appVersion': appVersion,
       };
-}
-
-
-extension TicketPriorityExtension on TicketPriority {
-  Color get color {
-    switch (this) {
-      case TicketPriority.low:
-        return const Color(0xFF4CAF50);
-      case TicketPriority.medium:
-        return const Color(0xFFFFC107);
-      case TicketPriority.high:
-        return const Color(0xFFFF9800);
-      case TicketPriority.urgent:
-        return const Color(0xFFF44336);
-    }
-  }
-
-  IconData get icon {
-    switch (this) {
-      case TicketPriority.low:
-        return Iconsax.arrow_down_1;
-      case TicketPriority.medium:
-        return Iconsax.minus;
-      case TicketPriority.high:
-        return Iconsax.arrow_up_2;
-      case TicketPriority.urgent:
-        return Iconsax.danger;
-    }
-  }
 }

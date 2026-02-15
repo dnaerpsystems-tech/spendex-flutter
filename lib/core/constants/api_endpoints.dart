@@ -24,6 +24,7 @@ class ApiEndpoints {
   // Account Management
   static const String deleteAccount = '/auth/delete-account';
   static const String checkSubscription = '/user/subscription/active';
+  static const String verifyPassword = '/auth/verify-password';
   // Accounts Endpoints
   static const String accounts = '/accounts';
   static const String accountsSummary = '/accounts/summary';

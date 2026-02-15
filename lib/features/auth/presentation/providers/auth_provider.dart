@@ -3,10 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/services/social_auth_service.dart';
 import '../../../../core/storage/secure_storage.dart';
+import '../../../../core/utils/app_logger.dart';
+import '../../../../core/utils/connectivity_checker.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/repositories/auth_repository.dart';
 
@@ -111,8 +114,9 @@ class AuthState extends Equatable {
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
       isBiometricLoading: isBiometricLoading ?? this.isBiometricLoading,
       isSocialLoading: isSocialLoading ?? this.isSocialLoading,
-      loadingSocialProvider:
-          clearLoadingProvider ? null : (loadingSocialProvider ?? this.loadingSocialProvider),
+      loadingSocialProvider: clearLoadingProvider
+          ? null
+          : (loadingSocialProvider ?? this.loadingSocialProvider),
     );
   }
 
@@ -132,7 +136,8 @@ class AuthState extends Equatable {
 
 /// Auth State Notifier
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier(this._authRepository, this._secureStorage) : super(const AuthState.initial()) {
+  AuthNotifier(this._authRepository, this._secureStorage)
+      : super(const AuthState.initial()) {
     _socialAuthService = getIt<SocialAuthService>();
   }
 
@@ -143,7 +148,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> checkAuthStatus() async {
     state = const AuthState.loading();
-
     final isAuth = await _secureStorage.isAuthenticated();
     if (isAuth) {
       final result = await _authRepository.getCurrentUser();
@@ -154,7 +158,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } else {
       state = const AuthState.unauthenticated();
     }
-
     await checkBiometricAvailability();
   }
 
@@ -168,10 +171,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
             const Duration(seconds: 2),
             onTimeout: () => false,
           );
-
       final isAvailable = canCheck && isDeviceSupported;
       final isEnabled = await _authRepository.isBiometricEnabled();
-
       state = state.copyWith(
         isBiometricAvailable: isAvailable,
         isBiometricEnabled: isEnabled,
@@ -214,9 +215,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
         return false;
       }
-
       final optionsResult = await _authRepository.getBiometricLoginOptions();
-
       return await optionsResult.fold(
         (failure) {
           state = state.copyWith(
@@ -231,9 +230,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
             'deviceVerified': true,
             'timestamp': DateTime.now().toIso8601String(),
           };
-
-          final loginResult = await _authRepository.loginWithBiometric(credential);
-
+          final loginResult =
+              await _authRepository.loginWithBiometric(credential);
           return loginResult.fold(
             (failure) {
               state = state.copyWith(
@@ -274,9 +272,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
         return false;
       }
-
       final optionsResult = await _authRepository.getBiometricRegisterOptions();
-
       return await optionsResult.fold(
         (failure) {
           state = state.copyWith(
@@ -292,9 +288,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
             'deviceName': await _getDeviceName(),
             'timestamp': DateTime.now().toIso8601String(),
           };
-
-          final registerResult = await _authRepository.registerBiometric(credential);
-
+          final registerResult =
+              await _authRepository.registerBiometric(credential);
           return registerResult.fold(
             (failure) {
               state = state.copyWith(
@@ -358,9 +353,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<bool> login(String email, String password) async {
     state = state.copyWith(isLoading: true);
-
     final result = await _authRepository.login(email, password);
-
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -379,13 +372,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<bool> signInWithGoogle() async {
+    // Check connectivity first
+    if (!await ConnectivityChecker.hasConnection()) {
+      state = state.copyWith(
+        error:
+            'No internet connection. Please check your network and try again.',
+        isSocialLoading: false,
+      );
+      return false;
+    }
+
     state = state.copyWith(
       isSocialLoading: true,
       loadingSocialProvider: SocialAuthProviderType.google,
+      error: null,
     );
 
     final credentialsResult = await _socialAuthService.signInWithGoogle();
-
     return await credentialsResult.fold(
       (failure) {
         state = state.copyWith(
@@ -396,8 +399,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (credentials) async {
-        final result = await _authRepository.signInWithSocial(credentials.toJson());
-
+        final result =
+            await _authRepository.signInWithSocial(credentials.toJson());
         return result.fold(
           (failure) {
             state = state.copyWith(
@@ -429,13 +432,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
       return false;
     }
 
+    // Check connectivity first
+    if (!await ConnectivityChecker.hasConnection()) {
+      state = state.copyWith(
+        error:
+            'No internet connection. Please check your network and try again.',
+        isSocialLoading: false,
+      );
+      return false;
+    }
+
     state = state.copyWith(
       isSocialLoading: true,
       loadingSocialProvider: SocialAuthProviderType.apple,
+      error: null,
     );
 
     final credentialsResult = await _socialAuthService.signInWithApple();
-
     return await credentialsResult.fold(
       (failure) {
         state = state.copyWith(
@@ -446,8 +459,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (credentials) async {
-        final result = await _authRepository.signInWithSocial(credentials.toJson());
-
+        final result =
+            await _authRepository.signInWithSocial(credentials.toJson());
         return result.fold(
           (failure) {
             state = state.copyWith(
@@ -472,13 +485,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<bool> signInWithFacebook() async {
+    // Check connectivity first
+    if (!await ConnectivityChecker.hasConnection()) {
+      state = state.copyWith(
+        error:
+            'No internet connection. Please check your network and try again.',
+        isSocialLoading: false,
+      );
+      return false;
+    }
+
     state = state.copyWith(
       isSocialLoading: true,
       loadingSocialProvider: SocialAuthProviderType.facebook,
+      error: null,
     );
 
     final credentialsResult = await _socialAuthService.signInWithFacebook();
-
     return await credentialsResult.fold(
       (failure) {
         state = state.copyWith(
@@ -489,8 +512,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (credentials) async {
-        final result = await _authRepository.signInWithSocial(credentials.toJson());
-
+        final result =
+            await _authRepository.signInWithSocial(credentials.toJson());
         return result.fold(
           (failure) {
             state = state.copyWith(
@@ -523,9 +546,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     String? phone,
   ) async {
     state = state.copyWith(isLoading: true);
-
     final result = await _authRepository.register(email, password, name, phone);
-
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -540,9 +561,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<bool> verifyOtp(String email, String otp) async {
     state = state.copyWith(isLoading: true);
-
     final result = await _authRepository.verifyOtp(email, otp);
-
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -562,9 +581,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<bool> forgotPassword(String email) async {
     state = state.copyWith(isLoading: true);
-
     final result = await _authRepository.forgotPassword(email);
-
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -579,9 +596,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<bool> resetPassword(String token, String password) async {
     state = state.copyWith(isLoading: true);
-
     final result = await _authRepository.resetPassword(token, password);
-
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -594,11 +609,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  Future<bool> changePassword(String currentPassword, String newPassword) async {
+  Future<bool> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
     state = state.copyWith(isLoading: true);
-
-    final result = await _authRepository.changePassword(currentPassword, newPassword);
-
+    final result =
+        await _authRepository.changePassword(currentPassword, newPassword);
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -613,9 +630,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<bool> updatePreferences(UserPreferences preferences) async {
     state = state.copyWith(isLoading: true);
-
     final result = await _authRepository.updatePreferences(preferences);
-
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -631,18 +646,50 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     state = state.copyWith(isLoading: true);
 
-    await _socialAuthService.signOutAll();
+    try {
+      // Clear all secure storage first
+      await _secureStorage.clearAll();
 
-    final result = await _authRepository.logout();
+      // Sign out from social providers
+      await _socialAuthService.signOutAll();
 
-    result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
-      (_) => state = const AuthState.unauthenticated(),
-    );
+      // Clear any cached user data
+      await _clearLocalUserData();
+
+      // Call backend logout
+      final result = await _authRepository.logout();
+
+      result.fold(
+        (failure) {
+          // Even if backend fails, we've cleared local data - consider logged out
+          AppLogger.w('Backend logout failed: ${failure.message}');
+          state = const AuthState.unauthenticated();
+        },
+        (_) {
+          state = const AuthState.unauthenticated();
+        },
+      );
+    } catch (e) {
+      AppLogger.e('Logout error: $e');
+      // Force logout even on error
+      state = const AuthState.unauthenticated();
+    }
+  }
+
+  Future<void> _clearLocalUserData() async {
+    try {
+      // Clear shared preferences user data
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('cached_user');
+      await prefs.remove('last_sync');
+      await prefs.remove('remember_email');
+    } catch (e) {
+      AppLogger.w('Failed to clear local user data: $e');
+    }
   }
 
   void clearError() {
-    state = state.copyWith();
+    state = state.copyWith(error: null);
   }
 
   void updateUser(UserModel user) {

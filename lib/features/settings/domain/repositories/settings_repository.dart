@@ -1,5 +1,7 @@
 import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+
 import '../../../../core/errors/failures.dart';
 import '../../data/models/deletion_models.dart';
 import '../../data/models/device_session_model.dart';
@@ -53,6 +55,9 @@ abstract class SettingsRepository {
 
   /// Check if user has active subscription before account deletion
   Future<Either<Failure, ActiveSubscriptionInfo>> checkActiveSubscription();
+
+  /// Verify password for account deletion
+  Future<Either<Failure, VerifyPasswordResponse>> verifyPassword(String password);
 
   /// Delete user account permanently
   Future<Either<Failure, void>> deleteAccount(DeleteAccountRequest request);

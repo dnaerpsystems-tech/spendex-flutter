@@ -95,6 +95,11 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
+  Future<Either<Failure, VerifyPasswordResponse>> verifyPassword(String password) {
+    return _remoteDataSource.verifyPassword(password);
+  }
+
+  @override
   Future<Either<Failure, void>> deleteAccount(DeleteAccountRequest request) {
     return _remoteDataSource.deleteAccount(request);
   }

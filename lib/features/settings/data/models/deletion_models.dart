@@ -1,21 +1,59 @@
 import 'package:equatable/equatable.dart';
 
-/// Request model for account deletion
+/// Request to verify password before account deletion
+class VerifyPasswordRequest {
+  const VerifyPasswordRequest({required this.password});
+  
+  final String password;
+  
+  Map<String, dynamic> toJson() => {'password': password};
+}
+
+/// Response from password verification
+class VerifyPasswordResponse extends Equatable {
+  const VerifyPasswordResponse({
+    required this.verified,
+    this.verificationToken,
+    this.expiresAt,
+  });
+  
+  factory VerifyPasswordResponse.fromJson(Map<String, dynamic> json) {
+    return VerifyPasswordResponse(
+      verified: json['verified'] as bool? ?? false,
+      verificationToken: json['verificationToken'] as String?,
+      expiresAt: json['expiresAt'] != null 
+          ? DateTime.parse(json['expiresAt'] as String) 
+          : null,
+    );
+  }
+  
+  final bool verified;
+  final String? verificationToken;
+  final DateTime? expiresAt;
+  
+  @override
+  List<Object?> get props => [verified, verificationToken, expiresAt];
+}
+
+/// Request for account deletion (after password verification)
 class DeleteAccountRequest {
   const DeleteAccountRequest({
-    required this.password,
+    required this.verificationToken,
     required this.confirmationText,
     this.cancelSubscription = true,
+    this.reason,
   });
 
-  final String password;
+  final String verificationToken;
   final String confirmationText;
   final bool cancelSubscription;
+  final String? reason;
 
   Map<String, dynamic> toJson() => {
-        'password': password,
+        'verificationToken': verificationToken,
         'confirmationText': confirmationText,
         'cancelSubscription': cancelSubscription,
+        if (reason != null) 'reason': reason,
       };
 }
 
@@ -43,7 +81,6 @@ class ActiveSubscriptionInfo extends Equatable {
     );
   }
 
-  /// No active subscription placeholder
   static const ActiveSubscriptionInfo none = ActiveSubscriptionInfo(
     hasActiveSubscription: false,
   );
@@ -56,13 +93,11 @@ class ActiveSubscriptionInfo extends Equatable {
   final String? subscriptionId;
   final String? status;
 
-  /// Get formatted amount with currency
   String get formattedAmount {
     if (amountPaid == null) return 'N/A';
     return '₹${amountPaid!.toStringAsFixed(2)}';
   }
 
-  /// Get formatted billing cycle
   String get formattedBillingCycle {
     switch (billingCycle?.toLowerCase()) {
       case 'monthly':
@@ -93,22 +128,21 @@ class ActiveSubscriptionInfo extends Equatable {
 enum DeletionState {
   idle,
   checkingSubscription,
+  verifyingPassword,
   confirming,
   deleting,
   success,
   error,
 }
 
-/// Extension for DeletionState
 extension DeletionStateExtension on DeletionState {
   bool get isLoading =>
       this == DeletionState.checkingSubscription ||
+      this == DeletionState.verifyingPassword ||
       this == DeletionState.deleting;
 
   bool get isIdle => this == DeletionState.idle;
-
   bool get isSuccess => this == DeletionState.success;
-
   bool get isError => this == DeletionState.error;
 
   String get message {
@@ -117,6 +151,8 @@ extension DeletionStateExtension on DeletionState {
         return 'Ready';
       case DeletionState.checkingSubscription:
         return 'Checking subscription status...';
+      case DeletionState.verifyingPassword:
+        return 'Verifying your identity...';
       case DeletionState.confirming:
         return 'Waiting for confirmation...';
       case DeletionState.deleting:
@@ -127,4 +163,17 @@ extension DeletionStateExtension on DeletionState {
         return 'Failed to delete account';
     }
   }
+}
+
+/// Deletion reason options
+enum DeletionReason {
+  notUseful('Not useful for me'),
+  tooExpensive('Too expensive'),
+  foundBetter('Found a better alternative'),
+  privacyConcerns('Privacy concerns'),
+  technicalIssues('Technical issues'),
+  other('Other');
+
+  const DeletionReason(this.label);
+  final String label;
 }

@@ -58,6 +58,9 @@ abstract class SettingsRemoteDataSource {
   /// Check if user has active subscription before account deletion
   Future<Either<Failure, ActiveSubscriptionInfo>> checkActiveSubscription();
 
+  /// Verify password for account deletion
+  Future<Either<Failure, VerifyPasswordResponse>> verifyPassword(String password);
+
   /// Delete user account permanently
   Future<Either<Failure, void>> deleteAccount(DeleteAccountRequest request);
 }
@@ -226,6 +229,15 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
         }
         return ActiveSubscriptionInfo.none;
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, VerifyPasswordResponse>> verifyPassword(String password) async {
+    return _apiClient.post<VerifyPasswordResponse>(
+      ApiEndpoints.verifyPassword,
+      data: VerifyPasswordRequest(password: password).toJson(),
+      fromJson: (data) { if (data is Map<String, dynamic>) { return VerifyPasswordResponse.fromJson(data); } return const VerifyPasswordResponse(verified: false); },
     );
   }
 

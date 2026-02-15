@@ -62,6 +62,9 @@ import '../features/settings/presentation/screens/delete_account_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/support/presentation/screens/support_screen.dart';
 import '../features/support/presentation/screens/create_ticket_screen.dart';
+import '../features/support/presentation/screens/ticket_list_screen.dart';
+import '../features/support/presentation/screens/ticket_detail_screen.dart';
+import '../features/support/data/models/ticket_model.dart';
 import '../features/subscription/presentation/screens/screens.dart';
 import '../features/transactions/presentation/screens/add_transaction_screen.dart';
 import '../features/transactions/presentation/screens/transaction_details_screen.dart';
@@ -137,6 +140,8 @@ class AppRoutes {
   static const String deleteAccount = '/delete-account';
   static const String support = '/support';
   static const String createTicket = '/support/create-ticket';
+  static const String ticketList = '/support/tickets';
+  static const String ticketDetail = '/support/tickets';
   static const String profile = '/profile';
   static const String notifications = '/notifications';
 
@@ -509,7 +514,24 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Create Ticket Route
       GoRoute(
         path: AppRoutes.createTicket,
-        builder: (context, state) => const CreateTicketScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final category = extra?['category'] as TicketCategory?;
+          return CreateTicketScreen(initialCategory: category);
+        },
+      ),
+      // Ticket List Route
+      GoRoute(
+        path: AppRoutes.ticketList,
+        builder: (context, state) => const TicketListScreen(),
+      ),
+      // Ticket Detail Route
+      GoRoute(
+        path: '${AppRoutes.ticketDetail}/:ticketId',
+        builder: (context, state) {
+          final ticketId = state.pathParameters['ticketId'] ?? '';
+          return TicketDetailScreen(ticketId: ticketId);
+        },
       ),
       GoRoute(
         path: '/profile/edit',
