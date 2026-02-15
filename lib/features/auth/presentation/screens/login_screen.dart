@@ -406,10 +406,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
                             isLoading: authState.isLoading,
                           ),
 
-                          const SizedBox(height: 24),
-
-                          // Divider
-                          const AuthDivider(),
 
                           const SizedBox(height: 24),
 
